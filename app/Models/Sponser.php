@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Sponser extends Model
 {
     use HasFactory;
-    protected $fillable = ['name', 'phone', 'city', 'customer_id'];
+    protected $fillable = ['name', 'phone', 'city'];
     public function customers() { return $this->hasMany(Customer::class); }
 }

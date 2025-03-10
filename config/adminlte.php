@@ -236,7 +236,7 @@ return [
     |
     */
 
-    'right_sidebar' => false,
+    'right_sidebar' => true,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,
@@ -260,9 +260,9 @@ return [
     'dashboard_url' => 'home',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
+    'register_url' => 'login',
+    'password_reset_url' => 'login',
+    'password_email_url' => 'login',
     'profile_url' => true,
     'disable_darkmode_routes' => false,
 
@@ -373,34 +373,40 @@ return [
                 ],
                 
                 [
-                    'text' => 'التأشيرات',
-                    'url' => '#',
+                    'text' => 'أنواع التأشيرات',
+                    'url' => 'visa-type-view',
+                    'icon' => 'fab fa-cc-visa',
+                    'label_color' => 'success',
+                ],
+                [
+                    'text' => 'مدة التأشيرات',
+                    'url' => 'visa-peroid-view',
                     'icon' => 'fab fa-cc-visa',
                     'label_color' => 'success',
                 ],
                 [
                     'text' => 'المجموعات',
-                    'url' => '#',
+                    'url' => 'customer-groups',
                     'icon' => 'fas fa-layer-group',
                 ],
                 [
                     'text' => 'التقييم',
-                    'url' => '#',
+                    'url' => 'evaluation-view',
                     'icon' => 'fas fa-hourglass-half',
                 ],
                 [
                     'text' => 'الكفيل',
-                    'url' => '#',
+                    'url' => 'sponsor-view',
                     'icon' => 'fas fa-building',
                 ],
                 [
                     'text' => 'المستندات',
-                    'url' => '#',
+                    'url' => 'document-type-view',
                     'icon' => 'fas fa-file-medical',
                 ],
                 [
                     'text' => 'المعاملات المالية',
-                    'url' => '#',
+                    'url' => 'payment-type-view',
                     'icon' => 'far fa-credit-card',
                 ],
                 
@@ -408,8 +414,8 @@ return [
         ],
 
         [
-            'text' => 'استخراج بيانات الباسورد',
-            'url' => 'mrz-passprt-extractor',
+            'text' => 'ارسال رسائل',
+            'url' => 'bulk-sms-view',
             'icon' => 'fas fa-passport',
         ],
 
