@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
+use App\Http\Controllers\DocumentTypeController;
+use App\Http\Controllers\PaymentTitleController;
+use App\Http\Controllers\SponserController;
 use App\Models\Delegate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -26,15 +30,8 @@ Route::get('/users', function () {
     return view('users'); // This loads resources/views/dashboard.blade.php
 })->name('users');
 
-// عرض مجموعات
-Route::get('/customer-groups', function () {
-    return view(view: 'groups'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'customer-groups.index');
 
-// عرض الكفلاء
-Route::get('/sponsor-view', function () {
-    return view(view: 'sponsor'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'sponsor.index');
+
 
 // عرض التقييمات
 Route::get('/evaluation-view', action: function () {
@@ -51,23 +48,40 @@ Route::get('/visa-peroid-view', action: function () {
     return view(view: 'visa-peroid'); // This loads resources/views/dashboard.blade.php
 })->name(name: 'visa-peroid.index');
 
-// عرض انواع المستندات
-Route::get('/document-type-view', action: function () {
-    return view(view: 'document-type'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'document-type.index');
-
-//  عرض انواع المعاملات المالية
-Route::get(uri: '/payment-type-view', action: function () {
-    return view(view: 'payment-type'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'payment-type.index');
 
 // عرض الرسائل
 Route::get(uri: '/bulk-sms-view', action: function () {
-    return view(view: 'bulk-sms'); 
+    return view(view: 'bulk-sms');
 })->name(name: 'bulk-sms.index');
 
+
+//  عرض انواع المعاملات المالية
+Route::get('/payment-type-view/{id?}', [PaymentTitleController::class, 'index'])->name('payment-type.index');
+Route::post('/payment-type-view', [PaymentTitleController::class, 'create'])->name('payment-type.create');
+Route::post('/payment-type-view/edit/{id}', [PaymentTitleController::class, 'edit'])->name('payment-type.edit');
+Route::delete('/payment-type-view/{id}', [PaymentTitleController::class, 'delete'])->name('payment-type.delete');
+
+// عرض انواع المستندات
+Route::get('/document-type-view/{id?}', [DocumentTypeController::class, 'index'])->name('document-type.index');
+Route::post('/document-type-view', [DocumentTypeController::class, 'create'])->name('document-type.create');
+Route::post('/document-type-view/edit/{id}', [DocumentTypeController::class, 'edit'])->name('document-type.edit');
+Route::delete('/document-type-view/{id}', [DocumentTypeController::class, 'delete'])->name('document-type.delete');
+
+
+// عرض الكفلاء
+Route::get('/sponsor-view/{id?}', [SponserController::class, 'index'])->name('sponsor.index');
+Route::post('/sponsor-view', [SponserController::class, 'create'])->name('sponsor.create');
+Route::post('/sponsor-view/edit/{id}', [SponserController::class, 'edit'])->name('sponsor.edit');
+Route::delete('/sponsor-view/{id}', [SponserController::class, 'delete'])->name('sponsor.delete');
+
+// عرض مجموعات
+Route::get('/customer-groups/{id?}', [CustomerGroupController::class, 'index'])->name('customer-groups.index');
+Route::post('/customer-groups', [CustomerGroupController::class, 'create'])->name('customer-groups.create');
+Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit');
+Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete');
+
 // المناديب
-Route::get('/Delegates-create/{id?}', [DelegateController::class, 'index'])->name(name: 'Delegates.create');
+Route::get('/Delegates-create/{id?}', [DelegateController::class, 'index'])->name('Delegates.create');
 Route::post('/delegates',  [DelegateController::class, 'store'])->name('delegates.store');
 Route::post('/delegates/edit/{id}',  [DelegateController::class, 'edit'])->name('delegates.edit');
 Route::delete('/Delegates-delete/{id}', [DelegateController::class, 'delete'])->name('Delegates.delete');

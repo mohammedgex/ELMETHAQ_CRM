@@ -260,7 +260,7 @@ return [
     'dashboard_url' => 'home',
     'logout_url' => 'logout',
     'login_url' => 'login',
-    'register_url' => 'login',
+    'register_url' => 'register',
     'password_reset_url' => 'login',
     'password_email_url' => 'login',
     'profile_url' => true,
@@ -343,9 +343,9 @@ return [
                     'url' =>  'workers',
                     'icon' => 'fas fa-eye',
                     'label' => 4,
-                    'label_color' => 'success',    
+                    'label_color' => 'success',
                 ],
-                
+
                 [
                     'text' => 'اضافة عميل',
                     'url' => 'worker-create',
@@ -369,9 +369,9 @@ return [
                     'url' => 'Delegates-create',
                     'icon' => 'fas fa-user',
                     'label' =>  4,
-                    'label_color' => 'success',    
+                    'label_color' => 'success',
                 ],
-                
+
                 [
                     'text' => 'أنواع التأشيرات',
                     'url' => 'visa-type-view',
@@ -409,7 +409,7 @@ return [
                     'url' => 'payment-type-view',
                     'icon' => 'far fa-credit-card',
                 ],
-                
+
             ],
         ],
 
@@ -419,10 +419,10 @@ return [
             'icon' => 'fas fa-passport',
         ],
 
-        
+
 
         // الاعدادات
-        
+
         ['header' => 'الاعدادات'],
         [
             'text' => 'المستخدم',
@@ -434,7 +434,7 @@ return [
             'url' => 'admin/settings',
             'icon' => 'fas fa-fw fa-lock',
         ],
-        
+
         // ['header' => 'labels'],
         // [
         //     'text' => 'important',
