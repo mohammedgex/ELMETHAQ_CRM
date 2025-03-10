@@ -22,16 +22,29 @@ Route::get('/users', function () {
     return view('users'); // This loads resources/views/dashboard.blade.php
 })->name('users');
 
-// MRZ extractor
-Route::get('/mrz-passprt-extractor', function () {
-    return view('mrz-extractor'); // This loads resources/views/dashboard.blade.php
-})->name('mrz-passprt-extractor');
+Route::get('/users', function () {
+    return view('users'); // This loads resources/views/dashboard.blade.php
+})->name('users');
 
+// عرض مجموعات
+Route::get('/customer-groups', function () {
+    return view(view: 'groups'); // This loads resources/views/dashboard.blade.php
+})->name(name: 'customer-groups');
 
+// عرض الكفلاء
+Route::get('/sponsers', function () {
+    return view(view: 'sponsers'); // This loads resources/views/dashboard.blade.php
+})->name(name: 'sponsers');
+
+// عرض المناديب
 Route::get('/Delegates-create', [DelegateController::class,'index'])->name(name: 'Delegates-create');
 
+//تخزين المناديب
 Route::post('/delegates', action: [DelegateController::class, 'store'])->name('delegates.store');
 
+// عرض العملاء
 Route::get('/worker-create', [CustomerController::class, 'index'])->name('customer.indes');
+
+//اضافة عملاء
 
 Route::post('/customer-add',[CustomerController::class, 'create'])->name(name: 'customer.create');
