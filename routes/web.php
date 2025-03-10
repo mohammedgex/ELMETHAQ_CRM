@@ -36,6 +36,9 @@ Route::get('/sponsers', function () {
     return view(view: 'sponsers'); // This loads resources/views/dashboard.blade.php
 })->name(name: 'sponsers');
 
+
+Route::get('/Delegates-create', [DelegateController::class, 'index'])->name(name: 'Delegates.create');
+Route::delete('/Delegates-delete/{id}', [DelegateController::class, 'delete'])->name('Delegates.delete');
 // عرض المناديب
 Route::get('/Delegates-create', [DelegateController::class,'index'])->name(name: 'Delegates-create');
 
@@ -47,4 +50,4 @@ Route::get('/worker-create', [CustomerController::class, 'index'])->name('custom
 
 //اضافة عملاء
 
-Route::post('/customer-add',[CustomerController::class, 'create'])->name(name: 'customer.create');
+Route::post('/customer-add', [CustomerController::class, 'create'])->name(name: 'customer.create');
