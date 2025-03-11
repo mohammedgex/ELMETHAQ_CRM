@@ -1,17 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use TCPDF;
+use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Delegate;
 use Spatie\SimpleExcel\SimpleExcelWriter;
 use Illuminate\Support\Facades\Response;
 use OpenSpout\Common\Entity\Style\Color;
-use OpenSpout\Common\Entity\Style\CellAlignment;
 use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Common\Entity\Style\Border;
 use OpenSpout\Common\Entity\Style\BorderPart;
-use PhpParser\Node\Stmt\Return_;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class DelegateController extends Controller
 {
@@ -76,17 +77,17 @@ class DelegateController extends Controller
             ]);
         }
         $delegate->delete();
-        return redirect()->route('Delegates.create');
+        return redirect()->route('Delegates.create')->with('success', 'successs');
     }
 
-     public function exportDelegates()
+     public function exportDelegates($id)
     {
+
         // Define file path
         $filePath = storage_path('app/public/delegates.xlsx');
 
         // Fetch delegates data
-        $delegates = Delegate::all(['id', 'name', 'phone', 'card_id']);
-
+        $delegate = Delegate::find($id); 
         // Define header style
        /* Create a border around a cell */
         $border = new Border(
@@ -115,16 +116,36 @@ class DelegateController extends Controller
             ->addHeader(['ID', 'Name', 'Phone', 'Card ID'])
             ->setHeaderStyle($style);
 
-        foreach ($delegates as $delegate) {
             $writer->addRow([
                 $delegate->id,
                 $delegate->name,
                 $delegate->phone,
                 $delegate->card_id
             ], $style);
-        }
+        
 
         // Return the file for download
-        return Response::download($filePath, 'delegates.xlsx')->deleteFileAfterSend();
+        return Response::download($filePath, name: 'delegate_'.$delegate->name.'.xlsx')->deleteFileAfterSend();
     }
+
+        // طباعة pdf المندوب
+        public function downloadPdf($id)
+            {
+                // Fetch delegate data (change '1' to a dynamic value if needed)
+                $delegate = Delegate::find($id); 
+
+                
+                // Check if delegate exists
+                if (!$delegate) {
+                    return abort(404, message: 'Delegate not found');
+                }
+
+                // Load the Blade view with delegate data
+                $pdf = SnappyPdf::loadView('pdf.invoice', ['delegate' => $delegate])
+                    ->setPaper('a4');
+
+                // Download the PDF
+                return $pdf->download("delegate_{$delegate->name}.pdf");
+            }
+
 }

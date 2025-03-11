@@ -9,18 +9,54 @@
 @section('content')
 <div class="card shadow-lg border-success">
     <div class="card-body">
-        <ul class="nav nav-tabs nav-fill">
-            <li class="nav-item"><a class="nav-link active text-success" data-toggle="tab" href="#personalInfo">التفاصيل الشخصية</a></li>
-            <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#passportDetails">تفاصيل جواز السفر</a></li>
-            <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#attachments">المرفقات</a></li>
-            <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#payments">المدفوعات</a></li>
-        </ul>
+                <ul class="nav nav-tabs nav-fill">
+    <li class="nav-item"><a class="nav-link active text-success" data-toggle="tab" href="#personalInfo">التفاصيل الشخصية</a></li>
+    <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#passportDetails">تفاصيل جواز السفر</a></li>
+    <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#attachments">المرفقات</a></li>
+    <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#payments">المدفوعات</a></li>
+        <li class="nav-item"><a class="nav-link text-success" data-bs-toggle="tab" href="#timelineTab">تقدم العميل</a></li>
+
+</ul>
+
 
         <div class="tab-content mt-3">
-            <form action="{{ route('customer.create') }}" method="Post">
-                @csrf
+
+              <div id="timelineTab" class="tab-pane fade">
+     <h2 class="text-success text-center">مخطط تقدم العميل</h2>
+    <ul class="timeline" id="timeline">
+        <li class="timeline-item">
+            <span class="timeline-icon step-1"><i class="fas fa-passport"></i></span>
+            <div class="timeline-content">
+                <h3>تسجيل البيانات</h3>
+                <p>تم تسجيل البيانات الأساسية</p>
+            </div>
+        </li>
+        <li class="timeline-item">
+            <span class="timeline-icon step-2"><i class="fas fa-plane"></i></span>
+            <div class="timeline-content">
+                <h3>حجز الكشف الطبي</h3>
+                <p>تم حجز الكشف الطبي</p>
+            </div>
+        </li>
+        <li class="timeline-item">
+            <span class="timeline-icon step-3"><i class="fas fa-file-alt"></i></span>
+            <div class="timeline-content">
+                <h3> اصدار نتيجة الكشف الطبي</h3>
+                <p> النتيجة ناجح </p>
+            </div>
+        </li>
+    </ul>
+    <div class="text-center">
+        <button class="btn btn-success btn-sm mt-3" id="addStep">إضافة خطوة جديدة</button>
+    </div>
+</div>
+            
+
+            <!-- <form action="{{ route('customer.create') }}" method="Post">
+                @csrf -->
                 <!-- التفاصيل الشخصية -->
-            <div id="personalInfo" class="tab-pane fade show active">
+            <form id="personalInfo" class="tab-pane fade show active" action="{{ route('customer.create') }}" method="Post">
+                @csrf
                         <!-- القسم: المعلومات الأساسية -->
     <div class="section-container">
         <h5 class="text-success fw-bold mb-3">المعلومات الأساسية</h5>
@@ -104,11 +140,12 @@
             </div>
         </div>
     </div>
-</div>
+    <input class="btn btn-success btn-block mt-3" type="submit" value="حفظ البيانات"/>
+</form>
 
-        <input class="btn btn-success btn-block mt-3" type="submit" value="حفظ البيانات"/>
+        
 
-            </form>
+            <!-- </form> -->
 
 
             <!-- تفاصيل جواز السفر -->
@@ -197,6 +234,19 @@
                     </tbody>
                 </table>
             </div>
+            <div id="timelineTab" class="tab-pane fade">
+    <h5 class="text-success">مخطط التقدم</h5>
+    <ul class="timeline" id="timeline">
+        <li class="timeline-item">
+            <span class="timeline-icon bg-success"></span>
+            <div class="timeline-content">
+                <h6>الخطوة الأولى</h6>
+                <p>تم تسجيل البيانات الأساسية</p>
+            </div>
+        </li>
+    </ul>
+    <button class="btn btn-success btn-sm mt-3" id="addStep">إضافة خطوة جديدة</button>
+</div>
         </div>
 
         <!-- <button class="btn btn-success btn-block mt-3">حفظ البيانات</button> -->
@@ -207,24 +257,109 @@
 
 @section('css')
 <style>
-    .section-container {
-        background: #f8f9fa; /* لون فاتح */
-        padding: 20px;
-        border-radius: 10px;
-        /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
-        margin-bottom: 20px; /* تباعد بين الأقسام */
-    }
-    .bold-input {
-    font-weight: 600 !important;
-    /* font-size: 18px !important; */
+      .timeline {
+            position: relative;
+            list-style: none;
+            padding: 20px 0;
+            margin: 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            width: 4px;
+            height: 100%;
+            background: #6c757d;
+            transform: translateX(50%);
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+        .timeline-content {
+            width: 45%;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-left: auto;
+            text-align: right;
+        }
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-right: auto;
+            text-align: right;
+        }
+        .timeline-icon {
+            position: absolute;
+            top: 50%;
+            right: 50%;
+            transform: translate(50%, -50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+        .step-1 { background: #28a745; } /* ناجح */
+        .step-2 { background: #007bff; } /* قيد التنفيذ */
+        .step-3 { background: #ffc107; } /* بانتظار الموافقة */
+        .step-4 { background: #dc3545; } /* مرفوض */
+        .section-container {
+            background: #f8f9fa; /* لون فاتح */
+            padding: 20px;
+            border-radius: 10px;
+            /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
+            margin-bottom: 20px; /* تباعد بين الأقسام */
+        }
+        .bold-input {
+        font-weight: 600 !important;
+        /* font-size: 18px !important; */
 }
+
 </style>
 
 @stop
 
 @section('js')
 <script>
+     document.getElementById('addStep').addEventListener('click', function () {
+        const timeline = document.getElementById('timeline');
+        const stepNumber = timeline.children.length + 1;
+        const icons = ['fa-passport', 'fa-plane', 'fa-file-alt', 'fa-times-circle'];
+        const texts = ['تم تقديم الطلب', 'تمت الموافقة على الطلب', 'تم إصدار التأشيرة', 'تم رفض الطلب'];
+        const colors = ['step-1', 'step-2', 'step-3', 'step-4'];
+
+        const newStep = document.createElement('li');
+        newStep.classList.add('timeline-item');
+        newStep.innerHTML = `
+            <span class="timeline-icon ${colors[stepNumber % 4]}"><i class="fas ${icons[stepNumber % 4]}"></i></span>
+            <div class="timeline-content">
+                <h4> تم اصدار تأشيرة السفر</h4>
+                <p>${texts[stepNumber % 4]}</p>
+            </div>
+        `;
+        timeline.appendChild(newStep);
+    });
+    
+
     $(document).ready(function () {
+         $('.nav-tabs a').click(function (e) {
+            e.preventDefault();
+            $(this).tab('show');
+        });
+
         // إضافة مرفق جديد
         $("#addAttachment").click(function () {
             var title = $("#attachmentTitle").val();
@@ -289,6 +424,7 @@
         });
     });
 
+    //استخراج بيانات جواز السفر
     function extractMRZData() {
     // let mrz = "P<EGYFARGHAL<<OMAR<MOHAMED<MOHAMED<<<<<<<<<<\nA240842345EGY8702193M2602084<<<<<<<<04";
     let mrz =document.getElementById("mrz_input").value;

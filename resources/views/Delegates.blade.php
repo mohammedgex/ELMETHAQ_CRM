@@ -51,7 +51,7 @@
                         placeholder="أدخل الرقم القومي" required>
                 </div>
                 <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
-                    style="background-color: #997a44; color: white;">تحديث المندوب</button>
+                    style="background-color: #ffc107; color: white;">تحديث المندوب</button>
             </form>
         @endif
 
@@ -79,8 +79,7 @@
                             <td>{{ $delegate->card_id }}</td>
                             <td class="d-flex justify-content-center">
                                 <a href="{{ route('Delegates.create', $delegate->id) }}">
-                                    <button class="btn btn-sm shadow-sm mx-1"
-                                        style="border-color: #997a44; color: #997a44;">
+                                    <button class="btn btn-sm btn-outline-success shadow-sms">
                                         <i class="fas fa-edit"></i> تعديل
                                     </button>
                                 </a>
@@ -88,12 +87,11 @@
                                     class="mx-1">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm shadow-sm" style="border-color: #997a44; color: #997a44;"
-                                        type="submit">
+                                    <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
                                         <i class="fas fa-trash"></i> حذف
                                     </button>
                                 </form>
-                                <button class="btn btn-sm shadow-sm mx-1" style="border-color: #997a44; color: #997a44;">
+                                <button class="btn btn-sm btn-outline-primary shadow-sm mx-1" >
                                     <i class="fas fa-users"></i> عرض العملاء
                                 </button>
 
@@ -105,14 +103,15 @@
                                     <ul class="dropdown-menu">
                                         <li>
                                             <a class="dropdown-item text-success"
-                                                href="{{ route('Delegates.create', $delegate->id) }}">
-                                                <i class="fas fa-edit"></i> طباعة تقرير
+                                                href="{{ route('export.delegates.xlsx', $delegate->id) }}">
+                                                <i class="fas fa-edit"></i> تصدير اكسيل
                                             </a>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-success">
-                                                <i class="fas fa-users"></i> تصدير PDF
-                                            </button>
+                                            <a class="dropdown-item text-warning"
+                                                href="{{ route('export.delegates.pdf', $delegate->id) }}">
+                                                <i class="fas fa-edit"></i> طباعة تقرير
+                                            </a>
                                         </li>
                                         <li>
                                             <button class="dropdown-item text-danger">
@@ -180,5 +179,4 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
 @stop
