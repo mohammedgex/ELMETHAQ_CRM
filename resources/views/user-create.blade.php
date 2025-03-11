@@ -9,7 +9,7 @@
 @section('content')
 <div class="card shadow-lg border-success">
     <div class="card-body">
-                <ul class="nav nav-tabs nav-fill">
+                <ul class="nav nav-tabs nav-fill" >
     <li class="nav-item"><a class="nav-link active text-success" data-toggle="tab" href="#personalInfo">التفاصيل الشخصية</a></li>
     <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#passportDetails">تفاصيل جواز السفر</a></li>
     <li class="nav-item"><a class="nav-link text-success" data-toggle="tab" href="#attachments">المرفقات</a></li>
@@ -323,8 +323,8 @@
             /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); */
             margin-bottom: 20px; /* تباعد بين الأقسام */
         }
-        .bold-input {
-        font-weight: 600 !important;
+        .nav {
+        font-weight: 800 !important;
         /* font-size: 18px !important; */
 }
 
