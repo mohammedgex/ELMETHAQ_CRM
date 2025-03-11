@@ -13,9 +13,7 @@ class CustomerGroupController extends Controller
     {
         # code...
         $groupEdit = new CustomerGroup();
-        $groupEdit->name = '';
-        $groupEdit->phone = '';
-        $groupEdit->card_id = '';
+        $groupEdit->title = '';
 
         if (!empty($id)) {
             $groupEdit = CustomerGroup::find($id);

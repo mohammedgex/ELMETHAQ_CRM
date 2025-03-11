@@ -371,12 +371,12 @@ return [
                 ],
                 [
                     'text' => 'تعريف القنصلية',
-                    'url' => 'Delegates-create',
+                    'url' => 'embassy-view',
                     'icon' => 'fas fa-user',
                 ],
                 [
                     'text' => 'تعريف الوظائف',
-                    'url' => 'Delegates-create',
+                    'url' => 'job-type-view',
                     'icon' => 'fas fa-user',
                 ],
                 [

@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Evalution extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'customer_id'];
-    public function customers() { return $this->hasMany(Customer::class); }
+    protected $fillable = ['title'];
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
 }

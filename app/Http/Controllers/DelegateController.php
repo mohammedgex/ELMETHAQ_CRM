@@ -89,24 +89,31 @@ class DelegateController extends Controller
 
         // Define header style
        /* Create a border around a cell */
-$border = new Border(
-        new BorderPart(Border::BOTTOM, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::LEFT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-        new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
-    );
+        $border = new Border(
+                new BorderPart(Border::BOTTOM, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
+                new BorderPart(Border::LEFT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
+                new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
+                new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
+            );
 
-$style = (new Style())
-   ->setFontBold()
-   ->setFontSize(15)
-   ->setFontColor(Color::BLUE)
-   ->setShouldWrapText()
-   ->setBackgroundColor(Color::YELLOW)
-   ->setBorder($border);
+        $style = (new Style())
+        ->setFontBold()
+        ->setFontSize(15)
+        ->setFontColor(Color::BLUE)
+        ->setShouldWrapText()
+        ->setBackgroundColor(Color::YELLOW)
+        ->setBorder($border);
+
+        $headerStyle = (new Style())
+            ->setFontBold()
+            ->setFontSize(50)
+            ->setFontColor(Color::BLACK)
+            ->setBackgroundColor(Color::BLUE);
 
         // Create and write to Excel file
         $writer = SimpleExcelWriter::create($filePath)
-            ->addHeader(['ID', 'Name', 'Phone', 'Card ID'], $style);
+            ->addHeader(['ID', 'Name', 'Phone', 'Card ID'])
+            ->setHeaderStyle($style);
 
         foreach ($delegates as $delegate) {
             $writer->addRow([

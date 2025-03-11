@@ -4,6 +4,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\DocumentTypeController;
+use App\Http\Controllers\EvalutionController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
 use App\Models\Delegate;
@@ -33,10 +34,7 @@ Route::get('/users', function () {
 
 
 
-// عرض التقييمات
-Route::get('/evaluation-view', action: function () {
-    return view(view: 'evaluation'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'evaluation.index');
+
 
 // عرض أنواع التأشيرات
 Route::get('/visa-type-view', action: function () {
@@ -63,6 +61,11 @@ Route::get(uri: '/bulk-sms-view', action: function () {
     return view(view: 'bulk-sms');
 })->name(name: 'bulk-sms.index');
 
+// عرض التقييمات
+Route::get('/evaluation-view/{id?}', [EvalutionController::class, 'index'])->name('evaluation.index');
+Route::post('/evaluation-view', [EvalutionController::class, 'create'])->name('evaluation.create');
+Route::post('/evaluation-view/edit/{id}', [EvalutionController::class, 'edit'])->name('evaluation.edit');
+Route::delete('/evaluation-view/{id}', [EvalutionController::class, 'delete'])->name('evaluation.delete');
 
 //  عرض انواع المعاملات المالية
 Route::get('/payment-type-view/{id?}', [PaymentTitleController::class, 'index'])->name('payment-type.index');
