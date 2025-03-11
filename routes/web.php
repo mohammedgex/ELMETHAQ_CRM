@@ -48,6 +48,15 @@ Route::get('/visa-peroid-view', action: function () {
     return view(view: 'visa-peroid'); // This loads resources/views/dashboard.blade.php
 })->name(name: 'visa-peroid.index');
 
+// عرض الوظائف
+Route::get(uri: '/job-type-view', action: function () {
+    return view(view: 'job-type'); // This loads resources/views/dashboard.blade.php
+})->name(name: 'job-type.index');
+
+// عرض القنصلية
+Route::get(uri: '/embassy-view', action: function () {
+    return view(view: 'embassy'); // This loads resources/views/dashboard.blade.php
+})->name(name: 'embassy.index');
 
 // عرض الرسائل
 Route::get(uri: '/bulk-sms-view', action: function () {
@@ -92,3 +101,6 @@ Route::get('/worker-create', [CustomerController::class, 'index'])->name('custom
 //اضافة عملاء
 
 Route::post('/customer-add', [CustomerController::class, 'create'])->name(name: 'customer.create');
+
+
+Route::get('/export-delegates', [DelegateController::class, 'exportDelegates'])->name('export.delegates');

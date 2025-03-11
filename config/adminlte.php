@@ -365,13 +365,20 @@ return [
             'icon' => 'fas fa-stream',
             'submenu' => [
                 [
-                    'text' => 'المناديب',
+                    'text' => 'تعريف المناديب',
                     'url' => 'Delegates-create',
                     'icon' => 'fas fa-user',
-                    'label' =>  4,
-                    'label_color' => 'success',
                 ],
-
+                [
+                    'text' => 'تعريف القنصلية',
+                    'url' => 'Delegates-create',
+                    'icon' => 'fas fa-user',
+                ],
+                [
+                    'text' => 'تعريف الوظائف',
+                    'url' => 'Delegates-create',
+                    'icon' => 'fas fa-user',
+                ],
                 [
                     'text' => 'أنواع التأشيرات',
                     'url' => 'visa-type-view',
@@ -385,27 +392,27 @@ return [
                     'label_color' => 'success',
                 ],
                 [
-                    'text' => 'المجموعات',
+                    'text' => 'تعريف المجموعات',
                     'url' => 'customer-groups',
                     'icon' => 'fas fa-layer-group',
                 ],
                 [
-                    'text' => 'التقييم',
+                    'text' => 'تعريف التقييم',
                     'url' => 'evaluation-view',
                     'icon' => 'fas fa-hourglass-half',
                 ],
                 [
-                    'text' => 'الكفيل',
+                    'text' => 'تعريف الكفيل',
                     'url' => 'sponsor-view',
                     'icon' => 'fas fa-building',
                 ],
                 [
-                    'text' => 'المستندات',
+                    'text' => 'تعريف المستندات',
                     'url' => 'document-type-view',
                     'icon' => 'fas fa-file-medical',
                 ],
                 [
-                    'text' => 'المعاملات المالية',
+                    'text' => 'تعريف المعاملات المالية',
                     'url' => 'payment-type-view',
                     'icon' => 'far fa-credit-card',
                 ],
