@@ -9,7 +9,7 @@
 @section('content')
     <div class="row">
         <!-- ✅ قسم إضافة مجموعة -->
-        @if ($groupEdit->name === '')
+        @if ($groupEdit->title === '')
             <div class="col-md-12 mb-4">
                 <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                     style="border-radius: 15px; background-color: #f8f9fa;">
