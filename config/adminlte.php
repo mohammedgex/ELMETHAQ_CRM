@@ -353,7 +353,7 @@ return [
                 ],
                 [
                     'text' => 'تصدير جميع العملاء',
-                    'url' => '#',
+                    'url' => 'export-customers-xlsx',
                     'icon' => 'fas fa-download',
                 ],
             ],
@@ -419,7 +419,11 @@ return [
 
             ],
         ],
-
+        [
+            'text' => 'العملاء المحتملون',
+            'url' => 'bulk-sms-view',
+            'icon' => 'fas fa-passport',
+        ],
         [
             'text' => 'ارسال رسائل',
             'url' => 'bulk-sms-view',

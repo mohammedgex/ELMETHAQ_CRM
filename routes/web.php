@@ -109,3 +109,5 @@ Route::post('/customer-add', [CustomerController::class, 'create'])->name(name: 
 Route::get('/export-delegates-xlsx/{id}', [DelegateController::class, 'exportDelegates'])->name('export.delegates.xlsx');
 
 Route::get('/export-delegates-pdf/{id}', action: [DelegateController::class, 'downloadPdf'])->name('export.delegates.pdf');
+
+Route::get('/export-customers-xlsx', action: [CustomerController::class, 'exportCustomers'])->name('export.customers.xlsx');

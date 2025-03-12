@@ -18,9 +18,33 @@
                 </div>
                 
                 <div class="card-body">
-                    <div class="mb-3">
-                        <input type="text" id="tableSearch" class="form-control" placeholder="🔍 ابحث في الجدول...">
-                    </div>
+                    <div class="row d-flex justify-content-between">
+                        <!-- حقل البحث -->
+                                                <!-- 📌 فلتر متقدم -->
+                        <div class="mb-3 d-flex ">
+                            <!-- القائمة الأولى لاختيار الفئة -->
+                            <select id="filterType" class="form-select me-2 mx-2" onchange="updateFilterValues()">
+                                <option value="all">🔍 البحث في الكل</option>
+                                <option value="name">الاسم</option>
+                                <option value="phone">رقم الهاتف</option>
+                            </select>
+
+                            <!-- القائمة الثانية لتحديد القيمة بناءً على الأولى -->
+                            <select id="filterValues" class="form-select me-2 mx-2">
+                                <option value="">-- اختر --</option>
+                            </select>
+                            
+                            <!-- زر تصفية -->
+                            <button class="btn btn-warning" onclick="filterTable()">تصفية</button>
+                        </div>
+
+                        <!-- أزرار الإجراءات -->
+                        <div class="mb-3">
+                            <button class="btn btn-success" onclick="sendSMS()">📩 إرسال SMS</button>
+                            <button class="btn btn-danger" onclick="deleteRows()">🗑️ حذف المحدد</button>
+                        </div>
+
+                        </div>
                     
                     <table id="dataTable" class="table table-bordered table-hover text-center" style="border-radius: 10px; overflow: hidden;">
                         <thead class="table-dark">
