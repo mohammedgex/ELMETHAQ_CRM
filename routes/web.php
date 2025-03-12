@@ -4,7 +4,9 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\DocumentTypeController;
+use App\Http\Controllers\EmbassyController;
 use App\Http\Controllers\EvalutionController;
+use App\Http\Controllers\JobController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
 use App\Models\Delegate;
@@ -46,20 +48,23 @@ Route::get('/visa-peroid-view', action: function () {
     return view(view: 'visa-peroid'); // This loads resources/views/dashboard.blade.php
 })->name(name: 'visa-peroid.index');
 
-// عرض الوظائف
-Route::get(uri: '/job-type-view', action: function () {
-    return view(view: 'job-type'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'job-type.index');
-
-// عرض القنصلية
-Route::get(uri: '/embassy-view', action: function () {
-    return view(view: 'embassy'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'embassy.index');
-
 // عرض الرسائل
 Route::get(uri: '/bulk-sms-view', action: function () {
     return view(view: 'bulk-sms');
 })->name(name: 'bulk-sms.index');
+
+
+// عرض الوظائف
+Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index');
+Route::post('/job-type-view', [JobController::class, 'create'])->name('job-type.create');
+Route::post('/job-type-view/edit/{id}', [JobController::class, 'edit'])->name('job-type.edit');
+Route::delete('/job-type-view/{id}', [JobController::class, 'delete'])->name('job-type.delete');
+
+// عرض القنصلية
+Route::get('/embassy-view/{id?}', [EmbassyController::class, 'index'])->name('embassy.index');
+Route::post('/embassy-view', [EmbassyController::class, 'create'])->name('embassy.create');
+Route::post('/embassy-view/edit/{id}', [EmbassyController::class, 'edit'])->name('embassy.edit');
+Route::delete('/embassy-view/{id}', [EmbassyController::class, 'delete'])->name('embassy.delete');
 
 // عرض التقييمات
 Route::get('/evaluation-view/{id?}', [EvalutionController::class, 'index'])->name('evaluation.index');
