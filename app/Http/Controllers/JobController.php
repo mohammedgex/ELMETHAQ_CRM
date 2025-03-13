@@ -35,7 +35,7 @@ class JobController extends Controller
 
         $job = new JobTitle($request->all());
         $job->save();
-        return redirect()->route('job-type.index');
+        return redirect()->route('job-type.index')->with('success', 'تمت إضافة الوظيفة بنجاح!');
     }
 
     public function edit(Request $request, $id)
@@ -48,7 +48,7 @@ class JobController extends Controller
         $job = JobTitle::find($id);
         $job->title = $request->title;
         $job->save();
-        return redirect()->route('job-type.index');
+        return redirect()->route('job-type.index')->with('edit_success',value: $job->title);
     }
 
     public function delete($id)
@@ -62,6 +62,6 @@ class JobController extends Controller
             ]);
         }
         $job->delete();
-        return redirect()->route('job-type.index');
+        return redirect()->route('job-type.index')->with('delete_success','');
     }
 }

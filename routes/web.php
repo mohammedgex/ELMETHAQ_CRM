@@ -42,8 +42,8 @@ Route::get('/users', function () {
 
 
 // عرض مدة التأشيرات
-Route::get('/visa-peroid-view', action: function () {
-    return view(view: 'visa-peroid'); // This loads resources/views/dashboard.blade.php
+Route::get('/visa-professions', action: function () {
+    return view(view: 'visa-professions'); // This loads resources/views/dashboard.blade.php
 })->name(name: 'visa-peroid.index');
 
 // عرض الرسائل

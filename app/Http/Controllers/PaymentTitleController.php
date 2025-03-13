@@ -34,7 +34,7 @@ class PaymentTitleController extends Controller
 
         $payment = new PaymentTitle($request->all());
         $payment->save();
-        return redirect()->route('payment-type.index');
+        return redirect()->route('payment-type.index')->with('success', 'تمت إضافة المعاملة بنجاح!');
     }
 
 
@@ -48,7 +48,7 @@ class PaymentTitleController extends Controller
         $payment = PaymentTitle::find($id);
         $payment->title = $request->title;
         $payment->save();
-        return redirect()->route('payment-type.index');
+        return redirect()->route('payment-type.index')->with('edit_success',value: $payment->title);
     }
 
     public function delete($id)
@@ -62,6 +62,6 @@ class PaymentTitleController extends Controller
             ]);
         }
         $payment->delete();
-        return redirect()->route('payment-type.index');
+        return redirect()->route('payment-type.index')->with('delete_success','');
     }
 }

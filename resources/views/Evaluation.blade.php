@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'التقييمات')
+@section('title', 'تعريف التققيمات')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">التقييمات</h1>
+    <h1 style="font-weight:bold; text-align:right;">تعريف التقييمات</h1>
 @stop
 
 @section('content')
@@ -33,7 +33,7 @@
             @else
                 <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                     style="border-radius: 15px; background-color: #f8f9fa;">
-                    <h4 class="mb-3 text-dark font-weight-bold">التعدديل علي "{{ $evaluationEdit->title }}"</h4>
+                    <h4 class="mb-3 text-dark font-weight-bold">التعديل علي "{{ $evaluationEdit->title }}"</h4>
                     <form action="{{ route('evaluation.edit', $evaluationEdit->id) }}" method="POST">
                         @csrf
                         <div class="row">
@@ -53,11 +53,35 @@
             @endif
         </div>
 
+         @if (Session::has('success'))
+        <script>
+                Swal.fire({
+                title: "{{Session::get('success')}}",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
+        @if (Session::has('edit_success'))
+        <script>
+                Swal.fire({
+                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                 style="border-radius: 15px; background-color: #eae0d5;">
-                <h4 class="mb-3 text-dark font-weight-bold">قائمة التقييمات</h4>
+                <h4 class="mb-3 text-dark font-weight-bold">قائمة التقييمات <span class="text-success">({{ $evaluations->count() }})</span></h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->
                 <div class="row mb-3">
@@ -81,6 +105,7 @@
                             <tr>
                                 <th>كود التقييم</th>
                                 <th>اسم التقييم</th>
+                                <th>عدد العملاء</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
@@ -89,6 +114,7 @@
                                 <tr class="table-light">
                                     <td>#{{ $evaluation->id }}</td>
                                     <td class="highlight">{{ $evaluation->title }}</td>
+                                    <td class="highlight"><span class="badge bg-success text-white">{{$evaluation->customers->count()}} عميل</span></td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('evaluation.index', $evaluation->id) }}">
                                             <button class="btn btn-sm shadow-sm mx-1"
@@ -97,7 +123,7 @@
                                             </button>
                                         </a>
                                         <form action="{{ route('evaluation.delete', $evaluation->id) }}" method="POST"
-                                            class="mx-1">
+                                            class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm shadow-sm"
@@ -180,5 +206,29 @@
                 rows[i].style.display = found ? "" : "none";
             }
         }
+
+        function confirmDelete(event) {
+        event.preventDefault(); // Prevent form submission
+        Swal.fire({
+                title: "هل أنت متأكد من الحذف؟",
+                text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "حذف",
+                cancelButtonText: "الغاء",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Submit the form if confirmed
+                    Swal.fire({
+                    title: "تم الحذف",
+                    text: "تم الحذف بنجاح!",
+                    confirmButtonText: "تم",
+                    icon: "success"
+                    });
+                }
+                });
+    }
     </script>
 @stop
