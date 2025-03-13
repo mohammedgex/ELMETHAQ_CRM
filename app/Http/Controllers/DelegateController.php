@@ -63,7 +63,7 @@ class DelegateController extends Controller
         $delegate->phone = $request->phone;
         $delegate->card_id = $request->card_id;
         $delegate->save();
-        return redirect()->route('Delegates.create');
+        return redirect()->route('Delegates.create')->with('edit_success',value: $delegate->name);
     }
 
     public function delete($id)
@@ -77,7 +77,7 @@ class DelegateController extends Controller
             ]);
         }
         $delegate->delete();
-        return redirect()->route('Delegates.create')->with('success', 'successs');
+        return redirect()->route('Delegates.create')->with('delete_success','');
     }
 
      public function exportDelegates($id)

@@ -34,7 +34,7 @@ class DocumentTypeController extends Controller
 
         $group = new FileTitle($request->all());
         $group->save();
-        return redirect()->route('document-type.index');
+        return redirect()->route('document-type.index')->with('success', 'تمت إضافة نوع مستند بنجاح!');
     }
 
     public function edit(Request $request, $id)
@@ -47,7 +47,7 @@ class DocumentTypeController extends Controller
         $document = FileTitle::find($id);
         $document->title = $request->title;
         $document->save();
-        return redirect()->route('document-type.index');
+        return redirect()->route('document-type.index')->with('edit_success',value: $document->title);
     }
 
     public function delete($id)
@@ -61,6 +61,6 @@ class DocumentTypeController extends Controller
             ]);
         }
         $document->delete();
-        return redirect()->route('document-type.index');
+        return redirect()->route('document-type.index')->with('delete_success','');
     }
 }

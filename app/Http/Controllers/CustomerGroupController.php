@@ -36,7 +36,7 @@ class CustomerGroupController extends Controller
 
         $group = new CustomerGroup($request->all());
         $group->save();
-        return redirect()->route('customer-groups.index');
+        return redirect()->route('customer-groups.index')->with('success', 'تمت إضافة المجموعة بنجاح!');
     }
     public function edit(Request $request, $id)
     {
@@ -48,7 +48,7 @@ class CustomerGroupController extends Controller
         $group = CustomerGroup::find($id);
         $group->title = $request->title;
         $group->save();
-        return redirect()->route('customer-groups.index');
+        return redirect()->route('customer-groups.index')->with('edit_success',value: $group->title);
     }
 
     public function delete($id)
@@ -62,6 +62,6 @@ class CustomerGroupController extends Controller
             ]);
         }
         $group->delete();
-        return redirect()->route('customer-groups.index');
+        return redirect()->route('customer-groups.index')->with('delete_success','');
     }
 }

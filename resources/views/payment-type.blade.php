@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'أنواع المعاملات المالية')
+@section('title', 'تعريف المعاملات المالية')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">أنواع المعاملات المالية</h1>
+    <h1 style="font-weight:bold; text-align:right;">تعريف المعاملات المالية</h1>
 @stop
 
 @section('content')
@@ -53,11 +53,34 @@
             @endif
         </div>
 
+        @if (Session::has('success'))
+        <script>
+                Swal.fire({
+                title: "{{Session::get('success')}}",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
+        @if (Session::has('edit_success'))
+        <script>
+                Swal.fire({
+                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        @endif
+
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                 style="border-radius: 15px; background-color: #eae0d5;">
-                <h4 class="mb-3 text-dark font-weight-bold">قائمة التقييمات</h4>
+                <h4 class="mb-3 text-dark font-weight-bold"> قائمة المعاملات  <span class="text-success">({{ $payments->count() }})</span></h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->
                 <div class="row mb-3">
@@ -97,7 +120,7 @@
                                             </button>
                                         </a>
                                         <form action="{{ route('payment-type.delete', $payment->id) }}" method="POST"
-                                            class="mx-1">
+                                            class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm shadow-sm"
@@ -180,5 +203,29 @@
                 rows[i].style.display = found ? "" : "none";
             }
         }
+
+        function confirmDelete(event) {
+        event.preventDefault(); // Prevent form submission
+        Swal.fire({
+                title: "هل أنت متأكد من الحذف؟",
+                text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "حذف",
+                cancelButtonText: "الغاء",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Submit the form if confirmed
+                    Swal.fire({
+                    title: "تم الحذف",
+                    text: "تم الحذف بنجاح!",
+                    confirmButtonText: "تم",
+                    icon: "success"
+                    });
+                }
+                });
+    }
     </script>
 @stop

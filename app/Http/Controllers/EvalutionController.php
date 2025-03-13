@@ -34,7 +34,7 @@ class EvalutionController extends Controller
 
         $evaluation = new Evalution($request->all());
         $evaluation->save();
-        return redirect()->route('evaluation.index');
+        return redirect()->route('evaluation.index')->with('success', 'تمت إضافة التقييم بنجاح!');
     }
 
     public function edit(Request $request, $id)
@@ -47,7 +47,7 @@ class EvalutionController extends Controller
         $evaluation = Evalution::find($id);
         $evaluation->title = $request->title;
         $evaluation->save();
-        return redirect()->route('evaluation.index');
+        return redirect()->route('evaluation.index')->with('edit_success', $evaluation->title);
     }
 
     public function delete($id)
@@ -61,6 +61,6 @@ class EvalutionController extends Controller
             ]);
         }
         $evaluation->delete();
-        return redirect()->route('evaluation.index');
+        return redirect()->route('evaluation.index')->with('delete_success','');
     }
 }

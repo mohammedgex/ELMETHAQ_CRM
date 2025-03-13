@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'أنواع التأشيرات')
+@section('title', 'تعريف الوظائف')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">مدة التأشيرات</h1>
+    <h1 style="font-weight:bold; text-align:right;"> تعريف الوظائف</h1>
 @stop
 
 @section('content')
@@ -53,11 +53,34 @@
             @endif
         </div>
 
+        @if (Session::has('success'))
+        <script>
+                Swal.fire({
+                title: "{{Session::get('success')}}",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
+        @if (Session::has('edit_success'))
+        <script>
+                Swal.fire({
+                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        @endif
+
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                 style="border-radius: 15px; background-color: #eae0d5;">
-                <h4 class="mb-3 text-dark font-weight-bold">قائمة الوظائف</h4>
+                <h4 class="mb-3 text-dark font-weight-bold">قائمة الوظائف <span class="text-success">({{ $jobs->count() }})</span></h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->
                 <div class="row mb-3">
@@ -81,6 +104,7 @@
                             <tr>
                                 <th>كود الوظيفة</th>
                                 <th>اسم الوظيفة</th>
+                                <th>عدد العملاء</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
@@ -89,6 +113,7 @@
                                 <tr class="table-light">
                                     <td>#{{ $job->id }}</td>
                                     <td class="highlight">{{ $job->title }}</td>
+                                    <td class="highlight"><span class="badge bg-success text-white">{{$job->customers->count()}} عميل</span></td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('job-type.index', $job->id) }}">
                                             <button class="btn btn-sm btn-outline-success shadow-sms">
@@ -96,10 +121,10 @@
                                             </button>
                                         </a>
                                         <form action="{{ route('job-type.delete', $job->id) }}" method="POST"
-                                            class="mx-1">
+                                            class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
+                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit" >
                                                 <i class="fas fa-trash"></i> حذف
                                             </button>
                                         </form>
@@ -177,5 +202,29 @@
                 rows[i].style.display = found ? "" : "none";
             }
         }
+
+        function confirmDelete(event) {
+        event.preventDefault(); // Prevent form submission
+        Swal.fire({
+                title: "هل أنت متأكد من الحذف؟",
+                text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "حذف",
+                cancelButtonText: "الغاء",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Submit the form if confirmed
+                    Swal.fire({
+                    title: "تم الحذف",
+                    text: "تم الحذف بنجاح!",
+                    confirmButtonText: "تم",
+                    icon: "success"
+                    });
+                }
+                });
+    }
     </script>
 @stop

@@ -3,7 +3,7 @@
 @section('title', 'المناديب')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">المناديب</h1>
+    <h1 style="font-weight:bold; text-align:right;">تعريف المناديب</h1>
 @stop
 
 @section('content')
@@ -27,7 +27,7 @@
                     <input type="text" class="form-control" name="card_id" placeholder="أدخل الرقم القومي" required>
                 </div>
                 <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
-                    style="background-color: #997a44; color: white;">إضافة مندوب</button>
+                    style="background-color: #997a44; color: white;">إضافة مندوب جديد</button>
             </form>
         @else
             <h4 class="mb-3 font-weight-bold" style="color: #997a44 !important;">تعديل على "{{ $delegatesEdit->name }}"</h4>
@@ -57,8 +57,10 @@
 
         <hr>
 
-        <h4 class="mb-3 font-weight-bold" style="color: #997a44;">قائمة المناديب</h4>
-        <div class="table-responsive">
+        <h4 class="mb-3 text-dark font-weight-bold">
+            قائمة المناديب <span class="text-success"> ({{$delegates->count()}})</span>
+        </h4>
+            <div class="table-responsive">
             <table class="table table-hover text-center animate__animated animate__fadeInUp">
                 <thead class="text-white"
                     style="background: linear-gradient(45deg, #997a44, #7a5e33); border-radius: 10px;">
@@ -67,6 +69,7 @@
                         <th>اسم المندوب</th>
                         <th>رقم الهاتف</th>
                         <th>الرقم القومي</th>
+                        <th>عدد العملاء</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
@@ -77,6 +80,7 @@
                             <td>{{ $delegate->name }}</td>
                             <td>{{ $delegate->phone }}</td>
                             <td>{{ $delegate->card_id }}</td>
+                            <td class="highlight"><span class="badge bg-success text-white">{{$delegate->customers->count()}} عميل</span></td>
                             <td class="d-flex justify-content-center">
                                 <a href="{{ route('Delegates.create', $delegate->id) }}">
                                     <button class="btn btn-sm btn-outline-success shadow-sms">
@@ -84,10 +88,10 @@
                                     </button>
                                 </a>
                                 <form action="{{ route('Delegates.delete', $delegate->id) }}" method="POST"
-                                    class="mx-1">
+                                    class="mx-1" onsubmit="confirmDelete(event)">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
+                                    <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit" >
                                         <i class="fas fa-trash"></i> حذف
                                     </button>
                                 </form>
@@ -127,6 +131,43 @@
             </table>
         </div>
     </div>
+
+    @if (Session::has('success'))
+        <script>
+                Swal.fire({
+                title: "تم حفظ بيانات المندوب بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
+        @if (Session::has('edit_success'))
+            <script>
+                Swal.fire({
+                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+            @endif
+
+            @if (Session::has('pdf_export'))
+            <script>
+                    Swal.fire({
+                    title: "تم تصدير '{{Session::get('pdf_export')}}' بنجاح",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
+                    });
+            </script>
+            @endif
+
+            
+        
 
 
 
@@ -174,9 +215,37 @@
             border-radius: 12px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
         }
+        .table-responsive{
+            overflow: visible !important;
+        }
     </style>
 @stop
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function confirmDelete(event) {
+        event.preventDefault(); // Prevent form submission
+        Swal.fire({
+                title: "هل أنت متأكد من الحذف؟",
+                text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "حذف",
+                cancelButtonText: "الغاء",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Submit the form if confirmed
+                    Swal.fire({
+                    title: "تم الحذف",
+                    text: "تم الحذف بنجاح!",
+                    confirmButtonText: "تم",
+                    icon: "success"
+                    });
+                }
+                });
+    }
+    </script>
 @stop
