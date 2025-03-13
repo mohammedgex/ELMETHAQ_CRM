@@ -34,7 +34,7 @@ return new class extends Migration
             $table->integer('age')->nullable();
             $table->foreignId('delegate_id')->constrained('delegates')->onDelete('cascade');
             $table->foreignId(column: 'visa_type_id')->constrained('visa_types')->onDelete('cascade');
-            $table->foreignId('visa_peroid_id')->constrained(table: 'visa_peroids')->onDelete('cascade');
+            $table->foreignId('visa_professions_id')->constrained(table: 'visa_professions')->onDelete('cascade');
             $table->foreignId('customer_group_id')->constrained('customer_groups')->onDelete('cascade');
             $table->foreignId(column: 'sponser_id')->constrained('sponsers')->onDelete('cascade');
             $table->foreignId('evalution_id')->constrained('evalutions')->onDelete('cascade');

@@ -35,7 +35,7 @@ class EmbassyController extends Controller
 
         $embassy = new Embassy($request->all());
         $embassy->save();
-        return redirect()->route('embassy.index');
+        return redirect()->route('embassy.index')->with('success','تم حفظ البيانات بنجاح');
     }
 
     public function edit(Request $request, $id)
@@ -48,7 +48,8 @@ class EmbassyController extends Controller
         $embassy = Embassy::find($id);
         $embassy->title = $request->title;
         $embassy->save();
-        return redirect()->route('embassy.index');
+
+        return redirect()->route('embassy.index')->with('edit_success',value: $embassy->title);
     }
 
     public function delete($id)
@@ -62,6 +63,6 @@ class EmbassyController extends Controller
             ]);
         }
         $embassy->delete();
-        return redirect()->route('embassy.index');
+        return redirect()->route('embassy.index')->with('delete_success','');
     }
 }

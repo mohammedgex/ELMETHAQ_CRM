@@ -3,7 +3,8 @@
 @section('title', 'أنواع التأشيرات')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">مدة التأشيرات</h1>
+
+    <h1 class="text-success" style="font-weight:bold; text-align:right;"> المهن لتأشيرة برقم صادر (4545454545)</h1>
 @stop
 
 @section('content')
@@ -11,18 +12,27 @@
         <!-- ✅ قسم إضافة مجموعة -->
         <div class="col-md-12 mb-4">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn" style="border-radius: 15px; background-color: #f8f9fa;">
-                <h4 class="mb-3 text-dark font-weight-bold">إضافة مدة تأشيرة جديدة</h4>
+                <h4 class="mb-3 text-dark font-weight-bold">إضافة مهنة</h4>
                 <form action="" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label class="font-weight-bold">مدة التأشيرة </label>
-                            <input type="text" class="form-control" name="name" placeholder="أدخل نوع التأشيرة" required>
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold"> المهنة </label>
+                            <select class="form-control fw-bold" style="border-color: #997a44;">
+                                <option value="">اختر المهنة بالتأشيرة</option>
+                                <option value="A">3 شهور</option>
+                                <option value="B">6 شهور</option>
+                                <option value="C">سنة </option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold"> العدد لهذه المهنة </label>
+                            <input type="text" class="form-control" name="name" placeholder="أدخل العدد" required>
                         </div>
                     </div>
                     <!-- زر بعرض كامل -->
                     <button type="submit" class="btn mt-3 px-4 shadow-sm w-100" style="background-color: #997a44; color: white;">
-                        إضافة مدة تأشيرة جديد
+                        إضافة مهنة للتأشيرة
                     </button>
                 </form>
             </div>
@@ -31,7 +41,9 @@
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn" style="border-radius: 15px; background-color: #eae0d5;">
-                <h4 class="mb-3 text-dark font-weight-bold">قائمة التقييمات</h4>
+                        <h4 class="mb-3 text-dark font-weight-bold">
+                            قائمة المهن <span class="text-success">(50 مهنة)</span>
+                        </h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->
                 <div class="row mb-3">
@@ -51,15 +63,17 @@
                     <table class="table table-hover text-center animate__animated animate__fadeInUp" id="delegatesTable">
                         <thead class="text-white" style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
                             <tr>
-                                <th>كود مدة التأشيرة</th>
-                                <th>مدة التأشيرة</th>
+                                <th> المهنة </th>
+                                <th> العدد </th>
+                                <th> عدد العملاء </th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class="table-light">
-                                <td>#1</td>
-                                <td class="highlight">مقبول بالاختبارات</td>
+                                <td>سائق حافلة</td>
+                                <td class="highlight"> <span class="badge bg-info"> 50 </span> </td>
+                                <td class="highlight"> <span class="badge bg-success"> 100 عميل</span> </td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-success shadow-sm"><i class="fas fa-edit"></i> تعديل</button>
                                     <button class="btn btn-sm btn-outline-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"><i class="fas fa-trash"></i> حذف</button>

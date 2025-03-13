@@ -21,6 +21,7 @@
                                 <label class="font-weight-bold"> القنصلية </label>
                                 <input type="text" class="form-control" name="title" placeholder="أدخل اسم القنصلية"
                                     required>
+
                             </div>
                         </div>
                         <!-- زر بعرض كامل -->
@@ -52,6 +53,31 @@
                 </div>
             @endif
         </div>
+        @if (Session::has('success'))
+        <script>
+                Swal.fire({
+                title: "تم حفظ بيانات القنصلية بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
+        @if (Session::has('edit_success'))
+        <script>
+                Swal.fire({
+                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
+                icon: "success",
+                  confirmButtonText: "تم",
+                draggable: true
+                });
+            </script>
+        
+        @endif
+
+        
 
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
@@ -96,7 +122,7 @@
                                             </button>
                                         </a>
                                         <form action="{{ route('embassy.delete', $embassy->id) }}" method="POST"
-                                            class="mx-1">
+                                            class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
@@ -177,5 +203,29 @@
                 rows[i].style.display = found ? "" : "none";
             }
         }
+
+        function confirmDelete(event) {
+        event.preventDefault(); // Prevent form submission
+        Swal.fire({
+                title: "هل أنت متأكد من الحذف؟",
+                text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "حذف",
+                cancelButtonText: "الغاء",
+                }).then((result) => {
+                if (result.isConfirmed) {
+                    event.target.submit(); // Submit the form if confirmed
+                    Swal.fire({
+                    title: "تم الحذف",
+                    text: "تم الحذف بنجاح!",
+                    confirmButtonText: "تم",
+                    icon: "success"
+                    });
+                }
+                });
+    }
     </script>
 @stop

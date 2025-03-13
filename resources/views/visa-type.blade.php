@@ -3,7 +3,7 @@
 @section('title', 'أنواع التأشيرات')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">أنواع التأشيرات</h1>
+    <h1 style="font-weight:bold; text-align:right;"> تعريف التأشيرات</h1>
 @stop
 
 @section('content')
@@ -11,18 +11,61 @@
         <!-- ✅ قسم إضافة مجموعة -->
         <div class="col-md-12 mb-4">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn" style="border-radius: 15px; background-color: #f8f9fa;">
-                <h4 class="mb-3 text-dark font-weight-bold">إضافة نوع تأشيرة جديدة</h4>
+                <h4 class="mb-3 text-dark font-weight-bold">إضافة تأشيرة جديدة</h4>
                 <form action="" method="POST">
                     @csrf
                     <div class="row">
-                        <div class="col-md-12 form-group">
-                            <label class="font-weight-bold">نوع التأشيرة </label>
-                            <input type="text" class="form-control" name="name" placeholder="أدخل نوع التأشيرة" required>
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold"> العدد </label>
+                            <input type="number" class="form-control" name="name" placeholder="أدخل العدد" required>
                         </div>
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold"> رقم الصادر </label>
+                            <input type="number" class="form-control" name="name" placeholder="أدخل رقم الصادر" required>
+                        </div>
+                        
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold"> رقم السجل </label>
+                            <input type="number" class="form-control" name="name" placeholder="أدخل رقم السجل" required>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold">  مدة التأشيرة </label>
+                            <select class="form-control fw-bold" style="border-color: #997a44;">
+                                <option value="">اختر المدة</option>
+                                <option value="A">3 شهور</option>
+                                <option value="B">6 شهور</option>
+                                <option value="C">سنة </option>
+                            </select>                           
+                        </div>
+                        
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold">  القنصلية </label>
+                            <select class="form-control fw-bold" style="border-color: #997a44;">
+                                <option value="">اختر الحالة</option>
+                                <option value="A">القاهرة</option>
+                                <option value="B">السويس</option>
+                            </select>                       
+                    </div>
+                        <div class="col-md-6 form-group">
+                            <label class="font-weight-bold">  الكفيل </label>
+                            <select class="form-control fw-bold" style="border-color: #997a44;">
+                                <option value="">اختر الكفيل</option>
+                                <option value="A">محمد سيد</option>
+                                <option value="B">احمد خالد</option>
+                            </select>                       
+                    </div>
+                        
+                    </div>
+
+                    
                     <!-- زر بعرض كامل -->
                     <button type="submit" class="btn mt-3 px-4 shadow-sm w-100" style="background-color: #997a44; color: white;">
-                        إضافة نوع تأشيرة جديد
+                        إضافة تأشيرة جديدة
                     </button>
                 </form>
             </div>
@@ -52,20 +95,60 @@
                         <thead class="text-white" style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
                             <tr>
                                 <th>كود التأشيرة</th>
-                                <th>اسم التأشيرة</th>
+                                <th>رقم السجل</th>
+                                <th>رقم الصادر</th>
+                                <th> أجمالي العدد</th>
+                                <th>الكفيل </th>
+                                <th> القنصلية</th>
+                                <th> عدد المهن</th>
+                                <th> عدد العملاء</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr class="table-light">
+                            
+                             <tr class="table-light">
                                 <td>#1</td>
-                                <td class="highlight">مقبول بالاختبارات</td>
+                                <td class="highlight"> 658456456465 </td>
+                                <td class="highlight"> 864765465 </td>
+                                <td class="highlight"> <span class="badge bg-success"> 100 عميل</span> </td>
+                                <td class="highlight"> البركة التجارية </td>
+                                <td class="highlight"> قنصلية السويس</td>
+                                <td class="highlight"> <span class="badge bg-info">3 مهن</span> </td>
+                                <td class="highlight"> <span class="badge bg-primary">50 عميل</span> </td>
                                 <td>
                                     <button class="btn btn-sm btn-outline-success shadow-sm"><i class="fas fa-edit"></i> تعديل</button>
                                     <button class="btn btn-sm btn-outline-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"><i class="fas fa-trash"></i> حذف</button>
-                                    <button class="btn btn-sm btn-outline-primary shadow-sm"><i class="fas fa-users"></i> عرض العملاء</button>
+                                    <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
+                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li>
+                                            <a class="dropdown-item text-success">
+                                                <i class="fas fa-edit"></i>  المهن
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item text-primary">
+                                                <i class="fas fa-edit"></i>  العملاء
+                                            </a>
+                                        </li>                                        <li>
+                                            <a class="dropdown-item text-warning">
+                                                <i class="fas fa-edit"></i> طباعة تقرير
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <button class="dropdown-item text-danger">
+                                                <i class="fas fa-users"></i> بلاك ليست
+                                            </button>
+                                        </li>
+                                    </ul>
+                                </div>
                                 </td>
                             </tr>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -111,10 +194,14 @@
         border-radius: 12px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
+    .table-responsive{
+        overflow: visible !important;
+    }
 </style>
 @stop
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     // ✅ كود البحث داخل الجدول
     function searchTable() {

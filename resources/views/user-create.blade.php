@@ -68,28 +68,10 @@
                         </div>
                         
                     </div>
+                    
                     <div class="row my-2">
                         <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">الجنسية</label>
-                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
-                                <option value="">اختر الجنسية</option>
-                                <option value="A">مصري</option>
-                                <option value="B">غير ذلك</option>
-                            </select>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
-                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
-                                <option value="">اختر الحالة الاجتماعية</option>
-                                <option value="A">أعزب</option>
-                                <option value="B">متزوج</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row my-2">
-                        <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">المحافظة</label>
+                            <label class="fw-bold" style="color: #997a44;">محافظة الاقامة</label>
                             <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
                                 <option value="">اختر المحافظة</option>
                                 <option value="A">القاهرة</option>
@@ -102,14 +84,26 @@
                             <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر" name="card_id">
                         </div>
                     </div>
-                    <div class="col-md-12">
-                            <label class="fw-bold" style="color: #997a44;"> المؤهل الدراسي</label>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;"> التقييم</label>
                             <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
-                                <option value="">اختر المؤهل</option>
-                                <option value="A">محو امية</option>
-                                <option value="B">مؤهل متوسط</option>
+                                <option value="">اختر التقييم</option>
+                                <option value="A">مقبول</option>
+                                <option value="B">مرفوض</option>
                             </select>
                         </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;"> الحالة</label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر الحالة</option>
+                                <option value="A">جديد</option>
+                                <option value="B">ناجح</option>
+                                <option value="C">تجهيز الاوراق</option>
+                            </select>
+                        </div>
+                    </div>
+                    
                 </div>
 
                 <!-- القسم: البيانات الشخصية -->
@@ -212,24 +206,33 @@
                 <!-- القسم: معلومات إضافية -->
                 <div class="section-container">
                     <h4 class="fw-bold mb-3">معلومات إضافية</h4>
-                    <div class="row">
+                    
+                    <div class="row my-2">
                         <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;"> التقييم</label>
+                            <label class="fw-bold" style="color: #997a44;">الجنسية</label>
                             <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
-                                <option value="">اختر التقييم</option>
-                                <option value="A">مقبول</option>
-                                <option value="B">مرفوض</option>
+                                <option value="">اختر الجنسية</option>
+                                <option value="A">مصري</option>
+                                <option value="B">غير ذلك</option>
                             </select>
                         </div>
+                        
                         <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;"> الحالة</label>
+                            <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
                             <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
-                                <option value="">اختر الحالة</option>
-                                <option value="A">جديد</option>
-                                <option value="B">ناجح</option>
-                                <option value="C">تجهيز الاوراق</option>
+                                <option value="">اختر الحالة الاجتماعية</option>
+                                <option value="A">أعزب</option>
+                                <option value="B">متزوج</option>
                             </select>
                         </div>
+                    </div>
+                    <div class="col-md-12">
+                            <label class="fw-bold" style="color: #997a44;"> المؤهل الدراسي</label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر المؤهل</option>
+                                <option value="A">محو امية</option>
+                                <option value="B">مؤهل متوسط</option>
+                            </select>
                     </div>
                     <div class="col-md-12 my-2">
                             <label class="fw-bold" style="color: #997a44;"> ملاحظات</label>

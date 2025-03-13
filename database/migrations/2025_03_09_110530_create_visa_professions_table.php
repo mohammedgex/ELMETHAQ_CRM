@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('visa_peroids', function (Blueprint $table) {
+        Schema::create('visa_professions', function (Blueprint $table) {
             $table->id();
-            $table->string('peroid');
+            $table->string(column: 'profession_count');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('visa_peroids');
+        Schema::dropIfExists('visa_professions');
     }
 };

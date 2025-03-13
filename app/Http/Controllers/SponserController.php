@@ -36,7 +36,7 @@ class SponserController extends Controller
         ]);
         $sponser = new Sponser($request->all());
         $sponser->save();
-        return redirect()->route('sponsor.index');
+        return redirect()->route('sponsor.index')->with('success','تم اضافة الكفيل بنجاح');
     }
     public function edit(Request $request, $id)
     {
@@ -51,7 +51,7 @@ class SponserController extends Controller
         $sponser->phone = $request->phone;
         $sponser->city = $request->city;
         $sponser->save();
-        return redirect()->route('sponsor.index');
+        return redirect()->route('sponsor.index')->with('edit_success',$sponser->name);
     }
     public function delete($id)
     {

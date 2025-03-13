@@ -359,9 +359,33 @@ return [
             ],
         ],
 
+             [
+            'text' => 'تعريفات التأشيرة',
+            'icon' => 'fas fa-stream',
+            'submenu' => [
+                [
+                    'text' => 'تعريف التأشيرات',
+                    'url' => 'visa-type-view',
+                    'icon' => 'fab fa-cc-visa',
+                    'label_color' => 'success',
+                ],
+                    [
+                    'text' => 'تعريف القنصلية',
+                    'url' => 'embassy-view',
+                    'icon' => 'fas fa-user',
+                ],
+                [
+                    'text' => 'تعريف الكفيل',
+                    'url' => 'sponsor-view',
+                    'icon' => 'fas fa-building',
+                ],
+                ],
+            ],
+        
+
         // التعريفات
         [
-            'text' => 'التعريفات',
+            'text' => 'تعريفات العملاء',
             'icon' => 'fas fa-stream',
             'submenu' => [
                 [
@@ -370,27 +394,11 @@ return [
                     'icon' => 'fas fa-user',
                 ],
                 [
-                    'text' => 'تعريف القنصلية',
-                    'url' => 'embassy-view',
-                    'icon' => 'fas fa-user',
-                ],
-                [
                     'text' => 'تعريف الوظائف',
                     'url' => 'job-type-view',
                     'icon' => 'fas fa-user',
-                ],
-                [
-                    'text' => 'أنواع التأشيرات',
-                    'url' => 'visa-type-view',
-                    'icon' => 'fab fa-cc-visa',
-                    'label_color' => 'success',
-                ],
-                [
-                    'text' => 'مدة التأشيرات',
-                    'url' => 'visa-peroid-view',
-                    'icon' => 'fab fa-cc-visa',
-                    'label_color' => 'success',
-                ],
+                ],                
+                
                 [
                     'text' => 'تعريف المجموعات',
                     'url' => 'customer-groups',
@@ -400,11 +408,6 @@ return [
                     'text' => 'تعريف التقييم',
                     'url' => 'evaluation-view',
                     'icon' => 'fas fa-hourglass-half',
-                ],
-                [
-                    'text' => 'تعريف الكفيل',
-                    'url' => 'sponsor-view',
-                    'icon' => 'fas fa-building',
                 ],
                 [
                     'text' => 'تعريف المستندات',
@@ -419,6 +422,7 @@ return [
 
             ],
         ],
+        ['header' => 'اضافي'],
         [
             'text' => 'العملاء المحتملون',
             'url' => 'bulk-sms-view',
