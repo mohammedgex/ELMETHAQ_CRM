@@ -8,6 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class VisaType extends Model
 {
     use HasFactory;
-    protected $fillable = ['title', 'customer_id'];
-    public function customers() { return $this->hasMany(Customer::class); }
+    protected $fillable = ['count', 'outgoing_number', 'registration_number', 'visa_peroid', 'sponser_id', 'embassy_id'];
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+    public function sponser()
+    {
+        return $this->belongsTo(Sponser::class);
+    }
+    public function embassy()
+    {
+        return $this->belongsTo(Embassy::class);
+    }
 }
