@@ -13,6 +13,10 @@ class VisaType extends Model
     {
         return $this->hasMany(Customer::class);
     }
+    public function visa_professions()
+    {
+        return $this->hasMany(VisaProfessions::class);
+    }
     public function sponser()
     {
         return $this->belongsTo(Sponser::class);

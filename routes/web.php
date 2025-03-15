@@ -9,6 +9,7 @@ use App\Http\Controllers\EvalutionController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
+use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Models\Delegate;
 use Illuminate\Support\Facades\Auth;
@@ -37,15 +38,6 @@ Route::get('/users', function () {
 
 
 
-
-
-
-
-// عرض مدة التأشيرات
-Route::get('/visa-professions', action: function () {
-    return view(view: 'visa-professions'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'visa-peroid.index');
-
 // عرض الرسائل
 Route::get(uri: '/bulk-sms-view', action: function () {
     return view(view: 'bulk-sms');
@@ -56,6 +48,12 @@ Route::get('/visa-type-view/{id?}', [VisaTypeController::class, 'index'])->name(
 Route::post('/visa-type-view', [VisaTypeController::class, 'create'])->name('visa-type.create');
 Route::post('/visa-type-view/edit/{id}', [VisaTypeController::class, 'edit'])->name('visa-type.edit');
 Route::delete('/visa-type-view/{id}', [VisaTypeController::class, 'delete'])->name('visa-type.delete');
+
+// عرض مدة التأشيرات
+Route::get('/visa-professions/{visa_id}/{id?}', [VisaProfessionsController::class, 'index'])->name('visa-profession.index');
+Route::post('/visa-professions/{visa_id}', [VisaProfessionsController::class, 'create'])->name('visa-profession.create');
+Route::post('/visa-professions/edit/{id}', [VisaProfessionsController::class, 'edit'])->name('visa-profession.edit');
+Route::delete('/visa-professions/{id}', [VisaProfessionsController::class, 'delete'])->name('visa-profession.delete');
 
 // عرض الوظائف
 Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index');

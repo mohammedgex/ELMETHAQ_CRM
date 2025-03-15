@@ -51,7 +51,7 @@ class VisaTypeController extends Controller
 
         $visa_type = new VisaType($request->all());
         $visa_type->save();
-        return redirect()->route('visa-type.index');
+        return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
     }
 
     public function edit(Request $request, $id)
