@@ -9,6 +9,7 @@ use App\Http\Controllers\EvalutionController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
+use App\Http\Controllers\VisaTypeController;
 use App\Models\Delegate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -38,10 +39,7 @@ Route::get('/users', function () {
 
 
 
-// عرض أنواع التأشيرات
-Route::get('/visa-type-view', action: function () {
-    return view(view: 'visa-type'); // This loads resources/views/dashboard.blade.php
-})->name(name: 'visa-type.index');
+
 
 // عرض مدة التأشيرات
 Route::get('/visa-professions', action: function () {
@@ -53,6 +51,15 @@ Route::get(uri: '/bulk-sms-view', action: function () {
     return view(view: 'bulk-sms');
 })->name(name: 'bulk-sms.index');
 
+
+
+
+
+// عرض أنواع التأشيرات
+Route::get('/visa-type-view/{id?}', [VisaTypeController::class, 'index'])->name('visa-type.index');
+Route::post('/visa-type-view', [VisaTypeController::class, 'create'])->name('visa-type.create');
+Route::post('/visa-type-view/edit/{id}', [VisaTypeController::class, 'edit'])->name('visa-type.edit');
+Route::delete('/visa-type-view/{id}', [VisaTypeController::class, 'delete'])->name('visa-type.delete');
 
 // عرض الوظائف
 Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index');
