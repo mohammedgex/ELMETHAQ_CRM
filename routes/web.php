@@ -51,6 +51,11 @@ Route::get(uri: '/bulk-sms-view', action: function () {
     return view(view: 'bulk-sms');
 })->name(name: 'bulk-sms.index');
 
+// عرض المهام
+Route::get(uri: '/user-tasks', action: function () {
+    return view(view: 'tasks.tasks');
+})->name(name: 'user-tasks.index');
+
 // عرض أنواع التأشيرات
 Route::get('/visa-type-view/{id?}', [VisaTypeController::class, 'index'])->name('visa-type.index');
 Route::post('/visa-type-view', [VisaTypeController::class, 'create'])->name('visa-type.create');

@@ -414,7 +414,7 @@ return [
         ],
         [
             'text' => 'المهام',
-            'url' => 'visa-professions',
+            'url' => 'user-tasks',
             'icon' => 'fas fa-passport',
         ],
 
