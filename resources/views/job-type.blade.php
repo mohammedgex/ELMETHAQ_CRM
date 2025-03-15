@@ -17,12 +17,16 @@
                     <form action="{{ route('job-type.create') }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-12 form-group">
-                                <label class="font-weight-bold"> الوظائف </label>
-                                <input type="text" class="form-control" name="title" placeholder="أدخل اسم الوظيفة"
-                                    required>
-                            </div>
+                            
+                        <label class="font-weight-bold"> اسم الوظيفة </label>
+                        <div class="col-md-12 input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user-tie" style="color:#7c6232;"></i></span>
                         </div>
+                        <input type="text" class="form-control" name="title" placeholder="أدخل اسم الوظيفة" required>
+                </div>
+                        </div>
+                        
                         <!-- زر بعرض كامل -->
                         <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
                             style="background-color: #997a44; color: white;">
@@ -33,20 +37,28 @@
             @else
                 <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                     style="border-radius: 15px; background-color: #f8f9fa;">
-                    <h4 class="mb-3 text-dark font-weight-bold">إضافة وظيفة</h4>
+                    <h4 class="mb-3 text-dark font-weight-bold">تعديل وظيفة '{{ $jobEdit->title }}'</h4>
                     <form action="{{ route('job-type.edit', $jobEdit->id) }}" method="POST">
                         @csrf
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <label class="font-weight-bold"> الوظائف </label>
+                                <label class="font-weight-bold"> اسم الوظيفة </label>
+                                <div class="col-md-12 input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><i class="fas fa-user-tie" style="color:#7c6232;"></i></span>
+                        </div>
+
                                 <input type="text" class="form-control" name="title" value="{{ $jobEdit->title }}"
                                     placeholder="أدخل اسم الوظيفة" required>
+                                </div>
+
+                                    
                             </div>
                         </div>
                         <!-- زر بعرض كامل -->
-                        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
-                            style="background-color: #997a44; color: white;">
-                            إضافة وظيفة جديدة
+                        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100 bg-warning text-white"
+                            >
+                           تعديل الوظيفة
                         </button>
                     </form>
                 </div>
@@ -155,7 +167,7 @@
 
         .form-control:focus {
             border-color: #997a44;
-            box-shadow: 0 0 8px rgba(153, 122, 68, 0.3);
+            /* box-shadow: 0 0 8px rgba(153, 122, 68, 0.3); */
         }
 
         /* ✅ تحسين الجدول */
