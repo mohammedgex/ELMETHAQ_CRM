@@ -13,6 +13,7 @@
         <div class="col-md-12 mb-4">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn" style="border-radius: 15px; background-color: #f8f9fa;">
                 <h4 class="mb-3 text-dark font-weight-bold">إضافة مهنة</h4>
+                </button>
                 <form action="" method="POST">
                     @csrf
                     <div class="row">
@@ -86,6 +87,47 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"> اضافة مهن للتأشيرة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">اغلاق</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 form-group">
+                            <label class="font-weight-bold"> المهنة بالتأشيرة </label>
+                            <input type="text" class="form-control" name="name" placeholder="أدخل اسم المهنة" required>
+                        </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover text-center animate__animated animate__fadeInUp" id="delegatesTable">
+                        <thead class="text-white" style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
+                            <tr>
+                                <th> المهنة بالتأشيرة </th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="table-light">
+                                <td>سائق حافلة</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-success shadow-sm" data-bs-toggle="modal" data-bs-target="#exampleModal"><i class="fas fa-edit"></i> تعديل</button>
+                                    <button class="btn btn-sm btn-outline-danger shadow-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"><i class="fas fa-trash"></i> حذف</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">اضافة</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -129,6 +171,7 @@
 @stop
 
 @section('js')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script>
     // ✅ كود البحث داخل الجدول
     function searchTable() {

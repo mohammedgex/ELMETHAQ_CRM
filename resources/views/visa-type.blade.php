@@ -58,13 +58,14 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> الكفيل </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="sponser_id">
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="sponser_id" data-placeholder="اختر الكفيل">
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
                                         <option value="{{ $sponser->id }}">{{ $sponser->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
+                            
 
                         </div>
 
@@ -93,7 +94,6 @@
                                 <input type="number" class="form-control" name="outgoing_number"
                                     placeholder="أدخل رقم الصادر" required value="{{ $visaTypeEdit->outgoing_number }}">
                             </div>
-
                         </div>
                         <div class="row">
                             <div class="col-md-6 form-group">
@@ -119,6 +119,8 @@
                                 </select>
                             </div>
 
+                            
+
                         </div>
 
                         <div class="row">
@@ -137,16 +139,12 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> الكفيل </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="sponser_id">
+                                <select class="form-control select2 fw-bold" style="border-color: #997a44;" name="sponser_id">
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
-                                        <option value="{{ $sponser->id }}"
-                                            {{ old('sponser_id', $visaTypeEdit->sponser_id ?? '') == $sponser->id ? 'selected class= bg-success' : '' }}>
-                                            {{ $sponser->name }}
-                                        </option>
+                                        <option value="{{ $sponser->id }}">{{ $sponser->name }}</option>
                                     @endforeach
                                 </select>
-
                             </div>
 
                         </div>
@@ -212,7 +210,7 @@
                                     <td class="highlight">{{ $visa_type->embassy->title }}</td>
                                     <td class="highlight"> <span class="badge bg-info">3 مهن</span> </td>
                                     <td class="highlight"> <span
-                                            class="badge bg-primary">{{ $visa_type->customers->count() }} عميل</span>
+                                    class="badge bg-primary">{{ $visa_type->customers->count() }} عميل</span>
                                     </td>
                                     <td>
                                         <a href="{{ route('visa-type.index', $visa_type->id) }}">
@@ -228,6 +226,7 @@
                                                 <i class="fas fa-trash"></i> حذف
                                             </button>
                                         </form>
+                                        
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
                                                 type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -245,7 +244,7 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item text-warning">
+                                                    <a class="dropdown-item text-warning" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                                         <i class="fas fa-edit"></i> طباعة تقرير
                                                     </a>
                                                 </li>
@@ -266,9 +265,29 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Modal Title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            This is a Bootstrap modal.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 @stop
 
 @section('css')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <style>
         /* ✅ تحسين إدخال البيانات */
         .form-control {
@@ -313,8 +332,13 @@
 @stop
 
 @section('js')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script>
+        $(document).on('DOMContentLoaded', function() {
+        $('.select2').select2();
+    });
         // ✅ كود البحث داخل الجدول
         function searchTable() {
             let input = document.getElementById("searchInput").value.toLowerCase();
@@ -333,5 +357,7 @@
                 rows[i].style.display = found ? "" : "none";
             }
         }
+
+        
     </script>
 @stop
