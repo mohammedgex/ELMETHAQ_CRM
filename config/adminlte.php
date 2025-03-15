@@ -309,31 +309,12 @@ return [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-
-        // Sidebar items:
-        // [
-        //     'type' => 'sidebar-menu-search',
-        //     'text' => 'search',
-        // ],
-        // [
-        //     'text' => 'blog',
-        //     'url' => 'admin/blog',
-        //     'can' => 'manage-blog',
-        // ],
-        // [
-        //     'text' => 'pages',
-        //     'url' => 'admin/pages',
-        //     'icon' => 'far fa-fw fa-file',
-        //     'label' => 4,
-        //     'label_color' => 'success',
-        // ],
         [
             'text' => 'لوحة التحكم',
             'icon' => 'fas fa-fw fa-users',
             'icon_color' => 'Indigo',
             'url' => 'home'
         ],
-
         [
             'text' => 'العملاء',
             'icon' => 'fas fa-fw fa-users',
@@ -345,7 +326,6 @@ return [
                     'label' => 4,
                     'label_color' => 'success',
                 ],
-
                 [
                     'text' => 'اضافة عميل',
                     'url' => 'worker-create',
@@ -358,7 +338,6 @@ return [
                 ],
             ],
         ],
-
              [
             'text' => 'تعريفات التأشيرة',
             'icon' => 'fas fa-stream',
@@ -431,6 +410,11 @@ return [
         [
             'text' => 'ارسال رسائل',
             'url' => 'bulk-sms-view',
+            'icon' => 'fas fa-passport',
+        ],
+        [
+            'text' => 'المهام',
+            'url' => 'visa-professions',
             'icon' => 'fas fa-passport',
         ],
 
