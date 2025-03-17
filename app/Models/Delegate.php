@@ -9,5 +9,12 @@ class Delegate extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'phone', 'card_id'];
-    public function customers() { return $this->hasMany(Customer::class); }
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+    public function leadsCustomers()
+    {
+        return $this->hasMany(LeadsCustomers::class);
+    }
 }

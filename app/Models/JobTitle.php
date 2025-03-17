@@ -8,7 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class JobTitle extends Model
 {
     //
-        use HasFactory;
+    use HasFactory;
     protected $fillable = ['title'];
-    public function customers() { return $this->hasMany(Customer::class); }
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+    public function leadsCustomers()
+    {
+        return $this->hasMany(LeadsCustomers::class, 'job_title_id');
+    }
 }

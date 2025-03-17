@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('document_type');
             $table->string('file');
-            $table->foreignId(column: 'customer_id')->constrained('customers')->onDelete('cascade');
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->timestamps();
         });
     }

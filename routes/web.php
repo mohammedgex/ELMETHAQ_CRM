@@ -7,6 +7,7 @@ use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EmbassyController;
 use App\Http\Controllers\EvalutionController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\LeadsCustomersController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
 use App\Http\Controllers\TaskController;
@@ -48,17 +49,16 @@ Route::get(uri: '/bulk-sms-view', action: function () {
 Route::middleware(['auth'])->group(function () {
 
 
-    Route::get('/leads-customers', function () {
-    return view(view: 'leads-customers.leads-customers');
-        })->name('leads-customers');
+    Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
+    Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');
 
-        Route::get('/leads-create', function () {
-    return view(view: 'leads-customers.leads-customers-edit');
-        })->name('leads-customers.edit');
+    Route::get('/leads-create', function () {
+        return view(view: 'leads-customers.leads-customers-edit');
+    })->name('leads-customers.edit');
 
     Route::get('/users', function () {
-    return view(view: 'users.users');
-        })->name('users');
+        return view('users.users');
+    })->name('users');
 
     // عرض المهام
     Route::get('/user-tasks', [TaskController::class, 'index'])->name('user-tasks.index');
