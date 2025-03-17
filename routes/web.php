@@ -11,6 +11,7 @@ use App\Http\Controllers\LeadsCustomersController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Models\Delegate;
@@ -56,9 +57,7 @@ Route::middleware(['auth'])->group(function () {
         return view(view: 'leads-customers.leads-customers-edit');
     })->name('leads-customers.edit');
 
-    Route::get('/users', function () {
-        return view('users.users');
-    })->name('users');
+    Route::get('/users', [UserController::class, 'index'])->name('users');
 
     // عرض المهام
     Route::get('/user-tasks', [TaskController::class, 'index'])->name('user-tasks.index');
