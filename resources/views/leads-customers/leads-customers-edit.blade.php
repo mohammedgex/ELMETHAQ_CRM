@@ -3,109 +3,186 @@
 @section('title', ' العملاء المحتملون')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;"> العملاء المحتملون</h1>
+    <h1 style="font-weight:bold; text-align:right;"> تعديل العميل ()</h1>
 @stop
 
 @section('content')
-    <div class="row">
-        <!-- ✅ قسم البحث والعرض -->
-        <div class="col-md-12">
-            <div class="card shadow-ls p-4 border-0" style="border-radius: 15px; background-color: #eae0d5;">
-                <form action="" method="POST" class="modal-content p-3">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">تعديل عميل محمد سيد</h5>
+    <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn" 
+    style="border-radius: 15px; background-color: #f8f9fa;">
+    <form action="" method="POST" enctype="multipart/form-data">
+        <div class="row">
+            <!-- اسم العميل -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> اسم العميل </label>
+                <input type="text" class="form-control" name="name" placeholder="أدخل اسم العميل..." required>
             </div>
-            <div class="modal-body">
-                @csrf
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> اسم العميل </label>
-                    <input type="text" class="form-control" name="description" placeholder="أدخل اسم العميل..." required>
-                </div>
+            <!-- الوظيفة المقدم عليها -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> الوظيفة المقدم عليها </label>
+                <select class="form-control fw-bold" name="job_title_id">
+                    <option value=""> اختر الوظيفة</option>
+                   
+                    <option value="سبلبل"> لبلب</option>
+                </select>
+            </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> الوظيفة المقدم عليها </label>
-                    <select class="form-control fw-bold" name="receiving_user_id">
-                        <option value=""> سائق</option>
-                        <option value="fgfg"> محاسب </option>
-                    </select>
-                </div>
+            <!-- السن -->
+            <div class="col-md-4 mb-3">
+                <label class="font-weight-bold"> السن </label>
+                <input type="number" class="form-control" name="age" placeholder="أدخل السن" required>
+            </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> السن </label>
-                    <input type="text" class="form-control" name="description" placeholder="أدخل السن هنا" required>
-                </div>
+            <!-- رقم الهاتف -->
+            <div class="col-md-4 mb-3">
+                <label class="font-weight-bold"> رقم الهاتف </label>
+                <input type="text" class="form-control" name="phone" placeholder="أدخل رقم الهاتف" required>
+            </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold">  رقم الهاتف </label>
-                    <input type="text" class="form-control" name="description" placeholder="أدخل رقم الهاتف" required>
-                </div>
+            <!-- الرقم القومي -->
+            <div class="col-md-4 mb-3">
+                <label class="font-weight-bold"> الرقم القومي </label>
+                <input type="text" class="form-control" name="card_id" placeholder="أدخل الرقم القومي" required>
+            </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> المندوب </label>
-                    <select class="form-control fw-bold" name="receiving_user_id">
-                        <option value=""> سائق</option>
-                        <option value="fgfg"> محاسب </option>
-                    </select>
-                </div>
+            <!-- المندوب -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> المندوب </label>
+                <select class="form-control fw-bold" name="delegate_id">
+                    <option value=""> اختر المندوب</option>
+                   
+                    <option value="بلالا"> الال</option>
+                </select>
+            </div>
 
+            <!-- نوع الرخصة -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> نوع الرخصة </label>
+                <select class="form-control fw-bold" name="licence_type">
+                    <option value="">اختر نوع الرخصة</option>
+                    <option value="درجة أولي"> درجة أولي</option>
+                    <option value="درجة ثانية">درجة ثانية</option>
+                    <option value="درجة ثالثة">درجة ثالثة</option>
+                    <option value="رخصة خاصة">رخصة خاصة</option>
+                </select>
+            </div>
+           <section class="card shadow-sm p-4 border-0 mt-4" style="border-radius: 15px; background-color: #ffffff;">
+                <h4 class="mb-3 text-dark font-weight-bold text-center"> تحميل الملفات</h4>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> الرقم القومي </label>
-                    <input type="text" class="form-control" name="description" placeholder="أدخل الرقم القومي" required>
-                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="font-weight-bold"> الصورة الشخصية</label>
+                            <input type="file" class="form-control" name="image">
+                        </div>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> نوع الرخصة </label>
-                    <select class="form-control fw-bold" name="receiving_user_id">
-                        <option value=""> درجة أولي</option>
-                        <option value="fgfg">درجة ثانية</option>
-                        <option value="fgfg">درجة ثالثة</option>
-                        <option value="fgfg">رخصة خاصة</option>
-                    </select>
-                </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="font-weight-bold"> صورة جواز السفر</label>
+                            <input type="file" class="form-control" name="passport_photo">
+                        </div>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> الصورة الشخصية </label>
-                    <input type="file" class="form-control-file" name="profile_picture">
-                </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="font-weight-bold"> بطاقة الرقم القومي</label>
+                            <input type="file" class="form-control" name="img_national_id_card">
+                        </div>
+                    </div>
 
-                <div class="mb-3">
-                    <label class="font-weight-bold"> الحالة </label>
-                    <select class="form-control fw-bold" name="receiving_user_id">
-                        <option value=""> ناجح بالاختبارات</option>
-                        <option value="fgfg">راسب بالاختبارات</option>
-                        <option value="fgfg"> اعادة الاختبار </option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label class="font-weight-bold"> موعد التسجيل </label>
-                    <div class="input-group">
-                        <span class="input-group-text"><i class="fas fa-calendar-alt" style="color:#7c6232;"></i></span>
-                        <input type="date" class="form-control" name="description" required>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label class="font-weight-bold"> صورة الرخصة</label>
+                            <input type="file" class="form-control" name="license_photo">
+                        </div>
                     </div>
                 </div>
+            </section>
 
+            <!-- نوع الاختبار -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> نوع الاختبار </label>
+                <select class="form-control fw-bold" name="test_type">
+                    <option value="">اختر نوع الاختبار </option>
+                    <option value="اول اختبار"> اول اختبار</option>
+                    <option value="اعادة اختبار">اعادة اختبار </option>
+                    <option value="قيادة امنة">قيادة امنة </option>
+                </select>
             </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-success"> تعديل العميل </button>
-                                <button type="submit" class="btn btn-warning"> عودة </button>
 
+            <!-- التقييم -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> التقييم </label>
+                <select class="form-control fw-bold" name="evaluation">
+                    <option value="">اختر التقييم </option>
+                    <option value="مقبول"> مقبول </option>
+                    <option value="احتياطي"> احتياطي </option>
+                    <option value="غير مقبول"> غير مقبول </option>
+                </select>
             </div>
-        </form>
+
+            <!-- المحافظة -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> المحافظة </label>
+                <select class="form-control fw-bold" name="governorate">
+                    <option value="">اختر المحافظة</option>
+                    <option value="القاهرة">القاهرة</option>
+                    <option value="الجيزة">الجيزة</option>
+                    <option value="الإسكندرية">الإسكندرية</option>
+                    <option value="الدقهلية">الدقهلية</option>
+                    <option value="البحر الأحمر">البحر الأحمر</option>
+                    <option value="البحيرة">البحيرة</option>
+                    <option value="الفيوم">الفيوم</option>
+                    <option value="الغربية">الغربية</option>
+                    <option value="الإسماعيلية">الإسماعيلية</option>
+                    <option value="كفر الشيخ">كفر الشيخ</option>
+                    <option value="المنوفية">المنوفية</option>
+                    <option value="المنيا">المنيا</option>
+                    <option value="القليوبية">القليوبية</option>
+                    <option value="الوادي الجديد">الوادي الجديد</option>
+                    <option value="السويس">السويس</option>
+                    <option value="أسوان">أسوان</option>
+                    <option value="أسيوط">أسيوط</option>
+                    <option value="بني سويف">بني سويف</option>
+                    <option value="بورسعيد">بورسعيد</option>
+                    <option value="دمياط">دمياط</option>
+                    <option value="جنوب سيناء">جنوب سيناء</option>
+                    <option value="شمال سيناء">شمال سيناء</option>
+                    <option value="الشرقية">الشرقية</option>
+                    <option value="سوهاج">سوهاج</option>
+                    <option value="قنا">قنا</option>
+                    <option value="مطروح">مطروح</option>
+                    <option value="الأقصر">الأقصر</option>
+                    <option value="حلوان">حلوان</option>
+                    <option value="6 أكتوبر">6 أكتوبر</option>
+                </select>
+            </div>
+
+            <!-- موعد التسجيل -->
+            <div class="col-md-6 mb-3">
+                <label class="font-weight-bold"> موعد التسجيل </label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-calendar-alt" style="color:#7c6232;"></i></span>
+                    <input type="date" class="form-control" name="registration_date" required>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-@stop
 
+        <!-- زر الإضافة -->
+        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100" 
+            style="background-color: #997a44; color: white;">
+            إضافة كعميل محتمل
+        </button>
+    </form>
+</div>
+
+@stop
 
 @section('css')
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 <style>
-    /* تنسيق أزرار التصدير */
     .dt-buttons {
         margin-bottom: 10px;
     }
@@ -125,20 +202,49 @@
         background-color: #dc3545 !important;
         color: white !important;
     }
-
-    /* تحسين حقل البحث */
     .dataTables_filter {
         text-align: left !important;
         margin-bottom: 15px;
     }
     .dataTables_filter input {
         width: 250px;
-        padding: 8px;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 14px;
     }
-    </style>
+      /* ✅ تحسين إدخال البيانات */
+        .form-control {
+            border-radius: 10px;
+            padding: 12px;
+            height: 50px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #997a44;
+            box-shadow: 0 0 8px rgba(153, 122, 68, 0.3);
+        }
+
+        /* ✅ تحسين الجدول */
+        .table-hover tbody tr:hover {
+            background-color: #f1ede5;
+            transition: 0.3s ease-in-out;
+        }
+
+        /* ✅ تحسين الأزرار */
+        .btn {
+            transition: all 0.3s ease-in-out;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        /* ✅ تحسين تقسيم الأقسام */
+        .card {
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+</style>
 @stop
 
 @section('js')

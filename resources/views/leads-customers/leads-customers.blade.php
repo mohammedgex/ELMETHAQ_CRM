@@ -27,12 +27,18 @@
                                 <th>كود العميل</th>
                                 <th>اسم العميل</th>
                                 <th>الصورة الشخصية</th>
+                                <!-- <th> صورة الرخصة</th>
+                                <th> صورة البطاقة</th>
+                                <th> صورة جواز السفر</th> -->
                                 <th> السن</th>
                                 <th> الرقم القومي</th>
                                 <th> المحافظة</th>
                                 <th> رقم الهاتف</th>
                                 <th> نوع الرخصة</th>
                                 <th> الحالة</th>
+                                <th> المندوب</th>
+                                <th> المحافظة</th>
+                                <th> الوظيفة</th>
                                 <th> موعد التسجيل للاختبار</th>
                                 <th>الإجراءات</th>
                             </tr>
@@ -47,25 +53,70 @@
                                                 src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
                                                 width="45" height="45" style="border-radius: 10px;"></a>
                                     </td>
+                                    <!-- <td>
+                                        <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
+                                                src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                width="45" height="45" style="border-radius: 10px;"></a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
+                                                src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                width="45" height="45" style="border-radius: 10px;"></a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
+                                                src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                width="45" height="45" style="border-radius: 10px;"></a>
+                                    </td> -->
                                     <td><span class="badge bg-info text-white">{{ $lead->age }}</span></td>
                                     <td>{{ $lead->card_id }}</td>
                                     <td> {{ $lead->governorate }} </td>
                                     <td> {{ $lead->phone }} </td>
                                     <td> {{ $lead->licence_type }}</td>
                                     <td><span class="badge bg-info text-success">{{ $lead->status }}</span></td>
+                                    <td> {{ $lead->delegate->name }}</td>
+                                    <td> {{ $lead->governorate }}</td>
+                                    <td> {{ $lead->jobTitle->title }}</td>
                                     <td>{{ $lead->registration_date }}</td>
                                     <td>
-                                        <a href="">
-                                            <button class="btn btn-sm btn-outline-success shadow-sms">
-                                                <i class="fas fa-edit"></i> تعديل
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="fas fa-ellipsis-v"></i>
                                             </button>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
-                                            <i class="fas fa-trash"></i> حذف
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-primary shadow-sm mx-1">
-                                            <i class="fas fa-users"></i> عميل اساسي
-                                        </button>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <a class="dropdown-item text-success" href="">
+                                                        <i class="fas fa-eye"></i> عرض
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a class="dropdown-item text-primary" href="">
+                                                        <i class="fas fa-edit"></i> تعديل
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item text-danger">
+                                                        <i class="fas fa-trash"></i> حذف
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <button class="dropdown-item text-warning">
+                                                        <i class="fas fa-users"></i> عميل أساسي
+                                                    </button>
+                                                </li>
+                                                <li class="dropdown-divider"></li>
+                                                <li class="rating-item">
+                                                    <span class="dropdown-item text-info">
+                                                        <i class="fas fa-star"></i> تقييم
+                                                    </span>
+                                                    <ul class="rating-options">
+                                                        <li><a class="dropdown-item text-success" href="#"><i class="fas fa-check"></i> تغيير التقييم لنجاح</a></li>
+                                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-times"></i> تغيير التقييم لراسب</a></li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -78,7 +129,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <form action="{{ route('leads-customers.create') }}" method="POST" class="modal-content p-3"
                 enctype="multipart/form-data">
                 <div class="modal-header">
@@ -88,13 +139,13 @@
                 </div>
                 <div class="modal-body">
                     @csrf
-
-                    <div class="mb-3">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> اسم العميل </label>
                         <input type="text" class="form-control" name="name" placeholder="أدخل اسم العميل..." required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> الوظيفة المقدم عليها </label>
                         <select class="form-control fw-bold" name="job_title_id">
                             <option value=""> اختر الوظيفة</option>
@@ -103,18 +154,22 @@
                             @endforeach
                         </select>
                     </div>
+                    </div>
 
-                    <div class="mb-3">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> السن </label>
                         <input type="text" class="form-control" name="age" placeholder="أدخل السن هنا" required>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> رقم الهاتف </label>
                         <input type="text" class="form-control" name="phone" placeholder="أدخل رقم الهاتف" required>
                     </div>
+                    </div>
 
-                    <div class="mb-3">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> المندوب </label>
                         <select class="form-control fw-bold" name="delegate_id">
                             <option value=""> اختر المندوب</option>
@@ -124,44 +179,62 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> الرقم القومي </label>
                         <input type="text" class="form-control" name="card_id" placeholder="أدخل الرقم القومي" required>
                     </div>
-
-                    <div class="mb-3">
-                        <label class="font-weight-bold"> نوع الرخصة </label>
-                        <select class="form-control fw-bold" name="licence_type">
-                            <option value="">اختر نوع الرخصة</option>
-                            <option value="درجة أولي"> درجة أولي</option>
-                            <option value="درجة ثانية">درجة ثانية</option>
-                            <option value="درجة ثالثة">درجة ثالثة</option>
-                            <option value="رخصة خاصة">رخصة خاصة</option>
-                        </select>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="row">
+                        <div class="mb-3 col-md-6">
+                            <label class="font-weight-bold"> نوع الرخصة </label>
+                            <select class="form-control fw-bold" name="licence_type">
+                                <option value="">اختر نوع الرخصة</option>
+                                <option value="درجة أولي"> درجة أولي</option>
+                                <option value="درجة ثانية">درجة ثانية</option>
+                                <option value="درجة ثالثة">درجة ثالثة</option>
+                                <option value="رخصة خاصة">رخصة خاصة</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3 col-md-6">
+                            <label class="font-weight-bold"> التقييم </label>
+                            <select class="form-control fw-bold" name="evaluation">
+                                <option value="">اختر التقييم </option>
+                                <option value="مقبول"> مقبول </option>
+                                <option value="احتياطي"> احتياطي </option>
+                                <option value="غير مقبول"> غير مقبول </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> الصورة الشخصية </label>
-                        <input type="file" class="form-control-file" name="image">
-                    </div>
+                        <input type="file" class="form-control" name="image">
+                            </div>
 
-                    <div class="mb-3">
-                        <label class="font-weight-bold"> صورة جواز السفر </label>
-                        <input type="file" class="form-control-file" name="passport_photo">
+                            <div class="mb-3 col-md-6">
+                                <label class="font-weight-bold"> صورة جواز السفر </label>
+                                <input type="file" class="form-control" name="passport_photo">
+                            </div>
                     </div>
+                    
 
-                    <div class="mb-3">
+                    <div class="row">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> بطاقة الرقم القومي </label>
-                        <input type="file" class="form-control-file" name="img_national_id_card">
+                        <input type="file" class="form-control" name="img_national_id_card">
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> صورة الرخصة </label>
-                        <input type="file" class="form-control-file" name="license_photo">
+                        <input type="file" class="form-control" name="license_photo">
+                    </div>
                     </div>
 
-
-                    <div class="mb-3">
+                    <div class="row">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> نوع الاختبار </label>
                         <select class="form-control fw-bold" name="test_type">
                             <option value="">اختر نوع الاختبار </option>
@@ -171,23 +244,44 @@
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label class="font-weight-bold"> التقييم </label>
-                        <select class="form-control fw-bold" name="evaluation">
-                            <option value="">اختر التقييم </option>
-                            <option value="مقبول"> مقبول </option>
-                            <option value="احتياطي"> احتياطي </option>
-                            <option value="غير مقبول"> غير مقبول </option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
+                    <div class="mb-3 col-md-6">
                         <label class="font-weight-bold"> المحافظة </label>
                         <select class="form-control fw-bold" name="governorate">
-                            <option value=""> اختر المحافظة </option>
-                            <option value="القاهرة"> القاهرة </option>
-                            <option value="اسكندرية"> اسكندرية </option>
+                            <option value="">اختر المحافظة</option>
+                            <option value="القاهرة">القاهرة</option>
+                            <option value="الجيزة">الجيزة</option>
+                            <option value="الإسكندرية">الإسكندرية</option>
+                            <option value="الدقهلية">الدقهلية</option>
+                            <option value="البحر الأحمر">البحر الأحمر</option>
+                            <option value="البحيرة">البحيرة</option>
+                            <option value="الفيوم">الفيوم</option>
+                            <option value="الغربية">الغربية</option>
+                            <option value="الإسماعيلية">الإسماعيلية</option>
+                            <option value="كفر الشيخ">كفر الشيخ</option>
+                            <option value="المنوفية">المنوفية</option>
+                            <option value="المنيا">المنيا</option>
+                            <option value="القليوبية">القليوبية</option>
+                            <option value="الوادي الجديد">الوادي الجديد</option>
+                            <option value="السويس">السويس</option>
+                            <option value="أسوان">أسوان</option>
+                            <option value="أسيوط">أسيوط</option>
+                            <option value="بني سويف">بني سويف</option>
+                            <option value="بورسعيد">بورسعيد</option>
+                            <option value="دمياط">دمياط</option>
+                            <option value="جنوب سيناء">جنوب سيناء</option>
+                            <option value="شمال سيناء">شمال سيناء</option>
+                            <option value="الشرقية">الشرقية</option>
+                            <option value="سوهاج">سوهاج</option>
+                            <option value="قنا">قنا</option>
+                            <option value="مطروح">مطروح</option>
+                            <option value="الأقصر">الأقصر</option>
+                            <option value="حلوان">حلوان</option>
+                            <option value="6 أكتوبر">6 أكتوبر</option>
                         </select>
                     </div>
+                    </div>
+
+
 
                     <div class="mb-3">
                         <label class="font-weight-bold"> موعد التسجيل </label>
@@ -249,6 +343,31 @@
             border: 1px solid #ccc;
             font-size: 14px;
         }
+        .rating-options {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 10;
+        background: white;
+        border: 1px solid #ddd;
+        list-style: none;
+        padding: 0;
+        min-width: 180px;
+    }
+
+    .rating-item:hover .rating-options {
+        display: block;
+    }
+
+    .rating-options li {
+        padding: 5px 10px;
+    }
+    .table-responsive{
+        overflow: visible;
+    }
+    .modal-dialog {
+    max-width: 80%; /* Adjust as needed */
+    }
     </style>
 @stop
 
@@ -299,6 +418,7 @@
                 [10, 25, 50, "الكل"]
             ],
         });
+
     </script>
 
 @stop

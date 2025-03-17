@@ -56,6 +56,10 @@ Route::middleware(['auth'])->group(function () {
         return view(view: 'leads-customers.leads-customers-edit');
     })->name('leads-customers.edit');
 
+    Route::get('/leads-show', function () {
+        return view(view: 'leads-customers.leads-customers-show');
+    })->name('leads-customers.show');
+
     Route::get('/users', function () {
         return view('users.users');
     })->name('users');
