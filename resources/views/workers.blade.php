@@ -134,9 +134,9 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item text-warning"
-                                                href="">
-                                                <i class="fas fa-edit"></i> حجز كشف طبي
+                                            <a class="dropdown-item text-warning check-medical-status" href="#" data-mrz="P<EGYABDOU<<FAYEZ<ABDELSATTAR<FAYEZ<<<<<<<<<
+                                            A268118145EGY9005156M2701312<<<<<<<<<<<<<<04">
+                                                <i class="fas fa-edit"></i> نتيجة كشف طبي
                                             </a>
                                         </li>
                                         <li>
@@ -165,6 +165,52 @@
 
 @section('js')
 <script>
+   document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".check-medical-status").forEach(button => {
+        button.addEventListener("click", async function (event) {
+            event.preventDefault();
+
+            let mrzCode = this.getAttribute("data-mrz");
+
+            try {
+                let response = await fetch("http://localhost:3000/check-status", { // Use 127.0.0.1 instead of localhost
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ mrzCode: mrzCode })
+                });
+
+                if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+
+                let result = await response.json();
+
+                if (result.status === "success") {
+                    Swal.fire({
+    title: "تم اصدار نتيجة الكشف الطبي بنجاح",
+    icon: "success",
+    confirmButtonText: "تم",
+    showCancelButton: true,
+    cancelButtonText: "عرض النتيجة",
+    didOpen: () => {
+        const cancelButton = document.querySelector(".swal2-cancel");
+        if (cancelButton) {
+            cancelButton.addEventListener("click", () => {
+                window.open(result.pdf_url, "_blank"); // Replace with actual PDF link
+            });
+        }
+    }
+});
+                } else {
+                    alert("⚠️ " + result.message);
+                }
+
+            } catch (error) {
+                alert("❌ Error: " + error.message);
+            }
+        });
+    });
+});
     $(document).ready(function() {
         $('#dataTable').DataTable({
             "paging": true,
@@ -192,5 +238,7 @@
             });
         });
     });
+
+        
 </script>
 @stop
