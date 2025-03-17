@@ -404,7 +404,7 @@ return [
         ['header' => 'اضافي'],
         [
             'text' => 'العملاء المحتملون',
-            'url' => 'bulk-sms-view',
+            'url' => 'leads-customers',
             'icon' => 'fas fa-passport',
         ],
         [

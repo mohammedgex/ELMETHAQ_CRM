@@ -61,7 +61,7 @@
             قائمة المناديب <span class="text-success"> ({{$delegates->count()}})</span>
         </h4>
             <div class="table-responsive">
-            <table class="table table-hover text-center animate__animated animate__fadeInUp">
+            <table id="example" class="table table-hover text-center animate__animated animate__fadeInUp" >
                 <thead class="text-white"
                     style="background: linear-gradient(45deg, #997a44, #7a5e33); border-radius: 10px;">
                     <tr>
@@ -177,6 +177,9 @@
 @stop
 
 @section('css')
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
 
     <style>
         /* تحسين إدخال البيانات */
@@ -218,11 +221,75 @@
         .table-responsive{
             overflow: visible !important;
         }
+        /* تحسين مظهر الجدول */
+    table.dataTable {
+        border-collapse: collapse !important;
+        width: 100%;
+        background-color: #fff;
+        font-size: 16px;
+        text-align: center;
+    }
+    table.dataTable thead {
+        background-color: #007bff;
+        color: #fff;
+    }
+    table.dataTable tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    table.dataTable tbody tr:hover {
+        background-color: #d9edf7;
+    }
+
+    /* تنسيق أزرار التصدير */
+    .dt-buttons {
+        margin-bottom: 10px;
+    }
+    .dt-button {
+        padding: 8px 15px;
+        margin: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    .buttons-excel {
+        background-color: #28a745 !important;
+        color: white !important;
+    }
+    .buttons-pdf {
+        background-color: #dc3545 !important;
+        color: white !important;
+    }
+
+    /* تحسين حقل البحث */
+    .dataTables_filter {
+        text-align: left !important;
+        margin-bottom: 15px;
+    }
+    .dataTables_filter input {
+        width: 250px;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 14px;
+    }
     </style>
 @stop
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery & DataTables JS -->
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+<!-- DataTables Buttons -->
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+
     <script>
         function confirmDelete(event) {
         event.preventDefault(); // Prevent form submission
@@ -247,5 +314,28 @@
                 }
                 });
     }
+
+    $('#example').DataTable({
+        dom: 'Bfrtip', // تخصيص ترتيب العناصر
+        buttons: [
+            {
+                extend: 'excel',
+                text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
+                className: 'buttons-excel'
+            },
+            
+            {
+                extend: 'print',
+                text: '<i class="fa fa-file-pdf"></i> طباعة',
+                className: 'buttons-pdf',
+            },
+            
+        ],
+        language: {
+            url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+        },
+        pageLength: 10,
+        lengthMenu: [ [10, 25, 50, -1], [10, 25, 50, "الكل"] ],
+    });
     </script>
 @stop

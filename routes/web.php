@@ -48,6 +48,18 @@ Route::get(uri: '/bulk-sms-view', action: function () {
 Route::middleware(['auth'])->group(function () {
 
 
+    Route::get('/leads-customers', function () {
+    return view(view: 'leads-customers.leads-customers');
+        })->name('leads-customers');
+
+        Route::get('/leads-create', function () {
+    return view(view: 'leads-customers.leads-customers-edit');
+        })->name('leads-customers.edit');
+
+    Route::get('/users', function () {
+    return view(view: 'users.users');
+        })->name('users');
+
     // عرض المهام
     Route::get('/user-tasks', [TaskController::class, 'index'])->name('user-tasks.index');
     Route::get('/user-tasks/done/{id}', [TaskController::class, 'done'])->name('user-tasks.done');
@@ -66,7 +78,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/visa-professions/{id}', [VisaProfessionsController::class, 'delete'])->name('visa-profession.delete');
 
     // عرض الوظائف
-    Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index');
+    Route::get('/job-type-view/{id?}', action: [JobController::class, 'index'])->name('job-type.index');
     Route::post('/job-type-view', [JobController::class, 'create'])->name('job-type.create');
     Route::post('/job-type-view/edit/{id}', [JobController::class, 'edit'])->name('job-type.edit');
     Route::delete('/job-type-view/{id}', [JobController::class, 'delete'])->name('job-type.delete');
