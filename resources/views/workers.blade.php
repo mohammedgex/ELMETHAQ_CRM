@@ -139,8 +139,16 @@
                                                 <i class="fas fa-edit"></i> نتيجة كشف طبي
                                             </a>
                                         </li>
+
                                         <li>
-                                            <button class="dropdown-item text-danger">
+                                            <a class="dropdown-item text-warning check-medical-hopital" href="#">
+                                                <i class="fas fa-edit"></i> نتيجة وبيانات المستشفي
+                                            </a>
+                                        </li>
+
+                                        
+                                        <li>
+                                            <button class="dropdown-item text-danger send-sms">
                                                 <i class="fas fa-users"></i> بلاك ليست
                                             </button>
                                         </li>
@@ -187,16 +195,16 @@
 
                 if (result.status === "success") {
                     Swal.fire({
-    title: "تم اصدار نتيجة الكشف الطبي بنجاح",
-    icon: "success",
-    confirmButtonText: "تم",
-    showCancelButton: true,
-    cancelButtonText: "عرض النتيجة",
-    didOpen: () => {
-        const cancelButton = document.querySelector(".swal2-cancel");
-        if (cancelButton) {
-            cancelButton.addEventListener("click", () => {
-                window.open(result.pdf_url, "_blank"); // Replace with actual PDF link
+                        title: "تم اصدار نتيجة الكشف الطبي بنجاح",
+                        icon: "success",
+                        confirmButtonText: "تم",
+                        showCancelButton: true,
+                        cancelButtonText: "عرض النتيجة",
+                        didOpen: () => {
+                            const cancelButton = document.querySelector(".swal2-cancel");
+                            if (cancelButton) {
+                                cancelButton.addEventListener("click", () => {
+                                    window.open(result.pdf_url, "_blank"); // Replace with actual PDF link
             });
         }
     }
@@ -210,6 +218,111 @@
             }
         });
     });
+
+
+    // المستشفي
+
+   document.querySelectorAll(".check-medical-hopital").forEach(button => {
+    button.addEventListener("click", async function (event) {
+        event.preventDefault();
+
+        try {
+            // إرسال الطلب لجلب بيانات المستشفى
+            let response = await fetch("http://localhost:3000/get-hospital", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ passport: "A23294560", nationality: "Egyptian" })
+            });
+
+            if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+
+            let result = await response.json();
+
+            if (result.hospitalName && result.address && result.phone) {
+                // عرض بيانات المستشفى في SweetAlert
+                Swal.fire({
+                    title: "✅ بيانات المستشفى",
+                    html: `
+                        <b>🏥 اسم المركز الطبي:</b> ${result.hospitalName} <br><br>
+                        <b>📍 العنوان:</b> ${result.address} <br><br>
+                        <b>📞 رقم الهاتف:</b> ${result.phone}
+                    `,
+                    icon: "info",
+                    showCancelButton: true,
+                    confirmButtonText: "إغلاق",
+                    cancelButtonText: "📩 إرسال رسالة",
+                }).then(async (swalResult) => {
+                    if (swalResult.dismiss === Swal.DismissReason.cancel) {
+                        await sendSms(result);
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: "⚠️ لم يتم العثور على البيانات",
+                    text: "يرجى التحقق من رقم جواز السفر والجنسية والمحاولة مرة أخرى.",
+                    icon: "warning",
+                    confirmButtonText: "إغلاق"
+                });
+            }
+
+        } catch (error) {
+            Swal.fire({
+                title: "❌ خطأ",
+                text: "حدث خطأ أثناء معالجة الطلب: " + error.message,
+                icon: "error",
+                confirmButtonText: "إغلاق"
+            });
+        }
+    });
+});
+
+// دالة لإرسال الرسالة النصية
+async function sendSms(hospitalData) {
+    try {
+        let smsResponse = await fetch("http://localhost:3000/send-sms", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                recipient: "201222540002",
+                hospitalName: hospitalData.hospitalName,
+                address: hospitalData.address,
+                phone: hospitalData.phone
+            })
+        });
+
+        let smsResult = await smsResponse.json();
+
+        if (smsResult.status === 'success') {
+            Swal.fire({
+                title: "✅ تم إرسال الرسالة بنجاح",
+                text: "تم إرسال بيانات المستشفى عبر الرسائل القصيرة.",
+                icon: "success",
+                confirmButtonText: "حسناً"
+            });
+        } else {
+            Swal.fire({
+                title: "⚠️ فشل في الإرسال",
+                text: "لم يتم إرسال الرسالة. حاول مرة أخرى لاحقًا.",
+                icon: "warning",
+                confirmButtonText: "إغلاق"
+            });
+        }
+    } catch (error) {
+        Swal.fire({
+            title: "❌ خطأ",
+            text: "حدث خطأ أثناء إرسال الرسالة: " + error.message,
+            icon: "error",
+            confirmButtonText: "إغلاق"
+        });
+    }
+}
+
+
 });
     $(document).ready(function() {
         $('#dataTable').DataTable({
@@ -238,6 +351,55 @@
             });
         });
     });
+
+     document.querySelectorAll(".send-sms").forEach(button => {
+    button.addEventListener("click", async function (event) {
+        event.preventDefault();
+        
+            try {
+                let smsResponse = await fetch("http://localhost:3000/send-sms", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                    "recipient": "201117831932",
+                    "hospitalName": "dfdf",
+                    "address":"sfddfdf",
+                    "phone":"5455"
+                    })
+                });
+
+                let smsResult = await smsResponse.json();
+
+                if (smsResult['status']=='success') {
+                    Swal.fire({
+                        title: "✅ تم إرسال الرسالة بنجاح",
+                        text: "تم إرسال بيانات المستشفى عبر الرسائل القصيرة.",
+                        icon: "success",
+                        confirmButtonText: "حسناً"
+                    });
+                } 
+                else {
+                    Swal.fire({
+                        title: "⚠️ فشل في الإرسال",
+                        text: "لم يتم إرسال الرسالة. حاول مرة أخرى لاحقًا.",
+                        icon: "warning",
+                        confirmButtonText: "إغلاق"
+                    });
+                }
+            } catch (error) {
+                Swal.fire({
+                    title: "❌ خطأ",
+                    text: "حدث خطأ أثناء إرسال الرسالة: " + error.message,
+                    icon: "error",
+                    confirmButtonText: "إغلاق"
+                });
+            }
+     })});
+
+    
 
         
 </script>

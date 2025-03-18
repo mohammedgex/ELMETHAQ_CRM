@@ -49,11 +49,21 @@
         <button class="btn btn-sm mt-3 text-white" style="background-color: #997a44;" id="addStep">إضافة خطوة جديدة</button>
     </div>
 </div>
-            
-
                         <!-- التفاصيل الشخصية -->
             <form id="personalInfo" class="tab-pane fade show active" action="{{ route('customer.create') }}" method="Post">
                 @csrf
+                <div class="section-container">
+                    <h4 >الصورة الشخصية</h4>
+                    <div class="col-md-12 d-flex align-items-center justify-content-center">
+                        <div class="form-group">
+                            <div class="d-flex align-items-center">
+                                <input type="file" class="form-control fw-bold" id="attachmentFile" accept="image/*" onchange="previewImage(event)">
+                                <img id="imagePreview" src="" alt="معاينة" style="display: none; width: 200px; height: 150px; object-fit: cover; margin-right: 30px; border-radius: 6px; border: 2px solid #997a44;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- القسم: المعلومات الأساسية -->
                 <div class="section-container">
                     <h4 class="fw-bold mb-3" >المعلومات الأساسية</h4>
@@ -106,42 +116,6 @@
                     
                 </div>
 
-                <!-- القسم: البيانات الشخصية -->
-                <div class="section-container">
-                    <h4 class="fw-bold mb-3" > بيانات الرخصة</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">نوع الرخصة</label>
-                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
-                                <option value="">اختر الرخصة</option>
-                                <option value="A">درجة أولي</option>
-                                <option value="B">درجة ثانية</option>
-                            </select>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">رقم الرخصة</label>
-                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم الرخصة" name="license_id">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- القسم: معلومات الاتصال -->
-                <div class="section-container">
-                    <h4 class="fw-bold mb-3">معلومات الاتصال</h4>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
-                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم الهاتف" name="phone">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="fw-bold" style="color: #997a44;">رقم هاتف آخر</label>
-                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم هاتف آخر" name="phone_two">
-                        </div>
-                        
-                    </div>
-                </div>
-
                 <!-- القسم: معلومات العمل -->
                 <div class="section-container">
                     <h4 class="fw-bold mb-3" >معلومات العمل</h4>
@@ -183,6 +157,44 @@
                 </div>
                 </div>
 
+                <!-- القسم: البيانات الشخصية -->
+                <div class="section-container">
+                    <h4 class="fw-bold mb-3" > بيانات الرخصة</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">نوع الرخصة</label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر الرخصة</option>
+                                <option value="A">درجة أولي</option>
+                                <option value="B">درجة ثانية</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">رقم الرخصة</label>
+                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم الرخصة" name="license_id">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- القسم: معلومات الاتصال -->
+                <div class="section-container">
+                    <h4 class="fw-bold mb-3">معلومات الاتصال</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
+                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم الهاتف" name="phone">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">رقم هاتف آخر</label>
+                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم هاتف آخر" name="phone_two">
+                        </div>
+                        
+                    </div>
+                </div>
+
+
+
                  <!-- القسم: بيانات التأشيرة -->
                 <div class="section-container">
                     <h4 class="fw-bold mb-3">معلومات تأشيرة السفر</h4>
@@ -198,6 +210,55 @@
                         <div class="col-md-6">
                             <label class="fw-bold" style="color: #997a44;">رقم التأشيرة</label>
                             <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم التأشيرة" name="visa_id">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- المراحل -->
+                <div class="section-container">
+                    <h4 class="fw-bold mb-3" >  المراحل </h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;"> الكشف الطبي </label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر المرحلة</option>
+                                <option value="A">في انتظار الحجز</option>
+                                <option value="B">تم الحجز</option>
+                                <option value="B"> لائق</option>
+                                <option value="B"> غير لائق</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">  البصمة </label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر المرحلة</option>
+                                <option value="A">في انتظار الحجز</option>
+                                <option value="B"> تم تصدير الاكسيل </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">  كشف الفايرس </label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر المرحلة</option>
+                                <option value="A"> بأنتظار ايصال المعامل </option>
+                                <option value="A"> تم اصدار ايصال المعامل</option>
+                                <option value="B"> سالب </option>
+                                <option value="B"> موجب </option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">  حجز النت </label>
+                            <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر المرحلة</option>
+                                <option value="A">في انتظار الطلب  </option>
+                                <option value="A">تم الحجز </option>
+                                <option value="B">تم اصدار التأشيرة </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -312,6 +373,18 @@
                             <input type="text" id="expiry_date" class=" form-control fw-bold" style="height: 60px; border-color: #997a44;" readonly>
                         </div>
                     </div>
+                </div>
+
+                <div class="row mt-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">السن</label>
+                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" name="age" readonly>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="fw-bold" style="color: #997a44;">كود الدولة</label>
+                            <input type="text" class="form-control fw-bold" style="height: 60px; border-color: #997a44;" name="eg_code" readonly>
+                        </div>
                 </div>
                 <div class="d-flex justify-content-between mt-3">
                     <!-- زر الحفظ -->
@@ -508,6 +581,39 @@
         font-weight: 800 !important;
     }
 
+    #attachmentFile {
+    border: 2px solid #997a44;
+    border-radius: 8px;
+    height: 55px;
+    font-weight: bold;
+    color: #333;
+    background-color: #f9f5f0;
+    transition: all 0.3s ease-in-out;
+    padding: 10px;
+    }
+
+    #attachmentFile:hover {
+        border-color: #b38f5e;
+        background-color: #f1ebe5;
+    }
+
+    #attachmentFile:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(153, 122, 68, 0.5);
+        border-color: #b38f5e;
+    }
+
+    .fw-bold {
+        font-size: 16px;
+    }
+
+    label.fw-bold {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 18px;
+    }
+
+
 </style>
 
 @stop
@@ -648,5 +754,20 @@
     document.getElementById("dob").value = birthDate;
     document.getElementById("expiry_date").value = expiryDate;
 }
+
+    function previewImage(event) {
+        const input = event.target;
+        const file = input.files[0];
+        const preview = document.getElementById("imagePreview");
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 </script>
 @stop
