@@ -11,6 +11,7 @@ use App\Http\Controllers\LeadsCustomersController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Models\Delegate;
@@ -29,13 +30,13 @@ Route::get('/workers', function () {
     return view('workers'); // This loads resources/views/dashboard.blade.php
 })->name('workers');
 
-Route::get('/users', function () {
-    return view('users'); // This loads resources/views/dashboard.blade.php
-})->name('users');
+// Route::get('/users', function () {
+//     return view('users'); // This loads resources/views/dashboard.blade.php
+// })->name('users');
 
-Route::get('/users', function () {
-    return view('users'); // This loads resources/views/dashboard.blade.php
-})->name('users');
+// Route::get('/users', function () {
+//     return view('users'); // This loads resources/views/dashboard.blade.php
+// })->name('users');
 
 
 
@@ -51,18 +52,13 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');
+    Route::get('/leads-show/{id}', [LeadsCustomersController::class, 'show'])->name('leads-customers.show');
+    Route::get('/leads-edit/{id}', [LeadsCustomersController::class, 'update'])->name('leads-customers.update');
+    Route::post('/leads-edit/{id}', [LeadsCustomersController::class, 'edit'])->name('leads-customers.edit');
+    Route::delete('/leads-delete/{id}', [LeadsCustomersController::class, 'delete'])->name('leads-customers.delete');
 
-    Route::get('/leads-create', function () {
-        return view(view: 'leads-customers.leads-customers-edit');
-    })->name('leads-customers.edit');
 
-    Route::get('/leads-show', function () {
-        return view(view: 'leads-customers.leads-customers-show');
-    })->name('leads-customers.show');
-
-    Route::get('/users', function () {
-        return view('users.users');
-    })->name('users');
+    Route::get('/users', [UserController::class, 'index'])->name('users');
 
     // عرض المهام
     Route::get('/user-tasks', [TaskController::class, 'index'])->name('user-tasks.index');

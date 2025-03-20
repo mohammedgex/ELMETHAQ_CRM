@@ -369,8 +369,8 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="fw-bold" style="color: #997a44;" for="expiry_date">النوع</label>
-                            <input type="text" id="expiry_date" class=" form-control fw-bold" style="height: 60px; border-color: #997a44;" readonly>
+                            <label class="fw-bold" style="color: #997a44;" for="gender">النوع</label>
+                            <input type="text" id="gender" class=" form-control fw-bold" style="height: 60px; border-color: #997a44;" readonly>
                         </div>
                     </div>
                 </div>
@@ -424,6 +424,27 @@
                         <div class="form-group">
                             <label class="fw-bold" style="color: #997a44;">رفع المرفق</label>
                             <input type="file" class="form-control fw-bold" style="border-color: #997a44; height: 60px;" id="attachmentFile">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="fw-bold" style="color: #997a44;">حالة المرفق</label>
+                            <select id="attachmentTitle" class="form-control fw-bold" style="height: 60px; border-color: #997a44;">
+                                <option value="">اختر حالة المرفق</option>
+                                <option value="جواز سفر"> لا يوجد بالمكتب </option>
+                                <option value="رخصة">موجود بالمكتب</option>
+                            </select>   
+                            <!-- <input type="text" class="form-control fw-bold" style="border-color: #997a44; height: 60px;" id="attachmentTitle" placeholder="مثال: صورة الجواز"> -->
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="fw-bold" style="color: #997a44;">ملحوظة  </label>
+                            <input type="text" class="form-control fw-bold" style="border-color: #997a44; height: 60px;" id="attachmentFile">
                         </div>
                     </div>
                 </div>
@@ -639,7 +660,6 @@
         timeline.appendChild(newStep);
     });
     
-
     $(document).ready(function () {
          $('.nav-tabs a').click(function (e) {
             e.preventDefault();
@@ -718,43 +738,67 @@
 
     //استخراج بيانات جواز السفر
     function extractMRZData() {
-    // let mrz = "P<EGYFARGHAL<<OMAR<MOHAMED<MOHAMED<<<<<<<<<<\nA240842345EGY8702193M2602084<<<<<<<<04";
-    let mrz =document.getElementById("mrz_input").value;
+    let mrz = document.getElementById("mrz_input").value;
     let lines = mrz.split("\n");
     if (lines.length < 2) {
         alert("يرجى إدخال MRZ صالح");
         return;
     }
-    let passportNumber = lines[1].substring(0, 9).replace(/</g, "");  // Passport Number
-    let nationality = lines[1].substring(10, 13).replace(/</g, "");   // Nationality
-    // Extract raw date strings from MRZ
-    let rawBirthDate = lines[1].substring(13, 19).replace(/</g, ""); // YYMMDD
-    let rawExpiryDate = lines[1].substring(21, 27).replace(/</g, ""); // YYMMDD
 
-    // Determine the century for birth date
+    let passportNumber = lines[1].substring(0, 9).replace(/</g, "");  // رقم الجواز
+    let nationality = lines[1].substring(10, 13).replace(/</g, "");   // الجنسية
+
+    // استخراج تاريخ الميلاد
+    let rawBirthDate = lines[1].substring(13, 19).replace(/</g, ""); // YYMMDD
     let birthYear = parseInt(rawBirthDate.substring(0, 2), 10);
-    birthYear = birthYear >= 50 ? 1900 + birthYear : 2000 + birthYear; // If >= 50, assume 1900s, else 2000s
+    birthYear = birthYear >= 50 ? 1900 + birthYear : 2000 + birthYear;
     let birthMonth = rawBirthDate.substring(2, 4);
     let birthDay = rawBirthDate.substring(4, 6);
-    let birthDate = `${birthDay}/${birthMonth}/${birthYear}`; // Format DD/MM/YYYY
+    let birthDate = `${birthDay}/${birthMonth}/${birthYear}`;
 
-    // Determine the century for expiry date (always 2000+)
+    // استخراج النوع (M/F)
+    let genderChar = lines[1].charAt(20); 
+    let gender = genderChar === "M" ? "ذكر" : genderChar === "F" ? "انثي" : "غير معروف";
+
+    // حساب العمر
+    let today = new Date();
+    let age = today.getFullYear() - birthYear;
+    if (
+        today.getMonth() + 1 < parseInt(birthMonth) || 
+        (today.getMonth() + 1 === parseInt(birthMonth) && today.getDate() < parseInt(birthDay))
+    ) {
+        age--; // تقليل العمر إذا لم يصل الشخص إلى عيد ميلاده بعد هذا العام
+    }
+
+    // استخراج تاريخ انتهاء الصلاحية
+    let rawExpiryDate = lines[1].substring(21, 27).replace(/</g, ""); // YYMMDD
     let expiryYear = 2000 + parseInt(rawExpiryDate.substring(0, 2), 10);
     let expiryMonth = rawExpiryDate.substring(2, 4);
     let expiryDay = rawExpiryDate.substring(4, 6);
-    let expiryDate = `${expiryDay}/${expiryMonth}/${expiryYear}`; // Format DD/MM/YYYY
-        let nameParts = lines[0].substring(5).split("<<"); // Extract surname and given names
+    let expiryDate = `${expiryDay}/${expiryMonth}/${expiryYear}`;
+
+    // استخراج الاسم
+    let nameParts = lines[0].substring(5).split("<<");
     let surname = nameParts[0].replace(/</g, " ");
     let givenNames = nameParts[1].replace(/</g, " ");
     let fullName = givenNames + " " + surname;
-    
+
+    // استخراج كود الدولة من آخر رقم في MRZ
+    let countryCode = lines[1].slice(-1); // آخر رقم في السطر الثاني من MRZ
+
+    // تعبئة الحقول
     document.getElementById("passport_number").value = passportNumber;
     document.getElementById("full_name").value = fullName;
-    document.getElementById("nationality").value = nationality;
+    document.getElementById("nationality").value = "مصري";
     document.getElementById("dob").value = birthDate;
     document.getElementById("expiry_date").value = expiryDate;
+    document.getElementsByName("age")[0].value = age;
+    document.getElementsByName("eg_code")[0].value = countryCode;
+    document.getElementById("gender").value = gender;
+    
 }
 
+    // عرض الصورة بعد رفعها
     function previewImage(event) {
         const input = event.target;
         const file = input.files[0];

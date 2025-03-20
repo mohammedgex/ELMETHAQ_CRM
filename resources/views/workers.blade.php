@@ -12,153 +12,147 @@
     <div class="row justify-content-center">
         <div class="col-12">
             <div class="card shadow border-0">
-                <div class="card-header text-white text-center" 
-                     style="background: linear-gradient(to right, #997A44, #7A5E33); font-size: 1.2rem;">
-                    جدول بيانات العملاء
-                </div>
                 
                 <div class="card-body">
                     <div class="row d-flex justify-content-between">
-                        <!-- حقل البحث -->
-                                                <!-- 📌 فلتر متقدم -->
                         <div class="mb-3 d-flex ">
-                            <!-- القائمة الأولى لاختيار الفئة -->
-                            <select id="filterType" class="form-select me-2 mx-2" onchange="updateFilterValues()">
-                                <option value="all">🔍 البحث في الكل</option>
-                                <option value="name">الاسم</option>
-                                <option value="phone">رقم الهاتف</option>
-                            </select>
-
-                            <!-- القائمة الثانية لتحديد القيمة بناءً على الأولى -->
-                            <select id="filterValues" class="form-select me-2 mx-2">
-                                <option value="">-- اختر --</option>
-                            </select>
-                            
+                            <a href="{{ route('customer.indes') }}">
+                                <button class="btn btn-success me-2 mx-2" >اضافة عميل جديد</button>
+                            </a>
                             <!-- زر تصفية -->
                             <button class="btn btn-warning" onclick="filterTable()">تصفية</button>
                         </div>
 
                         <!-- أزرار الإجراءات -->
-                        <div class="mb-3">
-                            <button class="btn btn-success" onclick="sendSMS()">📩 إرسال SMS</button>
-                            <button class="btn btn-danger" onclick="deleteRows()">🗑️ حذف المحدد</button>
+                        <div class="mb-3 me-2 mx-2">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    عمليات
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><button class="dropdown-item" onclick="sendSMS('option1')">إرسال إلى فرد</button></li>
+                                    <li><button class="dropdown-item" onclick="sendSMS('option2')">إرسال إلى مجموعة</button></li>
+                                    <li><button class="dropdown-item" onclick="sendSMS('option3')">إرسال مخصص</button></li>
+                                </ul>
+                            </div>                            
+                            <button class="btn btn-danger" onclick="deleteRows()">حذف المحدد</button>
                         </div>
 
                         </div>
+
+                            <hr> <!-- Divider -->
+
                     
-                    <table id="dataTable" class="table table-bordered table-hover text-center" style="border-radius: 10px; overflow: hidden;">
-                        <thead class="table-dark">
+                <div class="table-responsive">
+                    <table class="table table-hover text-center animate__animated animate__fadeInUp" id="example">
+                        <thead class="text-white"
+                            style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
                             <tr>
-                                <th><input type="checkbox" id="selectAll"></th>
-                                <th>الاسم</th>
-                                <th>رقم الهاتف</th>
-                                <th>رقم الجواز</th>
+                                <th>
+                                    <input type="checkbox" id="checkAll" class="rounded">
+                                </th>
+                                <th>كود العميل</th>
+                                <th>اسم العميل</th>
+                                <th> الوظيفة </th>
                                 <th>الرقم القومي</th>
-                                <th>العمر</th>
-                                <th>المندوب</th>
-                                <th>المحافظة</th>
-                                <th>المرفقات</th>
-                                <th>المدفوعات</th>
-                                <th>الإجراءات</th>
+                                <th>رقم الهاتف</th>
+                                <th>السن</th>
+                                 <th>المندوب</th>
+                                <th>المجموعة</th>
+                                <th>نوع الرخصة</th>
+                                <th>نوع التأشيرة</th>
+                                <th>الحالة </th>
+                                <th>رقم جواز السفر</th>
+                                <th>عدد المرفقات</th>
+                                <th>عدد المدفوعات</th>  
+                                <th>المرحلة</th>
+                                <th> تاريخ التسجيل</th>
+                                <th>اخر تعديل</th>
+                                <th>الرقم القومي</th>
+                                <th> الإجراءات</th>
+
                             </tr>
                         </thead>
                         <tbody>
-                            @php
-                                $customers = [
-                                    ['id' => 1, 'name' => 'أحمد محمد', 'phone' => '0501234567', 'passport' => 'A12345678', 'nationality' => 'سعودي', 'status' => 'نشط'],
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-                                                                        ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-                                    ['id' => 2, 'name' => 'خالد علي', 'phone' => '0507654321', 'passport' => 'B98765432', 'nationality' => 'مصري', 'status' => 'غير نشط'],
-
-
-                                ];
-                            @endphp
-                            
-                            @foreach($customers as $index => $customer)
-                                <tr>
-                                    <td><input type="checkbox" class="rowCheckbox"></td>
-                                    <td>{{ $customer['name'] }}</td>
-                                    <td>{{ $customer['phone'] }}</td>
-                                    <td>{{ $customer['passport'] }}</td>
-                                    <td>{{ $customer['nationality'] }}</td>
-                                    <td>{{ rand(20, 50) }}</td>
-                                    <td>مندوب {{ $index + 1 }}</td>
-                                    <td>محافظة {{ $index + 1 }}</td>
-                                    <td><i class="fas fa-paperclip"></i></td>
+                                <tr class="table-light">
                                     <td>
-                                        <span class="badge {{ $customer['status'] == 'نشط' ? 'badge-success' : 'badge-danger' }}">
-                                            {{ $customer['status'] }}
-                                        </span>
+                                        <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
                                     </td>
+                                    <td>#5</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight"><span class="badge bg-success text-white"> عميل</span></td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight"><a href="#">قطب احمد</a></td>
+                                    <td class="highlight"><a href="#">سائقن مجموعة 545</a></td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
+                                    <td class="highlight">لبلبل</td>
                                     <td>
-                                        <button class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i> عرض</button>
-                                        <button class="btn btn-outline-warning btn-sm"><i class="fas fa-edit"></i> تعديل</button>
-                                        <button class="btn btn-outline-danger btn-sm"><i class="fas fa-trash"></i> حذف</button>
-                                         <div class="btn-group">
-                                    <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
-                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v"></i>
-                                    </button>
-                                    <ul class="dropdown-menu">
-                                        <li>
-                                            <a class="dropdown-item text-success"
-                                                href="">
-                                                <i class="fas fa-edit"></i> تصدير العميل اكسيل
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-warning"
-                                                href="">
-                                                <i class="fas fa-edit"></i> طباعة ملف العميل
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-warning"
-                                                href="">
-                                                <i class="fas fa-edit"></i> حجز نت
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-warning"
-                                                href="">
-                                                <i class="fas fa-edit"></i> بيانات التأشيرة
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item text-warning check-medical-status" href="#" data-mrz="P<EGYABDOU<<FAYEZ<ABDELSATTAR<FAYEZ<<<<<<<<<
-                                            A268118145EGY9005156M2701312<<<<<<<<<<<<<<04">
-                                                <i class="fas fa-edit"></i> نتيجة كشف طبي
-                                            </a>
-                                        </li>
+                                                    <div class="btn-group">
+                                                <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
+                                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <a class="dropdown-item text-success"
+                                                            href="">
+                                                            <i class="fas fa-edit"></i> تصدير العميل اكسيل
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-warning"
+                                                            href="">
+                                                            <i class="fas fa-edit"></i> طباعة ملف العميل
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-warning"
+                                                            href="">
+                                                            <i class="fas fa-edit"></i> حجز نت
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-warning"
+                                                            href="">
+                                                            <i class="fas fa-edit"></i> بيانات التأشيرة
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-warning check-medical-status" href="#" data-mrz="P<EGYABDOU<<FAYEZ<ABDELSATTAR<FAYEZ<<<<<<<<<
+                                                        A268118145EGY9005156M2701312<<<<<<<<<<<<<<04">
+                                                            <i class="fas fa-edit"></i> نتيجة كشف طبي
+                                                        </a>
+                                                    </li>
 
-                                        <li>
-                                            <a class="dropdown-item text-warning check-medical-hopital" href="#">
-                                                <i class="fas fa-edit"></i> نتيجة وبيانات المستشفي
-                                            </a>
-                                        </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-warning check-medical-hopital" href="#">
+                                                            <i class="fas fa-edit"></i> نتيجة وبيانات المستشفي
+                                                        </a>
+                                                    </li>
 
-                                        
-                                        <li>
-                                            <button class="dropdown-item text-danger send-sms">
-                                                <i class="fas fa-users"></i> بلاك ليست
-                                            </button>
-                                        </li>
-                                    </ul>
-                                </div>
+                                                    
+                                                    <li>
+                                                        <button class="dropdown-item text-danger send-sms">
+                                                            <i class="fas fa-users"></i> بلاك ليست
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                     </td>
                                 </tr>
-                            @endforeach
                         </tbody>
                     </table>
+                </div>
                 </div> <!-- End card-body -->
             </div> <!-- End card -->
         </div>
@@ -168,10 +162,58 @@
 @stop
 
 @section('css')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <style>
+        .table-responsive {
+            overflow: visible;
+        }
+        .content-wrapper{
+            width: fit-content;
+        }
+
+        .dt-button {
+            padding: 8px 15px;
+            margin: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .buttons-excel {
+            background-color: #28a745 !important;
+            color: white !important;
+        }
+
+        .buttons-pdf {
+            background-color: #dc3545 !important;
+            color: white !important;
+        }
+
+        .form-check-input.rounded {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            accent-color: #dc3545; /* لون أحمر */
+        }
+    </style>
+
+
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery & DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script>
    document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".check-medical-status").forEach(button => {
@@ -399,8 +441,48 @@ async function sendSms(hospitalData) {
             }
      })});
 
-    
 
-        
+     // check all
+      document.getElementById("checkAll").addEventListener("change", function() {
+        let checkboxes = document.querySelectorAll(".form-check-input");
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = this.checked;
+        });
+    });
+
+     $('#example').DataTable({
+            dom: 'Bfrtip', // تخصيص ترتيب العناصر
+            buttons: [{
+                    extend: 'excel',
+                    text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
+                    className: 'buttons-excel',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3] // Specify which columns to export (0-based index)
+                    }
+                },
+
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-file-pdf"></i> طباعة',
+                    className: 'buttons-pdf',
+                    customize: function(win) {
+                        $(win.document.body).css('direction', 'rtl'); // Set text direction to right-to-left
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', '12px'); // Adjust font size
+                    }
+                },
+
+            ],
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+            },
+            searching: false,
+            pageLength: 10,
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, "الكل"]
+            ],
+        });
 </script>
 @stop
