@@ -321,14 +321,19 @@ return [
             'submenu' => [
                 [
                     'text' => 'العملاء',
-                    'url' =>  'workers',
+                    'url' =>  'customers',
                     'icon' => 'fas fa-eye',
                     'label' => 4,
                     'label_color' => 'success',
                 ],
                 [
                     'text' => 'اضافة عميل',
-                    'url' => 'worker-create',
+                    'url' => 'customer-create',
+                    'icon' => 'fas fa-plus',
+                ],
+                [
+                    'text' => 'عرض عميل',
+                    'url' => 'customer-show',
                     'icon' => 'fas fa-plus',
                 ],
                 [

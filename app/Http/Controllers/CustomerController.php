@@ -20,7 +20,7 @@ class CustomerController extends Controller
     //
     public function index(){
         $delegates = Delegate::all();
-        return view("user-create",[
+        return view(view: "customers.customer",data: [
             "delegates"=> $delegates
         ]);
     }
@@ -38,8 +38,14 @@ class CustomerController extends Controller
         $customer->job_title_id = "1";
         $customer->save();
 
-        return redirect()->route('workers');
+        return redirect()->route(route: 'customers.customer-create');
+    }
 
+    public function show($id)
+    {
+        # code...
+        $customer = Customer::find($id);
+        return view('customers.customer-show');
     }
 
     public function exportCustomers()
