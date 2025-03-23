@@ -45,6 +45,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(User_task::class, 'receiving_user_id');
     }
+    public function histories()
+    {
+        return $this->hasMany(History::class);
+    }
 
     /**
      * Get the attributes that should be cast.

@@ -10,33 +10,41 @@ class Customer extends Model
 
     use HasFactory;
     protected $fillable = [
-        'passport_id',
-        'card_id',
+        'image',
         'name_ar',
+        'card_id',
         'phone',
-        'mrz',
-        'phone_two',
-        'date_birth',
-        'nationality',
-        'name_en_mrz',
-        'passport_issue_date',
-        'marital_status',
-        'license_id',
-        'travel_before',
-        'education',
-        'visa_id',
-        'notes',
-        'visa_number',
-        'governorates',
+        'governorate',
+        'governorate_live',
         'age',
+        'status',
+        'license_type',
+        'license_expire_date',
+        'license_status',
+        'phone_two',
+        'e_visa_number',
+        'medical_examination',
+        'finger_print_examination',
+        'virus_examination',
+        'engaz_request',
+        'nationality',
+        'marital_status',
+        'education',
+        'notes',
+        'mrz',
+        'name_en_mrz',
+        'passport_id',
+        'date_birth',
+        'passport_expire_date',
+        'gender',
+        'issue_place',
+        'travel_before',
         'delegate_id',
-        'visa_type_id',
-        'visa_peroid_id',
+        'job_title_id',
         'customer_group_id',
         'sponser_id',
-        'evalution_id',
-        'embassy_id',
-        'job_id'
+        'visa_type_id',
+        'evalution_id'
     ];
 
     public function delegate()
@@ -78,5 +86,9 @@ class Customer extends Model
     public function job()
     {
         return $this->belongsTo(JobTitle::class);
+    }
+    public function histories()
+    {
+        return $this->hasMany(History::class);
     }
 }

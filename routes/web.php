@@ -46,16 +46,6 @@ Route::get(uri: '/bulk-sms-view', action: function () {
     return view(view: 'bulk-sms');
 })->name(name: 'bulk-sms.index');
 
-Route::get(uri: '/customer-show', action: function () {
-    return view(view: 'customers.customer-show');
-})->name(name: 'customer.show');
-
-Route::get(uri: '/customer-create', action: function () {
-            $delegates = Delegate::all();
-    return view('customers.customer-create',[
-        'delegates' => $delegates
-    ]);
-})->name(name: 'customer.create');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -137,12 +127,11 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/Delegates-delete/{id}', [DelegateController::class, 'delete'])->name('Delegates.delete');
 
     // عرض العملاء
-    Route::get('/customers', action: [CustomerController::class, 'index'])->name(name: 'customer.indes');
-
-    //اضافة عملاء
-
-    // Route::post('/customer-create', action: [CustomerController::class, 'create'])->name(name: 'customer.create');
-    // Route::post('/customer-show/{id}', [CustomerController::class, 'show'])->name(name: 'customer.show');
+    Route::get('/customers',  [CustomerController::class, 'index'])->name('customer.indes');
+    Route::get('/customer-create/{id?}', [CustomerController::class, 'add'])->name('customer.add');
+    Route::post('/customer-basicDetails', [CustomerController::class, 'basicDetails'])->name('customer.basicDetails');
+    Route::post('/customer-mrz/{id}', [CustomerController::class, 'mrz'])->name('customer.mrz');
+    // Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
 
 
     Route::get('/export-delegates-xlsx/{id}', [DelegateController::class, 'exportDelegates'])->name('export.delegates.xlsx');
