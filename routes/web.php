@@ -130,7 +130,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customers',  [CustomerController::class, 'index'])->name('customer.indes');
     Route::get('/customer-create/{id?}', [CustomerController::class, 'add'])->name('customer.add');
     Route::post('/customer-basicDetails', [CustomerController::class, 'basicDetails'])->name('customer.basicDetails');
+    Route::post('/customer-editBasicDetails/{id}', [CustomerController::class, 'editBasicDetails'])->name('customer.editBasicDetails');
     Route::post('/customer-mrz/{id}', [CustomerController::class, 'mrz'])->name('customer.mrz');
+    Route::post('/customer-attachments/{id}', [CustomerController::class, 'attachments'])->name('customer.attachments');
+    Route::post('/customer-payments/{id}', [CustomerController::class, 'payments'])->name('customer.payments');
+    Route::post('/customer-history/{id}', [CustomerController::class, 'history'])->name('customer.history');
     // Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
 
 

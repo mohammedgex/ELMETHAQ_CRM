@@ -7,11 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class History extends Model
 {
     //
-    protected $fillable = [
-        'description',
-        'customer_id',
-        'user_id',
-    ];
+    protected $fillable = ['description', 'date', 'customer_id', 'user_id'];
     public function customer()
     {
         return $this->belongsTo(Customer::class);
