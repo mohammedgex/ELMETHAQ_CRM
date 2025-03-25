@@ -135,7 +135,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-attachments/{id}', [CustomerController::class, 'attachments'])->name('customer.attachments');
     Route::post('/customer-payments/{id}', [CustomerController::class, 'payments'])->name('customer.payments');
     Route::post('/customer-history/{id}', [CustomerController::class, 'history'])->name('customer.history');
-    // Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
+    Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
+    Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
 
 
     Route::get('/export-delegates-xlsx/{id}', [DelegateController::class, 'exportDelegates'])->name('export.delegates.xlsx');

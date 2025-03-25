@@ -47,7 +47,7 @@ return new class extends Migration
             $table->foreignId('customer_group_id')->nullable()->constrained('customer_groups')->onDelete('cascade');
             $table->foreignId('sponser_id')->nullable()->constrained('sponsers')->onDelete('cascade');
             $table->foreignId('visa_type_id')->nullable()->constrained('visa_types')->onDelete('cascade');
-            $table->foreignId('evalution_id')->nullable()->constrained('evalutions')->onDelete('cascade');
+            $table->foreignId('evalution_id')->nullable()->constrained('evaluations')->onDelete('cascade');
             $table->timestamps();
         });
     }

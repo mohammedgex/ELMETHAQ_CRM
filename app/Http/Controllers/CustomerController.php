@@ -22,6 +22,7 @@ use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Common\Entity\Style\Border;
 use OpenSpout\Common\Entity\Style\BorderPart;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 class CustomerController extends Controller
 {
@@ -69,14 +70,14 @@ class CustomerController extends Controller
             'edit' => $customer
         ]);
     }
+
     public function index()
     {
-        $delegates = Delegate::all();
-        return view(view: "customers.customer", data: [
-            "delegates" => $delegates
+        $customers = Customer::all();
+        return view("customers.customer", [
+            'customers' => $customers
         ]);
     }
-
 
     public function basicDetails(Request $request)
     {
@@ -197,7 +198,9 @@ class CustomerController extends Controller
     {
         # code...
         $customer = Customer::find($id);
-        return view('customers.customer-show');
+        return view('customers.customer-show', [
+            'customer' => $customer
+        ]);
     }
 
     public function exportCustomers()
@@ -246,5 +249,24 @@ class CustomerController extends Controller
 
         // Return the file for download
         return Response::download($filePath, name: 'customer_' . $customers->name . '.xlsx')->deleteFileAfterSend();
+    }
+
+    public function search(Request $request)
+    {
+        $request->validate([
+            'searchBy' => 'required',
+            'searchInput' => 'required'
+        ]);
+
+
+        $searchBy = $request->input('searchBy');
+        $searchInput = $request->input('searchInput');
+
+        // البحث في جدول العملاء
+        $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
+
+        return view("customers.customer", [
+            'customers' => $customers
+        ]);
     }
 }

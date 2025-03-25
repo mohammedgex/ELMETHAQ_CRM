@@ -83,7 +83,7 @@ class Customer extends Model
     {
         return $this->hasMany(related: Payments::class);
     }
-    public function job()
+    public function jobTitle()
     {
         return $this->belongsTo(JobTitle::class);
     }
