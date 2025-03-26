@@ -20,23 +20,24 @@
                                 <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
                             </a>
                             <!-- نموذج البحث -->
-                            <form action="{{ route('customer.search') }}" method="POST" class="d-flex">
+                            <form action="{{ route('customer.search') }}" method="POST" class="d-flex" id="searchForm">
                                 @csrf
-                                <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
-                                    id="searchBy" name="searchBy">
+                                <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2" id="searchBy" name="searchBy">
+                                    <option value="mrz">الـ MRZ</option>
+                                    <option value="id">الكود </option>
                                     <option value="name_ar">الاسم</option>
                                     <option value="phone">رقم الهاتف</option>
                                     <option value="card_id">الرقم القومي</option>
-                                    <option value="mrz">الـ MRZ</option>
                                     <option value="age">السن</option>
                                     <option value="e_visa_number">رقم طلب التأشيرة</option>
                                     <option value="passport_id">رقم الجواز</option>
                                     <option value="issue_place">جهة الإصدار</option>
                                 </select>
 
-                                <input type="text" class="form-control flex-grow-1" id="searchInput"
-                                    name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث">
-                                <button type="submit" class="btn btn-primary mx-1">بحث</button>
+                                <input type="text" class="form-control flex-grow-1" id="searchInput" name="searchInput"
+                                    style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus>
+
+                                <button type="submit" class="btn btn-primary mx-1" id="searchButton">بحث</button>
                             </form>
                             @if (Route::currentRouteName() == 'customer.search')
                             <a href="{{ route('customer.indes') }}">
@@ -818,6 +819,13 @@
             [10, 25, 50, -1],
             [10, 25, 50, "الكل"]
         ],
+    });
+
+    document.getElementById('searchInput').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevents the form from submitting when pressing Enter
+            document.getElementById('searchButton').click(); // Manually triggers the search button click
+        }
     });
 
     // document.addEventListener("DOMContentLoaded", function() {

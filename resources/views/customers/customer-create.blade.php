@@ -158,7 +158,7 @@
                         <div class="col-md-6">
                             <label class="fw-bold" style="color: #997a44;"> التقييم</label>
                             <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                name="evalution_id">
+                                name="evaluation_id">
                                 <option value="">اختر التقييم</option>
                                 @foreach ($evalutions as $evalution)
                                 <option value="{{ $evalution->id }}">{{ $evalution->title }}</option>
