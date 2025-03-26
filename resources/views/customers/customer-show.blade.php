@@ -13,11 +13,16 @@
     style="border-radius: 15px; background-color: #f8f9fa;">
 
     <ul class="nav nav-tabs nav-fill">
-        <li class="nav-item"><a class="nav-link active" style="color: #997a44;" data-bs-toggle="tab" href="#personalInfo">التفاصيل الشخصية</a></li>
-        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab" href="#passportDetails">تفاصيل جواز السفر</a></li>
-        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab" href="#attachments">المرفقات</a></li>
-        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab" href="#payments">المدفوعات</a></li>
-        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab" href="#timelineTab">تقدم العميل</a></li>
+        <li class="nav-item"><a class="nav-link active" style="color: #997a44;" data-bs-toggle="tab"
+                href="#personalInfo">التفاصيل الشخصية</a></li>
+        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab"
+                href="#passportDetails">تفاصيل جواز السفر</a></li>
+        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab"
+                href="#attachments">المرفقات</a></li>
+        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab"
+                href="#payments">المدفوعات</a></li>
+        <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab" href="#timelineTab">تقدم
+                العميل</a></li>
     </ul>
 
     <div class="tab-content mt-3">
@@ -29,7 +34,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> اسم العميل </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->name_ar }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -40,7 +45,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> الرقم القومي </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->card_id }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -53,7 +58,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> رقم الهاتف </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->phone }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -64,7 +69,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> محافظة الاقامة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->governorate_live }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -77,7 +82,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> السن </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->age }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -88,7 +93,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> تاريخ الميلاد </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->date_birth }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -101,7 +106,8 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> التقييم </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->evaluation->title }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -112,7 +118,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> حالة العميل </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->status }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -126,9 +132,9 @@
                 <div class="row">
                     <!-- اسم العميل -->
                     <div class="col-md-6 my-3">
-                        <label class="font-weight-bold"> رقم الهاتف </label>
+                        <label class="font-weight-bold"> رقم هاتف </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->phone }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -139,7 +145,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> رقم هاتف اخر </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0"> {{ $customer->phone_two }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -155,7 +161,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> المندوب </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->delegate->name }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -166,7 +172,9 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> المجموعة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">
+                                {{ $customer->customerGroup->title }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -179,7 +187,9 @@
                     <div class="col-md-4 mb-3">
                         <label class="font-weight-bold"> نوع التأشيرة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">
+                                {{ $customer->visaType->outgoing_number }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -190,7 +200,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="font-weight-bold"> الكفيل </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->sponser->name }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -201,7 +211,7 @@
                     <div class="col-md-4 mb-3">
                         <label class="font-weight-bold"> الوظيفة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->jobTitle->title }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -218,7 +228,7 @@
                     <div class="col-md-4 my-3">
                         <label class="font-weight-bold"> نوع الرخصة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->license_type }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -228,7 +238,8 @@
                     <div class="col-md-4 my-3">
                         <label class="font-weight-bold"> تاريخ انتهاء الرخصة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->license_expire_date }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -239,7 +250,7 @@
                     <div class="col-md-4 my-3">
                         <label class="font-weight-bold"> حالة الرخصة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->license_status }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -255,7 +266,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> نوع التأشيرة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->license_type }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -266,7 +277,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> رقم طلب التأشيرة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->e_visa_number }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -282,7 +293,8 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> مرحلة الكشف الطبي </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->medical_examination }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -293,7 +305,9 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> مرحلة البصمة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">
+                                {{ $customer->finger_print_examination }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -306,7 +320,8 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> مرحلة الفايرس </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->virus_examination }}
+                            </p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -317,7 +332,7 @@
                     <div class="col-md-6 my-3">
                         <label class="font-weight-bold"> مرحلة التأشيرة </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->engaz_request }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -334,7 +349,7 @@
                     <div class="col-md-4 my-3">
                         <label class="font-weight-bold"> الجنسية </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->nationality }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -345,7 +360,7 @@
                     <div class="col-md-4 my-3">
                         <label class="font-weight-bold"> المؤهل الدراسي </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->education }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -355,7 +370,7 @@
                     <div class="col-md-4 my-3">
                         <label class="font-weight-bold"> الحالة الاجتماعية </label>
                         <div class="input-group rounded">
-                            <p id="textToCopy" class="form-control border-0 m-0"></p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->marital_status }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -368,7 +383,7 @@
                     <div class="col-md-12 my-3">
                         <label class="font-weight-bold"> ملاحظات </label>
                         <div class="input-group rounded" style="height: 100px;">
-                            <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                            <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->notes }}</p>
                             <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                 <i class="fas fa-copy"></i>
                             </button>
@@ -387,7 +402,7 @@
                 <div class="col-md-12 my-3">
                     <label class="font-weight-bold"> MRZ </label>
                     <div class="input-group rounded">
-                        <p id="textToCopy" class="form-control border-0 m-0"></p>
+                        <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->mrz }}</p>
                         <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -400,7 +415,7 @@
                 <div class="col-md-6 my-3">
                     <label class="font-weight-bold"> الاسم بجواز السفر </label>
                     <div class="input-group rounded">
-                        <p id="textToCopy" class="form-control border-0 m-0"></p>
+                        <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->name_en_mrz }}</p>
                         <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -411,7 +426,7 @@
                 <div class="col-md-6 my-3">
                     <label class="font-weight-bold"> رقم جواز السفر </label>
                     <div class="input-group rounded">
-                        <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                        <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->passport_id }}</p>
                         <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -424,7 +439,7 @@
                 <div class="col-md-4 my-3">
                     <label class="font-weight-bold"> تاريخ الميلاد </label>
                     <div class="input-group rounded">
-                        <p id="textToCopy" class="form-control border-0 m-0"></p>
+                        <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->date_birth }}</p>
                         <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -435,7 +450,8 @@
                 <div class="col-md-4 my-3">
                     <label class="font-weight-bold"> تاريخ انتهاء الصلاحية </label>
                     <div class="input-group rounded">
-                        <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                        <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->passport_expire_date }}
+                        </p>
                         <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -445,7 +461,7 @@
                 <div class="col-md-4 my-3">
                     <label class="font-weight-bold"> جهة الاصدار </label>
                     <div class="input-group rounded">
-                        <p id="textToCopy" class="form-control border-0 m-0"> </p>
+                        <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->issue_place }} </p>
                         <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                             <i class="fas fa-copy"></i>
                         </button>
@@ -472,6 +488,32 @@
             </thead>
             <tbody id="attachmentTable">
                 <!-- بيانات المرفقات ستتم إضافتها هنا -->
+                @foreach ($customer->documentTypes as $file)
+                <tr>
+                    <th>{{ $file->document_type }}</th>
+                    <th><a href="{{ asset('storage/' . $file->file) }}" target="_blank"><img
+                                src="{{ asset('storage/' . $file->file) }}" alt=""
+                                style="width: 100px; height: auto; margin: 0 auto; display: block;"></a></th>
+                    <th>
+                        <span class="badge 
+                            @if ($file->status == 'موجود بالمكتب') bg-success 
+                            @elseif ($file->status == 'لا يوجد بالمكتب') bg-warning text-dark 
+                            @else bg-secondary 
+                            @endif">
+                            {{ $file->status }}
+                        </span>
+                    </th>
+                    <th>{{ $file->note }}</th>
+                    <th><button class="btn btn-success btn-sm">
+                            <i class="fa-solid fa-download"></i> تحميل
+                        </button>
+                        <button class="btn btn-primary btn-sm">
+                            <i class="fa-solid fa-eye"></i> عرض
+                        </button>
+                    </th>
+                </tr>
+                @endforeach
+
             </tbody>
         </table>
     </div>
@@ -485,10 +527,16 @@
                     <th>عنوان الدفع</th>
                     <th>المبلغ</th>
                     <th>المتبقي</th>
-                    <th>الإجراءات</th>
                 </tr>
             </thead>
             <tbody id="paymentTable">
+                @foreach ($customer->payments as $payment)
+                <tr>
+                    <th>{{ $payment->paymentTitle->title }}</th>
+                    <th>{{ $payment->amount }} جنية</th>
+                    <th>{{ $payment->amoun_rest }} جنية</th>
+                </tr>
+                @endforeach
             </tbody>
         </table>
     </div>
@@ -496,27 +544,28 @@
     <div id="timelineTab" class="tab-pane fade">
         <h2 class=" text-center"> تقدم العميل</h2>
         <ul class="timeline" id="timeline">
+            @foreach ($customer->histories as $history)
             <li class="timeline-item">
-                <span class="timeline-icon step-1"><i class="fas fa-passport"></i></span>
+                <span class="timeline-icon step-1"></i></span>
                 <div class="timeline-content">
-                    <h3 class="bold">تسجيل البيانات</h3>
-                    <p>تم تسجيل البيانات الأساسية</p>
+                    <div class="timeline-header row justify-content-between">
+                        <span class="d-block text-start"><i class="fas fa-user" style="color: #997a44;"></i>
+                            الموظف: <strong>{{ $history->user->name }}</strong></span>
+                        <span class="timestamp"><i class="fas fa-calendar-alt" style="color: #997a44;"></i>
+                            التاريخ:
+                            <strong>{{ \Carbon\Carbon::parse($history->date)->format('Y-m-d H:i') }}
+                            </strong></span>
+                    </div>
+                    <div class="row justify-content-between align-items-center d-flex">
+                        <h3 class="bold mt-4 mb-0">{{ $history->description }}</h3>
+                        <span class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center"
+                            style="width: 35px; height: 35px; cursor: pointer;">
+                            <i class="fa-solid fa-trash"></i>
+                        </span>
+                    </div>
                 </div>
             </li>
-            <li class="timeline-item">
-                <span class="timeline-icon step-2"><i class="fas fa-plane"></i></span>
-                <div class="timeline-content">
-                    <h3>حجز الكشف الطبي</h3>
-                    <p>تم حجز الكشف الطبي</p>
-                </div>
-            </li>
-            <li class="timeline-item">
-                <span class="timeline-icon step-3"><i class="fas fa-file-alt"></i></span>
-                <div class="timeline-content">
-                    <h3> اصدار نتيجة الكشف الطبي</h3>
-                    <p> النتيجة ناجح </p>
-                </div>
-            </li>
+            @endforeach
         </ul>
     </div>
 
@@ -524,21 +573,13 @@
 
     <!-- أزرار التحكم -->
     <div class="d-flex justify-content-between mt-4">
-        <a href="#"
+        <a href="{{ route('customer.add', $customer->id) }}"
             class="btn btn-primary shadow-sm flex-grow-1 mx-2 text-center">
             <i class="fas fa-edit"></i> تعديل
         </a>
-        <a href="#" class="btn btn-secondary shadow-sm flex-grow-1 mx-2 text-center">
+        <a href="{{ url()->previous() }}" class="btn btn-secondary shadow-sm flex-grow-1 mx-2 text-center">
             <i class="fas fa-arrow-left"></i> رجوع
         </a>
-        <form action="" method="POST" class="flex-grow-1 mx-2"
-            onsubmit="return confirm('هل أنت متأكد من حذف هذا العميل؟')">
-            @csrf
-            @method('DELETE')
-            <button type="submit" class="btn btn-danger shadow-sm w-100 text-center">
-                <i class="fas fa-trash-alt"></i> حذف
-            </button>
-        </form>
     </div>
 
 
@@ -547,6 +588,8 @@
     @stop
 
     @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <style>
         .timeline {
             position: relative;

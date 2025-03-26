@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table) {
             $table->id();
             $table->string('image')->nullable();
-            $table->string('name_ar');
+            $table->string(column: 'name_ar');
             $table->string('card_id');
             $table->string('phone');
             $table->string('governorate')->nullable();
@@ -47,7 +47,7 @@ return new class extends Migration
             $table->foreignId('customer_group_id')->nullable()->constrained('customer_groups')->onDelete('cascade');
             $table->foreignId('sponser_id')->nullable()->constrained('sponsers')->onDelete('cascade');
             $table->foreignId('visa_type_id')->nullable()->constrained('visa_types')->onDelete('cascade');
-            $table->foreignId('evalution_id')->nullable()->constrained('evalutions')->onDelete('cascade');
+            $table->foreignId('evalution_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -59,7 +59,7 @@ class LeadsCustomersController extends Controller
             $lead['license_photo'] = $request->file('license_photo')->store('uploads', 'public');
         }
 
-        $lead['status'] = 'مرحلة الاختبار';
+        $lead['status'] = 'عميل محتمل';
         $lead['customer_id'] = null;
 
         LeadsCustomers::create($lead);

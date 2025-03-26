@@ -20,50 +20,64 @@
                                 <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
                             </a>
                             <!-- نموذج البحث -->
-                            <div class="d-flex">
-                                <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2" id="searchBy" name="searchBy">
-                                    <option value="name">الاسم</option>
-                                    <option value="email">البريد الإلكتروني</option>
+                            <form action="{{ route('customer.search') }}" method="POST" class="d-flex">
+                                @csrf
+                                <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
+                                    id="searchBy" name="searchBy">
+                                    <option value="name_ar">الاسم</option>
                                     <option value="phone">رقم الهاتف</option>
-                                    <option value="national_id">الرقم القومي</option>
+                                    <option value="card_id">الرقم القومي</option>
                                     <option value="mrz">الـ MRZ</option>
                                     <option value="age">السن</option>
-                                    <option value="visa_request_number">رقم طلب التأشيرة</option>
-                                    <option value="passport_number">رقم الجواز</option>
-                                    <option value="issuing_authority">جهة الإصدار</option>
+                                    <option value="e_visa_number">رقم طلب التأشيرة</option>
+                                    <option value="passport_id">رقم الجواز</option>
+                                    <option value="issue_place">جهة الإصدار</option>
                                 </select>
 
-                                <input type="text" class="form-control flex-grow-1" id="searchInput" name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث">
-                                <button class="btn btn-primary mx-1">بحث</button>
-                            </div>
+                                <input type="text" class="form-control flex-grow-1" id="searchInput"
+                                    name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث">
+                                <button type="submit" class="btn btn-primary mx-1">بحث</button>
+                            </form>
+                            @if (Route::currentRouteName() == 'customer.search')
+                            <a href="{{ route('customer.indes') }}">
+                                <button class="btn btn-primary mx-1">كل العملاء</button>
+                            </a>
+                            @endif
                         </div>
                         <!-- أزرار الإجراءات -->
                         <div class="mb-3 me-2 mx-2">
 
                             <!-- زر تصفية -->
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#filterModal">
                                 <i class="fas fa-filter"></i> تصفية العملاء
                             </button>
 
                             <div class="btn-group">
-                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
                                     عمليات
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><button class="dropdown-item" onclick="sendSMS('option1')"> ارسال رسالة نصية </button></li>
-                                    <li><button class="dropdown-item" onclick="sendSMS('option2')">إرسال رسالة واتساب </button></li>
-                                    <li><button class="dropdown-item" onclick="sendSMS('option3')">إرسال مخصص</button></li>
+                                    <li><button class="dropdown-item" onclick="sendSMS('option1')"> ارسال رسالة نصية
+                                        </button></li>
+                                    <li><button class="dropdown-item" onclick="sendSMS('option2')">إرسال رسالة واتساب
+                                        </button></li>
+                                    <li><button class="dropdown-item" onclick="sendSMS('option3')">إرسال مخصص</button>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title fw-bold" id="filterModalLabel">تصفية العملاء</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <form id="filterForm">
@@ -76,15 +90,18 @@
                                         <div class="row">
                                             <div class="col-md-4">
                                                 <label class="fw-bold" style="color: #997a44;">الاسم الكامل</label>
-                                                <input type="text" class="form-control fw-bold" name="name_ar" placeholder="أدخل الاسم الكامل">
+                                                <input type="text" class="form-control fw-bold" name="name_ar"
+                                                    placeholder="أدخل الاسم الكامل">
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="fw-bold" style="color: #997a44;">الرقم القومي</label>
-                                                <input type="text" class="form-control fw-bold" name="card_id" placeholder="أدخل الرقم القومي">
+                                                <input type="text" class="form-control fw-bold" name="card_id"
+                                                    placeholder="أدخل الرقم القومي">
                                             </div>
                                             <div class="col-md-4">
                                                 <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
-                                                <input type="text" class="form-control fw-bold" name="phone" placeholder="أدخل رقم الهاتف">
+                                                <input type="text" class="form-control fw-bold" name="phone"
+                                                    placeholder="أدخل رقم الهاتف">
                                             </div>
                                         </div>
                                         <div class="row my-2">
@@ -120,11 +137,13 @@
                                         <div class="row my-2">
                                             <div class="col-md-6">
                                                 <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                <input type="text" class="form-control fw-bold" name="age" placeholder="أدخل العمر">
+                                                <input type="text" class="form-control fw-bold" name="age"
+                                                    placeholder="أدخل العمر">
                                             </div>
                                             <div class="col-md-6">
                                                 <label class="fw-bold" style="color: #997a44;">رقم جواز السفر</label>
-                                                <input type="text" class="form-control fw-bold" name="age" placeholder="أدخل العمر">
+                                                <input type="text" class="form-control fw-bold" name="age"
+                                                    placeholder="أدخل العمر">
                                             </div>
                                         </div>
                                         <div class="row my-2">
@@ -178,7 +197,8 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
+                                                <label class="fw-bold" style="color: #997a44;">الحالة
+                                                    الاجتماعية</label>
                                                 <select class="form-control fw-bold" name="delegate_id">
                                                     <option value="">اختر المندوب</option>
                                                 </select>
@@ -211,8 +231,10 @@
                                                 <label class="fw-bold" style="color: #997a44;">كشف الفايرس</label>
                                                 <select class="form-control fw-bold" name="virus_examination">
                                                     <option value="">اختر المرحلة</option>
-                                                    <option value="بأنتظار ايصال المعامل">بأنتظار ايصال المعامل</option>
-                                                    <option value="تم اصدار ايصال المعامل">تم اصدار ايصال المعامل</option>
+                                                    <option value="بأنتظار ايصال المعامل">بأنتظار ايصال المعامل
+                                                    </option>
+                                                    <option value="تم اصدار ايصال المعامل">تم اصدار ايصال المعامل
+                                                    </option>
                                                     <option value="سالب">سالب</option>
                                                     <option value="موجب">موجب</option>
                                                 </select>
@@ -229,23 +251,32 @@
                                         </div>
                                         <div class="d-flex flex-column gap-3 mt-3">
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" name="travel_before" value="1" id="travelBefore">
-                                                <label class="form-check-label fw-bold" for="travelBefore">هل سافر من قبل؟</label>
+                                                <input class="form-check-input" type="checkbox" name="travel_before"
+                                                    value="1" id="travelBefore">
+                                                <label class="form-check-label fw-bold" for="travelBefore">هل سافر من
+                                                    قبل؟</label>
                                             </div>
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" name="e_visa_number" value="1" id="eVisaNumber">
-                                                <label class="form-check-label fw-bold" for="eVisaNumber">هل أصدر له رقم تأشيرة؟</label>
+                                                <input class="form-check-input" type="checkbox" name="e_visa_number"
+                                                    value="1" id="eVisaNumber">
+                                                <label class="form-check-label fw-bold" for="eVisaNumber">هل أصدر له
+                                                    رقم تأشيرة؟</label>
                                             </div>
                                             <div class="form-check mb-2">
-                                                <input class="form-check-input" type="checkbox" name="e_visa_number" value="1" id="eVisaNumber">
-                                                <label class="form-check-label fw-bold" for="eVisaNumber">هل ورقه دخل القنصلية ؟</label>
+                                                <input class="form-check-input" type="checkbox" name="e_visa_number"
+                                                    value="1" id="eVisaNumber">
+                                                <label class="form-check-label fw-bold" for="eVisaNumber">هل ورقه دخل
+                                                    القنصلية ؟</label>
                                             </div>
                                         </div>
 
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إغلاق</button>
-                                            <button type="button" class="btn btn-warning" id="resetFilter">إعادة تعيين</button>
-                                            <button type="button" class="btn btn-primary" id="applyFilter">تطبيق الفلترة</button>
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">إغلاق</button>
+                                            <button type="button" class="btn btn-warning" id="resetFilter">إعادة
+                                                تعيين</button>
+                                            <button type="button" class="btn btn-primary" id="applyFilter">تطبيق
+                                                الفلترة</button>
                                         </div>
                                     </form>
                                 </div>
@@ -257,7 +288,8 @@
 
 
                     <div class="table-responsive">
-                        <table class="table table-hover text-center animate__animated animate__fadeInUp" id="example">
+                        <table class="table table-hover text-center animate__animated animate__fadeInUp"
+                            id="example">
                             <thead class="text-white"
                                 style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
                                 <tr>
@@ -278,83 +310,113 @@
                                     <th>رقم جواز السفر</th>
                                     <th>عدد المرفقات</th>
                                     <th>عدد المدفوعات</th>
-                                    <th>المرحلة</th>
                                     <th> تاريخ التسجيل</th>
                                     <th>اخر تعديل</th>
-                                    <th>الرقم القومي</th>
                                     <th> الإجراءات</th>
-
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach ($customers as $customer)
                                 <tr class="table-light">
                                     <td>
                                         <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
                                     </td>
-                                    <td>#5</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight"><span class="badge bg-success text-white"> عميل</span></td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight"><a href="#">قطب احمد</a></td>
-                                    <td class="highlight"><a href="#">سائقن مجموعة 545</a></td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
-                                    <td class="highlight">لبلبل</td>
+                                    <td>#{{ $customer->id }}</td>
+                                    <td class="highlight">{{ $customer->name_ar }}</td>
+                                    <td class="highlight"><span
+                                            class="badge bg-success text-white">{{ $customer->jobTitle->title }}</span>
+                                    </td>
+                                    <td class="highlight">{{ $customer->card_id }}</td>
+                                    <td class="highlight">{{ $customer->phone }}</td>
+                                    <td class="highlight">{{ $customer->age }}</td>
+                                    <td class="highlight"><a href="#">{{ $customer->delegate->name }}</a>
+                                    </td>
+                                    <td class="highlight"><a
+                                            href="#">{{ $customer->customerGroup->title }}</a></td>
+                                    <td class="highlight">{{ $customer->license_type }}</td>
+                                    <td class="highlight">{{ $customer->visaType->outgoing_number }}</td>
+                                    <td class="highlight">{{ $customer->status }}</td>
+                                    <td class="highlight">{{ $customer->passport_id }}</td>
+                                    <td class="highlight">{{ count($customer->documentTypes) }}</td>
+                                    <td class="highlight">{{ count($customer->payments) }}</td>
+                                    <td class="highlight">{{ $customer->created_at }}</td>
+                                    <td class="highlight">{{ $customer->updated_at }}</td>
                                     <td>
                                         <div class="btn-group">
-                                            <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
+                                            <button
+                                                class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
+                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                                 <i class="fas fa-ellipsis-v"></i>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <!-- خيار التعديل -->
                                                 <li>
-                                                    <a class="dropdown-item text-primary" href="#">
+                                                    <a class="dropdown-item text-primary"
+                                                        href="{{ route('customer.add', $customer->id) }}">
                                                         <i class="fas fa-edit"></i> تعديل
                                                     </a>
                                                 </li>
 
                                                 <!-- خيار العرض -->
                                                 <li>
-                                                    <a class="dropdown-item text-info" href="#">
+                                                    <a class="dropdown-item text-info"
+                                                        href="{{ route('customer.show', $customer->id) }}">
                                                         <i class="fas fa-eye"></i> عرض
                                                     </a>
                                                 </li>
 
                                                 <!-- الكشوفات والحجوزات -->
                                                 <li class="dropdown">
-                                                    <a class="dropdown-item text-primary dropdown-toggle" href="#" id="submenu-toggle">
+                                                    <a class="dropdown-item text-primary dropdown-toggle"
+                                                        href="#" id="submenu-toggle">
                                                         <i class="fas fa-list-alt"></i> الكشوفات والحجوزات
                                                     </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end submenu" aria-labelledby="submenu-toggle">
-                                                        <li><a class="dropdown-item text-dark hover:bg-light" href="#"><i class="fas fa-globe"></i> حجز نت</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light" href="#"><i class="fas fa-passport"></i> بيانات التأشيرة</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light" href="#"><i class="fas fa-virus"></i> كشف الفايرس</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-status" href="#"><i class="fas fa-hospital"></i> نتيجة كشف طبي</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital" href="#"><i class="fas fa-clinic-medical"></i> نتيجة وبيانات المستشفى</a></li>
+                                                    <ul class="dropdown-menu dropdown-menu-end submenu"
+                                                        aria-labelledby="submenu-toggle">
+                                                        <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="#"><i class="fas fa-globe"></i> حجز
+                                                                نت</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="#"><i class="fas fa-passport"></i>
+                                                                بيانات التأشيرة</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="#"><i class="fas fa-virus"></i> كشف
+                                                                الفايرس</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
+                                                                href="#"><i class="fas fa-hospital"></i>
+                                                                نتيجة كشف طبي</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                href="#"><i
+                                                                    class="fas fa-clinic-medical"></i> نتيجة
+                                                                وبيانات المستشفى</a></li>
                                                     </ul>
                                                 </li>
 
                                                 <!-- الطباعة -->
                                                 <li class="dropdown">
-                                                    <a class="dropdown-item text-primary dropdown-toggle" href="#" id="submenu-toggle">
+                                                    <a class="dropdown-item text-primary dropdown-toggle"
+                                                        href="#" id="submenu-toggle">
                                                         <i class="fas fa-print"></i> طباعة
                                                     </a>
-                                                    <ul class="dropdown-menu dropdown-menu-end submenu" aria-labelledby="submenu-toggle">
-                                                        <li><a class="dropdown-item text-dark hover:bg-light" href="#"><i class="fas fa-file-alt"></i> ملف العميل</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light" href="#"><i class="fas fa-envelope-open-text"></i> خطاب ترشيح</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light" href="#"><i class="fas fa-history"></i> تاريخ العميل</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-status" href="#"><i class="fas fa-paperclip"></i> مرفقات العميل</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital" href="#"><i class="fas fa-money-check-alt"></i> عمليات الدفع</a></li>
+                                                    <ul class="dropdown-menu dropdown-menu-end submenu"
+                                                        aria-labelledby="submenu-toggle">
+                                                        <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="#"><i class="fas fa-file-alt"></i> ملف
+                                                                العميل</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="#"><i
+                                                                    class="fas fa-envelope-open-text"></i> خطاب
+                                                                ترشيح</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="#"><i class="fas fa-history"></i>
+                                                                تاريخ العميل</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
+                                                                href="#"><i class="fas fa-paperclip"></i>
+                                                                مرفقات العميل</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                href="#"><i
+                                                                    class="fas fa-money-check-alt"></i> عمليات
+                                                                الدفع</a></li>
                                                     </ul>
                                                 </li>
 
@@ -369,8 +431,11 @@
                                                     </ul>
                                                 </li>
 
+
                                                 <!-- تصدير إلى إكسل -->
-                                                <li><a class="dropdown-item text-success" href="#"><i class="fas fa-file-excel"></i> تصدير العميل إكسيل</a></li>
+                                                <li><a class="dropdown-item text-success" href="#"><i
+                                                            class="fas fa-file-excel"></i> تصدير العميل إكسيل</a>
+                                                </li>
 
                                                 <!-- إضافة العميل إلى القائمة السوداء -->
                                                 <li>
@@ -385,6 +450,7 @@
 
 
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -479,17 +545,19 @@
                 let mrzCode = this.getAttribute("data-mrz");
 
                 try {
-                    let response = await fetch("http://localhost:3000/check-status", { // Use 127.0.0.1 instead of localhost
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                            mrzCode: mrzCode
-                        })
-                    });
+                    let response = await fetch(
+                        "http://localhost:3000/check-status", { // Use 127.0.0.1 instead of localhost
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                mrzCode: mrzCode
+                            })
+                        });
 
-                    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+                    if (!response.ok) throw new Error(
+                        `HTTP Error! Status: ${response.status}`);
 
                     let result = await response.json();
 
@@ -501,11 +569,15 @@
                             showCancelButton: true,
                             cancelButtonText: "عرض النتيجة",
                             didOpen: () => {
-                                const cancelButton = document.querySelector(".swal2-cancel");
+                                const cancelButton = document.querySelector(
+                                    ".swal2-cancel");
                                 if (cancelButton) {
-                                    cancelButton.addEventListener("click", () => {
-                                        window.open(result.pdf_url, "_blank"); // Replace with actual PDF link
-                                    });
+                                    cancelButton.addEventListener("click",
+                                        () => {
+                                            window.open(result.pdf_url,
+                                                "_blank"
+                                            ); // Replace with actual PDF link
+                                        });
                                 }
                             }
                         });
@@ -539,7 +611,8 @@
                         })
                     });
 
-                    if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+                    if (!response.ok) throw new Error(
+                        `HTTP Error! Status: ${response.status}`);
 
                     let result = await response.json();
 
@@ -557,7 +630,8 @@
                             confirmButtonText: "إغلاق",
                             cancelButtonText: "📩 إرسال رسالة",
                         }).then(async (swalResult) => {
-                            if (swalResult.dismiss === Swal.DismissReason.cancel) {
+                            if (swalResult.dismiss === Swal.DismissReason
+                                .cancel) {
                                 await sendSms(result);
                             }
                         });
