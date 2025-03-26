@@ -24,7 +24,7 @@ return new class extends Migration
             $table->string('evaluation');
             $table->string('phone');
             $table->string('licence_type');
-            $table->string('status');
+            $table->string(column: 'status');
             $table->string('test_type');
             $table->date('registration_date');
             $table->foreignId('job_title_id')->constrained(table: 'job_titles')->onDelete('cascade');

@@ -66,12 +66,18 @@
                                                 src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
                                                 width="45" height="45" style="border-radius: 10px;"></a>
                                     </td> -->
-                            <td><span class="badge bg-info text-white">{{ $lead->age }}</span></td>
+                            <td><span class="badge bg-info text-white">{{ $lead->age }} عام</span></td>
                             <td>{{ $lead->card_id }}</td>
                             <td> {{ $lead->governorate }} </td>
                             <td> {{ $lead->phone }} </td>
                             <td> {{ $lead->licence_type }}</td>
-                            <td><span class="badge bg-info text-success">{{ $lead->status }}</span></td>
+                            <td> <span class="badge 
+                                    @if ($lead->status == 'عميل محتمل') bg-warning text-dark 
+                                    @elseif ($lead->status == 'عميل أساسي') bg-success text-white 
+                                    @else bg-secondary text-white 
+                                    @endif">
+                                    {{ $lead->status }}
+                                </span></td>
                             <td> {{ $lead->delegate->name }}</td>
                             <td> {{ $lead->governorate }}</td>
                             <td> {{ $lead->jobTitle->title }}</td>
