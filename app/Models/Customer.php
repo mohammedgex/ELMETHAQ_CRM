@@ -81,7 +81,7 @@ class Customer extends Model
     }
     public function payments()
     {
-        return $this->hasMany(related: Payments::class);
+        return $this->hasMany(Payments::class);
     }
     public function jobTitle()
     {

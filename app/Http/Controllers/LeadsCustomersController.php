@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\Delegate;
+use App\Models\DocumentType;
+use App\Models\History;
 use App\Models\JobTitle;
 use App\Models\LeadsCustomers;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class LeadsCustomersController extends Controller
@@ -137,5 +141,58 @@ class LeadsCustomersController extends Controller
         $lead->delete();
 
         return redirect()->route('leads-customers.index')->with('success', 'تم حذف البيانات بنجاح');
+    }
+
+    public function leadToCustomer($leadId)
+    {
+        # code...
+        $lead = LeadsCustomers::find($leadId);
+        $customer = new Customer();
+        $customer->image = $lead->image;
+        $customer->name_ar = $lead->name;
+        $customer->age = $lead->age;
+        $customer->card_id = $lead->card_id;
+        $customer->governorate = $lead->governorate_live;
+        $customer->phone = $lead->phone;
+        $customer->license_type = $lead->licence_type;
+        $customer->card_id = $lead->card_id;
+        $customer->job_title_id = $lead->job_title_id;
+        $customer->delegate_id = $lead->delegate_id;
+        $customer->save();
+        $lead->status = 'عميل اساسي';
+        $lead->customer_id = $customer->id;
+        $lead->save();
+
+        $history = new History();
+        $history->description = 'انتقل من عميل محتمل الي عميل اساسي';
+        $history->date = Carbon::now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->id();
+        $history->save();
+
+        $passport_photo = new DocumentType();
+        $passport_photo->document_type = "جواز السفر";
+        $passport_photo->status = "لا يوجد في المكتب";
+        $passport_photo->file = $lead->passport_photo;
+        $passport_photo->note = 'قادم من عميل محتمل';
+        $passport_photo->customer_id = $customer->id;
+        $passport_photo->save();
+
+        $img_national_id_card = new DocumentType();
+        $img_national_id_card->document_type = "البطاقة الشخصية";
+        $img_national_id_card->status = "لا يوجد في المكتب";
+        $img_national_id_card->file = $lead->img_national_id_card;
+        $img_national_id_card->note = 'قادم من عميل محتمل';
+        $img_national_id_card->customer_id = $customer->id;
+        $img_national_id_card->save();
+
+        $license_photo = new DocumentType();
+        $license_photo->document_type = "صورة الرخصة";
+        $license_photo->status = "لا يوجد في المكتب";
+        $license_photo->file = $lead->license_photo;
+        $license_photo->note = 'قادم من عميل محتمل';
+        $license_photo->customer_id = $customer->id;
+        $license_photo->save();
+        return redirect()->route('customer.indes');
     }
 }

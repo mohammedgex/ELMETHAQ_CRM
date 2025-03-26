@@ -24,10 +24,10 @@ return new class extends Migration
             $table->string('evaluation');
             $table->string('phone');
             $table->string('licence_type');
-            $table->string(column: 'status');
+            $table->string('status');
             $table->string('test_type');
             $table->date('registration_date');
-            $table->foreignId('job_title_id')->constrained(table: 'job_titles')->onDelete('cascade');
+            $table->foreignId('job_title_id')->constrained('job_titles')->onDelete('cascade');
             $table->foreignId('delegate_id')->constrained('delegates')->onDelete('cascade');
             $table->foreignId('customer_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();

@@ -6,8 +6,10 @@ use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EmbassyController;
 use App\Http\Controllers\EvalutionController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LeadsCustomersController;
+use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\PaymentTitleController;
 use App\Http\Controllers\SponserController;
 use App\Http\Controllers\TaskController;
@@ -137,7 +139,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-history/{id}', [CustomerController::class, 'history'])->name('customer.history');
     Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
+    Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
 
+    Route::delete('/history-delete/{id}', [HistoryController::class, 'delete'])->name('history.delete');
+
+    Route::delete('/payment-delete/{id}', [PaymentsController::class, 'delete'])->name('payment.delete');
 
     Route::get('/export-delegates-xlsx/{id}', [DelegateController::class, 'exportDelegates'])->name('export.delegates.xlsx');
 
