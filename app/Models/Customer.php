@@ -44,7 +44,7 @@ class Customer extends Model
         'customer_group_id',
         'sponser_id',
         'visa_type_id',
-        'evalution_id'
+        'evaluation_id'
     ];
 
     public function delegate()
@@ -65,7 +65,7 @@ class Customer extends Model
     }
     public function evaluation()
     {
-        return $this->belongsTo(Evalution::class);
+        return $this->belongsTo(Evaluation::class);
     }
     public function documentTypes()
     {

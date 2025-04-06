@@ -6,7 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
 use App\Models\DocumentType;
-use App\Models\Evalution;
+use App\Models\Evaluation;
 use App\Models\FileTitle;
 use App\Models\History;
 use App\Models\JobTitle;
@@ -31,7 +31,7 @@ class CustomerController extends Controller
     {
         // # code...
         $delegates = Delegate::all();
-        $evalutions = Evalution::all();
+        $evalutions = Evaluation::all();
         $groups = CustomerGroup::all();
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
@@ -194,6 +194,7 @@ class CustomerController extends Controller
         return redirect()->route("customer.add", $customer->id);
     }
 
+
     public function show($id)
     {
         # code...
@@ -268,5 +269,50 @@ class CustomerController extends Controller
         return view("customers.customer", [
             'customers' => $customers
         ]);
+    }
+
+    public function filter(Request $request)
+    {
+        $query = Customer::query();
+
+        if ($request->has('name_ar') && $request->name_ar != '') {
+            $query->where('name_ar', 'LIKE', '%' . $request->name_ar . '%');
+        }
+
+        if ($request->has('card_id') && $request->card_id != '') {
+            $query->where('card_id', $request->card_id);
+        }
+
+        if ($request->has('phone') && $request->phone != '') {
+            $query->where('phone', $request->phone);
+        }
+
+        if ($request->has('governorate_live') && $request->governorate_live != '') {
+            $query->where('governorate_live', $request->governorate_live);
+        }
+
+        if ($request->has('status') && $request->status != '') {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->has('license_type') && $request->license_type != '') {
+            $query->where('license_type', $request->license_type);
+        }
+
+        if ($request->has('age') && $request->age != '') {
+            $query->where('age', $request->age);
+        }
+
+        if ($request->has('visa_type_id') && $request->visa_type_id != '') {
+            $query->where('visa_type_id', $request->visa_type_id);
+        }
+
+        if ($request->has('evalution_id') && $request->evalution_id != '') {
+            $query->where('evaluation_id', $request->evalution_id);
+        }
+
+        $customers = $query->get();
+
+        return view("customers.customer", compact('customers'));
     }
 }

@@ -46,11 +46,15 @@
                                     </div>
                                     <div class="row justify-content-between align-items-center d-flex">
                                         <h3 class="bold mt-4 mb-0">{{ $history->description }}</h3>
-                                        <span
-                                            class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center"
-                                            style="width: 35px; height: 35px; cursor: pointer;">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </span>
+                                        <form action="{{ route('history.delete', $history->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"><span
+                                                    class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center"
+                                                    style="width: 35px; height: 35px; cursor: pointer;">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </span></button>
+                                        </form>
                                     </div>
                                 </div>
                             </li>
@@ -158,7 +162,7 @@
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;"> التقييم</label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="evalution_id">
+                                        name="evaluation_id">
                                         <option value="">اختر التقييم</option>
                                         @foreach ($evalutions as $evalution)
                                             <option value="{{ $evalution->id }}">{{ $evalution->title }}</option>
@@ -545,11 +549,11 @@
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;"> التقييم</label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="evalution_id">
+                                        name="evaluation_id">
                                         <option value="">اختر التقييم</option>
                                         @foreach ($evalutions as $evalution)
                                             <option value="{{ $evalution->id }}"
-                                                {{ old('evalution_id', $edit->evalution_id ?? '') == $evalution->id ? 'selected' : '' }}>
+                                                {{ old('evaluation_id', $edit->evaluation_id ?? '') == $evalution->id ? 'selected' : '' }}>
                                                 {{ $evalution->title }}
                                             </option>
                                         @endforeach
@@ -1072,7 +1076,6 @@
                                             <option value="{{ $fileTitle->title }}">{{ $fileTitle->title }}</option>
                                         @endforeach
                                     </select>
-                                    <!-- <input type="text" class="form-control fw-bold" style="border-color: #997a44; height: 60px;" id="attachmentTitle" placeholder="مثال: صورة الجواز"> -->
                                 </div>
                             </div>
 
@@ -1096,7 +1099,6 @@
                                         <option value="لا يوجد بالمكتب"> لا يوجد بالمكتب </option>
                                         <option value="موجود بالمكتب">موجود بالمكتب</option>
                                     </select>
-                                    <!-- <input type="text" class="form-control fw-bold" style="border-color: #997a44; height: 60px;" id="attachmentTitle" placeholder="مثال: صورة الجواز"> -->
                                 </div>
                             </div>
 
@@ -1144,16 +1146,21 @@
                                         </th>
                                         <th>{{ $file->note }}</th>
                                         <td>
-                                            <button class="btn btn-success btn-sm">
-                                                <i class="fa-solid fa-download"></i> تحميل
-                                            </button>
-                                            <button class="btn btn-primary btn-sm">
-                                                <i class="fa-solid fa-eye"></i> عرض
-                                            </button>
-                                            <button class="btn btn-warning btn-sm">
+                                            <a href="{{ asset('storage/' . $file->file) }}" download>
+                                                <button class="btn btn-success btn-sm" type="button">
+                                                    <i class="fa-solid fa-download"></i> تحميل
+                                                </button>
+                                            </a>
+                                            <a href="{{ asset('storage/' . $file->file) }}" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <button class="btn btn-primary btn-sm" type="button">
+                                                    <i class="fa-solid fa-eye"></i> عرض
+                                                </button>
+                                            </a>
+                                            <button class="btn btn-warning btn-sm" type="button">
                                                 <i class="fa-solid fa-pen"></i> تعديل
                                             </button>
-                                            <button class="btn btn-danger btn-sm">
+                                            <button class="btn btn-danger btn-sm" type="button">
                                                 <i class="fa-solid fa-trash"></i> حذف
                                             </button>
                                         </td>

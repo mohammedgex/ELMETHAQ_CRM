@@ -506,12 +506,19 @@
                                 </span>
                             </th>
                             <th>{{ $file->note }}</th>
-                            <th><button class="btn btn-success btn-sm">
-                                    <i class="fa-solid fa-download"></i> تحميل
-                                </button>
-                                <button class="btn btn-primary btn-sm">
-                                    <i class="fa-solid fa-eye"></i> عرض
-                                </button>
+                            <th>
+                                <a href="{{ asset('storage/' . $file->file) }}" download>
+                                    <button class="btn btn-success btn-sm">
+                                        <i class="fa-solid fa-download"></i> تحميل
+                                    </button>
+                                </a>
+                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank"
+                                    rel="noopener noreferrer">
+                                    <button class="btn btn-primary btn-sm">
+                                        <i class="fa-solid fa-eye"></i> عرض
+                                    </button>
+                                </a>
+
                             </th>
                         </tr>
                     @endforeach

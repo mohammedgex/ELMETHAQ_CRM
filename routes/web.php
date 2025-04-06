@@ -141,6 +141,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
     Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
 
+    Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
+
+
     Route::delete('/history-delete/{id}', [HistoryController::class, 'delete'])->name('history.delete');
 
     Route::delete('/payment-delete/{id}', [PaymentsController::class, 'delete'])->name('payment.delete');

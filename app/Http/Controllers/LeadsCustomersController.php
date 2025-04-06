@@ -152,7 +152,7 @@ class LeadsCustomersController extends Controller
         $customer->name_ar = $lead->name;
         $customer->age = $lead->age;
         $customer->card_id = $lead->card_id;
-        $customer->governorate = $lead->governorate_live;
+        $customer->governorate_live = $lead->governorate;
         $customer->phone = $lead->phone;
         $customer->license_type = $lead->licence_type;
         $customer->card_id = $lead->card_id;

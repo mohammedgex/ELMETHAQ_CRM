@@ -80,7 +80,8 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="filterForm">
+                                        <form id="filterForm" method="POST" action="{{ route('customers.filter') }}">
+                                            @csrf
                                             <div>
                                                 <div class="col-md-12 my-2">
                                                     <label class="fw-bold" style="color: #997a44;"> MRZ جواز السفر</label>
@@ -275,7 +276,7 @@
                                                     data-bs-dismiss="modal">إغلاق</button>
                                                 <button type="button" class="btn btn-warning" id="resetFilter">إعادة
                                                     تعيين</button>
-                                                <button type="button" class="btn btn-primary" id="applyFilter">تطبيق
+                                                <button type="submit" class="btn btn-primary" id="applyFilter">تطبيق
                                                     الفلترة</button>
                                             </div>
                                         </form>
