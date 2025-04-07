@@ -370,6 +370,21 @@ class CustomerController extends Controller
 
         $customers = $query->get();
 
-        return view("customers.customer", compact('customers'));
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
+
+        return view("customers.customer", [
+            'customers' => $customers,
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
+        ]);
     }
 }

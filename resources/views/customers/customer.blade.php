@@ -218,20 +218,26 @@
                                                     <select class="form-control fw-bold" name="customer_group_id">
                                                         <option value="">اختر المجموعة</option>
                                                         @foreach ($groups as $group)
-                                                            <option value="">{{ $group->title }}</option>
+                                                            <option value="{{ $group->id }}">{{ $group->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">الوظيفة</label>
                                                     <select class="form-control fw-bold" name="job_title_id">
-                                                        <option value="">اختر المندوب</option>
+                                                        <option value="">اختر الوظيفة</option>
+                                                        @foreach ($jobs as $job )
+                                                        <option value="{{ $job->id }}">{{ $job->title }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">المندوب</label>
                                                     <select class="form-control fw-bold" name="delegate_id">
                                                         <option value="">اختر المندوب</option>
+                                                        @foreach ($delegates as $delegate )
+                                                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -278,7 +284,7 @@
                                             </div>
                                             <div class="row mt-2">
                                                 <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">كشف الفايرس</label>
+                                                    <label class="fw-bold" style="color: #997a44;">كشف المعامل</label>
                                                     <select class="form-control fw-bold" name="virus_examination">
                                                         <option value="">اختر المرحلة</option>
                                                         <option value="بأنتظار ايصال المعامل">بأنتظار ايصال المعامل
