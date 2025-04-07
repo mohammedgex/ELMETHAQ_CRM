@@ -339,7 +339,7 @@
 
                             <div class="row mt-2">
                                 <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;"> كشف الفايرس </label>
+                                    <label class="fw-bold" style="color: #997a44;"> كشف المعامل </label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
                                         name="virus_examination">
                                         <option value="">اختر المرحلة</option>
@@ -781,7 +781,7 @@
 
                             <div class="row mt-2">
                                 <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;"> كشف الفايرس </label>
+                                    <label class="fw-bold" style="color: #997a44;">كشف المعامل</label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
                                         name="virus_examination">
                                         <option value="">اختر المرحلة</option>

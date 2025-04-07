@@ -85,7 +85,7 @@
                                             <div>
                                                 <div class="col-md-12 my-2">
                                                     <label class="fw-bold" style="color: #997a44;"> MRZ جواز السفر</label>
-                                                    <textarea class="form-control fw-bold" name="name_ar" placeholder="أدخل منقطة القراءة الالية"></textarea>
+                                                    <textarea class="form-control fw-bold" name="mrz" placeholder="أدخل منقطة القراءة الالية"></textarea>
                                                 </div>
                                             </div>
                                             <div class="row">
@@ -109,10 +109,44 @@
 
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">محافظة الإقامة</label>
+                                                    @php
+                                                        $governorates = [
+                                                            'القاهرة',
+                                                            'الجيزة',
+                                                            'اسكندرية',
+                                                            'الدقهلية',
+                                                            'الشرقية',
+                                                            'القليوبية',
+                                                            'الغربية',
+                                                            'المنوفية',
+                                                            'البحيرة',
+                                                            'كفر الشيخ',
+                                                            'دمياط',
+                                                            'بورسعيد',
+                                                            'الإسماعيلية',
+                                                            'السويس',
+                                                            'الفيوم',
+                                                            'بني سويف',
+                                                            'المنيا',
+                                                            'أسيوط',
+                                                            'سوهاج',
+                                                            'قنا',
+                                                            'الأقصر',
+                                                            'أسوان',
+                                                            'مطروح',
+                                                            'البحر الأحمر',
+                                                            'الوادي الجديد',
+                                                            'شمال سيناء',
+                                                            'جنوب سيناء',
+                                                        ];
+                                                    @endphp
+
                                                     <select class="form-control fw-bold" name="governorate_live">
                                                         <option value="">اختر المحافظة</option>
-                                                        <option value="القاهرة">القاهرة</option>
-                                                        <option value="الإسكندرية">الإسكندرية</option>
+                                                        @foreach ($governorates as $gov)
+                                                            <option value="{{ $gov }}"> {{ $gov }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
 
@@ -143,7 +177,7 @@
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">رقم جواز السفر</label>
-                                                    <input type="text" class="form-control fw-bold" name="age"
+                                                    <input type="text" class="form-control fw-bold" name="passport_id"
                                                         placeholder="أدخل العمر">
                                                 </div>
                                             </div>
@@ -153,33 +187,44 @@
                                                     <label class="fw-bold" style="color: #997a44;">نوع التأشيرة</label>
                                                     <select class="form-control fw-bold" name="visa_type_id">
                                                         <option value="">اختر التأشيرة</option>
+                                                        @foreach ($visas as $visa)
+                                                            <option value="{{ $visa->id }}">
+                                                                {{ $visa->outgoing_number }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
 
-                                                <div class="col-md-4">
+                                                {{-- <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">القنصلية </label>
                                                     <select class="form-control fw-bold" name="evalution_id">
                                                         <option value="">اختر القنصلية</option>
                                                     </select>
-                                                </div>
+                                                </div> --}}
 
                                                 <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الكفل </label>
-                                                    <select class="form-control fw-bold" name="evalution_id">
-                                                        <option value="">اختر الكفل</option>
+                                                    <label class="fw-bold" style="color: #997a44;">الكفيل </label>
+                                                    <select class="form-control fw-bold" name="sponser_id">
+                                                        <option value="">اختر الكفيل</option>
+                                                        @foreach ($sponsers as $sponser)
+                                                            <option value="{{ $sponser->id }}">{{ $sponser->name }}
+                                                            </option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="row my-2">
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">المجموعة</label>
-                                                    <select class="form-control fw-bold" name="evalution_id">
-                                                        <option value="">اختر التقييم</option>
+                                                    <select class="form-control fw-bold" name="customer_group_id">
+                                                        <option value="">اختر المجموعة</option>
+                                                        @foreach ($groups as $group)
+                                                            <option value="">{{ $group->title }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">الوظيفة</label>
-                                                    <select class="form-control fw-bold" name="delegate_id">
+                                                    <select class="form-control fw-bold" name="job_title_id">
                                                         <option value="">اختر المندوب</option>
                                                     </select>
                                                 </div>
@@ -193,15 +238,19 @@
                                             <div class="row my-2">
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">المؤهل الدراسي</label>
-                                                    <select class="form-control fw-bold" name="evalution_id">
-                                                        <option value="">اختر التقييم</option>
+                                                    <select class="form-control fw-bold" name="education">
+                                                        <option value="">اختر المؤهل</option>
+                                                        <option value="محو امية">محو امية</option>
+                                                        <option value="مؤهل متوسط">مؤهل متوسط</option>
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">الحالة
-                                                        الاجتماعية</label>
-                                                    <select class="form-control fw-bold" name="delegate_id">
-                                                        <option value="">اختر المندوب</option>
+                                                    <label class="fw-bold"
+                                                        style="color: #997a44;">الحالةالاجتماعية</label>
+                                                    <select class="form-control fw-bold" name="marital_status">
+                                                        <option value="">اختر الحالة الاجتماعية</option>
+                                                        <option value="اعزب">اعزب</option>
+                                                        <option value="متزوج">متزوج</option>
                                                     </select>
                                                 </div>
                                             </div>

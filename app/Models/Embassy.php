@@ -9,5 +9,8 @@ class Embassy extends Model
 {
     use HasFactory;
     protected $fillable = ['title', 'customer_id'];
-    public function customers() { return $this->hasMany(Customer::class); }
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
 }

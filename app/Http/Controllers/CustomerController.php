@@ -73,9 +73,22 @@ class CustomerController extends Controller
 
     public function index()
     {
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
         $customers = Customer::all();
+
         return view("customers.customer", [
-            'customers' => $customers
+            'customers' => $customers,
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
         ]);
     }
 
@@ -275,40 +288,84 @@ class CustomerController extends Controller
     {
         $query = Customer::query();
 
-        if ($request->has('name_ar') && $request->name_ar != '') {
-            $query->where('name_ar', 'LIKE', '%' . $request->name_ar . '%');
+        if ($request->filled('mrz')) {
+            $query->where('mrz', 'like', '%' . $request->mrz . '%');
         }
 
-        if ($request->has('card_id') && $request->card_id != '') {
-            $query->where('card_id', $request->card_id);
+        if ($request->filled('name_ar')) {
+            $query->where('name_ar', 'like', '%' . $request->name_ar . '%');
         }
 
-        if ($request->has('phone') && $request->phone != '') {
-            $query->where('phone', $request->phone);
+        if ($request->filled('card_id')) {
+            $query->where('card_id', 'like', '%' . $request->card_id . '%');
         }
 
-        if ($request->has('governorate_live') && $request->governorate_live != '') {
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
+
+        if ($request->filled('governorate_live')) {
             $query->where('governorate_live', $request->governorate_live);
         }
 
-        if ($request->has('status') && $request->status != '') {
+        if ($request->filled('status')) {
             $query->where('status', $request->status);
         }
 
-        if ($request->has('license_type') && $request->license_type != '') {
+        if ($request->filled('license_type')) {
             $query->where('license_type', $request->license_type);
         }
 
-        if ($request->has('age') && $request->age != '') {
+        if ($request->filled('age')) {
             $query->where('age', $request->age);
         }
 
-        if ($request->has('visa_type_id') && $request->visa_type_id != '') {
+        if ($request->filled('passport_id')) {
+            $query->where('passport_id', 'like', '%' . $request->passport_id . '%');
+        }
+
+        if ($request->filled('visa_type_id')) {
             $query->where('visa_type_id', $request->visa_type_id);
         }
 
-        if ($request->has('evalution_id') && $request->evalution_id != '') {
-            $query->where('evaluation_id', $request->evalution_id);
+        if ($request->filled('sponser_id')) {
+            $query->where('sponser_id', $request->sponser_id);
+        }
+
+        if ($request->filled('customer_group_id')) {
+            $query->where('customer_group_id', $request->customer_group_id);
+        }
+
+        if ($request->filled('job_title_id')) {
+            $query->where('job_title_id', $request->job_title_id);
+        }
+
+        if ($request->filled('delegate_id')) {
+            $query->where('delegate_id', $request->delegate_id);
+        }
+
+        if ($request->filled('education')) {
+            $query->where('education', $request->education);
+        }
+
+        if ($request->filled('marital_status')) {
+            $query->where('marital_status', $request->marital_status);
+        }
+
+        if ($request->filled('medical_examination')) {
+            $query->where('medical_examination', $request->medical_examination);
+        }
+
+        if ($request->filled('finger_print_examination')) {
+            $query->where('finger_print_examination', $request->finger_print_examination);
+        }
+
+        if ($request->filled('virus_examination')) {
+            $query->where('virus_examination', $request->virus_examination);
+        }
+
+        if ($request->filled('engaz_request')) {
+            $query->where('engaz_request', $request->engaz_request);
         }
 
         $customers = $query->get();
