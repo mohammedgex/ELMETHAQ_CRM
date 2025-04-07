@@ -22,7 +22,6 @@ use OpenSpout\Common\Entity\Style\Style;
 use OpenSpout\Common\Entity\Style\Border;
 use OpenSpout\Common\Entity\Style\BorderPart;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Route;
 
 class CustomerController extends Controller
 {
@@ -127,6 +126,10 @@ class CustomerController extends Controller
         $passport_expire_date = Carbon::createFromFormat('d/m/Y', $request->passport_expire_date)->format('Y-m-d');
 
         $customer->mrz = $request->mrz;
+        if ($request->hasFile('mrz_image')) {
+            $filePath = $request->file('file')->store('uploads', 'public');
+            $customer->mrz_image = $filePath;
+        }
         $customer->name_en_mrz = $request->name_en_mrz;
         $customer->passport_id = $request->passport_id;
         $customer->nationality = $request->nationality;

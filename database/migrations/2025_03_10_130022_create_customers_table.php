@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name_ar');
             $table->string('card_id');
             $table->string('phone');
+            $table->string('experience_years')->nullable();
+            $table->string('experience')->nullable();
             $table->string('governorate')->nullable();
             $table->string('governorate_live')->nullable();
             $table->integer('age')->nullable();
@@ -35,6 +37,7 @@ return new class extends Migration
             $table->string('education')->nullable();
             $table->text('notes')->nullable();
             $table->text('mrz')->nullable();
+            $table->string('mrz_image')->nullable();
             $table->string('name_en_mrz')->nullable();
             $table->string('passport_id')->nullable();
             $table->date('date_birth')->nullable();

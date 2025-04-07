@@ -9,5 +9,12 @@ class Sponser extends Model
 {
     use HasFactory;
     protected $fillable = ['name', 'phone', 'city'];
-    public function customers() { return $this->hasMany(Customer::class); }
+    public function customers()
+    {
+        return $this->hasMany(Customer::class);
+    }
+    public function visas()
+    {
+        return $this->hasMany(VisaType::class);
+    }
 }

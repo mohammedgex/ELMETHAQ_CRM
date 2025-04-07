@@ -78,7 +78,7 @@
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                 style="border-radius: 15px; background-color: #eae0d5;">
                 <h4 class="mb-3 text-dark font-weight-bold">
-                    قائمة المهن <span class="text-success">(50 مهنة)</span>
+                    قائمة المهن
                 </h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->

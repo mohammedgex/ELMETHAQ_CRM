@@ -218,7 +218,8 @@
                                                     <select class="form-control fw-bold" name="customer_group_id">
                                                         <option value="">اختر المجموعة</option>
                                                         @foreach ($groups as $group)
-                                                            <option value="{{ $group->id }}">{{ $group->title }}</option>
+                                                            <option value="{{ $group->id }}">{{ $group->title }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -226,8 +227,9 @@
                                                     <label class="fw-bold" style="color: #997a44;">الوظيفة</label>
                                                     <select class="form-control fw-bold" name="job_title_id">
                                                         <option value="">اختر الوظيفة</option>
-                                                        @foreach ($jobs as $job )
-                                                        <option value="{{ $job->id }}">{{ $job->title }}</option>
+                                                        @foreach ($jobs as $job)
+                                                            <option value="{{ $job->id }}">{{ $job->title }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -235,8 +237,9 @@
                                                     <label class="fw-bold" style="color: #997a44;">المندوب</label>
                                                     <select class="form-control fw-bold" name="delegate_id">
                                                         <option value="">اختر المندوب</option>
-                                                        @foreach ($delegates as $delegate )
-                                                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
+                                                        @foreach ($delegates as $delegate)
+                                                            <option value="{{ $delegate->id }}">{{ $delegate->name }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -373,19 +376,23 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($customers as $customer)
-                                        <tr class="table-light">
+                                        {{-- <tr class="table-light"> --}}
+                                        <tr
+                                            class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
+
                                             <td>
                                                 <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
                                             </td>
                                             <td>#{{ $customer->id }}</td>
                                             <td class="highlight">{{ $customer->name_ar }}</td>
                                             <td class="highlight"><span
-                                                    class="badge bg-success text-white">{{ $customer->jobTitle->title }}</span>
+                                                    class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
                                             </td>
                                             <td class="highlight">{{ $customer->card_id }}</td>
                                             <td class="highlight">{{ $customer->phone }}</td>
                                             <td class="highlight">{{ $customer->age }}</td>
-                                            <td class="highlight"><a href="#">{{ $customer->delegate->name }}</a>
+                                            <td class="highlight"><a
+                                                    href="#">{{ $customer->delegate->name ?? '' }}</a>
                                             </td>
                                             <td class="highlight"><a
                                                     href="#">{{ $customer->customerGroup->title ?? '' }}</a></td>
@@ -420,7 +427,23 @@
                                                                 <i class="fas fa-eye"></i> عرض
                                                             </a>
                                                         </li>
-
+                                                        @if ($customer->blackList)
+                                                            @if ($customer->blackList->block == false)
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger "
+                                                                        href="{{ route('customers.block', $customer->id) }}">
+                                                                        <i class="fas fa-users"></i> بلوك
+                                                                    </a>
+                                                                </li>
+                                                            @elseif ($customer->blackList->block == true)
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger "
+                                                                        href="{{ route('customers.unblock', $customer->id) }}">
+                                                                        <i class="fas fa-users"></i> ازالة البلوك
+                                                                    </a>
+                                                                </li>
+                                                            @endif
+                                                        @endif
                                                         <!-- الكشوفات والحجوزات -->
                                                         <li class="dropdown">
                                                             <a class="dropdown-item text-primary dropdown-toggle"
@@ -500,11 +523,7 @@
                                                         </li>
 
                                                         <!-- إضافة العميل إلى القائمة السوداء -->
-                                                        <li>
-                                                            <button class="dropdown-item text-danger send-sms">
-                                                                <i class="fas fa-users"></i> بلاك ليست
-                                                            </button>
-                                                        </li>
+
                                                     </ul>
                                                 </div>
                                             </td>

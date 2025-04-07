@@ -44,7 +44,10 @@ class Customer extends Model
         'customer_group_id',
         'sponser_id',
         'visa_type_id',
-        'evaluation_id'
+        'evaluation_id',
+        'experience_years',
+        'experience',
+        'mrz_image'
     ];
 
     public function delegate()
@@ -90,5 +93,9 @@ class Customer extends Model
     public function histories()
     {
         return $this->hasMany(History::class);
+    }
+    public function blackList()
+    {
+        return $this->hasOne(BlackList::class);
     }
 }

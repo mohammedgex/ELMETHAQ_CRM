@@ -162,7 +162,9 @@
                         <div class="col-md-6 my-3">
                             <label class="font-weight-bold"> المندوب </label>
                             <div class="input-group rounded">
-                                <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->delegate->name }}</p>
+                                <p id="textToCopy" class="form-control border-0 m-0">
+                                    {{ $customer->delegate->name ?? '' }}
+                                </p>
                                 <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                     <i class="fas fa-copy"></i>
                                 </button>
@@ -213,7 +215,8 @@
                         <div class="col-md-4 mb-3">
                             <label class="font-weight-bold"> الوظيفة </label>
                             <div class="input-group rounded">
-                                <p id="textToCopy" class="form-control border-0 m-0">{{ $customer->jobTitle->title }}</p>
+                                <p id="textToCopy" class="form-control border-0 m-0">
+                                    {{ $customer->jobTitle->title ?? '' }}</p>
                                 <button class="btn btn-primary copy-btn" onclick="copyText()" title="نسخ">
                                     <i class="fas fa-copy"></i>
                                 </button>
