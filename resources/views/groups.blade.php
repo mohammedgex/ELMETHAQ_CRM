@@ -76,27 +76,27 @@
                     </div>
                 </div>
 
-                 @if (Session::has('success'))
-        <script>
-                Swal.fire({
-                title: "{{Session::get('success')}}",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
-                });
-            </script>
-        @endif
+                @if (Session::has('success'))
+                    <script>
+                        Swal.fire({
+                            title: "{{ Session::get('success') }}",
+                            icon: "success",
+                            confirmButtonText: "تم",
+                            draggable: true
+                        });
+                    </script>
+                @endif
 
-        @if (Session::has('edit_success'))
-        <script>
-                Swal.fire({
-                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
-                });
-            </script>
-        @endif
+                @if (Session::has('edit_success'))
+                    <script>
+                        Swal.fire({
+                            title: "تم تعديل '{{ Session::get('edit_success') }}' بنجاح",
+                            icon: "success",
+                            confirmButtonText: "تم",
+                            draggable: true
+                        });
+                    </script>
+                @endif
 
                 <div class="table-responsive">
                     <table class="table table-hover text-center animate__animated animate__fadeInUp" id="delegatesTable">
@@ -129,10 +129,14 @@
                                                 <i class="fas fa-trash"></i> حذف
                                             </button>
                                         </form>
-                                        <button class="btn btn-sm shadow-sm mx-1"
-                                            style="border-color: #997a44; color: #997a44;">
-                                            <i class="fas fa-users"></i> عرض العملاء
-                                        </button>
+                                        <form action="{{ route('customers.filter') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="customer_group_id" value="{{ $group->id }}">
+                                            <button class="btn btn-sm shadow-sm mx-1"
+                                                style="border-color: #997a44; color: #997a44;">
+                                                <i class="fas fa-users"></i> عرض العملاء
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -204,9 +208,10 @@
                 rows[i].style.display = found ? "" : "none";
             }
         }
+
         function confirmDelete(event) {
-        event.preventDefault(); // Prevent form submission
-        Swal.fire({
+            event.preventDefault(); // Prevent form submission
+            Swal.fire({
                 title: "هل أنت متأكد من الحذف؟",
                 text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
                 icon: "warning",
@@ -215,17 +220,17 @@
                 cancelButtonColor: "#d33",
                 confirmButtonText: "حذف",
                 cancelButtonText: "الغاء",
-                }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     event.target.submit(); // Submit the form if confirmed
                     Swal.fire({
-                    title: "تم الحذف",
-                    text: "تم الحذف بنجاح!",
-                    confirmButtonText: "تم",
-                    icon: "success"
+                        title: "تم الحذف",
+                        text: "تم الحذف بنجاح!",
+                        confirmButtonText: "تم",
+                        icon: "success"
                     });
                 }
-                });
-    }
+            });
+        }
     </script>
 @stop

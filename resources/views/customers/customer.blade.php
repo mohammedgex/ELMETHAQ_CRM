@@ -82,70 +82,70 @@
                                     <div class="modal-body">
                                         <form id="filterForm" method="POST" action="{{ route('customers.filter') }}">
                                             @csrf
-                                            <div>
-                                                <div class="col-md-12 my-2">
-                                                    <label class="fw-bold" style="color: #997a44;"> MRZ جواز السفر</label>
-                                                    <textarea class="form-control fw-bold" name="mrz" placeholder="أدخل منقطة القراءة الالية"></textarea>
-                                                </div>
+
+                                            <div class="col-md-12 my-2">
+                                                <label class="fw-bold" style="color: #997a44;">MRZ جواز السفر</label>
+                                                <textarea class="form-control fw-bold" name="mrz">{{ old('mrz', $fillter['mrz'] ?? '') }}</textarea>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">الاسم الكامل</label>
                                                     <input type="text" class="form-control fw-bold" name="name_ar"
-                                                        placeholder="أدخل الاسم الكامل">
+                                                        value="{{ old('name_ar', $fillter['name_ar'] ?? '') }}">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">الرقم القومي</label>
                                                     <input type="text" class="form-control fw-bold" name="card_id"
-                                                        placeholder="أدخل الرقم القومي">
+                                                        value="{{ old('card_id', $fillter['card_id'] ?? '') }}">
                                                 </div>
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
                                                     <input type="text" class="form-control fw-bold" name="phone"
-                                                        placeholder="أدخل رقم الهاتف">
+                                                        value="{{ old('phone', $fillter['phone'] ?? '') }}">
                                                 </div>
                                             </div>
-                                            <div class="row my-2">
 
+                                            <div class="row my-2">
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">محافظة الإقامة</label>
                                                     @php
                                                         $governorates = [
                                                             'القاهرة',
                                                             'الجيزة',
-                                                            'اسكندرية',
+                                                            'الإسكندرية',
                                                             'الدقهلية',
-                                                            'الشرقية',
-                                                            'القليوبية',
-                                                            'الغربية',
-                                                            'المنوفية',
-                                                            'البحيرة',
-                                                            'كفر الشيخ',
-                                                            'دمياط',
-                                                            'بورسعيد',
-                                                            'الإسماعيلية',
-                                                            'السويس',
-                                                            'الفيوم',
-                                                            'بني سويف',
-                                                            'المنيا',
-                                                            'أسيوط',
-                                                            'سوهاج',
-                                                            'قنا',
-                                                            'الأقصر',
-                                                            'أسوان',
-                                                            'مطروح',
                                                             'البحر الأحمر',
+                                                            'البحيرة',
+                                                            'الفيوم',
+                                                            'الغربية',
+                                                            'الإسماعلية',
+                                                            'المنوفية',
+                                                            'المنيا',
+                                                            'القليوبية',
                                                             'الوادي الجديد',
-                                                            'شمال سيناء',
+                                                            'السويس',
+                                                            'أسوان',
+                                                            'أسيوط',
+                                                            'بني سويف',
+                                                            'بورسعيد',
+                                                            'دمياط',
+                                                            'الشرقية',
                                                             'جنوب سيناء',
+                                                            'كفر الشيخ',
+                                                            'مطروح',
+                                                            'الأقصر',
+                                                            'قنا',
+                                                            'شمال سيناء',
+                                                            'سوهاج',
                                                         ];
                                                     @endphp
-
                                                     <select class="form-control fw-bold" name="governorate_live">
                                                         <option value="">اختر المحافظة</option>
                                                         @foreach ($governorates as $gov)
-                                                            <option value="{{ $gov }}"> {{ $gov }}
-                                                            </option>
+                                                            <option value="{{ $gov }}"
+                                                                {{ old('governorate_live', $fillter['governorate_live'] ?? '') == $gov ? 'selected' : '' }}>
+                                                                {{ $gov }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -154,9 +154,11 @@
                                                     <label class="fw-bold" style="color: #997a44;">الحالة</label>
                                                     <select class="form-control fw-bold" name="status">
                                                         <option value="">اختر الحالة</option>
-                                                        <option value="جديد">جديد</option>
-                                                        <option value="ناجح">ناجح</option>
-                                                        <option value="تجهيز الأوراق">تجهيز الأوراق</option>
+                                                        @foreach (['جديد', 'ناجح', 'تجهيز الأوراق'] as $status)
+                                                            <option value="{{ $status }}"
+                                                                {{ old('status', $fillter['status'] ?? '') == $status ? 'selected' : '' }}>
+                                                                {{ $status }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
 
@@ -164,62 +166,63 @@
                                                     <label class="fw-bold" style="color: #997a44;">نوع الرخصة</label>
                                                     <select class="form-control fw-bold" name="license_type">
                                                         <option value="">اختر النوع</option>
-                                                        <option value="خاصة">خاصة</option>
-                                                        <option value="عامة">عامة</option>
+                                                        @foreach (['خاصة', 'عامة'] as $type)
+                                                            <option value="{{ $type }}"
+                                                                {{ old('license_type', $fillter['license_type'] ?? '') == $type ? 'selected' : '' }}>
+                                                                {{ $type }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="row my-2">
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">السن</label>
                                                     <input type="text" class="form-control fw-bold" name="age"
-                                                        placeholder="أدخل العمر">
+                                                        value="{{ old('age', $fillter['age'] ?? '') }}">
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">رقم جواز السفر</label>
                                                     <input type="text" class="form-control fw-bold" name="passport_id"
-                                                        placeholder="أدخل العمر">
+                                                        value="{{ old('passport_id', $fillter['passport_id'] ?? '') }}">
                                                 </div>
                                             </div>
-                                            <div class="row my-2">
 
+                                            <div class="row my-2">
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">نوع التأشيرة</label>
                                                     <select class="form-control fw-bold" name="visa_type_id">
                                                         <option value="">اختر التأشيرة</option>
                                                         @foreach ($visas as $visa)
-                                                            <option value="{{ $visa->id }}">
+                                                            <option value="{{ $visa->id }}"
+                                                                {{ old('visa_type_id', $fillter['visa_type_id'] ?? '') == $visa->id ? 'selected' : '' }}>
                                                                 {{ $visa->outgoing_number }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
 
-                                                {{-- <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">القنصلية </label>
-                                                    <select class="form-control fw-bold" name="evalution_id">
-                                                        <option value="">اختر القنصلية</option>
-                                                    </select>
-                                                </div> --}}
-
                                                 <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الكفيل </label>
+                                                    <label class="fw-bold" style="color: #997a44;">الكفيل</label>
                                                     <select class="form-control fw-bold" name="sponser_id">
                                                         <option value="">اختر الكفيل</option>
                                                         @foreach ($sponsers as $sponser)
-                                                            <option value="{{ $sponser->id }}">{{ $sponser->name }}
-                                                            </option>
+                                                            <option value="{{ $sponser->id }}"
+                                                                {{ old('sponser_id', $fillter['sponser_id'] ?? '') == $sponser->id ? 'selected' : '' }}>
+                                                                {{ $sponser->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="row my-2">
                                                 <div class="col-md-4">
                                                     <label class="fw-bold" style="color: #997a44;">المجموعة</label>
                                                     <select class="form-control fw-bold" name="customer_group_id">
                                                         <option value="">اختر المجموعة</option>
                                                         @foreach ($groups as $group)
-                                                            <option value="{{ $group->id }}">{{ $group->title }}
-                                                            </option>
+                                                            <option value="{{ $group->id }}"
+                                                                {{ old('customer_group_id', $fillter['customer_group_id'] ?? '') == $group->id ? 'selected' : '' }}>
+                                                                {{ $group->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -228,8 +231,9 @@
                                                     <select class="form-control fw-bold" name="job_title_id">
                                                         <option value="">اختر الوظيفة</option>
                                                         @foreach ($jobs as $job)
-                                                            <option value="{{ $job->id }}">{{ $job->title }}
-                                                            </option>
+                                                            <option value="{{ $job->id }}"
+                                                                {{ old('job_title_id', $fillter['job_title_id'] ?? '') == $job->id ? 'selected' : '' }}>
+                                                                {{ $job->title }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -238,28 +242,36 @@
                                                     <select class="form-control fw-bold" name="delegate_id">
                                                         <option value="">اختر المندوب</option>
                                                         @foreach ($delegates as $delegate)
-                                                            <option value="{{ $delegate->id }}">{{ $delegate->name }}
-                                                            </option>
+                                                            <option value="{{ $delegate->id }}"
+                                                                {{ old('delegate_id', $fillter['delegate_id'] ?? '') == $delegate->id ? 'selected' : '' }}>
+                                                                {{ $delegate->name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="row my-2">
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">المؤهل الدراسي</label>
                                                     <select class="form-control fw-bold" name="education">
                                                         <option value="">اختر المؤهل</option>
-                                                        <option value="محو امية">محو امية</option>
-                                                        <option value="مؤهل متوسط">مؤهل متوسط</option>
+                                                        @foreach (['محو امية', 'مؤهل متوسط'] as $edu)
+                                                            <option value="{{ $edu }}"
+                                                                {{ old('education', $fillter['education'] ?? '') == $edu ? 'selected' : '' }}>
+                                                                {{ $edu }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <label class="fw-bold"
-                                                        style="color: #997a44;">الحالةالاجتماعية</label>
+                                                    <label class="fw-bold" style="color: #997a44;">الحالة
+                                                        الاجتماعية</label>
                                                     <select class="form-control fw-bold" name="marital_status">
                                                         <option value="">اختر الحالة الاجتماعية</option>
-                                                        <option value="اعزب">اعزب</option>
-                                                        <option value="متزوج">متزوج</option>
+                                                        @foreach (['اعزب', 'متزوج'] as $marital)
+                                                            <option value="{{ $marital }}"
+                                                                {{ old('marital_status', $fillter['marital_status'] ?? '') == $marital ? 'selected' : '' }}>
+                                                                {{ $marital }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -270,62 +282,69 @@
                                                     <label class="fw-bold" style="color: #997a44;">الكشف الطبي</label>
                                                     <select class="form-control fw-bold" name="medical_examination">
                                                         <option value="">اختر المرحلة</option>
-                                                        <option value="في انتظار الحجز">في انتظار الحجز</option>
-                                                        <option value="تم الحجز">تم الحجز</option>
-                                                        <option value="لائق">لائق</option>
-                                                        <option value="غير لائق">غير لائق</option>
+                                                        @foreach (['في انتظار الحجز', 'تم الحجز', 'لائق', 'غير لائق'] as $med)
+                                                            <option value="{{ $med }}"
+                                                                {{ old('medical_examination', $fillter['medical_examination'] ?? '') == $med ? 'selected' : '' }}>
+                                                                {{ $med }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">البصمة</label>
                                                     <select class="form-control fw-bold" name="finger_print_examination">
                                                         <option value="">اختر المرحلة</option>
-                                                        <option value="في انتظار الحجز">في انتظار الحجز</option>
-                                                        <option value="تم تصدير الاكسيل">تم تصدير الاكسيل</option>
+                                                        @foreach (['في انتظار الحجز', 'تم تصدير الاكسيل'] as $finger)
+                                                            <option value="{{ $finger }}"
+                                                                {{ old('finger_print_examination', $fillter['finger_print_examination'] ?? '') == $finger ? 'selected' : '' }}>
+                                                                {{ $finger }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="row mt-2">
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">كشف المعامل</label>
                                                     <select class="form-control fw-bold" name="virus_examination">
                                                         <option value="">اختر المرحلة</option>
-                                                        <option value="بأنتظار ايصال المعامل">بأنتظار ايصال المعامل
-                                                        </option>
-                                                        <option value="تم اصدار ايصال المعامل">تم اصدار ايصال المعامل
-                                                        </option>
-                                                        <option value="سالب">سالب</option>
-                                                        <option value="موجب">موجب</option>
+                                                        @foreach (['بأنتظار ايصال المعامل', 'تم اصدار ايصال المعامل', 'سالب', 'موجب'] as $virus)
+                                                            <option value="{{ $virus }}"
+                                                                {{ old('virus_examination', $fillter['virus_examination'] ?? '') == $virus ? 'selected' : '' }}>
+                                                                {{ $virus }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-md-6">
                                                     <label class="fw-bold" style="color: #997a44;">حجز النت</label>
-                                                    <select name="engaz_request" class="form-control fw-bold">
+                                                    <select class="form-control fw-bold" name="engaz_request">
                                                         <option value="">اختر المرحلة</option>
-                                                        <option value="في انتظار الطلب">في انتظار الطلب</option>
-                                                        <option value="تم الحجز">تم الحجز</option>
-                                                        <option value="تم اصدار التأشيرة">تم اصدار التأشيرة</option>
+                                                        @foreach (['في انتظار الطلب', 'تم الحجز', 'تم اصدار التأشيرة'] as $engaz)
+                                                            <option value="{{ $engaz }}"
+                                                                {{ old('engaz_request', $fillter['engaz_request'] ?? '') == $engaz ? 'selected' : '' }}>
+                                                                {{ $engaz }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
+
                                             <div class="d-flex flex-column gap-3 mt-3">
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input" type="checkbox" name="travel_before"
-                                                        value="1" id="travelBefore">
-                                                    <label class="form-check-label fw-bold" for="travelBefore">هل سافر من
-                                                        قبل؟</label>
+                                                        value="1"
+                                                        {{ old('travel_before', $fillter['travel_before'] ?? false) ? 'checked' : '' }}>
+                                                    <label class="form-check-label fw-bold">هل سافر من قبل؟</label>
                                                 </div>
                                                 <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" name="e_visa_number"
-                                                        value="1" id="eVisaNumber">
-                                                    <label class="form-check-label fw-bold" for="eVisaNumber">هل أصدر له
-                                                        رقم تأشيرة؟</label>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        name="e_visa_number_issued" value="1"
+                                                        {{ old('e_visa_number_issued', $fillter['e_visa_number_issued'] ?? false) ? 'checked' : '' }}>
+                                                    <label class="form-check-label fw-bold">هل أصدر له رقم تأشيرة؟</label>
                                                 </div>
                                                 <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" name="e_visa_number"
-                                                        value="1" id="eVisaNumber">
-                                                    <label class="form-check-label fw-bold" for="eVisaNumber">هل ورقه دخل
-                                                        القنصلية ؟</label>
+                                                    <input class="form-check-input" type="checkbox"
+                                                        name="e_visa_number_entered" value="1"
+                                                        {{ old('e_visa_number_entered', $fillter['e_visa_number_entered'] ?? false) ? 'checked' : '' }}>
+                                                    <label class="form-check-label fw-bold">هل ورقه دخل القنصلية؟</label>
                                                 </div>
                                             </div>
 
@@ -334,10 +353,10 @@
                                                     data-bs-dismiss="modal">إغلاق</button>
                                                 <button type="button" class="btn btn-warning" id="resetFilter">إعادة
                                                     تعيين</button>
-                                                <button type="submit" class="btn btn-primary" id="applyFilter">تطبيق
-                                                    الفلترة</button>
+                                                <button type="submit" class="btn btn-primary">تطبيق الفلترة</button>
                                             </div>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>

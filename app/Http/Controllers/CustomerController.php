@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlackList;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
@@ -101,6 +102,10 @@ class CustomerController extends Controller
         $customer = new Customer($validatedData);
 
         $customer->save();
+        $blackList = new BlackList();
+        $blackList->block = false;
+        $blackList->customer_id = $customer->id;
+        $blackList->save();
         return redirect()->route("customer.add", $customer->id);
     }
     public function editBasicDetails(Request $request, $id)
@@ -381,6 +386,7 @@ class CustomerController extends Controller
         $visas = VisaType::all();
 
         return view("customers.customer", [
+            'fillter' => $request->all(),
             'customers' => $customers,
             'delegates' => $delegates,
             'evalutions' => $evalutions,

@@ -145,8 +145,16 @@
                                     <td class="highlight">{{ $sponser->city }}</td>
                                     <td class="highlight"><span class="badge bg-warning">{{ count($sponser->visas) }}
                                             تأشيرات</span> </td>
-                                    <td class="highlight"><span class="badge bg-success">{{ count($sponser->customers) }}
-                                            عميل</span> </td>
+                                    <td class="highlight">
+                                        <form action="{{ route('customers.filter') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="sponser_id" value="{{ $sponser->id }}">
+                                            <button type="submit" class="badge bg-success">
+                                                {{ count($sponser->customers) }}
+                                                عميل
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('sponsor.index', $sponser->id) }}">
                                             <button class="btn btn-sm btn-outline-success shadow-sms">
@@ -161,9 +169,13 @@
                                                 <i class="fas fa-trash"></i> حذف
                                             </button>
                                         </form>
-                                        <button class="btn btn-sm btn-outline-primary shadow-sm mx-1">
-                                            <i class="fas fa-users"></i> عرض العملاء
-                                        </button>
+                                        <form action="{{ route('customers.filter') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="sponser_id" value="{{ $sponser->id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-primary shadow-sm mx-1">
+                                                <i class="fas fa-users"></i> عرض العملاء
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach

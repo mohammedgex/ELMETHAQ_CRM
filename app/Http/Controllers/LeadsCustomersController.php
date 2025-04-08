@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BlackList;
 use App\Models\Customer;
 use App\Models\Delegate;
 use App\Models\DocumentType;
@@ -156,6 +157,7 @@ class LeadsCustomersController extends Controller
         $customer->phone = $lead->phone;
         $customer->license_type = $lead->licence_type;
         $customer->card_id = $lead->card_id;
+        $customer->mrz_image = $lead->passport_photo;
         $customer->job_title_id = $lead->job_title_id;
         $customer->delegate_id = $lead->delegate_id;
         $customer->save();
@@ -169,14 +171,6 @@ class LeadsCustomersController extends Controller
         $history->customer_id = $customer->id;
         $history->user_id = auth()->id();
         $history->save();
-
-        $passport_photo = new DocumentType();
-        $passport_photo->document_type = "جواز السفر";
-        $passport_photo->status = "لا يوجد في المكتب";
-        $passport_photo->file = $lead->passport_photo;
-        $passport_photo->note = 'قادم من عميل محتمل';
-        $passport_photo->customer_id = $customer->id;
-        $passport_photo->save();
 
         $img_national_id_card = new DocumentType();
         $img_national_id_card->document_type = "البطاقة الشخصية";
@@ -193,6 +187,11 @@ class LeadsCustomersController extends Controller
         $license_photo->note = 'قادم من عميل محتمل';
         $license_photo->customer_id = $customer->id;
         $license_photo->save();
+
+        $blackList = new BlackList();
+        $blackList->block = false;
+        $blackList->customer_id = $customer->id;
+        $blackList->save();
         return redirect()->route('customer.indes');
     }
 }

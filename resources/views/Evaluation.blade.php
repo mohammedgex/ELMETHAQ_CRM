@@ -53,35 +53,34 @@
             @endif
         </div>
 
-         @if (Session::has('success'))
-        <script>
+        @if (Session::has('success'))
+            <script>
                 Swal.fire({
-                title: "{{Session::get('success')}}",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
+                    title: "{{ Session::get('success') }}",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
                 });
             </script>
-        
         @endif
 
         @if (Session::has('edit_success'))
-        <script>
+            <script>
                 Swal.fire({
-                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
+                    title: "تم تعديل '{{ Session::get('edit_success') }}' بنجاح",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
                 });
             </script>
-        
         @endif
 
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                 style="border-radius: 15px; background-color: #eae0d5;">
-                <h4 class="mb-3 text-dark font-weight-bold">قائمة التقييمات <span class="text-success">({{ $evaluations->count() }})</span></h4>
+                <h4 class="mb-3 text-dark font-weight-bold">قائمة التقييمات <span
+                        class="text-success">({{ $evaluations->count() }})</span></h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->
                 <div class="row mb-3">
@@ -114,7 +113,9 @@
                                 <tr class="table-light">
                                     <td>#{{ $evaluation->id }}</td>
                                     <td class="highlight">{{ $evaluation->title }}</td>
-                                    <td class="highlight"><span class="badge bg-success text-white">{{$evaluation->customers->count()}} عميل</span></td>
+                                    <td class="highlight"><span
+                                            class="badge bg-success text-white">{{ $evaluation->customers->count() }}
+                                            عميل</span></td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('evaluation.index', $evaluation->id) }}">
                                             <button class="btn btn-sm shadow-sm mx-1"
@@ -131,10 +132,7 @@
                                                 <i class="fas fa-trash"></i> حذف
                                             </button>
                                         </form>
-                                        <button class="btn btn-sm shadow-sm mx-1"
-                                            style="border-color: #997a44; color: #997a44;">
-                                            <i class="fas fa-users"></i> عرض العملاء
-                                        </button>
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -208,8 +206,8 @@
         }
 
         function confirmDelete(event) {
-        event.preventDefault(); // Prevent form submission
-        Swal.fire({
+            event.preventDefault(); // Prevent form submission
+            Swal.fire({
                 title: "هل أنت متأكد من الحذف؟",
                 text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
                 icon: "warning",
@@ -218,17 +216,17 @@
                 cancelButtonColor: "#d33",
                 confirmButtonText: "حذف",
                 cancelButtonText: "الغاء",
-                }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     event.target.submit(); // Submit the form if confirmed
                     Swal.fire({
-                    title: "تم الحذف",
-                    text: "تم الحذف بنجاح!",
-                    confirmButtonText: "تم",
-                    icon: "success"
+                        title: "تم الحذف",
+                        text: "تم الحذف بنجاح!",
+                        confirmButtonText: "تم",
+                        icon: "success"
                     });
                 }
-                });
-    }
+            });
+        }
     </script>
 @stop

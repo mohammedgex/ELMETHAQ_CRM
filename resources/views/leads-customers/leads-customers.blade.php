@@ -51,21 +51,21 @@
                                                 width="45" height="45" style="border-radius: 10px;"></a>
                                     </td>
                                     <!--
-                                                                                        <td>
-                                                                                            <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
-                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
-                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                        </td>
-                                                                                        <td>
-                                                                                            <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
-                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                        </td> -->
+                                                                                                        <td>
+                                                                                                            <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
+                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
+                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                        </td>
+                                                                                                        <td>
+                                                                                                            <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
+                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                        </td> -->
                                     <td><span class="badge bg-info text-white">{{ $lead->age }} عام</span></td>
                                     <td>{{ $lead->card_id }}</td>
                                     <td> {{ $lead->governorate }} </td>
@@ -118,12 +118,14 @@
                                                     </form>
 
                                                 </li>
-                                                <li>
-                                                    <a href="{{ route('customer.leadToCustomer', $lead->id) }}"><button
-                                                            class="dropdown-item text-warning">
-                                                            <i class="fas fa-users"></i> عميل أساسي
-                                                        </button></a>
-                                                </li>
+                                                @if (!$lead->customer_id)
+                                                    <li>
+                                                        <a href="{{ route('customer.leadToCustomer', $lead->id) }}"><button
+                                                                class="dropdown-item text-warning">
+                                                                <i class="fas fa-users"></i> عميل أساسي
+                                                            </button></a>
+                                                    </li>
+                                                @endif
                                                 <li class="dropdown-divider"></li>
                                                 <li class="rating-item">
                                                     <span class="dropdown-item text-info">

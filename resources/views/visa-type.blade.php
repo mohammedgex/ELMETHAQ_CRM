@@ -213,8 +213,16 @@
                                     <td class="highlight"> <span
                                             class="badge bg-info">{{ count($visa_type->visa_professions) }} مهن</span>
                                     </td>
-                                    <td class="highlight"> <span
-                                            class="badge bg-primary">{{ $visa_type->customers->count() }} عميل</span>
+                                    <td class="highlight">
+                                        <form action="{{ route('customers.filter') }}" method="POST">
+                                            @csrf
+
+                                            <input type="hidden" name="visa_type_id" value="{{ $visa_type->id }}">
+                                            <button type="submit" class="badge bg-primary">
+                                                {{ $visa_type->customers->count() }}
+                                                عميل
+                                            </button>
+                                        </form>
                                     </td>
                                     <td>
                                         <a href="{{ route('visa-type.index', $visa_type->id) }}">
@@ -244,9 +252,14 @@
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a class="dropdown-item text-primary">
-                                                        <i class="fas fa-edit"></i> العملاء
-                                                    </a>
+                                                    <form action="{{ route('customers.filter') }}" method="POST">
+                                                        @csrf
+                                                        <input type="hidden" name="visa_type_id"
+                                                            value="{{ $visa_type->id }}">
+                                                        <button type="submit" class="dropdown-item text-primary">
+                                                            <i class="fas fa-edit"></i> العملاء
+                                                        </button>
+                                                    </form>
                                                 </li>
                                                 <li>
                                                     <a class="dropdown-item text-warning" data-bs-toggle="modal"

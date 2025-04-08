@@ -20,16 +20,9 @@ class BlackListController extends Controller
                 'error' => 'Customer not found'
             ]);
         }
-        if ($customer->blackList) {
-            # code...
-            $blackList = BlackList::where('customer_id', $customer->id)->first();
-            $blackList->block = true;
-            $blackList->save();
-            return redirect()->back();
-        }
-        $blackList = new BlackList();
+        # code...
+        $blackList = BlackList::where('customer_id', $customer->id)->first();
         $blackList->block = true;
-        $blackList->customer_id = $customer->id;
         $blackList->save();
         return redirect()->back();
     }
@@ -42,10 +35,6 @@ class BlackListController extends Controller
             return response()->json([
                 'error' => 'Customer not found'
             ]);
-        }
-        if (!$customer->blackList) {
-            # code...
-            return redirect()->back();
         }
         $blackList = BlackList::where('customer_id', $customer->id)->first();
         $blackList->block = false;

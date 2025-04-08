@@ -17,16 +17,18 @@
                     <form action="{{ route('job-type.create') }}" method="POST">
                         @csrf
                         <div class="row">
-                            
-                        <label class="font-weight-bold"> اسم الوظيفة </label>
-                        <div class="col-md-12 input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user-tie" style="color:#7c6232;"></i></span>
+
+                            <label class="font-weight-bold"> اسم الوظيفة </label>
+                            <div class="col-md-12 input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user-tie"
+                                            style="color:#7c6232;"></i></span>
+                                </div>
+                                <input type="text" class="form-control" name="title" placeholder="أدخل اسم الوظيفة"
+                                    required>
+                            </div>
                         </div>
-                        <input type="text" class="form-control" name="title" placeholder="أدخل اسم الوظيفة" required>
-                </div>
-                        </div>
-                        
+
                         <!-- زر بعرض كامل -->
                         <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
                             style="background-color: #997a44; color: white;">
@@ -44,21 +46,21 @@
                             <div class="col-md-12 form-group">
                                 <label class="font-weight-bold"> اسم الوظيفة </label>
                                 <div class="col-md-12 input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text"><i class="fas fa-user-tie" style="color:#7c6232;"></i></span>
-                        </div>
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-user-tie"
+                                                style="color:#7c6232;"></i></span>
+                                    </div>
 
-                                <input type="text" class="form-control" name="title" value="{{ $jobEdit->title }}"
-                                    placeholder="أدخل اسم الوظيفة" required>
+                                    <input type="text" class="form-control" name="title" value="{{ $jobEdit->title }}"
+                                        placeholder="أدخل اسم الوظيفة" required>
                                 </div>
 
-                                    
+
                             </div>
                         </div>
                         <!-- زر بعرض كامل -->
-                        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100 bg-warning text-white"
-                            >
-                           تعديل الوظيفة
+                        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100 bg-warning text-white">
+                            تعديل الوظيفة
                         </button>
                     </form>
                 </div>
@@ -66,24 +68,23 @@
         </div>
 
         @if (Session::has('success'))
-        <script>
+            <script>
                 Swal.fire({
-                title: "{{Session::get('success')}}",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
+                    title: "{{ Session::get('success') }}",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
                 });
             </script>
-        
         @endif
 
         @if (Session::has('edit_success'))
-        <script>
+            <script>
                 Swal.fire({
-                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
+                    title: "تم تعديل '{{ Session::get('edit_success') }}' بنجاح",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
                 });
             </script>
         @endif
@@ -92,7 +93,8 @@
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
                 style="border-radius: 15px; background-color: #eae0d5;">
-                <h4 class="mb-3 text-dark font-weight-bold">قائمة الوظائف <span class="text-success">({{ $jobs->count() }})</span></h4>
+                <h4 class="mb-3 text-dark font-weight-bold">قائمة الوظائف <span
+                        class="text-success">({{ $jobs->count() }})</span></h4>
 
                 <!-- 🔎 مربع البحث والفلترة -->
                 <div class="row mb-3">
@@ -125,7 +127,15 @@
                                 <tr class="table-light">
                                     <td>#{{ $job->id }}</td>
                                     <td class="highlight">{{ $job->title }}</td>
-                                    <td class="highlight"><span class="badge bg-success text-white">{{$job->customers->count()}} عميل</span></td>
+                                    <td class="highlight">
+                                        <form action="{{ route('customers.filter') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="job_title_id" value="{{ $job->id }}">
+                                            <button class="badge bg-success text-white">
+                                                {{ $job->customers->count() }} عميل
+                                            </button>
+                                        </form>
+                                    </td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('job-type.index', $job->id) }}">
                                             <button class="btn btn-sm btn-outline-success shadow-sms">
@@ -136,13 +146,17 @@
                                             class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit" >
+                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
                                                 <i class="fas fa-trash"></i> حذف
                                             </button>
                                         </form>
-                                        <button class="btn btn-sm btn-outline-primary shadow-sm mx-1">
-                                            <i class="fas fa-users"></i> عرض العملاء
-                                        </button>
+                                        <form action="{{ route('customers.filter') }}" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="job_title_id" value="{{ $job->id }}">
+                                            <button class="btn btn-sm btn-outline-primary shadow-sm mx-1">
+                                                <i class="fas fa-users"></i> عرض العملاء
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -216,8 +230,8 @@
         }
 
         function confirmDelete(event) {
-        event.preventDefault(); // Prevent form submission
-        Swal.fire({
+            event.preventDefault(); // Prevent form submission
+            Swal.fire({
                 title: "هل أنت متأكد من الحذف؟",
                 text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
                 icon: "warning",
@@ -226,17 +240,17 @@
                 cancelButtonColor: "#d33",
                 confirmButtonText: "حذف",
                 cancelButtonText: "الغاء",
-                }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     event.target.submit(); // Submit the form if confirmed
                     Swal.fire({
-                    title: "تم الحذف",
-                    text: "تم الحذف بنجاح!",
-                    confirmButtonText: "تم",
-                    icon: "success"
+                        title: "تم الحذف",
+                        text: "تم الحذف بنجاح!",
+                        confirmButtonText: "تم",
+                        icon: "success"
                     });
                 }
-                });
-    }
+            });
+        }
     </script>
 @stop
