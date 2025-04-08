@@ -449,14 +449,14 @@
                                                         @if ($customer->blackList)
                                                             @if ($customer->blackList->block == false)
                                                                 <li>
-                                                                    <a class="dropdown-item text-danger "
+                                                                    <a class="dropdown-item text-danger"
                                                                         href="{{ route('customers.block', $customer->id) }}">
                                                                         <i class="fas fa-users"></i> بلوك
                                                                     </a>
                                                                 </li>
                                                             @elseif ($customer->blackList->block == true)
                                                                 <li>
-                                                                    <a class="dropdown-item text-danger "
+                                                                    <a class="dropdown-item text-danger"
                                                                         href="{{ route('customers.unblock', $customer->id) }}">
                                                                         <i class="fas fa-users"></i> ازالة البلوك
                                                                     </a>

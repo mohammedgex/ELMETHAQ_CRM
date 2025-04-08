@@ -24,7 +24,7 @@ class BlackListController extends Controller
         $blackList = BlackList::where('customer_id', $customer->id)->first();
         $blackList->block = true;
         $blackList->save();
-        return redirect()->back();
+        return redirect()->route('customer.indes');
     }
     public function unBlock($id)
     {
@@ -39,6 +39,6 @@ class BlackListController extends Controller
         $blackList = BlackList::where('customer_id', $customer->id)->first();
         $blackList->block = false;
         $blackList->save();
-        return redirect()->back();
+        return redirect()->route('customer.indes');
     }
 }
