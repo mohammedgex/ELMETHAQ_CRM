@@ -287,8 +287,21 @@ class CustomerController extends Controller
         // البحث في جدول العملاء
         $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
 
+
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
         return view("customers.customer", [
-            'customers' => $customers
+            'customers' => $customers,
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
         ]);
     }
 
