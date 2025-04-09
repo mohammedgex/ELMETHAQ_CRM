@@ -109,7 +109,7 @@
                             </div>
 
                             <div class="row my-2">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="fw-bold" style="color: #997a44;">محافظة الاقامة</label>
                                     @php
                                         $governorates = [
@@ -151,12 +151,12 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">السن</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
                                         name="age">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -515,7 +515,7 @@
                             </div>
 
                             <div class="row my-2">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="fw-bold" style="color: #997a44;">محافظة الاقامة</label>
                                     @php
                                         $governorates = [
@@ -562,12 +562,12 @@
 
                                 </div>
 
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">السن</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
                                         name="age" value="{{ $edit->age }}">
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -1107,7 +1107,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <label class="fw-bold" style="color: #997a44;">جهة الاصدار</label>
                                     <div class="input-group rounded">
                                         <input type="text" class="form-control fw-bold"
