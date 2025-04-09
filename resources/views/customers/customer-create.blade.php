@@ -97,13 +97,13 @@
                                     <label class="fw-bold" style="color: #997a44;">الاسم الكامل</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل الاسم الكامل"
-                                        name="name_ar">
+                                        name="name_ar" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">الرقم القومي</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل الرقم القومي"
-                                        name="card_id">
+                                        name="card_id" required>
                                 </div>
 
                             </div>
@@ -297,7 +297,7 @@
                                     <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم الهاتف"
-                                        name="phone">
+                                        name="phone" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">رقم هاتف آخر</label>
@@ -609,7 +609,7 @@
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;"
                                         value="{{ $edit->experience_years }}" placeholder="أدخل عدد سنين الخبرة"
-                                        name="experience_years" required>
+                                        name="experience_years">
                                 </div>
 
                                 <div class="col-md-6">
@@ -748,7 +748,7 @@
                                     <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل رقم الهاتف"
-                                        name="phone" value="{{ $edit->phone }}">
+                                        name="phone" value="{{ $edit->phone }}" required>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">رقم هاتف آخر</label>

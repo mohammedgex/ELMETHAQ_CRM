@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('document_type');
             $table->string('file');
             $table->string('status');
-            $table->string('note');
+            $table->string('note')->nullable();
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->timestamps();
         });

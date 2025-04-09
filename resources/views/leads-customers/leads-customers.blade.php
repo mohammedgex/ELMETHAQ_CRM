@@ -51,21 +51,21 @@
                                                 width="45" height="45" style="border-radius: 10px;"></a>
                                     </td>
                                     <!--
-                                                                                                        <td>
-                                                                                                            <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
-                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
-                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                        </td>
-                                                                                                        <td>
-                                                                                                            <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
-                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                        </td> -->
+                                                                                                                <td>
+                                                                                                                    <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
+                                                                                                                            src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                            width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
+                                                                                                                            src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                            width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
+                                                                                                                            src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                            width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                </td> -->
                                     <td><span class="badge bg-info text-white">{{ $lead->age }} عام</span></td>
                                     <td>{{ $lead->card_id }}</td>
                                     <td> {{ $lead->governorate }} </td>
@@ -171,7 +171,7 @@
 
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> الوظيفة المقدم عليها </label>
-                            <select class="form-control fw-bold" name="job_title_id">
+                            <select class="form-control fw-bold" name="job_title_id" required>
                                 <option value=""> اختر الوظيفة</option>
                                 @foreach ($jobs as $job)
                                     <option value="{{ $job->id }}"> {{ $job->title }}</option>
@@ -197,7 +197,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> المندوب </label>
-                            <select class="form-control fw-bold" name="delegate_id">
+                            <select class="form-control fw-bold" name="delegate_id" required>
                                 <option value=""> اختر المندوب</option>
                                 @foreach ($delegates as $delegate)
                                     <option value="{{ $delegate->id }}"> {{ $delegate->name }}</option>
@@ -215,7 +215,7 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> نوع الرخصة </label>
-                            <select class="form-control fw-bold" name="licence_type">
+                            <select class="form-control fw-bold" name="licence_type" required>
                                 <option value="">اختر نوع الرخصة</option>
                                 <option value="درجة أولي"> درجة أولي</option>
                                 <option value="درجة ثانية">درجة ثانية</option>
@@ -226,7 +226,7 @@
 
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> التقييم </label>
-                            <select class="form-control fw-bold" name="evaluation">
+                            <select class="form-control fw-bold" name="evaluation" required>
                                 <option value="">اختر التقييم </option>
                                 <option value="مقبول"> مقبول </option>
                                 <option value="احتياطي"> احتياطي </option>
@@ -238,12 +238,12 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> الصورة الشخصية </label>
-                            <input type="file" class="form-control" name="image">
+                            <input type="file" class="form-control" name="image" required>
                         </div>
 
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> صورة جواز السفر </label>
-                            <input type="file" class="form-control" name="passport_photo">
+                            <input type="file" class="form-control" name="passport_photo" required>
                         </div>
                     </div>
 
@@ -251,19 +251,19 @@
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> بطاقة الرقم القومي </label>
-                            <input type="file" class="form-control" name="img_national_id_card">
+                            <input type="file" class="form-control" name="img_national_id_card" required>
                         </div>
 
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> صورة الرخصة </label>
-                            <input type="file" class="form-control" name="license_photo">
+                            <input type="file" class="form-control" name="license_photo" required>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> نوع الاختبار </label>
-                            <select class="form-control fw-bold" name="test_type">
+                            <select class="form-control fw-bold" name="test_type" required>
                                 <option value="">اختر نوع الاختبار </option>
                                 <option value="اول اختبار"> اول اختبار</option>
                                 <option value="اعادة اختبار">اعادة اختبار </option>
@@ -273,7 +273,7 @@
 
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> المحافظة </label>
-                            <select class="form-control fw-bold" name="governorate">
+                            <select class="form-control fw-bold" name="governorate" required>
                                 <option value="">اختر المحافظة</option>
                                 <option value="القاهرة">القاهرة</option>
                                 <option value="الجيزة">الجيزة</option>

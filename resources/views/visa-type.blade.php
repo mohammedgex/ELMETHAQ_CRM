@@ -36,7 +36,8 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> مدة التأشيرة </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid">
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid"
+                                    required>
                                     <option value="">اختر المدة</option>
                                     <option value='3 شهور'>3 شهور</option>
                                     <option value="6 شهور">6 شهور</option>
@@ -49,7 +50,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> القنصلية </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;"name="embassy_id">
+                                <select class="form-control fw-bold" style="border-color: #997a44;"name="embassy_id"
+                                    required>
                                     <option value="">اختر الحالة</option>
                                     @foreach ($embassions as $embassy)
                                         <option value="{{ $embassy->id }}">{{ $embassy->title }}</option>
@@ -59,7 +61,7 @@
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> الكفيل </label>
                                 <select class="form-control fw-bold" style="border-color: #997a44;" name="sponser_id"
-                                    data-placeholder="اختر الكفيل">
+                                    data-placeholder="اختر الكفيل" required>
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
                                         <option value="{{ $sponser->id }}">{{ $sponser->name }}</option>
@@ -104,7 +106,8 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> مدة التأشيرة </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid">
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid"
+                                    required>
                                     <option value="">اختر المدة</option>
                                     <option
                                         {{ $visaTypeEdit->visa_peroid == '3 شهور' ? 'selected class= bg-success ' : '' }}
@@ -127,7 +130,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> القنصلية </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="embassy_id">
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="embassy_id"
+                                    required>
                                     <option value="">اختر الحالة</option>
                                     @foreach ($embassions as $embassy)
                                         <option value="{{ $embassy->id }}"
@@ -141,7 +145,7 @@
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> الكفيل </label>
                                 <select class="form-control select2 fw-bold" style="border-color: #997a44;"
-                                    name="sponser_id">
+                                    name="sponser_id" required>
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
                                         <option value="{{ $sponser->id }}">{{ $sponser->name }}</option>

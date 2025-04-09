@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payments', function (Blueprint $table) {
-    $table->id();
-    $table->foreignId('payment_title_id')->constrained('payment_titles')->onDelete('cascade');
-    $table->string('amount');
-    $table->string('amoun_rest');
-    $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
-    $table->timestamps();
-});
+            $table->id();
+            $table->foreignId('payment_title_id')->constrained('payment_titles')->onDelete('cascade');
+            $table->string('amount');
+            $table->string('amoun_rest')->nullable();
+            $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**

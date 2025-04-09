@@ -3,7 +3,7 @@
 @section('title', ' العملاء المحتملون')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;"> تعديل العميل ()</h1>
+    <h1 style="font-weight:bold; text-align:right;"> تعديل العميل ({{ $lead->name }})</h1>
 @stop
 
 @section('content')
@@ -22,7 +22,7 @@
                 <!-- الوظيفة المقدم عليها -->
                 <div class="col-md-6 mb-3">
                     <label class="font-weight-bold"> الوظيفة المقدم عليها </label>
-                    <select class="form-control fw-bold" name="job_title_id">
+                    <select class="form-control fw-bold" name="job_title_id" required>
                         <option value="">اختر الوظيفة</option>
                         @foreach ($jobs as $job)
                             <option value="{{ $job->id }}"
@@ -58,7 +58,7 @@
                 <!-- المندوب -->
                 <div class="col-md-6 mb-3">
                     <label class="font-weight-bold"> المندوب </label>
-                    <select class="form-control fw-bold" name="delegate_id">
+                    <select class="form-control fw-bold" name="delegate_id" required>
                         <option value="">اختر المندوب</option>
                         @foreach ($delegates as $delegate)
                             <option value="{{ $delegate->id }}"
@@ -73,7 +73,7 @@
                 <!-- نوع الرخصة -->
                 <div class="col-md-6 mb-3">
                     <label class="font-weight-bold"> نوع الرخصة </label>
-                    <select class="form-control fw-bold" name="licence_type">
+                    <select class="form-control fw-bold" name="licence_type" required>
                         <option value="">اختر نوع الرخصة</option>
                         @php
                             $licenceTypes = ['درجة أولي', 'درجة ثانية', 'درجة ثالثة', 'رخصة خاصة'];
@@ -124,7 +124,7 @@
                 <!-- نوع الاختبار -->
                 <div class="col-md-6 mb-3">
                     <label class="font-weight-bold"> نوع الاختبار </label>
-                    <select class="form-control fw-bold" name="test_type">
+                    <select class="form-control fw-bold" name="test_type" required>
                         <option value="">اختر نوع الاختبار</option>
                         @php
                             $testTypes = ['اول اختبار', 'اعادة اختبار', 'قيادة امنة'];
@@ -143,7 +143,7 @@
                 <!-- التقييم -->
                 <div class="col-md-6 mb-3">
                     <label class="font-weight-bold"> التقييم </label>
-                    <select class="form-control fw-bold" name="evaluation">
+                    <select class="form-control fw-bold" name="evaluation" required>
                         <option value="">اختر التقييم</option>
                         @php
                             $evaluations = ['مقبول', 'احتياطي', 'غير مقبول'];
@@ -161,7 +161,7 @@
                 <!-- المحافظة -->
                 <div class="col-md-6 mb-3">
                     <label class="font-weight-bold"> المحافظة </label>
-                    <select class="form-control fw-bold" name="governorate">
+                    <select class="form-control fw-bold" name="governorate" required>
                         <option value="">اختر المحافظة</option>
                         @php
                             $governorates = [

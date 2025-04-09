@@ -6,9 +6,18 @@
 @source "../**/*.js";
 @source "../**/*.vue";
 
-@theme {
+
+/* @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+} */
+
+    body, .content-wrapper, .main-header, .main-sidebar, .brand-link, .nav-link, .nav-item, .card, .table, h1, h2, h3, h4, h5, h6, p, span, a, button, label, input, select, textarea {
+        font-family: 'Cairo', sans-serif !important;
+    }
+
+
+
+body {
+    font-family: 'Cairo', sans-serif !important;
 }
-
-
