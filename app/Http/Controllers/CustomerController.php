@@ -409,4 +409,16 @@ class CustomerController extends Controller
             'visas' => $visas,
         ]);
     }
+
+    public function printAttachments($clientId)
+    {
+        $client = Customer::with(relations: 'documentTypes')->findOrFail(id: $clientId);
+        return view('print-customer.cutomer-documents', compact('client'));
+    }
+
+    public function printPayments($clientId)
+    {
+        $client = Customer::with(relations: 'payments')->findOrFail(id: $clientId);
+        return view('print-customer.customer-payments', compact('client'));
+    }
 }

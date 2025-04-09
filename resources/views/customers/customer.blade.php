@@ -508,13 +508,13 @@
                                                                 <li><a class="dropdown-item text-dark hover:bg-light"
                                                                         href="#"><i class="fas fa-history"></i>
                                                                         تاريخ العميل</a></li>
-                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
-                                                                        href="#"><i class="fas fa-paperclip"></i>
-                                                                        مرفقات العميل</a></li>
-                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
-                                                                        href="#"><i
-                                                                            class="fas fa-money-check-alt"></i> عمليات
-                                                                        الدفع</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                href="{{ route('clients.print.attachments', $customer->id) }}"><i class="fas fa-paperclip"></i>
+                                                                مرفقات العميل</a></li>
+                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                href="{{ route('clients.print.payments', $customer->id) }}"><i
+                                                                    class="fas fa-money-check-alt"></i> عمليات
+                                                                الدفع</a></li>
                                                             </ul>
                                                         </li>
 

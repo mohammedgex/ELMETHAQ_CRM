@@ -156,4 +156,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/export-delegates-pdf/{id}', action: [DelegateController::class, 'downloadPdf'])->name('export.delegates.pdf');
 
     Route::get('/export-customers-xlsx', action: [CustomerController::class, 'exportCustomers'])->name('export.customers.xlsx');
+
+    Route::get('/clients/{client}/attachments/print', action: [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
+    Route::get('/clients/{client}/payments/print', action: [CustomerController::class, 'printPayments'])->name('clients.print.payments');
 });
