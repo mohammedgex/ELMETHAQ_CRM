@@ -141,10 +141,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
     Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
+    Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
 
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
-    Route::get('/customers/block/jhggjh/{id}', [BlackListController::class, 'block'])->name('customers.block');
-    Route::get('/customers/unblock/jkjk/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
+    Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
+    Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
 
 
     Route::delete('/history-delete/{id}', [HistoryController::class, 'delete'])->name('history.delete');

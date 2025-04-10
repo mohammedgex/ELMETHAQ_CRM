@@ -106,7 +106,7 @@ class CustomerController extends Controller
         $blackList->block = false;
         $blackList->customer_id = $customer->id;
         $blackList->save();
-        return redirect()->route("customer.add", $customer->id);
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }
     public function editBasicDetails(Request $request, $id)
     {
@@ -117,7 +117,7 @@ class CustomerController extends Controller
         $customer =  Customer::find($id);
         $customer->update($request->all());
 
-        return redirect()->route("customer.add", $customer->id);
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }
 
     public function mrz(Request $request, $id)
@@ -146,7 +146,7 @@ class CustomerController extends Controller
 
         $customer->save();
 
-        return redirect()->route("customer.add", $customer->id);
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'mrz');
     }
 
 
@@ -173,7 +173,7 @@ class CustomerController extends Controller
 
         $document->save();
 
-        return redirect()->route("customer.add", $customer->id);
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'attach');
     }
     public function payments(Request $request, $id)
     {
@@ -186,7 +186,7 @@ class CustomerController extends Controller
 
         $payment->save();
 
-        return redirect()->route("customer.add", $customer->id);
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'payment');
     }
 
     public function history(Request $request, $id)
@@ -212,7 +212,7 @@ class CustomerController extends Controller
         $history->user_id = auth()->user()->id;
         $history->save();
 
-        return redirect()->route("customer.add", $customer->id);
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'history');
     }
 
 
@@ -401,6 +401,29 @@ class CustomerController extends Controller
         return view("customers.customer", [
             'fillter' => $request->all(),
             'customers' => $customers,
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
+        ]);
+    }
+
+    public function consulate()
+    {
+        # code...
+        $Consulate = Customer::where(['medical_examination' => 'لائق', 'virus_examination' => 'سالب', 'finger_print_examination' => 'تم تصدير الاكسيل', 'engaz_request' => 'تم الحجز'])->get();
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
+        $customers = Customer::all();
+
+        return view("customers.customer", [
+            'customers' => $Consulate,
             'delegates' => $delegates,
             'evalutions' => $evalutions,
             'groups' => $groups,

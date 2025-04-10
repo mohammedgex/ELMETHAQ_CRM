@@ -40,8 +40,8 @@ return new class extends Migration
             $table->string('mrz_image')->nullable();
             $table->string('name_en_mrz')->nullable();
             $table->string('passport_id')->nullable();
-            $table->date('date_birth')->nullable();
-            $table->date('passport_expire_date')->nullable();
+            $table->string('date_birth')->nullable();
+            $table->string('passport_expire_date')->nullable();
             $table->string('gender')->nullable();
             $table->string('issue_place')->nullable();
             $table->boolean('travel_before')->nullable();

@@ -19,6 +19,6 @@ class HistoryController extends Controller
             ]);
         }
         $history->delete();
-        return redirect()->back();
+        return redirect()->back()->with('tap', 'history');
     }
 }

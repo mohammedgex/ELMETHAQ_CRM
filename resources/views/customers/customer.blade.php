@@ -3,7 +3,11 @@
 @section('title', 'العملاء')
 
 @section('content_header')
-    <h1>العملاء</h1>
+    @if (request()->is('customer-consulate'))
+        <h1> العملاء المؤهلون للقنصلية</h1>
+    @else
+        <h1>العملاء</h1>
+    @endif
 @stop
 
 @section('content')
@@ -16,7 +20,7 @@
                     <div class="card-body">
                         <div class="row d-flex justify-content-between">
                             <div class="mb-3 d-flex">
-                                <a href="{{ route('customer.indes') }}">
+                                <a href="">
                                     <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
                                 </a>
                                 <!-- نموذج البحث -->
@@ -398,7 +402,6 @@
                                         {{-- <tr class="table-light"> --}}
                                         <tr
                                             class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
-
                                             <td>
                                                 <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
                                             </td>
@@ -509,12 +512,13 @@
                                                                         href="#"><i class="fas fa-history"></i>
                                                                         تاريخ العميل</a></li>
                                                                 <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                href="{{ route('clients.print.attachments', $customer->id) }}"><i class="fas fa-paperclip"></i>
-                                                                مرفقات العميل</a></li>
-                                                        <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
-                                                                href="{{ route('clients.print.payments', $customer->id) }}"><i
-                                                                    class="fas fa-money-check-alt"></i> عمليات
-                                                                الدفع</a></li>
+                                                                        href="{{ route('clients.print.attachments', $customer->id) }}"><i
+                                                                            class="fas fa-paperclip"></i>
+                                                                        مرفقات العميل</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                        href="{{ route('clients.print.payments', $customer->id) }}"><i
+                                                                            class="fas fa-money-check-alt"></i> عمليات
+                                                                        الدفع</a></li>
                                                             </ul>
                                                         </li>
 

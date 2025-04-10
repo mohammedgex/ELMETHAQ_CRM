@@ -14,22 +14,28 @@
     <div class="card shadow-lg border-success">
         <div class="card-body">
             <ul class="nav nav-tabs nav-fill">
-                <li class="nav-item"><a class="nav-link active" style="color: #997a44;" data-toggle="tab"
-                        href="#personalInfo">التفاصيل الشخصية</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-toggle="tab"
-                        href="#passportDetails">تفاصيل جواز السفر</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-toggle="tab"
-                        href="#attachments">المرفقات</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-toggle="tab"
-                        href="#payments">المدفوعات</a></li>
-                <li class="nav-item"><a class="nav-link" style="color: #997a44;" data-bs-toggle="tab"
-                        href="#timelineTab">تقدم العميل</a></li>
+                <li class="nav-item">
+                    <a class="nav-link {{ session('tap') === null || session('tap') === 'info' ? 'active' : '' }}"
+                        style="color: #997a44;" data-toggle="tab" href="#personalInfo">التفاصيل الشخصية</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ session('tap') == 'mrz' ? ' active' : '' }}" style="color: #997a44;"
+                        data-toggle="tab" href="#passportDetails">تفاصيل جواز السفر</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link {{ session('tap') == 'attach' ? ' active' : '' }}" style="color: #997a44;"
+                        data-toggle="tab" href="#attachments">المرفقات</a>
+                </li>
+                <li class="nav-item "><a class="nav-link {{ session('tap') == 'payment' ? ' active' : '' }}"
+                        style="color: #997a44;" data-toggle="tab" href="#payments">المدفوعات</a></li>
+                <li class="nav-item"><a class="nav-link {{ session('tap') == 'history' ? 'active' : '' }}"
+                        style="color: #997a44;" data-bs-toggle="tab" href="#timelineTab">تقدم العميل</a></li>
             </ul>
 
 
             <div class="tab-content mt-3">
 
-                <div id="timelineTab" class="tab-pane fade">
+                <div id="timelineTab" class="tab-pane fade {{ session('tap') == 'history' ? 'show active' : '' }}">
                     <h2 class=" text-center"> تاريخ العميل</h2>
                     <ul class="timeline" id="timeline">
                         @foreach ($histories as $history)
@@ -72,8 +78,9 @@
 
                 @if ($edit == null)
                     <!-- التفاصيل الشخصية -->
-                    <form id="personalInfo" class="tab-pane fade show active" action="{{ route('customer.basicDetails') }}"
-                        method="POST" enctype="multipart/form-data">
+                    <form id="personalInfo"
+                        class="tab-pane fade {{ session('tap') === null || session('tap') === 'info' ? 'show active' : '' }}"
+                        action="{{ route('customer.basicDetails') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="section-container">
                             <h4>الصورة الشخصية</h4>
@@ -152,11 +159,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">السن</label>
-                                    <input type="text" class="form-control fw-bold"
-                                        style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                        name="age">
-                                </div> -->
+                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                            name="age">
+                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -477,7 +484,8 @@
                             </div>
                         </form>
                     </div>
-                    <form id="personalInfo" class="tab-pane fade show active"
+                    <form id="personalInfo"
+                        class="tab-pane fade {{ session('tap') === null || session('tap') === 'info' ? 'show active' : '' }}"
                         action="{{ route('customer.editBasicDetails', $edit->id) }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -563,11 +571,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">السن</label>
-                                    <input type="text" class="form-control fw-bold"
-                                        style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                        name="age" value="{{ $edit->age }}">
-                                </div> -->
+                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                            name="age" value="{{ $edit->age }}">
+                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -948,7 +956,7 @@
 
                 @if ($edit != null)
                     <!----------------------------------------------------------------- تفاصيل جواز السفر ------------------------------------------------------------------------------------------------------------->
-                    <div id="passportDetails" class="tab-pane fade">
+                    <div id="passportDetails" class="tab-pane fade  {{ session('tap') == 'mrz' ? 'show active' : '' }}">
                         <form action="{{ route('customer.mrz', $edit->id) }}" method="POST" class="table-wrapper">
                             <!-- حقل MRZ -->
                             @csrf
@@ -958,7 +966,7 @@
                                     <label class="fw-bold" style="color: #997a44;" for="mrz_input">أدخل بيانات
                                         MRZ</label>
                                     <textarea id="mrz_input" name="mrz" class="form-control fw-bold" style="border-color: #997a44;" rows="2"
-                                        placeholder="ضع هنا منطقة القراءة الآلية من جواز السفر">{{ $edit->mrz }}</textarea>
+                                        placeholder="ضع هنا منطقة القراءة الآلية من جواز السفر" readonly>{{ $edit->mrz }}</textarea>
 
                                     <button type="button" class="btn text-white fw-bold mt-2"
                                         style="background-color: #997a44;" onclick="extractMRZData()">
@@ -1107,7 +1115,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">جهة الاصدار</label>
                                     <div class="input-group rounded">
                                         <input type="text" class="form-control fw-bold"
@@ -1139,8 +1147,9 @@
 
                     <!-- المرفقات -->
                     <form action="{{ route('customer.attachments', $edit->id) }}" method="POST"
-                        enctype="multipart/form-data" id="attachments" class="tab-pane fade">
-                        <h4 class="fw-bold">إضافة مرفقات</h4>
+                        enctype="multipart/form-data" id="attachments"
+                        class="tab-pane fade {{ session('tap') == 'attach' ? 'show active' : '' }}">
+                        <h4>إضافة مرفقات</h4>
                         @csrf
                         <div class="row">
                             <!-- حقل عنوان المرفق -->
@@ -1250,7 +1259,7 @@
 
                     <!-- المدفوعات -->
                     <form action="{{ route('customer.payments', $edit->id) }}" method="POST" id="payments"
-                        class="tab-pane fade">
+                        class="tab-pane fade {{ session('tap') == 'payment' ? 'show active' : '' }}">
                         @csrf
                         <h4>إضافة مدفوعات</h4>
                         <div class="row">

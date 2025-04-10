@@ -174,7 +174,7 @@ class LeadsCustomersController extends Controller
 
         $img_national_id_card = new DocumentType();
         $img_national_id_card->document_type = "البطاقة الشخصية";
-        $img_national_id_card->status = "لا يوجد في المكتب";
+        $img_national_id_card->status = "لا يوجد بالمكتب";
         $img_national_id_card->file = $lead->img_national_id_card;
         $img_national_id_card->note = 'قادم من عميل محتمل';
         $img_national_id_card->customer_id = $customer->id;
