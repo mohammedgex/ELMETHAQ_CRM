@@ -159,11 +159,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                        <input type="text" class="form-control fw-bold"
-                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                            name="age">
-                                                                                                                                                    </div> -->
+                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                    name="age">
+                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -571,11 +571,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                        <input type="text" class="form-control fw-bold"
-                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                            name="age" value="{{ $edit->age }}">
-                                                                                                                                                    </div> -->
+                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                    name="age" value="{{ $edit->age }}">
+                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -957,7 +957,8 @@
                 @if ($edit != null)
                     <!----------------------------------------------------------------- تفاصيل جواز السفر ------------------------------------------------------------------------------------------------------------->
                     <div id="passportDetails" class="tab-pane fade  {{ session('tap') == 'mrz' ? 'show active' : '' }}">
-                        <form action="{{ route('customer.mrz', $edit->id) }}" method="POST" class="table-wrapper">
+                        <form action="{{ route('customer.mrz', $edit->id) }}" method="POST" class="table-wrapper"
+                            enctype="multipart/form-data">
                             <!-- حقل MRZ -->
                             @csrf
                             <div class="d-flex align-items-start gap-4">
@@ -965,8 +966,8 @@
                                 <div class="form-group flex-grow-1">
                                     <label class="fw-bold" style="color: #997a44;" for="mrz_input">أدخل بيانات
                                         MRZ</label>
-                                    <textarea id="mrz_input" name="mrz" class="form-control fw-bold" style="border-color: #997a44;" rows="2"
-                                        placeholder="ضع هنا منطقة القراءة الآلية من جواز السفر" readonly>{{ $edit->mrz }}</textarea>
+                                    <textarea id="mrz_input" name="mrz" class="form-control fw-bold" style="border-color: #997a44; height: 110px;"
+                                        rows="2" placeholder="ضع هنا منطقة القراءة الآلية من جواز السفر">{{ $edit->mrz }}</textarea>
 
                                     <button type="button" class="btn text-white fw-bold mt-2"
                                         style="background-color: #997a44;" onclick="extractMRZData()">
@@ -978,16 +979,17 @@
                                 <div style="width: 60px; background-color: #ccc; height: auto;"></div>
 
                                 <!-- مربع رفع الصورة -->
-                                <div class="form-group" style="width: 150px;">
+                                <div class="form-group" style="width: 50%;">
                                     <label class="fw-bold d-block mb-2" style="color: #997a44;" for="passport_image">صورة
                                         الجواز</label>
                                     <div
-                                        style="width: 150px; height: 150px; position: relative; border: 2px dashed #997a44; border-radius: 8px; overflow: hidden;">
-                                        <input type="file" id="passport_image" name="mrz_image" accept="image/*"
+                                        style="width: 100%; height: 150px; position: relative; border: 2px dashed #997a44; border-radius: 8px; overflow: hidden;">
+                                        <input type="file" id="passport_image" name="mrz_image"
                                             onchange="previewImage(event)"
                                             style="position: absolute; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 2;">
-                                        <img id="imagePreview" src="#" alt="معاينة الصورة"
-                                            style="width: 100%; height: 100%; object-fit: cover; display: none; position: absolute; z-index: 1;">
+                                        <img id="imagePreview" src="{{ asset('storage/' . $edit->mrz_image) }}"
+                                            alt="معاينة الصورة"
+                                            style="width: 100%; height: 100%; object-fit: cover; position: absolute; z-index: 1;">
                                         <div id="uploadText"
                                             style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #997a44; font-size: 14px; position: absolute; z-index: 0;">
                                             اختيار صورة
@@ -1056,9 +1058,10 @@
                                         <label class="fw-bold" style="color: #997a44;" for="dob">تاريخ
                                             الميلاد</label>
                                         <div class="input-group rounded">
-                                            <input type="text" id="dob" value="{{ $edit->date_birth }}"
-                                                name="date_birth" class=" form-control fw-bold"
-                                                style="height: 60px; border-color: #997a44;" readonly>
+                                            <input type="text" id="dob" name="date_birth"
+                                                class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                                readonly
+                                                value="{{ $edit->date_birth ? \Carbon\Carbon::parse($edit->date_birth)->format('d/m/Y') : '' }}">
                                             <button class="btn btn-primary copy-btn ml-1" type="button"
                                                 onclick="copyText()" title="نسخ">
                                                 <i class="fas fa-copy"></i>
@@ -1074,10 +1077,10 @@
                                         <label class="fw-bold" style="color: #997a44;" for="expiry_date">تاريخ انتهاء
                                             الصلاحية</label>
                                         <div class="input-group rounded">
-                                            <input type="text" id="expiry_date"
-                                                value="{{ $edit->passport_expire_date }}" name="passport_expire_date"
-                                                class=" form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                                readonly>
+                                            <input type="text" id="expiry_date" name="passport_expire_date"
+                                                class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                                readonly
+                                                value="{{ $edit->passport_expire_date ? \Carbon\Carbon::parse($edit->passport_expire_date)->format('d/m/Y') : '' }}">
                                             <button class="btn btn-primary copy-btn ml-1" type="button"
                                                 onclick="copyText()" title="نسخ">
                                                 <i class="fas fa-copy"></i>

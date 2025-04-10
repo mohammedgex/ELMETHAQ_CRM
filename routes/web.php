@@ -7,6 +7,7 @@ use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EmbassyController;
 use App\Http\Controllers\EvalutionController;
+use App\Http\Controllers\GoogleTranslateController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LeadsCustomersController;
@@ -142,6 +143,14 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
     Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
     Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
+
+
+
+
+    Route::get('/name/{mrz}', [GoogleTranslateController::class, 'parseMrz']);
+
+
+
 
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');

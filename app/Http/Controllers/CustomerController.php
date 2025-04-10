@@ -126,26 +126,26 @@ class CustomerController extends Controller
 
         // تحويل تاريخ الميلاد إلى التنسيق الصحيح
         $date_birth = Carbon::createFromFormat('d/m/Y', $request->date_birth)->format('Y-m-d');
+        $customer->date_birth = $date_birth; // التاريخ بصيغة Y-m-d
 
         // تحويل تاريخ انتهاء الجواز إلى التنسيق الصحيح
         $passport_expire_date = Carbon::createFromFormat('d/m/Y', $request->passport_expire_date)->format('Y-m-d');
+        $customer->passport_expire_date = $passport_expire_date; // التاريخ بصيغة Y-m-d
 
         $customer->mrz = $request->mrz;
         if ($request->hasFile('mrz_image')) {
-            $filePath = $request->file('file')->store('uploads', 'public');
+            $filePath = $request->file('mrz_image')->store('uploads', 'public');
             $customer->mrz_image = $filePath;
         }
         $customer->name_en_mrz = $request->name_en_mrz;
         $customer->passport_id = $request->passport_id;
         $customer->nationality = $request->nationality;
-        $customer->date_birth = $date_birth; // التاريخ بصيغة Y-m-d
-        $customer->passport_expire_date = $passport_expire_date; // التاريخ بصيغة Y-m-d
         $customer->gender = $request->gender;
         $customer->age = $request->age;
         $customer->issue_place = $request->issue_place;
+        $customer->name_ar = app(GoogleTranslateController::class)->translateName($customer->name_en_mrz);
 
         $customer->save();
-
         return redirect()->route("customer.add", $customer->id)->with('tap', 'mrz');
     }
 
