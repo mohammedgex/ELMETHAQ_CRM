@@ -1,0 +1,51 @@
+.small-box {
+    position: relative;
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+}
+
+.small-box .inner h3 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.small-box .inner p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.small-box .small-box-icon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    opacity: 0.3;
+}
+
+.small-box-footer {
+    display: block;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.small-box-footer:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+* {
+    font-family: "Cairo";
+}
