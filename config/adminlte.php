@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'title' => 'AdminLTE 3',
+    'title' => 'لوحة تحكم الميثاق',
     'title_prefix' => '',
     'title_postfix' => '',
 
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Admin</b>LTE',
+    'logo' => 'الميثاق',
     'logo_img' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -110,7 +110,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => true,
+        'enabled' => false,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
@@ -214,10 +214,10 @@ return [
     |
     */
 
-    'sidebar_mini' => 'lg',
+    'sidebar_mini' => 'xl',
     'sidebar_collapse' => false,
     'sidebar_collapse_auto_size' => false,
-    'sidebar_collapse_remember' => false,
+    'sidebar_collapse_remember' => true,
     'sidebar_collapse_remember_no_transition' => true,
     'sidebar_scrollbar_theme' => 'os-theme-light',
     'sidebar_scrollbar_auto_hide' => 'l',
@@ -236,13 +236,13 @@ return [
     |
     */
 
-    'right_sidebar' => false,
+    'right_sidebar' => true,
     'right_sidebar_icon' => 'fas fa-cogs',
     'right_sidebar_theme' => 'dark',
     'right_sidebar_slide' => true,
     'right_sidebar_push' => true,
-    'right_sidebar_scrollbar_theme' => 'os-theme-light',
-    'right_sidebar_scrollbar_auto_hide' => 'l',
+    'right_sidebar_scrollbar_theme' => 'os-theme-dark',
+    'right_sidebar_scrollbar_auto_hide' => '0w',
 
     /*
     |--------------------------------------------------------------------------
@@ -261,9 +261,9 @@ return [
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
-    'password_reset_url' => 'password/reset',
-    'password_email_url' => 'password/email',
-    'profile_url' => false,
+    'password_reset_url' => 'login',
+    'password_email_url' => 'login',
+    'profile_url' => true,
     'disable_darkmode_routes' => false,
 
     /*
@@ -299,100 +299,132 @@ return [
     */
 
     'menu' => [
-        // Navbar items:
-        [
-            'type' => 'navbar-search',
-            'text' => 'search',
-            'topnav_right' => true,
-        ],
         [
             'type' => 'fullscreen-widget',
             'topnav_right' => true,
         ],
-
-        // Sidebar items:
         [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
+            'text' => 'لوحة التحكم',
+            'icon' => 'fas fa-tachometer-alt',
+            'icon_color' => 'indigo',
+            'url' => 'home'
         ],
         [
-            'text' => 'blog',
-            'url' => 'admin/blog',
-            'can' => 'manage-blog',
-        ],
-        [
-            'text' => 'pages',
-            'url' => 'admin/pages',
-            'icon' => 'far fa-fw fa-file',
-            'label' => 4,
-            'label_color' => 'success',
-        ],
-        ['header' => 'account_settings'],
-        [
-            'text' => 'profile',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        [
-            'text' => 'multilevel',
-            'icon' => 'fas fa-fw fa-share',
+            'text' => 'العملاء',
+            'icon' => 'fas fa-users',
             'submenu' => [
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
+                    'text' => 'العملاء',
+                    'url' =>  'customers',
+                    'icon' => 'fas fa-eye',
+                    'label' => 4,
+                    'label_color' => 'success',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
-                    'submenu' => [
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                        ],
-                        [
-                            'text' => 'level_two',
-                            'url' => '#',
-                            'submenu' => [
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                                [
-                                    'text' => 'level_three',
-                                    'url' => '#',
-                                ],
-                            ],
-                        ],
-                    ],
+                    'text' => 'اضافة عميل',
+                    'url' => 'customer-create',
+                    'icon' => 'fas fa-user-plus',
                 ],
                 [
-                    'text' => 'level_one',
-                    'url' => '#',
+                    'text' => 'المؤهلون للقنصلية',
+                    'url' => 'customer-consulate',
+                    'icon' => 'fas fa-user-check',
+                ],
+                [
+                    'text' => 'تصدير جميع العملاء',
+                    'url' => 'export-customers-xlsx',
+                    'icon' => 'fas fa-file-export',
                 ],
             ],
         ],
-        ['header' => 'labels'],
         [
-            'text' => 'important',
-            'icon_color' => 'red',
-            'url' => '#',
+            'text' => 'تعريفات التأشيرة',
+            'icon' => 'fas fa-passport',
+            'submenu' => [
+                [
+                    'text' => 'تعريف التأشيرات',
+                    'url' => 'visa-type-view',
+                    'icon' => 'fab fa-cc-visa',
+                    'label_color' => 'success',
+                ],
+                [
+                    'text' => 'تعريف القنصلية',
+                    'url' => 'embassy-view',
+                    'icon' => 'fas fa-landmark',
+                ],
+                [
+                    'text' => 'تعريف الكفيل',
+                    'url' => 'sponsor-view',
+                    'icon' => 'fas fa-user-tie',
+                ],
+            ],
         ],
         [
-            'text' => 'warning',
-            'icon_color' => 'yellow',
-            'url' => '#',
+            'text' => 'تعريفات العملاء',
+            'icon' => 'fas fa-cogs',
+            'submenu' => [
+                [
+                    'text' => 'تعريف المناديب',
+                    'url' => 'Delegates-create',
+                    'icon' => 'fas fa-user-tag',
+                ],
+                [
+                    'text' => 'تعريف الوظائف',
+                    'url' => 'job-type-view',
+                    'icon' => 'fas fa-briefcase',
+                ],
+                [
+                    'text' => 'تعريف المجموعات',
+                    'url' => 'customer-groups',
+                    'icon' => 'fas fa-layer-group',
+                ],
+                [
+                    'text' => 'تعريف التقييم',
+                    'url' => 'evaluation-view',
+                    'icon' => 'fas fa-star-half-alt',
+                ],
+                [
+                    'text' => 'تعريف المستندات',
+                    'url' => 'document-type-view',
+                    'icon' => 'fas fa-file-alt',
+                ],
+                [
+                    'text' => 'تعريف المعاملات المالية',
+                    'url' => 'payment-type-view',
+                    'icon' => 'fas fa-money-check-alt',
+                ],
+            ],
+        ],
+        ['header' => 'اضافي'],
+        [
+            'text' => 'العملاء المحتملون',
+            'url' => 'leads-customers',
+            'icon' => 'fas fa-user-clock',
         ],
         [
-            'text' => 'information',
-            'icon_color' => 'cyan',
-            'url' => '#',
+            'text' => 'ارسال رسائل',
+            'url' => 'bulk-sms-view',
+            'icon' => 'fas fa-sms',
+        ],
+        [
+            'text' => 'المهام',
+            'url' => 'user-tasks',
+            'icon' => 'fas fa-tasks',
+        ],
+
+        ['header' => 'الاعدادات'],
+        [
+            'text' => 'المستخدم',
+            'url' => 'users',
+            'icon' => 'fas fa-user-cog',
+        ],
+        [
+            'text' => 'تغيير كلمة المرور',
+            'url' => 'admin/settings',
+            'icon' => 'fas fa-key',
         ],
     ],
+
 
     /*
     |--------------------------------------------------------------------------

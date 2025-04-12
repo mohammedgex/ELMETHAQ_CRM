@@ -33,6 +33,23 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function sentTasks()
+    {
+        return $this->hasMany(User_task::class, 'sending_user_id');
+    }
+
+    /**
+     * العلاقة مع المهام التي استلمها المستخدم.
+     */
+    public function receivedTasks()
+    {
+        return $this->hasMany(User_task::class, 'receiving_user_id');
+    }
+    public function histories()
+    {
+        return $this->hasMany(History::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
