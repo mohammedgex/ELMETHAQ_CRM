@@ -159,11 +159,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                    name="age">
-                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                            name="age">
+                                                                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -341,6 +341,47 @@
                             </div>
                         </div>
 
+                        <!-- القسم: معلومات إضافية -->
+                        <div class="section-container">
+                            <h4 class="fw-bold mb-3">معلومات إضافية</h4>
+
+                            <div class="row my-2">
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;">الجنسية</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                        name="nationality">
+                                        <option value="">اختر الجنسية</option>
+                                        <option value="مصري">مصري</option>
+                                        <option value="غير ذلك">غير ذلك</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                        name="marital_status">
+                                        <option value="">اختر الحالة الاجتماعية</option>
+                                        <option value="أعزب">أعزب</option>
+                                        <option value="متزوج">متزوج</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="fw-bold" style="color: #997a44;"> المؤهل الدراسي</label>
+                                <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                    name="education">
+                                    <option value="">اختر المؤهل</option>
+                                    <option value="محو امية">محو امية</option>
+                                    <option value="مؤهل متوسط">مؤهل متوسط</option>
+                                </select>
+                            </div>
+                            <div class="col-md-12 my-2">
+                                <label class="fw-bold" style="color: #997a44;"> ملاحظات</label>
+                                <textarea class="form-control fw-bold" style="height: 100px; border-color: #997a44;" placeholder="ملاحظات هنا..."
+                                    name="notes"></textarea>
+                            </div>
+                        </div>
+
                         <!-- المراحل -->
                         <div class="section-container">
                             <h4 class="fw-bold mb-3"> المراحل </h4>
@@ -393,49 +434,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <!-- القسم: معلومات إضافية -->
-                        <div class="section-container">
-                            <h4 class="fw-bold mb-3">معلومات إضافية</h4>
-
-                            <div class="row my-2">
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">الجنسية</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="nationality">
-                                        <option value="">اختر الجنسية</option>
-                                        <option value="مصري">مصري</option>
-                                        <option value="غير ذلك">غير ذلك</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="marital_status">
-                                        <option value="">اختر الحالة الاجتماعية</option>
-                                        <option value="أعزب">أعزب</option>
-                                        <option value="متزوج">متزوج</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="fw-bold" style="color: #997a44;"> المؤهل الدراسي</label>
-                                <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                    name="education">
-                                    <option value="">اختر المؤهل</option>
-                                    <option value="محو امية">محو امية</option>
-                                    <option value="مؤهل متوسط">مؤهل متوسط</option>
-                                </select>
-                            </div>
-                            <div class="col-md-12 my-2">
-                                <label class="fw-bold" style="color: #997a44;"> ملاحظات</label>
-                                <textarea class="form-control fw-bold" style="height: 100px; border-color: #997a44;" placeholder="ملاحظات هنا..."
-                                    name="notes"></textarea>
-                            </div>
-                        </div>
-
 
                         <div class="d-flex justify-content-between mt-3">
                             <!-- زر الحفظ -->
@@ -571,11 +569,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                    name="age" value="{{ $edit->age }}">
-                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                            name="age" value="{{ $edit->age }}">
+                                                                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -797,6 +795,63 @@
                             </div>
                         </div>
 
+                        <!-- القسم: معلومات إضافية -->
+                        <div class="section-container">
+                            <h4 class="fw-bold mb-3">معلومات إضافية</h4>
+
+                            <div class="row my-2">
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;">الجنسية</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                        name="nationality">
+                                        <option value="">اختر الجنسية</option>
+                                        <option value="مصري"
+                                            {{ old('nationality', $edit->nationality ?? '') == 'مصري' ? 'selected' : '' }}>
+                                            مصري</option>
+                                        <option value="غير ذلك"
+                                            {{ old('nationality', $edit->nationality ?? '') == 'غير ذلك' ? 'selected' : '' }}>
+                                            غير ذلك</option>
+                                    </select>
+
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                        name="marital_status">
+                                        <option value="">اختر الحالة الاجتماعية</option>
+                                        <option value="أعزب"
+                                            {{ old('marital_status', $edit->marital_status ?? '') == 'أعزب' ? 'selected' : '' }}>
+                                            أعزب</option>
+                                        <option value="متزوج"
+                                            {{ old('marital_status', $edit->marital_status ?? '') == 'متزوج' ? 'selected' : '' }}>
+                                            متزوج</option>
+                                    </select>
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="fw-bold" style="color: #997a44;"> المؤهل الدراسي</label>
+                                <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                    name="education">
+                                    <option value="">اختر المؤهل</option>
+                                    <option value="محو امية"
+                                        {{ old('education', $edit->education ?? '') == 'محو امية' ? 'selected' : '' }}>محو
+                                        امية</option>
+                                    <option value="مؤهل متوسط"
+                                        {{ old('education', $edit->education ?? '') == 'مؤهل متوسط' ? 'selected' : '' }}>
+                                        مؤهل متوسط</option>
+                                </select>
+
+                            </div>
+                            <div class="col-md-12 my-2">
+                                <label class="fw-bold" style="color: #997a44;"> ملاحظات</label>
+                                <textarea class="form-control fw-bold" style="height: 100px; border-color: #997a44;" placeholder="ملاحظات هنا..."
+                                    name="notes">{{ $edit->notes }}</textarea>
+                            </div>
+                        </div>
+
+
                         <!-- المراحل -->
                         <div class="section-container">
                             <h4 class="fw-bold mb-3"> المراحل </h4>
@@ -879,64 +934,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-                        <!-- القسم: معلومات إضافية -->
-                        <div class="section-container">
-                            <h4 class="fw-bold mb-3">معلومات إضافية</h4>
-
-                            <div class="row my-2">
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">الجنسية</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="nationality">
-                                        <option value="">اختر الجنسية</option>
-                                        <option value="مصري"
-                                            {{ old('nationality', $edit->nationality ?? '') == 'مصري' ? 'selected' : '' }}>
-                                            مصري</option>
-                                        <option value="غير ذلك"
-                                            {{ old('nationality', $edit->nationality ?? '') == 'غير ذلك' ? 'selected' : '' }}>
-                                            غير ذلك</option>
-                                    </select>
-
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">الحالة الاجتماعية</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="marital_status">
-                                        <option value="">اختر الحالة الاجتماعية</option>
-                                        <option value="أعزب"
-                                            {{ old('marital_status', $edit->marital_status ?? '') == 'أعزب' ? 'selected' : '' }}>
-                                            أعزب</option>
-                                        <option value="متزوج"
-                                            {{ old('marital_status', $edit->marital_status ?? '') == 'متزوج' ? 'selected' : '' }}>
-                                            متزوج</option>
-                                    </select>
-
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="fw-bold" style="color: #997a44;"> المؤهل الدراسي</label>
-                                <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                    name="education">
-                                    <option value="">اختر المؤهل</option>
-                                    <option value="محو امية"
-                                        {{ old('education', $edit->education ?? '') == 'محو امية' ? 'selected' : '' }}>محو
-                                        امية</option>
-                                    <option value="مؤهل متوسط"
-                                        {{ old('education', $edit->education ?? '') == 'مؤهل متوسط' ? 'selected' : '' }}>
-                                        مؤهل متوسط</option>
-                                </select>
-
-                            </div>
-                            <div class="col-md-12 my-2">
-                                <label class="fw-bold" style="color: #997a44;"> ملاحظات</label>
-                                <textarea class="form-control fw-bold" style="height: 100px; border-color: #997a44;" placeholder="ملاحظات هنا..."
-                                    name="notes">{{ $edit->notes }}</textarea>
-                            </div>
-                        </div>
-
 
                         <div class="d-flex justify-content-between mt-3">
                             <!-- زر الحفظ -->

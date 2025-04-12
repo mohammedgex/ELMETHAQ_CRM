@@ -137,13 +137,13 @@ class CustomerController extends Controller
             $filePath = $request->file('mrz_image')->store('uploads', 'public');
             $customer->mrz_image = $filePath;
         }
-        $customer->name_en_mrz = $request->name_en_mrz;
         $customer->passport_id = $request->passport_id;
         $customer->nationality = $request->nationality;
         $customer->gender = $request->gender;
         $customer->age = $request->age;
         $customer->issue_place = $request->issue_place;
-        $customer->name_ar = app(GoogleTranslateController::class)->translateName($customer->name_en_mrz);
+        $customer->name_en_mrz = $request->name_en_mrz;
+        $customer->name_ar = app(GoogleTranslateController::class)->translateText($request->name_en_mrz);
 
         $customer->save();
         return redirect()->route("customer.add", $customer->id)->with('tap', 'mrz');

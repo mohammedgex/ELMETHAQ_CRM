@@ -147,7 +147,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('/name/{mrz}', [GoogleTranslateController::class, 'parseMrz']);
+    Route::get('/name/{name}', [GoogleTranslateController::class, 'translateText']);
 
 
 
