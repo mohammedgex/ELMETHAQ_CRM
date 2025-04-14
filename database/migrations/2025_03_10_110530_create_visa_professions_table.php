@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('visa_professions', function (Blueprint $table) {
             $table->id();
             $table->string('job');
-            $table->string('profession_count');
+            $table->number('profession_count');
             $table->foreignId('visa_type_id')->constrained('visa_types')->onDelete('cascade');
             $table->timestamps();
         });

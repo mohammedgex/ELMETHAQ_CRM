@@ -87,8 +87,7 @@
                             <div class="col-md-12 d-flex align-items-center justify-content-center">
                                 <div class="form-group">
                                     <div class="d-flex align-items-center">
-                                        <input type="file" class="form-control fw-bold" id="attachmentFile"
-                                            name="image"  onchange="previewImage(event)">
+                                        <input type="file" class="form-control fw-bold" name="image">
                                         <img id="imagePreview" src="" alt="معاينة"
                                             style="display: none; width: 200px; height: 150px; object-fit: cover; margin-right: 30px; border-radius: 6px; border: 2px solid #997a44;">
                                     </div>
@@ -159,11 +158,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                            name="age">
-                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                    name="age">
+                                                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -492,8 +491,7 @@
                             <div class="col-md-12 d-flex align-items-center justify-content-center">
                                 <div class="form-group">
                                     <div class="d-flex align-items-center">
-                                        <input type="file" class="form-control fw-bold" id="attachmentFile"
-                                            name="image" accept="image/*" onchange="previewImage(event)">
+                                        <input type="file" class="form-control fw-bold" name="image">
                                         <img id="imagePreview" src="" alt="معاينة"
                                             style="display: none; width: 200px; height: 150px; object-fit: cover; margin-right: 30px; border-radius: 6px; border: 2px solid #997a44;">
                                     </div>
@@ -569,11 +567,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                            name="age" value="{{ $edit->age }}">
-                                                                                                                                                                                                    </div> -->
+                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                    name="age" value="{{ $edit->age }}">
+                                                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">

@@ -96,29 +96,42 @@ class CustomerController extends Controller
     {
         $validatedData = $request->all();
 
+        // لو فيه صورة، ضيفها إلى الـ array
         if ($request->hasFile('image')) {
-            $validatedData['image'] = $request->file('image')->store('uploads', 'public');
+            $filePath = $request->file('image')->store('uploads', 'public');
+            $validatedData['image'] = $filePath;
         }
-        $customer = new Customer($validatedData);
 
-        $customer->save();
+        // إنشاء العميل بكل البيانات دفعة واحدة
+        $customer = Customer::create($validatedData);
+
+        // إضافة للسجل الأسود (block = false)
         $blackList = new BlackList();
         $blackList->block = false;
         $blackList->customer_id = $customer->id;
         $blackList->save();
+
         return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }
+
     public function editBasicDetails(Request $request, $id)
     {
+        $customer = Customer::find($id);
 
+        $data = $request->all();
+
+        // لو فيه صورة
         if ($request->hasFile('image')) {
-            $request['image'] = $request->file('image')->store('uploads', 'public');
+            $filePath = $request->file('image')->store('uploads', 'public');
+            $data['image'] = $filePath;
         }
-        $customer =  Customer::find($id);
-        $customer->update($request->all());
+
+        // تحديث البيانات كلها
+        $customer->update($data);
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }
+
 
     public function mrz(Request $request, $id)
     {

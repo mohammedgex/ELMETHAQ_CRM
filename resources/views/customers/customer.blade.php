@@ -20,7 +20,7 @@
                     <div class="card-body">
                         <div class="row d-flex justify-content-between">
                             <div class="mb-3 d-flex">
-                                <a href="">
+                                <a href="{{ route('customer.add') }}">
                                     <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
                                 </a>
                                 <!-- نموذج البحث -->
@@ -84,7 +84,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="filterForm" method="POST" action="{{ route('customers.filter') }}" >
+                                        <form id="filterForm" method="POST" action="{{ route('customers.filter') }}">
                                             @csrf
 
                                             <div class="col-md-12 my-2">
@@ -400,7 +400,7 @@
                                 <tbody>
                                     @foreach ($customers as $customer)
                                         {{-- <tr class="table-light"> --}}
-                                        <tr
+                                        <tr date-customer="{{ $customer }}"
                                             class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
                                             <td>
                                                 <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
@@ -484,9 +484,11 @@
                                                                         href="#"><i class="fas fa-virus"></i> كشف
                                                                         الفايرس</a></li>
                                                                 <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
-                                                                        href="#"><i class="fas fa-hospital"></i>
+                                                                        data-mrz={{ $customer->mrz }} href="#"><i
+                                                                            class="fas fa-hospital"></i>
                                                                         نتيجة كشف طبي</a></li>
-                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                <li><a data-phone={{ $customer->phone }}
+                                                                        class="dropdown-item text-dark hover:bg-light check-medical-hospital"
                                                                         href="#"><i
                                                                             class="fas fa-clinic-medical"></i> نتيجة
                                                                         وبيانات المستشفى</a></li>
@@ -515,7 +517,7 @@
                                                                         href="{{ route('clients.print.attachments', $customer->id) }}"><i
                                                                             class="fas fa-paperclip"></i>
                                                                         مرفقات العميل</a></li>
-                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                <li><a class="dropdown-item text-dark hover:bg-light "
                                                                         href="{{ route('clients.print.payments', $customer->id) }}"><i
                                                                             class="fas fa-money-check-alt"></i> عمليات
                                                                         الدفع</a></li>
@@ -647,6 +649,7 @@
                     event.preventDefault();
 
                     let mrzCode = this.getAttribute("data-mrz");
+                    console.log(mrzCode);
 
                     try {
                         let response = await fetch(
@@ -698,8 +701,11 @@
 
             // المستشفي
 
-            document.querySelectorAll(".check-medical-hopital").forEach(button => {
+            document.querySelectorAll(".check-medical-hospital").forEach(button => {
                 button.addEventListener("click", async function(event) {
+                    let phone = this.getAttribute("data-phone");
+                    console.log(phone);
+
                     event.preventDefault();
 
                     try {
@@ -736,7 +742,7 @@
                             }).then(async (swalResult) => {
                                 if (swalResult.dismiss === Swal.DismissReason
                                     .cancel) {
-                                    await sendSms(result);
+                                    await sendSms(result, phone);
                                 }
                             });
                         } else {
@@ -760,7 +766,8 @@
             });
 
             // دالة لإرسال الرسالة النصية
-            async function sendSms(hospitalData) {
+            async function sendSms(hospitalData, phone) {
+                console.log(phone);
                 try {
                     let smsResponse = await fetch("http://localhost:3000/send-sms", {
                         method: "POST",
@@ -769,7 +776,7 @@
                             "Accept": "application/json"
                         },
                         body: JSON.stringify({
-                            recipient: "201222540002",
+                            recipient: `2${phone}`,
                             hospitalName: hospitalData.hospitalName,
                             address: hospitalData.address,
                             phone: hospitalData.phone
