@@ -35,9 +35,19 @@ class CustomerController extends Controller
         $groups = CustomerGroup::all();
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
-        $visas = VisaType::all();
         $fileTitles = FileTitle::all();
         $paymentTitles = PaymentTitle::all();
+        $visas = VisaType::all();
+        $validVisas = [];
+        foreach ($visas as $visa) {
+
+            $visasCount = $visa->visa_professions()->sum('profession_count');
+
+            if (intval($visasCount) < intval($visa->count)) {
+                # code...
+                $validVisas[] = $visa;
+            }
+        }
 
         $customer = [];
         if ($id == null) {
@@ -61,7 +71,7 @@ class CustomerController extends Controller
             'groups' => $groups,
             'jobs' => $jobs,
             'sponsers' => $sponsers,
-            'visas' => $visas,
+            'visas' => $validVisas,
             'fileTitles' => $fileTitles,
             'paymentTitles' => $paymentTitles,
             'histories' => $histories,
@@ -317,10 +327,157 @@ class CustomerController extends Controller
             'visas' => $visas,
         ]);
     }
+    public function searchConsulate(Request $request)
+    {
+        $request->validate([
+            'searchBy' => 'required',
+            'searchInput' => 'required'
+        ]);
+
+
+        $searchBy = $request->input('searchBy');
+        $searchInput = $request->input('searchInput');
+
+        // البحث في جدول العملاء
+        $conditions = [
+            'medical_examination' => 'لائق',
+            'virus_examination' => 'سالب',
+            'finger_print_examination' => 'تم تصدير الاكسيل',
+            'engaz_request' => 'تم الحجز'
+        ];
+
+        $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")
+            ->where($conditions)
+            ->get();
+
+
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
+        return view("customers.customer", [
+            'customers' => $customers,
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
+        ]);
+    }
 
     public function filter(Request $request)
     {
         $query = Customer::query();
+
+        if ($request->filled('mrz')) {
+            $query->where('mrz', 'like', '%' . $request->mrz . '%');
+        }
+
+        if ($request->filled('name_ar')) {
+            $query->where('name_ar', 'like', '%' . $request->name_ar . '%');
+        }
+
+        if ($request->filled('card_id')) {
+            $query->where('card_id', 'like', '%' . $request->card_id . '%');
+        }
+
+        if ($request->filled('phone')) {
+            $query->where('phone', 'like', '%' . $request->phone . '%');
+        }
+
+        if ($request->filled('governorate_live')) {
+            $query->where('governorate_live', $request->governorate_live);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('license_type')) {
+            $query->where('license_type', $request->license_type);
+        }
+
+        if ($request->filled('age')) {
+            $query->where('age', $request->age);
+        }
+
+        if ($request->filled('passport_id')) {
+            $query->where('passport_id', 'like', '%' . $request->passport_id . '%');
+        }
+
+        if ($request->filled('visa_type_id')) {
+            $query->where('visa_type_id', $request->visa_type_id);
+        }
+
+        if ($request->filled('sponser_id')) {
+            $query->where('sponser_id', $request->sponser_id);
+        }
+
+        if ($request->filled('customer_group_id')) {
+            $query->where('customer_group_id', $request->customer_group_id);
+        }
+
+        if ($request->filled('job_title_id')) {
+            $query->where('job_title_id', $request->job_title_id);
+        }
+
+        if ($request->filled('delegate_id')) {
+            $query->where('delegate_id', $request->delegate_id);
+        }
+
+        if ($request->filled('education')) {
+            $query->where('education', $request->education);
+        }
+
+        if ($request->filled('marital_status')) {
+            $query->where('marital_status', $request->marital_status);
+        }
+
+        if ($request->filled('medical_examination')) {
+            $query->where('medical_examination', $request->medical_examination);
+        }
+
+        if ($request->filled('finger_print_examination')) {
+            $query->where('finger_print_examination', $request->finger_print_examination);
+        }
+
+        if ($request->filled('virus_examination')) {
+            $query->where('virus_examination', $request->virus_examination);
+        }
+
+        if ($request->filled('engaz_request')) {
+            $query->where('engaz_request', $request->engaz_request);
+        }
+
+        $customers = $query->get();
+
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
+
+        return view("customers.customer", [
+            'fillter' => $request->all(),
+            'customers' => $customers,
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
+        ]);
+    }
+    public function filterConsulate(Request $request)
+    {
+        $query = Customer::query();
+
+        $query->where(['medical_examination' => 'لائق', 'virus_examination' => 'سالب', 'finger_print_examination' => 'تم تصدير الاكسيل', 'engaz_request' => 'تم الحجز']);
+
 
         if ($request->filled('mrz')) {
             $query->where('mrz', 'like', '%' . $request->mrz . '%');

@@ -163,6 +163,7 @@ class LeadsCustomersController extends Controller
         $customer->save();
         $lead->status = 'عميل اساسي';
         $lead->customer_id = $customer->id;
+        $lead->evaluation = 'مقبول';
         $lead->save();
 
         $history = new History();

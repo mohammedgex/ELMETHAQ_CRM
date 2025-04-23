@@ -24,7 +24,10 @@
                                     <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
                                 </a>
                                 <!-- نموذج البحث -->
-                                <form action="{{ route('customer.search') }}" method="POST" class="d-flex">
+                                <form
+                                    @if (request()->is('customer-consulate')) action="{{ route('consulate.search') }}"
+                                    @else action="{{ route('customer.search') }}" @endif
+                                    method="POST" class="d-flex">
                                     @csrf
                                     <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
                                         id="searchBy" name="searchBy">

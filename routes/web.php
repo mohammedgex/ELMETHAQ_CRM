@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BlackListController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
@@ -141,18 +142,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-history/{id}', [CustomerController::class, 'history'])->name('customer.history');
     Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
+    Route::post('/consulate-search', [CustomerController::class, 'searchConsulate'])->name('consulate.search');
     Route::post('/customer-multi_Search', [CustomerController::class, 'multi_Search'])->name('customer.multi_search');
     Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
     Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
-
-
-
-
-    Route::get('/name/{name}', [GoogleTranslateController::class, 'translateText']);
-
-
-
-
+    Route::post('/customer-consulate/fillter', [GoogleTranslateController::class, 'filterConsulate'])->name('consulate.filter');
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
@@ -174,5 +168,3 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/clients/{client}/attachments/print', action: [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
 Route::get('/clients/{client}/payments/print', action: [CustomerController::class, 'printPayments'])->name('clients.print.payments');
-
-
