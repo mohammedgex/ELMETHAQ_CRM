@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Otp;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Auth;
 
 class ApiAppController extends Controller
 {
