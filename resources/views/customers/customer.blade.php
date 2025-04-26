@@ -42,7 +42,7 @@
                                     </select>
 
                                     <input type="text" class="form-control flex-grow-1" id="searchInput"
-                                        name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث">
+                                        name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus>
                                     <button type="submit" class="btn btn-primary mx-1">بحث</button>
                                 </form>
                                 @if (Route::currentRouteName() == 'customer.search')
@@ -389,14 +389,14 @@
                                         <th>السن</th>
                                         <th>المندوب</th>
                                         <th>المجموعة</th>
-                                        <th>نوع الرخصة</th>
+                                        <!-- <th>نوع الرخصة</th> -->
                                         <th>نوع التأشيرة</th>
                                         <th>الحالة </th>
-                                        <th>رقم جواز السفر</th>
+                                        <!-- <th>رقم جواز السفر</th> -->
                                         <th>عدد المرفقات</th>
-                                        <th>عدد المدفوعات</th>
-                                        <th> تاريخ التسجيل</th>
-                                        <th>اخر تعديل</th>
+                                        <!-- <th>عدد المدفوعات</th> -->
+                                        <!-- <th> تاريخ التسجيل</th> -->
+                                        <!-- <th>اخر تعديل</th> -->
                                         <th> الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -423,14 +423,14 @@
                                             </td>
                                             <td class="highlight"><a
                                                     href="#">{{ $customer->customerGroup->title ?? '' }}</a></td>
-                                            <td class="highlight">{{ $customer->license_type }}</td>
+                                            <!-- <td class="highlight">{{ $customer->license_type }}</td> -->
                                             <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}</td>
                                             <td class="highlight">{{ $customer->status }}</td>
-                                            <td class="highlight">{{ $customer->passport_id }}</td>
+                                            <!-- <td class="highlight">{{ $customer->passport_id }}</td> -->
                                             <td class="highlight">{{ count($customer->documentTypes) }}</td>
-                                            <td class="highlight">{{ count($customer->payments) }}</td>
+                                            <!-- <td class="highlight">{{ count($customer->payments) }}</td>
                                             <td class="highlight">{{ $customer->created_at }}</td>
-                                            <td class="highlight">{{ $customer->updated_at }}</td>
+                                            <td class="highlight">{{ $customer->updated_at }}</td> -->
                                             <td>
                                                 <div class="btn-group">
                                                     <button
@@ -926,11 +926,8 @@
                 url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
             },
             searching: false,
-            pageLength: 10,
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, "الكل"]
-            ],
+            pageLength: 100,
+            
         });
 
         // document.addEventListener("DOMContentLoaded", function() {
