@@ -407,7 +407,8 @@
                                         <tr date-customer="{{ $customer }}"
                                             class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
                                             <td>
-                                                <input type="checkbox" id="myCheckbox" class="row-checkbox form-check-input rounded">
+                                                <input type="checkbox" id="myCheckbox"
+                                                    class="row-checkbox form-check-input rounded">
                                             </td>
                                             <td>#{{ $customer->id }}</td>
                                             <td class="highlight"><a
@@ -428,10 +429,12 @@
                                             <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}</td>
                                             <td class="highlight">{{ $customer->status }}</td>
                                             <!-- <td class="highlight">{{ $customer->passport_id }}</td> -->
-                                            <td class="highlight">{{ count($customer->documentTypes) }}</td>
+                                            <td class="highlight"><a
+                                                    href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
+                                            </td>
                                             <!-- <td class="highlight">{{ count($customer->payments) }}</td>
-                                            <td class="highlight">{{ $customer->created_at }}</td>
-                                            <td class="highlight">{{ $customer->updated_at }}</td> -->
+                                                                <td class="highlight">{{ $customer->created_at }}</td>
+                                                                <td class="highlight">{{ $customer->updated_at }}</td> -->
                                             <td>
                                                 <div class="btn-group">
                                                     <button
@@ -817,12 +820,12 @@
         });
 
         document.addEventListener('keydown', function(event) {
-    if (event.key == 's') {
-        const input = document.getElementById('searchInput');
-        input.focus();
-        input.value = ''; // Clears the input field
-    }
-});
+            if (event.key == 's') {
+                const input = document.getElementById('searchInput');
+                input.focus();
+                input.value = ''; // Clears the input field
+            }
+        });
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "paging": true,
@@ -907,45 +910,44 @@
             });
         });
 
-       $('#example').DataTable({
-    dom: 'Bfrtip',
-    buttons: [
-        {
-            extend: 'excel',
-            text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
-            className: 'buttons-excel',
-            exportOptions: {
-                columns: [1, 2, 3,4,5,6,7,8,9,10], // Ignore the checkbox column (start from 1)
-                rows: function (idx, data, node) {
-                    // Only export rows where the checkbox is checked
-                    return $(node).find('.row-checkbox').is(':checked');
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                    extend: 'excel',
+                    text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
+                    className: 'buttons-excel',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Ignore the checkbox column (start from 1)
+                        rows: function(idx, data, node) {
+                            // Only export rows where the checkbox is checked
+                            return $(node).find('.row-checkbox').is(':checked');
+                        }
+                    }
+                },
+                {
+                    extend: 'print',
+                    text: '<i class="fa fa-file-pdf"></i> طباعة',
+                    className: 'buttons-pdf',
+                    exportOptions: {
+                        columns: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], // Ignore the checkbox column
+                        rows: function(idx, data, node) {
+                            return $(node).find('.row-checkbox').is(':checked');
+                        }
+                    },
+                    customize: function(win) {
+                        $(win.document.body).css('direction', 'rtl');
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', '12px');
+                    }
                 }
-            }
-        },
-        {
-            extend: 'print',
-            text: '<i class="fa fa-file-pdf"></i> طباعة',
-            className: 'buttons-pdf',
-            exportOptions: {
-                columns: [1, 2, 3,4,5,6,7,8,9,10], // Ignore the checkbox column
-                rows: function (idx, data, node) {
-                    return $(node).find('.row-checkbox').is(':checked');
-                }
+            ],
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
             },
-            customize: function (win) {
-                $(win.document.body).css('direction', 'rtl');
-                $(win.document.body).find('table')
-                    .addClass('compact')
-                    .css('font-size', '12px');
-            }
-        }
-    ],
-    language: {
-        url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
-    },
-    searching: false,
-    pageLength: 100,
-});
+            searching: false,
+            pageLength: 100,
+        });
 
 
 

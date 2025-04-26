@@ -5,8 +5,8 @@
 @section('content_header')
     @if ($edit)
         <div class="row justify-content-between px-4">
-                    <h1> تعديل "{{ $edit->name_ar }}"</h1>
-                    <h4>(F4 للرجوع)</h4>
+            <h1> تعديل "{{ $edit->name_ar }}"</h1>
+            <h4>(F4 للرجوع)</h4>
         </div>
     @else
         <h1>اضافة بيانات عميل</h1>
@@ -167,11 +167,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                                                                                                                                                    name="age">
-                                                                                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                                                                                                            name="age">
+                                                                                                                                                                                                                                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -196,7 +196,7 @@
                                 </div>
                             </div>
 
-                            
+
 
                         </div>
 
@@ -502,6 +502,10 @@
                                             <img src="{{ asset('storage/' . $edit->image) }}" alt="معاينة"
                                                 style=" width: 200px; height: 150px; object-fit: cover; margin-right: 30px; border-radius: 6px; border: 2px solid #997a44;">
                                         </div>
+                                        {{-- <div class="col-md-6">
+                                            <img src="{{ asset('storage/' . $edit->image) }}" alt=""
+                                                style="max-width: 50%">
+                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
@@ -614,7 +618,7 @@
                                 </div>
                             </div>
 
-                           
+
 
                         </div>
 
@@ -682,7 +686,7 @@
                                 </div>
                             </div>
 
-                             <div class="row my-2">
+                            <div class="row my-2">
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #997a44;">عدد سنوات الخبرة</label>
                                     <input type="text" class="form-control fw-bold"
@@ -1214,7 +1218,8 @@
                         </div>
 
                         <!-- زر إضافة مرفق -->
-                        <button type="submit" class="btn text-white fw-bold my-6 w-100" id="addAttachmentFile" style="background-color:#28a745;margin:  15px 0;padding:7px;font-size:20px;"
+                        <button type="submit" class="btn text-white fw-bold my-6 w-100" id="addAttachmentFile"
+                            style="background-color:#28a745;margin:  15px 0;padding:7px;font-size:20px;"
                             id="addAttachment"> إضافة مرفق (F2)</button>
 
                         <!-- جدول المرفقات -->
@@ -1273,9 +1278,11 @@
                                                         <i class="fa-solid fa-eye"></i> عرض
                                                     </button>
                                                 </a>
-                                                {{-- <button class="btn btn-warning btn-sm" type="button">
-                                                    <i class="fa-solid fa-pen"></i> تعديل
-                                                </button> --}}
+                                                <a href="{{ route('attachments.show', $file->id) }}">
+                                                    <button class="btn btn-warning btn-sm" type="button">
+                                                        <i class="fa-solid fa-pen"></i> تعديل
+                                                    </button>
+                                                </a>
                                                 <a href="{{ route('attachments.delete', $file->id) }}"><button
                                                         class="btn btn-danger btn-sm" type="button">
                                                         <i class="fa-solid fa-trash"></i> حذف
@@ -1546,16 +1553,16 @@
             timeline.appendChild(newStep);
         });
 
-        document.addEventListener('keydown',function(event){
-            if(event.key == 'F1'){
+        document.addEventListener('keydown', function(event) {
+            if (event.key == 'F1') {
                 event.preventDefault();
                 document.getElementById("saveData").click();
             }
-            if(event.key == 'F2'){
+            if (event.key == 'F2') {
                 event.preventDefault();
                 document.getElementById("addAttachmentFile").click();
             }
-            if(event.key == 'F4'){
+            if (event.key == 'F4') {
                 event.preventDefault();
                 window.location.href = "http://192.168.1.219:8000/customers";
             }

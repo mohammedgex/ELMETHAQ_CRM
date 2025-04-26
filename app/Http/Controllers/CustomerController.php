@@ -30,41 +30,40 @@ class CustomerController extends Controller
     //
     public function add($id = null)
     {
-        // # code...
         $delegates = Delegate::all();
         $evalutions = Evaluation::all();
         $groups = CustomerGroup::all();
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
-        $fileTitles = FileTitle::all();
         $paymentTitles = PaymentTitle::all();
         $visas = VisaType::all();
         $validVisas = [];
-        foreach ($visas as $visa) {
 
+        foreach ($visas as $visa) {
             $visasCount = $visa->visa_professions()->sum('profession_count');
 
             if (intval($visasCount) < intval($visa->count)) {
-                # code...
                 $validVisas[] = $visa;
             }
         }
 
         $customer = [];
         if ($id == null) {
-            # code...
             $files = [];
             $payments = [];
             $histories = [];
+            $fileTitles = FileTitle::all(); // لو مفيش عميل هات كل العناوين عادي
         } else {
             $customer = Customer::find($id);
-
             $files = $customer->documentTypes;
             $payments = $customer->payments;
             $histories = $customer->histories;
+
+            // 🛠 استبعاد العناوين اللي العميل استعملها
+            $usedDocumentTypes = $customer->documentTypes->pluck('document_type')->toArray();
+
+            $fileTitles = FileTitle::whereNotIn('title', $usedDocumentTypes)->get();
         }
-
-
 
         return view('customers.customer-create', [
             'delegates' => $delegates,
@@ -81,6 +80,7 @@ class CustomerController extends Controller
             'edit' => $customer
         ]);
     }
+
 
     public function index()
     {

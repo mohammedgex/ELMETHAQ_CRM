@@ -140,6 +140,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-editBasicDetails/{id}', [CustomerController::class, 'editBasicDetails'])->name('customer.editBasicDetails');
     Route::post('/customer-mrz/{id}', [CustomerController::class, 'mrz'])->name('customer.mrz');
     Route::post('/customer-attachments/{id}', [CustomerController::class, 'attachments'])->name('customer.attachments');
+
+    Route::get('/show-attachments/{id}', [FileTitleController::class, 'showedit'])->name('attachments.show');
+    Route::post('/edit-attachments/{id}', [FileTitleController::class, 'updateAttachment'])->name('attachments.edit');
+    Route::get('/to-attachments/{id}', [FileTitleController::class, 'toAttach'])->name('attachments.toAttach');
+
     Route::get('/delete-attachments/{id}', [FileTitleController::class, 'delete'])->name('attachments.delete');
     Route::post('/customer-payments/{id}', [CustomerController::class, 'payments'])->name('customer.payments');
     Route::post('/customer-history/{id}', [CustomerController::class, 'history'])->name('customer.history');
