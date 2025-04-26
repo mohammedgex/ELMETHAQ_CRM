@@ -164,11 +164,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                                                                                                                                            <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                                                                                                                                                style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                                                                                                                                                name="age">
-                                                                                                                                                                                                                                                                                                                                                        </div> -->
+                                                                                                                                                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                                                                                                    name="age">
+                                                                                                                                                                                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -497,10 +497,6 @@
                                             <img src="{{ asset('storage/' . $edit->image) }}" alt="معاينة"
                                                 style=" width: 200px; height: 150px; object-fit: cover; margin-right: 30px; border-radius: 6px; border: 2px solid #997a44;">
                                         </div>
-                                        {{-- <div class="col-md-6">
-                                            <img src="{{ asset('storage/' . $edit->image) }}" alt=""
-                                                style="max-width: 50%">
-                                        </div> --}}
                                     </div>
                                 </div>
                             </div>
