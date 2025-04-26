@@ -31,8 +31,8 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($users as $user)
                             <tr class="table-light">
-                                @foreach ($users as $user)
                                     <td>#{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
@@ -43,8 +43,8 @@
                                         <button class="btn btn-sm btn-outline-danger shadow-sm"><i class="fas fa-trash"></i>
                                             حذف</button>
                                     </td>
+                                </tr>
                                 @endforeach
-                            </tr>
                         </tbody>
                     </table>
                 </div>

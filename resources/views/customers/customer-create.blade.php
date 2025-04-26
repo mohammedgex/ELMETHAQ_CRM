@@ -4,7 +4,10 @@
 
 @section('content_header')
     @if ($edit)
-        <h1> تعديل "{{ $edit->name_ar }}"</h1>
+        <div class="row justify-content-between px-4">
+                    <h1> تعديل "{{ $edit->name_ar }}"</h1>
+                    <h4>(F4 للرجوع)</h4>
+        </div>
     @else
         <h1>اضافة بيانات عميل</h1>
     @endif
@@ -193,29 +196,7 @@
                                 </div>
                             </div>
 
-                            <div class="row my-2">
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">عدد سنوات الخبرة</label>
-                                    <input type="text" class="form-control fw-bold"
-                                        style="height: 60px; border-color: #997a44;" placeholder="أدخل عدد سنين الخبرة "
-                                        name="experience_years">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;"> الخبرة</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="experience">
-                                        <option value="">اختر الخبرات</option>
-                                        <option value="جديد">جديد
-                                        </option>
-                                        <option value="قديم شركات">قديم شركات
-                                        </option>
-
-                                    </select>
-
-                                </div>
-
-                            </div>
+                            
 
                         </div>
 
@@ -265,6 +246,30 @@
                                         @endforeach
                                     </select>
                                 </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;">عدد سنوات الخبرة</label>
+                                    <input type="text" class="form-control fw-bold"
+                                        style="height: 60px; border-color: #997a44;" placeholder="أدخل عدد سنين الخبرة "
+                                        name="experience_years">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;"> الخبرة</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                        name="experience">
+                                        <option value="">اختر الخبرات</option>
+                                        <option value="جديد">جديد
+                                        </option>
+                                        <option value="قديم شركات">قديم شركات
+                                        </option>
+
+                                    </select>
+
+                                </div>
+
                             </div>
                         </div>
 
@@ -438,7 +443,7 @@
                         <div class="d-flex justify-content-between mt-3">
                             <!-- زر الحفظ -->
                             <button type="submit" class="btn text-white fw-bold"
-                                style="background-color: #997a44; width: 50%;">حفظ البيانات</button>
+                                style="background-color: #997a44; width: 50%;">حفظ البيانات (F1)</button>
 
                             <!--------------------------------- تظهر فقط عند اضافة المستخدم او التعديل --------------------------------------->
                             <!-- زر الحذف -->
@@ -609,32 +614,7 @@
                                 </div>
                             </div>
 
-                            <div class="row my-2">
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;">عدد سنوات الخبرة</label>
-                                    <input type="text" class="form-control fw-bold"
-                                        style="height: 60px; border-color: #997a44;"
-                                        value="{{ $edit->experience_years }}" placeholder="أدخل عدد سنين الخبرة"
-                                        name="experience_years">
-                                </div>
-
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #997a44;"> الخبرة</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
-                                        name="experience">
-                                        <option value="">اختر الخبرات</option>
-                                        <option value="جديد"
-                                            {{ old('experience', $edit->experience ?? '') == 'جديد' ? 'selected' : '' }}>
-                                            جديد</option>
-                                        <option value="قديم شركات"
-                                            {{ old('experience', $edit->experience ?? '') == 'قديم شركات' ? 'selected' : '' }}>
-                                            قديم شركات</option>
-                                    </select>
-
-
-                                </div>
-
-                            </div>
+                           
 
                         </div>
 
@@ -700,6 +680,33 @@
                                     </select>
 
                                 </div>
+                            </div>
+
+                             <div class="row my-2">
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;">عدد سنوات الخبرة</label>
+                                    <input type="text" class="form-control fw-bold"
+                                        style="height: 60px; border-color: #997a44;"
+                                        value="{{ $edit->experience_years }}" placeholder="أدخل عدد سنين الخبرة"
+                                        name="experience_years">
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #997a44;"> الخبرة</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
+                                        name="experience">
+                                        <option value="">اختر الخبرات</option>
+                                        <option value="جديد"
+                                            {{ old('experience', $edit->experience ?? '') == 'جديد' ? 'selected' : '' }}>
+                                            جديد</option>
+                                        <option value="قديم شركات"
+                                            {{ old('experience', $edit->experience ?? '') == 'قديم شركات' ? 'selected' : '' }}>
+                                            قديم شركات</option>
+                                    </select>
+
+
+                                </div>
+
                             </div>
                         </div>
 
@@ -932,8 +939,8 @@
 
                         <div class="d-flex justify-content-between mt-3">
                             <!-- زر الحفظ -->
-                            <button type="submit" class="btn text-white fw-bold"
-                                style="background-color: #997a44; width: 50%;">حفظ البيانات</button>
+                            <button type="submit" class="btn text-white fw-bold" id="saveData"
+                                style="background-color: #997a44; width: 50%;">حفظ البيانات (F2)</button>
 
                             <!--------------------------------- تظهر فقط عند اضافة المستخدم او التعديل --------------------------------------->
                             <!-- زر الحذف -->
@@ -1207,8 +1214,8 @@
                         </div>
 
                         <!-- زر إضافة مرفق -->
-                        <button type="submit" class="btn text-white fw-bold mt-2" style="background-color: #997a44;"
-                            id="addAttachment">إضافة مرفق</button>
+                        <button type="submit" class="btn text-white fw-bold my-6 w-100" id="addAttachmentFile" style="background-color:#28a745;margin:  15px 0;padding:7px;font-size:20px;"
+                            id="addAttachment"> إضافة مرفق (F2)</button>
 
                         <!-- جدول المرفقات -->
                         <table class="table table-bordered mt-3">
@@ -1537,6 +1544,22 @@
             </div>
         `;
             timeline.appendChild(newStep);
+        });
+
+        document.addEventListener('keydown',function(event){
+            if(event.key == 'F1'){
+                event.preventDefault();
+                document.getElementById("saveData").click();
+            }
+            if(event.key == 'F2'){
+                event.preventDefault();
+                document.getElementById("addAttachmentFile").click();
+            }
+            if(event.key == 'F4'){
+                event.preventDefault();
+                window.location.href = "http://192.168.1.219:8000/customers";
+            }
+
         });
 
         $(document).ready(function() {
