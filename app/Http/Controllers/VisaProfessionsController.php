@@ -40,6 +40,15 @@ class VisaProfessionsController extends Controller
             'profession_count' => 'required',
         ]);
 
+        $visaType = VisaType::find($visa_id);
+        $visas = $visaType->visa_professions();
+        $visasCount = $visas->sum('profession_count');
+
+        if (intval($visasCount) + intval($request->profession_count) > intval($visaType->count)) {
+            # code...
+            return redirect()->back()->with('error', 'مجموع عدد المهن تخطي العدد المسموح بيه في التأشيرة, العدد المتبقي هو (' . intval($visaType->count) - intval($visasCount) . ')');
+        }
+
         $visa = new VisaProfessions($request->all());
         $visa->visa_type_id = $visa_id;
         $visa->save();

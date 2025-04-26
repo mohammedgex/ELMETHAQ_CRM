@@ -49,7 +49,7 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> المهنة </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="job">
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="job" required>
                                     <option value="">اختر المهنة بالتأشيرة</option>
                                     @foreach ($jobs as $job)
                                         <option value="{{ $job }}" {{ $visaEdit->job == $job ? 'selected' : '' }}>
@@ -182,6 +182,15 @@
                         style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">اضافة</button>
                 </div>
             </div>
+            @if (Session::has('error'))
+                <script>
+                    Swal.fire({
+                        icon: "error",
+                        title: "خطأ...",
+                        text: "{{ Session::get('error') }}",
+                    });
+                </script>
+            @endif
         </div>
     </div>
 @stop

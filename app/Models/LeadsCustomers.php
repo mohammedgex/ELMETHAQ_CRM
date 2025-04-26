@@ -2,30 +2,52 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Sanctum\HasApiTokens;
 
 class LeadsCustomers extends Model
 {
     //
+    use HasFactory, HasApiTokens;
     protected $table = 'leads_customers';
+
+
     protected $fillable = [
         'name',
         'image',
-        'passport_photo',
-        'img_national_id_card',
-        'license_photo',
-        'age',
-        'card_id',
         'governorate',
         'phone',
+        'phone_two',
+        'job_title_id',
+        'have_you_ever_traveled_before?',
+        'password',
+        'phone_verified_at',
+        'passport_photo',
+        'passport_number',
+        'img_national_id_card',
+        'img_national_id_card_back',
+        'license_photo',
+        'age',
+        'date_of_birth',
+        'card_id',
+        'evaluation',
         'licence_type',
         'status',
         'test_type',
         'registration_date',
-        'job_title_id',
         'delegate_id',
         'customer_id',
-        'evaluation'
+    ];
+
+    protected $dates = [
+        'phone_verified_at',
+        'registration_date',
+        'date_of_birth',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 
     /**

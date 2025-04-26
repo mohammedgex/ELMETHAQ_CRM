@@ -20,17 +20,20 @@
                     <div class="card-body">
                         <div class="row d-flex justify-content-between">
                             <div class="mb-3 d-flex">
-                                <a href="">
+                                <a href="{{ route('customer.add') }}">
                                     <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
                                 </a>
                                 <!-- نموذج البحث -->
-                                <form action="{{ route('customer.search') }}" method="POST" class="d-flex">
+                                <form
+                                    @if (request()->is('customer-consulate')) action="{{ route('consulate.search') }}"
+                                    @else action="{{ route('customer.search') }}" @endif
+                                    method="POST" class="d-flex">
                                     @csrf
                                     <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
                                         id="searchBy" name="searchBy">
                                         <option value="name_ar">الاسم</option>
                                         <option value="phone">رقم الهاتف</option>
-                                        <option value="card_id">الرقم القومي</option>
+                                        <option selected value="card_id">الرقم القومي</option>
                                         <option value="mrz">الـ MRZ</option>
                                         <option value="age">السن</option>
                                         <option value="e_visa_number">رقم طلب التأشيرة</option>
@@ -84,7 +87,7 @@
                                             aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
-                                        <form id="filterForm" method="POST" action="{{ route('customers.filter') }}" >
+                                        <form id="filterForm" method="POST" action="{{ route('customers.filter') }}">
                                             @csrf
 
                                             <div class="col-md-12 my-2">
@@ -483,10 +486,10 @@
                                                                 <li><a class="dropdown-item text-dark hover:bg-light"
                                                                         href="#"><i class="fas fa-virus"></i> كشف
                                                                         الفايرس</a></li>
-                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-status" data-mrz= {{$customer->mrz}}
+                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
                                                                         href="#"><i class="fas fa-hospital"></i>
                                                                         نتيجة كشف طبي</a></li>
-                                                                <li><a data-phone={{ $customer->phone }} class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
                                                                         href="#"><i
                                                                             class="fas fa-clinic-medical"></i> نتيجة
                                                                         وبيانات المستشفى</a></li>
@@ -740,7 +743,7 @@
                             }).then(async (swalResult) => {
                                 if (swalResult.dismiss === Swal.DismissReason
                                     .cancel) {
-                                    await sendSms(result,phone);
+                                    await sendSms(result);
                                 }
                             });
                         } else {
@@ -764,8 +767,7 @@
             });
 
             // دالة لإرسال الرسالة النصية
-            async function sendSms(hospitalData,phone) {
-                console.log(phone);
+            async function sendSms(hospitalData) {
                 try {
                     let smsResponse = await fetch("http://localhost:3000/send-sms", {
                         method: "POST",

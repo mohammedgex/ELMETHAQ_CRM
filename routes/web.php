@@ -18,12 +18,13 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
-use App\Models\Delegate;
+use App\Http\Controllers\FileTitleController;
+use App\Http\Controllers\WaitingCustomersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
 Auth::routes();
@@ -110,6 +111,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/document-type-view', [DocumentTypeController::class, 'create'])->name('document-type.create');
     Route::post('/document-type-view/edit/{id}', [DocumentTypeController::class, 'edit'])->name('document-type.edit');
     Route::delete('/document-type-view/{id}', [DocumentTypeController::class, 'delete'])->name('document-type.delete');
+    Route::get('/send-file/accept/{id}', [FileTitleController::class, 'accept'])->name('document-type.accept');
+    Route::get('/send-file/reject/{id}', [FileTitleController::class, 'reject'])->name('document-type.reject');
 
 
     // عرض الكفلاء
@@ -141,18 +144,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/customer-history/{id}', [CustomerController::class, 'history'])->name('customer.history');
     Route::get('/customer-show/{id}', [CustomerController::class, 'show'])->name('customer.show');
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
+    Route::post('/consulate-search', [CustomerController::class, 'searchConsulate'])->name('consulate.search');
     Route::post('/customer-multi_Search', [CustomerController::class, 'multi_Search'])->name('customer.multi_search');
     Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
     Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
-
-
-
-
-    Route::get('/name/{name}', [GoogleTranslateController::class, 'translateText']);
-
-
-
-
+    Route::post('/customer-consulate/fillter', [GoogleTranslateController::class, 'filterConsulate'])->name('consulate.filter');
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
@@ -174,5 +170,3 @@ Route::middleware(['auth'])->group(function () {
 
 Route::get('/clients/{client}/attachments/print', action: [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
 Route::get('/clients/{client}/payments/print', action: [CustomerController::class, 'printPayments'])->name('clients.print.payments');
-
-

@@ -51,21 +51,21 @@
                                                 width="45" height="45" style="border-radius: 10px;"></a>
                                     </td>
                                     <!--
-                                                                                                                <td>
-                                                                                                                    <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
-                                                                                                                            src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                            width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                                </td>
-                                                                                                                <td>
-                                                                                                                    <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
-                                                                                                                            src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                            width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                                </td>
-                                                                                                                <td>
-                                                                                                                    <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
-                                                                                                                            src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                            width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                                </td> -->
+                                                                                                                        <td>
+                                                                                                                            <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
+                                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                        </td>
+                                                                                                                        <td>
+                                                                                                                            <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
+                                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                        </td>
+                                                                                                                        <td>
+                                                                                                                            <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
+                                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                        </td> -->
                                     <td><span class="badge bg-info text-white">{{ $lead->age }} عام</span></td>
                                     <td>{{ $lead->card_id }}</td>
                                     <td> {{ $lead->governorate }} </td>
@@ -83,9 +83,9 @@
                                                 {{ $lead->status }}
                                             @endif
                                         </span></td>
-                                    <td> {{ $lead->delegate->name }}</td>
+                                    <td> {{ $lead->delegate->name ?? '' }}</td>
                                     <td> {{ $lead->governorate }}</td>
-                                    <td> {{ $lead->jobTitle->title }}</td>
+                                    <td> {{ $lead->jobTitle->title ?? '' }}</td>
                                     <td>{{ $lead->registration_date }}</td>
                                     <td>
                                         <div class="btn-group">
@@ -229,6 +229,7 @@
                             <select class="form-control fw-bold" name="evaluation" required>
                                 <option value="">اختر التقييم </option>
                                 <option value="مقبول"> مقبول </option>
+                                <option value="جارى المعالجة"> جاري المعالجة </option>
                                 <option value="احتياطي"> احتياطي </option>
                                 <option value="غير مقبول"> غير مقبول </option>
                             </select>
