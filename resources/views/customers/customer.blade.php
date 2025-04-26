@@ -33,7 +33,7 @@
                                         id="searchBy" name="searchBy">
                                         <option value="name_ar">الاسم</option>
                                         <option value="phone">رقم الهاتف</option>
-                                        <option value="card_id">الرقم القومي</option>
+                                        <option selected value="card_id">الرقم القومي</option>
                                         <option value="mrz">الـ MRZ</option>
                                         <option value="age">السن</option>
                                         <option value="e_visa_number">رقم طلب التأشيرة</option>

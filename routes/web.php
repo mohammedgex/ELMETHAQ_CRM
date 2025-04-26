@@ -19,6 +19,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
+use App\Http\Controllers\WaitingCustomersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
