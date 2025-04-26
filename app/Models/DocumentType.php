@@ -13,7 +13,7 @@ class DocumentType extends Model
     {
         return $this->belongsTo(FileTitle::class);
     }
-    public function customers()
+    public function customer()
     {
         return $this->belongsTo(Customer::class);
     }

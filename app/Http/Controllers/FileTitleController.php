@@ -58,4 +58,13 @@ class FileTitleController extends Controller
         $document->save();
         return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');
     }
+
+    public function delete($id)
+    {
+        # code...
+        $file = DocumentType::find($id);
+        $customer = $file->customer;
+        $file->delete();
+        return redirect()->route("customer.add", $customer->id)->with('tap', 'attach');
+    }
 }

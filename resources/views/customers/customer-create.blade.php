@@ -164,11 +164,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                                                                                    name="age">
-                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                                                                    name="age">
+                                                                                                                                                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -574,11 +574,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                                                                                    name="age" value="{{ $edit->age }}">
-                                                                                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                                                                    name="age" value="{{ $edit->age }}">
+                                                                                                                                                                                                                                                                                                                            </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -1271,12 +1271,13 @@
                                                         <i class="fa-solid fa-eye"></i> عرض
                                                     </button>
                                                 </a>
-                                                <button class="btn btn-warning btn-sm" type="button">
+                                                {{-- <button class="btn btn-warning btn-sm" type="button">
                                                     <i class="fa-solid fa-pen"></i> تعديل
-                                                </button>
-                                                <button class="btn btn-danger btn-sm" type="button">
-                                                    <i class="fa-solid fa-trash"></i> حذف
-                                                </button>
+                                                </button> --}}
+                                                <a href="{{ route('attachments.delete', $file->id) }}"><button
+                                                        class="btn btn-danger btn-sm" type="button">
+                                                        <i class="fa-solid fa-trash"></i> حذف
+                                                    </button></a>
                                             @endif
                                         </td>
                                     </tr>
