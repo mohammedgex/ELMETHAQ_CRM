@@ -409,7 +409,9 @@
                                                 <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
                                             </td>
                                             <td>#{{ $customer->id }}</td>
-                                            <td class="highlight">{{ $customer->name_ar }}</td>
+                                            <td class="highlight"><a
+                                                    href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
+                                            </td>
                                             <td class="highlight"><span
                                                     class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
                                             </td>
