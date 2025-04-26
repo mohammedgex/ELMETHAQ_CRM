@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('document_types', function (Blueprint $table) {
             $table->id();
             $table->string('document_type');
-            $table->string('file');
+            $table->string('file')->nullable();
             $table->string('status');
+            $table->string('required');
+            $table->string('order_status')->nullable();
             $table->string('note')->nullable();
             $table->foreignId('customer_id')->constrained('customers')->onDelete('cascade');
             $table->timestamps();

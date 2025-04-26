@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BlackListController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
@@ -19,12 +18,12 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
-use App\Models\Delegate;
+use App\Http\Controllers\FileTitleController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/home');
 });
 
 Auth::routes();
@@ -111,6 +110,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/document-type-view', [DocumentTypeController::class, 'create'])->name('document-type.create');
     Route::post('/document-type-view/edit/{id}', [DocumentTypeController::class, 'edit'])->name('document-type.edit');
     Route::delete('/document-type-view/{id}', [DocumentTypeController::class, 'delete'])->name('document-type.delete');
+    Route::get('/send-file/accept/{id}', [FileTitleController::class, 'accept'])->name('document-type.accept');
+    Route::get('/send-file/reject/{id}', [FileTitleController::class, 'reject'])->name('document-type.reject');
 
 
     // عرض الكفلاء

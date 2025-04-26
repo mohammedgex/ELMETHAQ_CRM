@@ -158,11 +158,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                    name="age">
-                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                            name="age">
+                                                                                                                                                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -567,11 +567,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                    style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                    name="age" value="{{ $edit->age }}">
-                                                                                                                                                                                                                            </div> -->
+                                                                                                                                                                                                                                                                                        <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                        <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                            style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                            name="age" value="{{ $edit->age }}">
+                                                                                                                                                                                                                                                                                    </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -1168,7 +1168,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="fw-bold" style="color: #997a44;">رفع المرفق</label>
-                                    <input type="file" class="form-control fw-bold" required name="file"
+                                    <input type="file" class="form-control fw-bold" name="file"
                                         style="border-color: #997a44; height: 60px;" id="attachmentFile">
                                 </div>
                             </div>
@@ -1187,7 +1187,20 @@
                                 </div>
                             </div>
 
+
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="fw-bold" style="color: #997a44;">الحالة علي التطبيق </label>
+                                    <select id="attachmentTitle" class="form-control fw-bold"
+                                        style="height: 60px; border-color: #997a44;" name="required" required>
+                                        <option selected value="true">اجباري</option>
+                                        <option value="false">اختياري</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="fw-bold" style="color: #997a44;">ملحوظة </label>
                                     <input type="text" class="form-control fw-bold" name="note"
@@ -1207,6 +1220,7 @@
                                     <th>عنوان المرفق</th>
                                     <th>المرفق</th>
                                     <th>حالة المرفق</th>
+                                    <th>الحالة علي التطبيق</th>
                                     <th>ملحوظة</th>
                                     <th>الإجراءات</th>
                                 </tr>
@@ -1229,25 +1243,39 @@
                                                 {{ $file->status }}
                                             </span>
                                         </th>
+                                        <th>{{ $file->required ? 'اجباري' : 'اختياري' }}</th>
                                         <th>{{ $file->note }}</th>
                                         <td>
-                                            <a href="{{ asset('storage/' . $file->file) }}" download>
-                                                <button class="btn btn-success btn-sm" type="button">
-                                                    <i class="fa-solid fa-download"></i> تحميل
+                                            @if ($file->order_status == 'panding')
+                                                <a href="{{ route('document-type.accept', $file->id) }}">
+                                                    <button class="btn btn-success btn-sm" type="button">
+                                                        موافقة
+                                                    </button>
+                                                </a>
+                                                <a href="{{ route('document-type.reject', $file->id) }}">
+                                                    <button class="btn btn-danger btn-sm" type="button">
+                                                        رفض
+                                                    </button>
+                                                </a>
+                                            @else
+                                                <a href="{{ asset('storage/' . $file->file) }}" download>
+                                                    <button class="btn btn-success btn-sm" type="button">
+                                                        <i class="fa-solid fa-download"></i> تحميل
+                                                    </button>
+                                                </a>
+                                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank"
+                                                    rel="noopener noreferrer">
+                                                    <button class="btn btn-primary btn-sm" type="button">
+                                                        <i class="fa-solid fa-eye"></i> عرض
+                                                    </button>
+                                                </a>
+                                                <button class="btn btn-warning btn-sm" type="button">
+                                                    <i class="fa-solid fa-pen"></i> تعديل
                                                 </button>
-                                            </a>
-                                            <a href="{{ asset('storage/' . $file->file) }}" target="_blank"
-                                                rel="noopener noreferrer">
-                                                <button class="btn btn-primary btn-sm" type="button">
-                                                    <i class="fa-solid fa-eye"></i> عرض
+                                                <button class="btn btn-danger btn-sm" type="button">
+                                                    <i class="fa-solid fa-trash"></i> حذف
                                                 </button>
-                                            </a>
-                                            <button class="btn btn-warning btn-sm" type="button">
-                                                <i class="fa-solid fa-pen"></i> تعديل
-                                            </button>
-                                            <button class="btn btn-danger btn-sm" type="button">
-                                                <i class="fa-solid fa-trash"></i> حذف
-                                            </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach

@@ -29,25 +29,6 @@ class LeadsCustomersController extends Controller
     }
     public function create(Request $request)
     {
-        // التحقق من صحة البيانات
-        // $validatedData = $request->validate([
-        //     'name' => 'required',
-        //     'image' => 'required',
-        //     'passport_photo' => 'required',
-        //     'img_national_id_card' => 'required',
-        //     'license_photo' => 'required',
-        //     'age' => 'required',
-        //     'card_id' => 'required',
-        //     'governorate' => 'required',
-        //     'evaluation' => 'required',
-        //     'phone' => 'required',
-        //     'licence_type' => 'required',
-        //     'status' => 'required',
-        //     'test_type' => 'required',
-        //     'registration_date' => 'required',
-        //     'job_title_id' => 'required',
-        //     'delegate_id' => 'required',
-        // ]);
         $lead = $request->all();
 
         // رفع الصور إذا كانت موجودة

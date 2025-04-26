@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DocumentType extends Model
 {
     use HasFactory;
-    protected $fillable = ['file', 'document_type', 'status', 'note', 'customer_id'];
+    protected $fillable = ['file', 'document_type', 'status', 'note', 'customer_id', 'required', 'order_status'];
     public function fileTitle()
     {
         return $this->belongsTo(FileTitle::class);

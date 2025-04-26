@@ -81,7 +81,8 @@ class ApiAppController extends Controller
             'phone_two' => $request->phone_two,
             'job_title_id' => $request->job_title_id,
             'have_you_ever_traveled_before?' => $request['have_you_ever_traveled_before?'],
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'status' => 'عميل محتمل'
         ]);
         $this->sendOtp($request->phone);
 

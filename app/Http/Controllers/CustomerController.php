@@ -193,6 +193,7 @@ class CustomerController extends Controller
         $document->status = $request->status;
         $document->note = $request->note;
         $document->customer_id = $customer->id;
+        $document->required = $request->required;
 
         $document->save();
 
