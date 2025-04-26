@@ -31,6 +31,7 @@
                                     @csrf
                                     <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
                                         id="searchBy" name="searchBy">
+                                        <option value="id">السريال</option>
                                         <option value="name_ar">الاسم</option>
                                         <option value="phone">رقم الهاتف</option>
                                         <option selected value="card_id">الرقم القومي</option>
@@ -406,7 +407,7 @@
                                         <tr date-customer="{{ $customer }}"
                                             class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
                                             <td>
-                                                <input type="checkbox" id="myCheckbox" class="form-check-input rounded">
+                                                <input type="checkbox" id="myCheckbox" class="row-checkbox form-check-input rounded">
                                             </td>
                                             <td>#{{ $customer->id }}</td>
                                             <td class="highlight"><a
@@ -814,6 +815,14 @@
 
 
         });
+
+        document.addEventListener('keydown', function(event) {
+    if (event.key == 's') {
+        const input = document.getElementById('searchInput');
+        input.focus();
+        input.value = ''; // Clears the input field
+    }
+});
         $(document).ready(function() {
             $('#dataTable').DataTable({
                 "paging": true,
@@ -898,37 +907,47 @@
             });
         });
 
-        $('#example').DataTable({
-            dom: 'Bfrtip', // تخصيص ترتيب العناصر
-            buttons: [{
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
-                    className: 'buttons-excel',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3] // Specify which columns to export (0-based index)
-                    }
-                },
-
-                {
-                    extend: 'print',
-                    text: '<i class="fa fa-file-pdf"></i> طباعة',
-                    className: 'buttons-pdf',
-                    customize: function(win) {
-                        $(win.document.body).css('direction', 'rtl'); // Set text direction to right-to-left
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', '12px'); // Adjust font size
-                    }
-                },
-
-            ],
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+       $('#example').DataTable({
+    dom: 'Bfrtip',
+    buttons: [
+        {
+            extend: 'excel',
+            text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
+            className: 'buttons-excel',
+            exportOptions: {
+                columns: [1, 2, 3,4,5,6,7,8,9,10], // Ignore the checkbox column (start from 1)
+                rows: function (idx, data, node) {
+                    // Only export rows where the checkbox is checked
+                    return $(node).find('.row-checkbox').is(':checked');
+                }
+            }
+        },
+        {
+            extend: 'print',
+            text: '<i class="fa fa-file-pdf"></i> طباعة',
+            className: 'buttons-pdf',
+            exportOptions: {
+                columns: [1, 2, 3,4,5,6,7,8,9,10], // Ignore the checkbox column
+                rows: function (idx, data, node) {
+                    return $(node).find('.row-checkbox').is(':checked');
+                }
             },
-            searching: false,
-            pageLength: 100,
-            
-        });
+            customize: function (win) {
+                $(win.document.body).css('direction', 'rtl');
+                $(win.document.body).find('table')
+                    .addClass('compact')
+                    .css('font-size', '12px');
+            }
+        }
+    ],
+    language: {
+        url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+    },
+    searching: false,
+    pageLength: 100,
+});
+
+
 
         // document.addEventListener("DOMContentLoaded", function() {
         //     document.querySelectorAll(".dropdown-submenu > a").forEach((element) => {
