@@ -105,7 +105,10 @@ class CustomerController extends Controller
 
     public function basicDetails(Request $request)
     {
-        $validatedData = $request->all();
+        $validatedData = $request->validate([
+            'card_id' => 'required|unique:customers,card_id',
+        ]);
+        // $validatedData = $request->all();
 
         // لو فيه صورة، ضيفها إلى الـ array
         if ($request->hasFile('image')) {
@@ -127,6 +130,9 @@ class CustomerController extends Controller
 
     public function editBasicDetails(Request $request, $id)
     {
+        $request->validate([
+            'card_id' => 'required|unique:customers,card_id,' . $id,
+        ]);
         $customer = Customer::find($id);
 
         $data = $request->all();
@@ -146,30 +152,54 @@ class CustomerController extends Controller
 
     public function mrz(Request $request, $id)
     {
-        $customer = Customer::find($id);
+        $customer = Customer::findOrFail($id);
 
-        // تحويل تاريخ الميلاد إلى التنسيق الصحيح
-        $date_birth = Carbon::createFromFormat('d/m/Y', $request->date_birth)->format('Y-m-d');
-        $customer->date_birth = $date_birth; // التاريخ بصيغة Y-m-d
+        // التاريخ: تاريخ الميلاد
+        if ($request->filled('date_birth')) {
+            $customer->date_birth = Carbon::createFromFormat('d/m/Y', $request->date_birth)->format('Y-m-d');
+        }
 
-        // تحويل تاريخ انتهاء الجواز إلى التنسيق الصحيح
-        $passport_expire_date = Carbon::createFromFormat('d/m/Y', $request->passport_expire_date)->format('Y-m-d');
-        $customer->passport_expire_date = $passport_expire_date; // التاريخ بصيغة Y-m-d
+        // التاريخ: انتهاء الجواز
+        if ($request->filled('passport_expire_date')) {
+            $customer->passport_expire_date = Carbon::createFromFormat('d/m/Y', $request->passport_expire_date)->format('Y-m-d');
+        }
 
-        $customer->mrz = $request->mrz;
+        if ($request->filled('mrz')) {
+            $customer->mrz = $request->mrz;
+        }
+
         if ($request->hasFile('mrz_image')) {
             $filePath = $request->file('mrz_image')->store('uploads', 'public');
             $customer->mrz_image = $filePath;
         }
-        $customer->passport_id = $request->passport_id;
-        $customer->nationality = $request->nationality;
-        $customer->gender = $request->gender;
-        $customer->age = $request->age;
-        $customer->issue_place = $request->issue_place;
-        $customer->name_en_mrz = $request->name_en_mrz;
-        $customer->name_ar = app(GoogleTranslateController::class)->translateText($request->name_en_mrz);
+
+        if ($request->filled('passport_id')) {
+            $customer->passport_id = $request->passport_id;
+        }
+
+        if ($request->filled('nationality')) {
+            $customer->nationality = $request->nationality;
+        }
+
+        if ($request->filled('gender')) {
+            $customer->gender = $request->gender;
+        }
+
+        if ($request->filled('age')) {
+            $customer->age = $request->age;
+        }
+
+        if ($request->filled('issue_place')) {
+            $customer->issue_place = $request->issue_place;
+        }
+
+        if ($request->filled('name_en_mrz')) {
+            $customer->name_en_mrz = $request->name_en_mrz;
+            $customer->name_ar = app(GoogleTranslateController::class)->translateText($request->name_en_mrz);
+        }
 
         $customer->save();
+
         return redirect()->route("customer.add", $customer->id)->with('tap', 'mrz');
     }
 
@@ -301,17 +331,21 @@ class CustomerController extends Controller
     public function search(Request $request)
     {
         $request->validate([
-            'searchBy' => 'required',
-            'searchInput' => 'required'
+            'searchBy' => 'required|string',
+            'searchInput' => 'required',
         ]);
-
 
         $searchBy = $request->input('searchBy');
         $searchInput = $request->input('searchInput');
 
-        // البحث في جدول العملاء
-        $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
-
+        // عمل فلترة حسب نوع الحقل
+        if ($searchBy == 'id' || $searchBy == 'age') {
+            // بحث دقيق لو كان البحث رقمي مثل ID أو Age
+            $customers = Customer::where($searchBy, $searchInput)->get();
+        } else {
+            // بحث جزئي مع LIKE لو كان نصي مثل الاسم أو الجواز
+            $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
+        }
 
         $delegates = Delegate::all();
         $evalutions = Evaluation::all();
@@ -319,6 +353,7 @@ class CustomerController extends Controller
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
         $visas = VisaType::all();
+
         return view("customers.customer", [
             'customers' => $customers,
             'delegates' => $delegates,
@@ -329,6 +364,8 @@ class CustomerController extends Controller
             'visas' => $visas,
         ]);
     }
+
+
     public function searchConsulate(Request $request)
     {
         $request->validate([
@@ -374,85 +411,98 @@ class CustomerController extends Controller
     {
         $query = Customer::query();
 
-        if ($request->filled('mrz')) {
-            $query->where('mrz', 'like', '%' . $request->mrz . '%');
-        }
+        $query->when($request->filled('mrz'), function ($q) use ($request) {
+            $q->where('mrz', 'like', '%' . $request->mrz . '%');
+        });
 
-        if ($request->filled('name_ar')) {
-            $query->where('name_ar', 'like', '%' . $request->name_ar . '%');
-        }
+        $query->when($request->filled('name_ar'), function ($q) use ($request) {
+            $q->where('name_ar', 'like', '%' . $request->name_ar . '%');
+        });
 
-        if ($request->filled('card_id')) {
-            $query->where('card_id', 'like', '%' . $request->card_id . '%');
-        }
+        $query->when($request->filled('card_id'), function ($q) use ($request) {
+            $q->where('card_id', 'like', '%' . $request->card_id . '%');
+        });
 
-        if ($request->filled('phone')) {
-            $query->where('phone', 'like', '%' . $request->phone . '%');
-        }
+        $query->when($request->filled('phone'), function ($q) use ($request) {
+            $q->where('phone', 'like', '%' . $request->phone . '%');
+        });
 
-        if ($request->filled('governorate_live')) {
-            $query->where('governorate_live', $request->governorate_live);
-        }
+        $query->when($request->filled(key: 'governorate'), function ($q) use ($request) {
+            $q->where('governorate', $request->governorate);
+        });
 
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
+        $query->when($request->filled('status'), function ($q) use ($request) {
+            $q->where('status', $request->status);
+        });
 
-        if ($request->filled('license_type')) {
-            $query->where('license_type', $request->license_type);
-        }
+        $query->when($request->filled('license_type'), function ($q) use ($request) {
+            $q->where('license_type', $request->license_type);
+        });
 
-        if ($request->filled('age')) {
-            $query->where('age', $request->age);
-        }
+        $query->when($request->filled('age'), function ($q) use ($request) {
+            $q->where('age', $request->age);
+        });
 
-        if ($request->filled('passport_id')) {
-            $query->where('passport_id', 'like', '%' . $request->passport_id . '%');
-        }
+        $query->when($request->filled('passport_id'), function ($q) use ($request) {
+            $q->where('passport_id', 'like', '%' . $request->passport_id . '%');
+        });
 
-        if ($request->filled('visa_type_id')) {
-            $query->where('visa_type_id', $request->visa_type_id);
-        }
+        $query->when($request->filled('visa_type_id'), function ($q) use ($request) {
+            $q->where('visa_type_id', $request->visa_type_id);
+        });
 
-        if ($request->filled('sponser_id')) {
-            $query->where('sponser_id', $request->sponser_id);
-        }
+        $query->when($request->filled('sponser_id'), function ($q) use ($request) {
+            $q->where('sponser_id', $request->sponser_id);
+        });
 
-        if ($request->filled('customer_group_id')) {
-            $query->where('customer_group_id', $request->customer_group_id);
-        }
+        $query->when($request->filled('customer_group_id'), function ($q) use ($request) {
+            $q->where('customer_group_id', $request->customer_group_id);
+        });
 
-        if ($request->filled('job_title_id')) {
-            $query->where('job_title_id', $request->job_title_id);
-        }
+        $query->when($request->filled('job_title_id'), function ($q) use ($request) {
+            $q->where('job_title_id', $request->job_title_id);
+        });
 
-        if ($request->filled('delegate_id')) {
-            $query->where('delegate_id', $request->delegate_id);
-        }
+        $query->when($request->filled('delegate_id'), function ($q) use ($request) {
+            $q->where('delegate_id', $request->delegate_id);
+        });
 
-        if ($request->filled('education')) {
-            $query->where('education', $request->education);
-        }
+        $query->when($request->filled('education'), function ($q) use ($request) {
+            $q->where('education', $request->education);
+        });
 
-        if ($request->filled('marital_status')) {
-            $query->where('marital_status', $request->marital_status);
-        }
+        $query->when($request->filled('marital_status'), function ($q) use ($request) {
+            $q->where('marital_status', $request->marital_status);
+        });
 
-        if ($request->filled('medical_examination')) {
-            $query->where('medical_examination', $request->medical_examination);
-        }
+        $query->when($request->filled('medical_examination'), function ($q) use ($request) {
+            $q->where('medical_examination', $request->medical_examination);
+        });
 
-        if ($request->filled('finger_print_examination')) {
-            $query->where('finger_print_examination', $request->finger_print_examination);
-        }
+        $query->when($request->filled('finger_print_examination'), function ($q) use ($request) {
+            $q->where('finger_print_examination', $request->finger_print_examination);
+        });
 
-        if ($request->filled('virus_examination')) {
-            $query->where('virus_examination', $request->virus_examination);
-        }
+        $query->when($request->filled('virus_examination'), function ($q) use ($request) {
+            $q->where('virus_examination', $request->virus_examination);
+        });
 
-        if ($request->filled('engaz_request')) {
-            $query->where('engaz_request', $request->engaz_request);
-        }
+        $query->when($request->filled('engaz_request'), function ($q) use ($request) {
+            $q->where('engaz_request', $request->engaz_request);
+        });
+
+        // ✅ دعم فلترة الحقول الخاصة بـ Checkbox
+        $query->when($request->has('travel_before'), function ($q) {
+            $q->where('travel_before', 1);
+        });
+
+        $query->when($request->has('e_visa_number_issued'), function ($q) {
+            $q->where('e_visa_number_issued', 1);
+        });
+
+        $query->when($request->has('e_visa_number_entered'), function ($q) {
+            $q->where('e_visa_number_entered', 1);
+        });
 
         $customers = $query->get();
 
@@ -463,7 +513,7 @@ class CustomerController extends Controller
         $sponsers = Sponser::all();
         $visas = VisaType::all();
 
-        return view("customers.customer", [
+        return view('customers.customer', [
             'fillter' => $request->all(),
             'customers' => $customers,
             'delegates' => $delegates,
@@ -497,8 +547,8 @@ class CustomerController extends Controller
             $query->where('phone', 'like', '%' . $request->phone . '%');
         }
 
-        if ($request->filled('governorate_live')) {
-            $query->where('governorate_live', $request->governorate_live);
+        if ($request->filled('governorate')) {
+            $query->where('governorate', $request->governorate);
         }
 
         if ($request->filled('status')) {
@@ -517,7 +567,7 @@ class CustomerController extends Controller
             $query->where('passport_id', 'like', '%' . $request->passport_id . '%');
         }
 
-        if ($request->filled('visa_type_id')) {
+        if ($request->filled(key: 'visa_type_id')) {
             $query->where('visa_type_id', $request->visa_type_id);
         }
 

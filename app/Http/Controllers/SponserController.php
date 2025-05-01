@@ -21,7 +21,7 @@ class SponserController extends Controller
         }
 
         $sponsers = Sponser::all();
-        return view('sponsor', [
+        return view('Sponsor', [
             'sponsers' => $sponsers,
             'sponserEdit' => $sponserEdit,
         ]);

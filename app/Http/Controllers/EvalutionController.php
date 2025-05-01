@@ -20,7 +20,7 @@ class EvalutionController extends Controller
 
         $evalutions = Evaluation::all();
 
-        return view('evaluation', [
+        return view('Evaluation', [
             'evaluations' => $evalutions,
             'evaluationEdit' => $evalutionEdit
         ]);

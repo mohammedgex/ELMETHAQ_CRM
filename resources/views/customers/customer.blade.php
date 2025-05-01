@@ -30,11 +30,11 @@
                                     method="POST" class="d-flex">
                                     @csrf
                                     <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
-                                        id="searchBy" name="searchBy">
-                                        <option value="id">السريال</option>
-                                        <option value="name_ar">الاسم</option>
+                                        id="searchBy" name="searchBy" required>
+                                        <option selected value="id">السريال</option>
+                                        <option  value="name_ar">الاسم</option>
                                         <option value="phone">رقم الهاتف</option>
-                                        <option selected value="card_id">الرقم القومي</option>
+                                        <option  value="card_id">الرقم القومي</option>
                                         <option value="mrz">الـ MRZ</option>
                                         <option value="age">السن</option>
                                         <option value="e_visa_number">رقم طلب التأشيرة</option>
@@ -43,10 +43,10 @@
                                     </select>
 
                                     <input type="text" class="form-control flex-grow-1" id="searchInput"
-                                        name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus>
+                                        name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus required>
                                     <button type="submit" class="btn btn-primary mx-1">بحث</button>
                                 </form>
-                                @if (Route::currentRouteName() == 'customer.search')
+                                @if (Route::currentRouteName() == 'customer.search'||Route::currentRouteName() == 'customers.filter')
                                     <a href="{{ route('customer.indes') }}">
                                         <button class="btn btn-primary mx-1">كل العملاء</button>
                                     </a>
@@ -120,7 +120,7 @@
                                                     @php
                                                         $governorates = [
                                                             'القاهرة',
-                                                            'الجيزة',
+                                                            'الجيزه',
                                                             'الإسكندرية',
                                                             'الدقهلية',
                                                             'البحر الأحمر',
@@ -148,11 +148,11 @@
                                                             'سوهاج',
                                                         ];
                                                     @endphp
-                                                    <select class="form-control fw-bold" name="governorate_live">
+                                                    <select class="form-control fw-bold" name="governorate">
                                                         <option value="">اختر المحافظة</option>
                                                         @foreach ($governorates as $gov)
                                                             <option value="{{ $gov }}"
-                                                                {{ old('governorate_live', $fillter['governorate_live'] ?? '') == $gov ? 'selected' : '' }}>
+                                                                {{ old('governorate', $fillter['governorate'] ?? '') == $gov ? 'selected' : '' }}>
                                                                 {{ $gov }}</option>
                                                         @endforeach
                                                     </select>
@@ -387,6 +387,7 @@
                                         <th> الوظيفة </th>
                                         <th>الرقم القومي</th>
                                         <th>رقم الهاتف</th>
+                                        <th>المحافظة</th>
                                         <th>السن</th>
                                         <th>المندوب</th>
                                         <th>المجموعة</th>
@@ -419,7 +420,8 @@
                                             </td>
                                             <td class="highlight">{{ $customer->card_id }}</td>
                                             <td class="highlight">{{ $customer->phone }}</td>
-                                            <td class="highlight">{{ $customer->age }}</td>
+                                            <td class="highlight">{{ $customer->governorate }}</td>
+                                            <td class="highlight">{{ $customer->age }} عام</td>
                                             <td class="highlight"><a
                                                     href="#">{{ $customer->delegate->name ?? '' }}</a>
                                             </td>
@@ -430,7 +432,7 @@
                                             <td class="highlight">{{ $customer->status }}</td>
                                             <!-- <td class="highlight">{{ $customer->passport_id }}</td> -->
                                             <td class="highlight"><a
-                                                    href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
+                                                    href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes->where("status","موجود بالمكتب")) }}</a>
                                             </td>
                                             <!-- <td class="highlight">{{ count($customer->payments) }}</td>
                                                                 <td class="highlight">{{ $customer->created_at }}</td>

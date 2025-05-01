@@ -257,7 +257,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin/home',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -307,7 +307,7 @@ return [
             'text' => 'لوحة التحكم',
             'icon' => 'fas fa-tachometer-alt',
             'icon_color' => 'indigo',
-            'url' => 'home'
+            'url' => 'admin/home'
         ],
         [
             'text' => 'العملاء',
@@ -315,24 +315,24 @@ return [
             'submenu' => [
                 [
                     'text' => 'العملاء',
-                    'url' =>  'customers',
+                    'url' => 'admin/customers',
                     'icon' => 'fas fa-eye',
                     'label' => 4,
                     'label_color' => 'success',
                 ],
                 [
                     'text' => 'اضافة عميل',
-                    'url' => 'customer-create',
+                    'url' => 'admin/customer-create',
                     'icon' => 'fas fa-user-plus',
                 ],
                 [
                     'text' => 'المؤهلون للقنصلية',
-                    'url' => 'customer-consulate',
+                    'url' => 'admin/customer-consulate',
                     'icon' => 'fas fa-user-check',
                 ],
                 [
                     'text' => 'تصدير جميع العملاء',
-                    'url' => 'export-customers-xlsx',
+                    'url' => 'admin/export-customers-xlsx',
                     'icon' => 'fas fa-file-export',
                 ],
             ],
@@ -343,18 +343,18 @@ return [
             'submenu' => [
                 [
                     'text' => 'تعريف التأشيرات',
-                    'url' => 'visa-type-view',
+                    'url' => 'admin/visa-type-view',
                     'icon' => 'fab fa-cc-visa',
                     'label_color' => 'success',
                 ],
                 [
                     'text' => 'تعريف القنصلية',
-                    'url' => 'embassy-view',
+                    'url' => 'admin/embassy-view',
                     'icon' => 'fas fa-landmark',
                 ],
                 [
                     'text' => 'تعريف الكفيل',
-                    'url' => 'sponsor-view',
+                    'url' => 'admin/sponsor-view',
                     'icon' => 'fas fa-user-tie',
                 ],
             ],
@@ -365,32 +365,32 @@ return [
             'submenu' => [
                 [
                     'text' => 'تعريف المناديب',
-                    'url' => 'Delegates-create',
+                    'url' => 'admin/Delegates-create',
                     'icon' => 'fas fa-user-tag',
                 ],
                 [
                     'text' => 'تعريف الوظائف',
-                    'url' => 'job-type-view',
+                    'url' => 'admin/job-type-view',
                     'icon' => 'fas fa-briefcase',
                 ],
                 [
                     'text' => 'تعريف المجموعات',
-                    'url' => 'customer-groups',
+                    'url' => 'admin/customer-groups',
                     'icon' => 'fas fa-layer-group',
                 ],
                 [
                     'text' => 'تعريف التقييم',
-                    'url' => 'evaluation-view',
+                    'url' => 'admin/evaluation-view',
                     'icon' => 'fas fa-star-half-alt',
                 ],
                 [
                     'text' => 'تعريف المستندات',
-                    'url' => 'document-type-view',
+                    'url' => 'admin/document-type-view',
                     'icon' => 'fas fa-file-alt',
                 ],
                 [
                     'text' => 'تعريف المعاملات المالية',
-                    'url' => 'payment-type-view',
+                    'url' => 'admin/payment-type-view',
                     'icon' => 'fas fa-money-check-alt',
                 ],
             ],
@@ -398,24 +398,24 @@ return [
         ['header' => 'اضافي'],
         [
             'text' => 'العملاء المحتملون',
-            'url' => 'leads-customers',
+            'url' => 'admin/leads-customers',
             'icon' => 'fas fa-user-clock',
         ],
         [
             'text' => 'ارسال رسائل',
-            'url' => 'bulk-sms-view',
+            'url' => 'admin/bulk-sms-view',
             'icon' => 'fas fa-sms',
         ],
         [
             'text' => 'المهام',
-            'url' => 'user-tasks',
+            'url' => 'admin/user-tasks',
             'icon' => 'fas fa-tasks',
         ],
 
         ['header' => 'الاعدادات'],
         [
             'text' => 'المستخدم',
-            'url' => 'users',
+            'url' => 'admin/users',
             'icon' => 'fas fa-user-cog',
         ],
         [
@@ -424,6 +424,7 @@ return [
             'icon' => 'fas fa-key',
         ],
     ],
+
 
 
     /*
