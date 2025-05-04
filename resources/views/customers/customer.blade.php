@@ -17,43 +17,43 @@
         <div class="col-12">
             <div class="card shadow border-0">
 
-                <div class="card-body">
-                    <div class="row d-flex justify-content-between">
-                        <div class="mb-3 d-flex">
-                            <a href="{{ route('customer.add') }}">
-                                <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
-                            </a>
-                            <!-- نموذج البحث -->
-                            <form
-                                @if (request()->is('customer-consulate')) action="{{ route('consulate.search') }}"
-                                @else action="{{ route('customer.search') }}" @endif
-                                method="POST" class="d-flex">
-                                @csrf
-                                <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
-                                    id="searchBy" name="searchBy" required>
-                                    <option selected value="id">السريال</option>
-                                    <option value="name_ar">الاسم</option>
-                                    <option value="phone">رقم الهاتف</option>
-                                    <option value="card_id">الرقم القومي</option>
-                                    <option value="mrz">الـ MRZ</option>
-                                    <option value="age">السن</option>
-                                    <option value="e_visa_number">رقم طلب التأشيرة</option>
-                                    <option value="passport_id">رقم الجواز</option>
-                                    <option value="issue_place">جهة الإصدار</option>
-                                </select>
+                    <div class="card-body">
+                        <div class="row d-flex justify-content-between">
+                            <div class="mb-3 d-flex">
+                                <a href="{{ route('customer.add') }}">
+                                    <button class="btn btn-success me-2 mx-2">إضافة عميل جديد</button>
+                                </a>
+                                <!-- نموذج البحث -->
+                                <form
+                                    @if (request()->is('customer-consulate')) action="{{ route('consulate.search') }}"
+                                    @else action="{{ route('customer.search') }}" @endif
+                                    method="POST" class="d-flex">
+                                    @csrf
+                                    <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
+                                        id="searchBy" name="searchBy">
+                                        <option value="id">السريال</option>
+                                        <option value="name_ar">الاسم</option>
+                                        <option value="phone">رقم الهاتف</option>
+                                        <option selected value="card_id">الرقم القومي</option>
+                                        <option value="mrz">الـ MRZ</option>
+                                        <option value="age">السن</option>
+                                        <option value="e_visa_number">رقم طلب التأشيرة</option>
+                                        <option value="passport_id">رقم الجواز</option>
+                                        <option value="issue_place">جهة الإصدار</option>
+                                    </select>
 
-                                <input type="text" class="form-control flex-grow-1" id="searchInput"
-                                    name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus required>
-                                <button type="submit" class="btn btn-primary mx-1">بحث</button>
-                            </form>
-                            @if (Route::currentRouteName() == 'customer.search'||Route::currentRouteName() == 'customers.filter')
-                            <a href="{{ route('customer.indes') }}">
-                                <button class="btn btn-primary mx-1">كل العملاء</button>
-                            </a>
-                            @endif
-                        </div>
-                        <!-- أزرار الإجراءات -->
-                        <div class="mb-3 me-2 mx-2">
+                                    <input type="text" class="form-control flex-grow-1" id="searchInput"
+                                        name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus>
+                                    <button type="submit" class="btn btn-primary mx-1">بحث</button>
+                                </form>
+                                @if (Route::currentRouteName() == 'customer.search')
+                                    <a href="{{ route('customer.indes') }}">
+                                        <button class="btn btn-primary mx-1">كل العملاء</button>
+                                    </a>
+                                @endif
+                            </div>
+                            <!-- أزرار الإجراءات -->
+                            <div class="mb-3 me-2 mx-2">
 
                             <!-- زر تصفية -->
                             <button type="button" class="btn btn-primary" data-bs-toggle="modal"
@@ -129,50 +129,49 @@
                                             </div>
                                         </div>
 
-                                        <div class="row my-2">
-                                            <div class="col-md-4">
-                                                <label class="fw-bold" style="color: #997a44;">محافظة الإقامة</label>
-                                                @php
-                                                $governorates = [
-                                                'القاهرة',
-                                                'الجيزه',
-                                                'الإسكندرية',
-                                                'الدقهلية',
-                                                'البحر الأحمر',
-                                                'البحيرة',
-                                                'الفيوم',
-                                                'الغربية',
-                                                'الإسماعلية',
-                                                'المنوفية',
-                                                'المنيا',
-                                                'القليوبية',
-                                                'الوادي الجديد',
-                                                'السويس',
-                                                'أسوان',
-                                                'أسيوط',
-                                                'بني سويف',
-                                                'بورسعيد',
-                                                'دمياط',
-                                                'الشرقية',
-                                                'جنوب سيناء',
-                                                'كفر الشيخ',
-                                                'مطروح',
-                                                'الأقصر',
-                                                'قنا',
-                                                'شمال سيناء',
-                                                'سوهاج',
-                                                ];
-                                                @endphp
-                                                <select class="form-control fw-bold" name="governorate">
-                                                    <option value="">اختر المحافظة</option>
-                                                    @foreach ($governorates as $gov)
-                                                    <option value="{{ $gov }}"
-                                                        {{ old('governorate', $fillter['governorate'] ?? '') == $gov ? 'selected' : '' }}>
-                                                        {{ $gov }}
-                                                    </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
+                                            <div class="row my-2">
+                                                <div class="col-md-4">
+                                                    <label class="fw-bold" style="color: #997a44;">محافظة الإقامة</label>
+                                                    @php
+                                                        $governorates = [
+                                                            'القاهرة',
+                                                            'الجيزة',
+                                                            'الإسكندرية',
+                                                            'الدقهلية',
+                                                            'البحر الأحمر',
+                                                            'البحيرة',
+                                                            'الفيوم',
+                                                            'الغربية',
+                                                            'الإسماعلية',
+                                                            'المنوفية',
+                                                            'المنيا',
+                                                            'القليوبية',
+                                                            'الوادي الجديد',
+                                                            'السويس',
+                                                            'أسوان',
+                                                            'أسيوط',
+                                                            'بني سويف',
+                                                            'بورسعيد',
+                                                            'دمياط',
+                                                            'الشرقية',
+                                                            'جنوب سيناء',
+                                                            'كفر الشيخ',
+                                                            'مطروح',
+                                                            'الأقصر',
+                                                            'قنا',
+                                                            'شمال سيناء',
+                                                            'سوهاج',
+                                                        ];
+                                                    @endphp
+                                                    <select class="form-control fw-bold" name="governorate_live">
+                                                        <option value="">اختر المحافظة</option>
+                                                        @foreach ($governorates as $gov)
+                                                            <option value="{{ $gov }}"
+                                                                {{ old('governorate_live', $fillter['governorate_live'] ?? '') == $gov ? 'selected' : '' }}>
+                                                                {{ $gov }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
 
                                             <div class="col-md-4">
                                                 <label class="fw-bold" style="color: #997a44;">الحالة</label>
@@ -439,68 +438,66 @@
 
 
 
-                    <div class="table-responsive">
-                        <table class="table table-hover text-center animate__animated animate__fadeInUp"
-                            id="example">
-                            <thead class="text-white"
-                                style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
-                                <tr>
-                                    <th>
-                                        <input type="checkbox" id="checkAll" class="rounded">
-                                    </th>
-                                    <th>كود العميل</th>
-                                    <th>اسم العميل</th>
-                                    <th> الوظيفة </th>
-                                    <th>الرقم القومي</th>
-                                    <th>رقم الهاتف</th>
-                                    <th>المحافظة</th>
-                                    <th>السن</th>
-                                    <th>المندوب</th>
-                                    <th>المجموعة</th>
-                                    <!-- <th>نوع الرخصة</th> -->
-                                    <th>نوع التأشيرة</th>
-                                    <th>الحالة </th>
-                                    <!-- <th>رقم جواز السفر</th> -->
-                                    <th>عدد المرفقات</th>
-                                    <!-- <th>عدد المدفوعات</th> -->
-                                    <!-- <th> تاريخ التسجيل</th> -->
-                                    <!-- <th>اخر تعديل</th> -->
-                                    <th> الإجراءات</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($customers as $customer)
-                                {{-- <tr class="table-light"> --}}
-                                <tr date-customer="{{ $customer }}"
-                                    class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
-                                    <td>
-                                        <input type="checkbox" id="myCheckbox"
-                                            class="row-checkbox form-check-input rounded">
-                                    </td>
-                                    <td>#{{ $customer->id }}</td>
-                                    <td class="highlight"><a
-                                            href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
-                                    </td>
-                                    <td class="highlight"><span
-                                            class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
-                                    </td>
-                                    <td class="highlight">{{ $customer->card_id }}</td>
-                                    <td class="highlight">{{ $customer->phone }}</td>
-                                    <td class="highlight">{{ $customer->governorate }}</td>
-                                    <td class="highlight">{{ $customer->age }} عام</td>
-                                    <td class="highlight"><a
-                                            href="#">{{ $customer->delegate->name ?? '' }}</a>
-                                    </td>
-                                    <td class="highlight"><a
-                                            href="#">{{ $customer->customerGroup->title ?? '' }}</a></td>
-                                    <!-- <td class="highlight">{{ $customer->license_type }}</td> -->
-                                    <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}</td>
-                                    <td class="highlight">{{ $customer->status }}</td>
-                                    <!-- <td class="highlight">{{ $customer->passport_id }}</td> -->
-                                    <td class="highlight"><a
-                                            href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes->where("status","موجود بالمكتب")) }}</a>
-                                    </td>
-                                    <!-- <td class="highlight">{{ count($customer->payments) }}</td>
+                        <div class="table-responsive">
+                            <table class="table table-hover text-center animate__animated animate__fadeInUp"
+                                id="example">
+                                <thead class="text-white"
+                                    style="background: linear-gradient(45deg, #997a44, #7c6232); border-radius: 10px;">
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" id="checkAll" class="rounded">
+                                        </th>
+                                        <th>كود العميل</th>
+                                        <th>اسم العميل</th>
+                                        <th> الوظيفة </th>
+                                        <th>الرقم القومي</th>
+                                        <th>رقم الهاتف</th>
+                                        <th>السن</th>
+                                        <th>المندوب</th>
+                                        <th>المجموعة</th>
+                                        <!-- <th>نوع الرخصة</th> -->
+                                        <th>نوع التأشيرة</th>
+                                        <th>الحالة </th>
+                                        <!-- <th>رقم جواز السفر</th> -->
+                                        <th>عدد المرفقات</th>
+                                        <!-- <th>عدد المدفوعات</th> -->
+                                        <!-- <th> تاريخ التسجيل</th> -->
+                                        <!-- <th>اخر تعديل</th> -->
+                                        <th> الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($customers as $customer)
+                                        {{-- <tr class="table-light"> --}}
+                                        <tr date-customer="{{ $customer }}"
+                                            class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
+                                            <td>
+                                                <input type="checkbox" id="myCheckbox"
+                                                    class="row-checkbox form-check-input rounded">
+                                            </td>
+                                            <td>#{{ $customer->id }}</td>
+                                            <td class="highlight"><a
+                                                    href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
+                                            </td>
+                                            <td class="highlight"><span
+                                                    class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
+                                            </td>
+                                            <td class="highlight">{{ $customer->card_id }}</td>
+                                            <td class="highlight">{{ $customer->phone }}</td>
+                                            <td class="highlight">{{ $customer->age }}</td>
+                                            <td class="highlight"><a
+                                                    href="#">{{ $customer->delegate->name ?? '' }}</a>
+                                            </td>
+                                            <td class="highlight"><a
+                                                    href="#">{{ $customer->customerGroup->title ?? '' }}</a></td>
+                                            <!-- <td class="highlight">{{ $customer->license_type }}</td> -->
+                                            <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}</td>
+                                            <td class="highlight">{{ $customer->status }}</td>
+                                            <!-- <td class="highlight">{{ $customer->passport_id }}</td> -->
+                                            <td class="highlight"><a
+                                                    href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
+                                            </td>
+                                            <!-- <td class="highlight">{{ count($customer->payments) }}</td>
                                                                 <td class="highlight">{{ $customer->created_at }}</td>
                                                                 <td class="highlight">{{ $customer->updated_at }}</td> -->
                                     <td>

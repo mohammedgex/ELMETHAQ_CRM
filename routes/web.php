@@ -23,38 +23,28 @@ use App\Http\Controllers\WaitingCustomersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return redirect('/home');
-});
+
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 // Route::get('/workers', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/workers', function () {
     return view('workers'); // This loads resources/views/dashboard.blade.php
 })->name('workers');
 
-// Route::get('/users', function () {
-//     return view('users'); // This loads resources/views/dashboard.blade.php
-// })->name('users');
 
-// Route::get('/users', function () {
-//     return view('users'); // This loads resources/views/dashboard.blade.php
-// })->name('users');
+Route::group([
+    'prefix' => 'admin',
+    'middleware' => ['auth'] // أو أي Middleware آخر تريده
+], function () {
+    Route::get('/bulk-sms-view', action: function () {
+        return view('bulk-sms');
+    })->name('bulk-sms.index');
 
-
-
-
-// عرض الرسائل
-Route::get(uri: '/bulk-sms-view', action: function () {
-    return view(view: 'bulk-sms');
-})->name(name: 'bulk-sms.index');
-
-
-Route::middleware(['auth'])->group(function () {
-
-
+    Route::get('/', function () {
+        return redirect('admin/home');
+    });
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');
     Route::get('/leads-show/{id}', [LeadsCustomersController::class, 'show'])->name('leads-customers.show');
@@ -83,7 +73,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/visa-professions/{id}', [VisaProfessionsController::class, 'delete'])->name('visa-profession.delete');
 
     // عرض الوظائف
-    Route::get('/job-type-view/{id?}', action: [JobController::class, 'index'])->name('job-type.index');
+    Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index');
     Route::post('/job-type-view', [JobController::class, 'create'])->name('job-type.create');
     Route::post('/job-type-view/edit/{id}', [JobController::class, 'edit'])->name('job-type.edit');
     Route::delete('/job-type-view/{id}', [JobController::class, 'delete'])->name('job-type.delete');
@@ -92,7 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/embassy-view/{id?}', [EmbassyController::class, 'index'])->name('embassy.index');
     Route::post('/embassy-view', [EmbassyController::class, 'create'])->name('embassy.create');
     Route::post('/embassy-view/edit/{id}', [EmbassyController::class, 'edit'])->name('embassy.edit');
-    Route::delete('/embassy-view/{id}', action: [EmbassyController::class, 'delete'])->name('embassy.delete');
+    Route::delete('/embassy-view/{id}', [EmbassyController::class, 'delete'])->name('embassy.delete');
 
     // عرض التقييمات
     Route::get('/evaluation-view/{id?}', [EvalutionController::class, 'index'])->name('evaluation.index');
@@ -166,13 +156,14 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/export-delegates-xlsx/{id}', [DelegateController::class, 'exportDelegates'])->name('export.delegates.xlsx');
 
-    Route::get('/export-delegates-pdf/{id}', action: [DelegateController::class, 'downloadPdf'])->name('export.delegates.pdf');
+    Route::get('/export-delegates-pdf/{id}', [DelegateController::class, 'downloadPdf'])->name('export.delegates.pdf');
 
-    Route::get('/export-customers-xlsx', action: [CustomerController::class, 'exportCustomers'])->name('export.customers.xlsx');
+    Route::get('/export-customers-xlsx', [CustomerController::class, 'exportCustomers'])->name('export.customers.xlsx');
 
-    Route::get('/clients/{client}/attachments/print', action: [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
-    Route::get('/clients/{client}/payments/print', action: [CustomerController::class, 'printPayments'])->name('clients.print.payments');
+    Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
+    Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
+
+
+    Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
+    Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
 });
-
-Route::get('/clients/{client}/attachments/print', action: [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
-Route::get('/clients/{client}/payments/print', action: [CustomerController::class, 'printPayments'])->name('clients.print.payments');
