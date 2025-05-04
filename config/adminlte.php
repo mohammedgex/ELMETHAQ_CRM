@@ -418,11 +418,7 @@ return [
             'url' => 'users',
             'icon' => 'fas fa-user-cog',
         ],
-        [
-            'text' => 'تغيير كلمة المرور',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-key',
-        ],
+       
     ],
 
 

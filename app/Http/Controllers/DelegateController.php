@@ -28,7 +28,7 @@ class DelegateController extends Controller
         }
 
         $delegates = Delegate::all();
-        return view('/Delegates', [
+        return view('Delegates', [
             'delegates' => $delegates,
             'delegatesEdit' => $delegateEdit
         ]);
