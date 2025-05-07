@@ -369,6 +369,11 @@ return [
                     'icon' => 'fas fa-user-tag',
                 ],
                 [
+                    'text' => 'تعريف الحقائب',
+                    'url' => 'admin/bags-view',
+                    'icon' => 'fas fa-user-tag',
+                ],
+                [
                     'text' => 'تعريف الوظائف',
                     'url' => 'admin/job-type-view',
                     'icon' => 'fas fa-briefcase',
@@ -418,7 +423,7 @@ return [
             'url' => 'admin/users',
             'icon' => 'fas fa-user-cog',
         ],
-       
+
     ],
 
 

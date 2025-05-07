@@ -98,4 +98,8 @@ class Customer extends Model
     {
         return $this->hasOne(BlackList::class);
     }
+    public function bag()
+    {
+        return $this->belongsTo(Bag::class);
+    }
 }

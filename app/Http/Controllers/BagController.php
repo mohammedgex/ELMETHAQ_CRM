@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\bag;
+use Illuminate\Http\Request;
+
+class BagController extends Controller
+{
+    //
+    public function index($id = null)
+    {
+        # code...
+        $bagEdit = new bag();
+        $bagEdit->name = '';
+
+        if (!empty($id)) {
+            $bagEdit = bag::find($id);
+        }
+
+        $bags = bag::all();
+        return view('bags.bag-index', [
+            'bags' => $bags,
+            'bagEdit' => $bagEdit,
+        ]);
+    }
+    public function create(Request $request)
+    {
+        # code...
+        $request->validate([
+            'name' => 'required',
+        ]);
+        $bag = new bag($request->all());
+        $bag->save();
+        return redirect()->route('bags.index')->with('success', 'تم اضافة الحقيبة بنجاح');
+    }
+    public function edit(Request $request, $id)
+    {
+        # code...
+        $request->validate([
+            'name' => 'required',
+        ]);
+        $bag = bag::find($id);
+        $bag->name = $request->name;
+        $bag->save();
+        return redirect()->route('bags.index')->with('edit_success', $bag->name);
+    }
+
+    public function delete($id)
+    {
+        // return $id;
+        $bag = bag::find($id);
+        if (!$bag) {
+            # code...
+            return response()->json([
+                'error' => 'the bag is not find.'
+            ]);
+        }
+        $bag->delete();
+        return redirect()->route('bags.index');
+    }
+
+    public function bagCustomers($bag_id)
+    {
+        # code...
+        $bag = bag::find($bag_id);
+        return view('group-customers', [
+            'customers' => $bag->customers,
+            'bag' => $bag
+        ]);
+    }
+}

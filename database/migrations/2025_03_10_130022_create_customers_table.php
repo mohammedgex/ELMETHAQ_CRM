@@ -51,6 +51,7 @@ return new class extends Migration
             $table->foreignId('sponser_id')->nullable()->constrained('sponsers')->onDelete('cascade');
             $table->foreignId('visa_type_id')->nullable()->constrained('visa_types')->onDelete('cascade');
             $table->foreignId('evaluation_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('bag_id')->nullable()->constrained('bags')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -107,8 +107,9 @@ class CustomerController extends Controller
     {
         $validatedData = $request->validate([
             'card_id' => 'required|unique:customers,card_id',
+            'name_ar' => "required",
+            'phone' => "required",
         ]);
-        // $validatedData = $request->all();
 
         // لو فيه صورة، ضيفها إلى الـ array
         if ($request->hasFile('image')) {
@@ -334,10 +335,8 @@ class CustomerController extends Controller
             'searchBy' => 'required',
             'searchInput' => 'required'
         ]);
-
-
-    $searchBy = $request->input('searchBy');
-    $searchInput = $request->input('searchInput');
+        $searchBy = $request->input('searchBy');
+        $searchInput = $request->input('searchInput');
 
         // البحث في جدول العملاء
         $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
@@ -400,9 +399,9 @@ class CustomerController extends Controller
         ]);
     }
 
-public function filter(Request $request)
-{
-    $query = Customer::query();
+    public function filter(Request $request)
+    {
+        $query = Customer::query();
 
         if ($request->filled('mrz')) {
             $query->where('mrz', 'like', '%' . $request->mrz . '%');
@@ -484,14 +483,14 @@ public function filter(Request $request)
             $query->where('engaz_request', $request->engaz_request);
         }
 
-    $customers = $query->get();
+        $customers = $query->get();
 
-    $delegates = Delegate::all();
-    $evalutions = Evaluation::all();
-    $groups = CustomerGroup::all();
-    $jobs = JobTitle::all();
-    $sponsers = Sponser::all();
-    $visas = VisaType::all();
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
 
         return view("customers.customer", [
             'fillter' => $request->all(),
@@ -622,7 +621,6 @@ public function filter(Request $request)
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
         $visas = VisaType::all();
-        $customers = Customer::all();
 
         return view("customers.customer", [
             'customers' => $Consulate,
@@ -645,5 +643,23 @@ public function filter(Request $request)
     {
         $client = Customer::with(relations: 'payments')->findOrFail(id: $clientId);
         return view('print-customer.customer-payments', compact('client'));
+    }
+
+    public function customerGroup($group_id)
+    {
+        # code...
+        $group = CustomerGroup::find($group_id);
+        if (!$group) {
+            # code...
+            return response()->json([
+                'error' => 'group not found'
+            ]);
+        }
+
+        $customers = $group->customers;
+        return view('group-customers', [
+            'customers' => $customers,
+            'group' => $group
+        ]);
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BagController;
 use App\Http\Controllers\BlackListController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
@@ -19,7 +20,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
-use App\Http\Controllers\WaitingCustomersController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -148,6 +148,17 @@ Route::group([
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
+
+
+    Route::get('/customers/group/{group_id}', [CustomerController::class, 'customerGroup'])->name('group.customer');
+
+    // عرض الحقائب
+    Route::get('/bags-view/{id?}', [BagController::class, 'index'])->name('bags.index');
+    Route::post('/bags-view', [BagController::class, 'create'])->name('bags.create');
+    Route::post('/bags-view/edit/{id}', [BagController::class, 'edit'])->name('bags.edit');
+    Route::delete('/bags-view/{id}', [BagController::class, 'delete'])->name('bags.delete');
+    Route::get('/bags-view/customers/{bag_id}', [BagController::class, 'bagCustomers'])->name('bags.customers');
+
 
 
     Route::delete('/history-delete/{id}', [HistoryController::class, 'delete'])->name('history.delete');
