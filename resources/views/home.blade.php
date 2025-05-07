@@ -59,7 +59,7 @@
     <hr>
 
     <!-- تقسيمة المجموعات (دوائر ملونة بأيقونة واسم) -->
-    <h4 class="mt-4 mb-3" style="font-weight:bold;text-align: center;"> المجموعات</h4>
+    <h4 class="mt-4 mb-3" style="font-weight:bold;text-align: center;">المجموعات ({{ $groups->count() }})</h4>
     <div class="row justify-content-center">
         @foreach ($groups as $group)
             <div class="col-auto mb-3">
@@ -85,7 +85,7 @@
     <hr>
 
     <!-- تقسيمة المجموعات (دوائر ملونة بأيقونة واسم) -->
-    <h4 class="mt-4 mb-3" style="font-weight:bold; text-align: center;"> الحقائب</h4>
+    <h4 class="mt-4 mb-3" style="font-weight:bold; text-align: center;">الحقائب ({{ $bags->count() }})</h4>
     <div class="row justify-content-center">
         @foreach ($bags as $bag)
             <div class="col-auto mb-3">
