@@ -33,10 +33,12 @@ class SponserController extends Controller
             'name' => 'required',
             'phone' => 'required',
             'city' => 'required',
+            'id_number' => 'required',
+            'address' => 'required',
         ]);
         $sponser = new Sponser($request->all());
         $sponser->save();
-        return redirect()->route('sponsor.index')->with('success','تم اضافة الكفيل بنجاح');
+        return redirect()->route('sponsor.index')->with('success', 'تم اضافة الكفيل بنجاح');
     }
     public function edit(Request $request, $id)
     {
@@ -45,13 +47,17 @@ class SponserController extends Controller
             'name' => 'required',
             'phone' => 'required',
             'city' => 'required',
+            'address' => 'required',
+            'id_number' => 'required',
         ]);
         $sponser = Sponser::find($id);
         $sponser->name = $request->name;
         $sponser->phone = $request->phone;
         $sponser->city = $request->city;
+        $sponser->id_number = $request->id_number;
+        $sponser->address = $request->address;
         $sponser->save();
-        return redirect()->route('sponsor.index')->with('edit_success',$sponser->name);
+        return redirect()->route('sponsor.index')->with('edit_success', $sponser->name);
     }
     public function delete($id)
     {

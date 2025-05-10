@@ -19,8 +19,13 @@
                         <div class="row">
                             <div class="col-md-12 form-group">
                                 <label class="font-weight-bold"> القنصلية </label>
-                                <input type="text" class="form-control" name="title" placeholder="أدخل اسم القنصلية"
-                                    required>
+
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="title" required>
+                                    <option value="">اختر القنصلية</option>
+                                    <option value="قنصلية السويس">قنصلية السويس</option>
+                                    <option value="قنصلية القاهرة">قنصلية القاهرة</option>
+                                    <option value="قنصلية الاسكندرية">قنصلية الاسكندرية</option>
+                                </select>
 
                             </div>
                         </div>
@@ -40,8 +45,22 @@
                         <div class="row">
                             <div class="col-md-12 form-group">
                                 <label class="font-weight-bold"> القنصلية </label>
-                                <input type="text" class="form-control" name="title" value="{{ $embassyEdit->title }}"
-                                    placeholder="أدخل اسم القنصلية" required>
+
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="title" required>
+                                    <option value="">اختر القنصلية</option>
+                                    <option value="قنصلية السويس"
+                                        {{ old('title', $embassyEdit->title ?? '') == 'قنصلية السويس' ? 'selected' : '' }}>
+                                        قنصلية
+                                        السويس</option>
+                                    <option value="قنصلية القاهرة"
+                                        {{ old('title', $embassyEdit->title ?? '') == 'قنصلية القاهرة' ? 'selected' : '' }}>
+                                        قنصلية
+                                        القاهرة</option>
+                                    <option value="قنصلية الاسكندرية"
+                                        {{ old('title', $embassyEdit->title ?? '') == 'قنصلية الاسكندرية' ? 'selected' : '' }}>
+                                        قنصلية الاسكندرية</option>
+                                </select>
+
                             </div>
                         </div>
                         <!-- زر بعرض كامل -->
@@ -54,31 +73,28 @@
             @endif
         </div>
         @if (Session::has('success'))
-
-        <script>
+            <script>
                 Swal.fire({
-                title: "تم حفظ بيانات القنصلية بنجاح",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
+                    title: "تم حفظ بيانات القنصلية بنجاح",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
                 });
             </script>
-        
         @endif
 
         @if (Session::has('edit_success'))
-        <script>
+            <script>
                 Swal.fire({
-                title: "تم تعديل '{{Session::get('edit_success')}}' بنجاح",
-                icon: "success",
-                  confirmButtonText: "تم",
-                draggable: true
+                    title: "تم تعديل '{{ Session::get('edit_success') }}' بنجاح",
+                    icon: "success",
+                    confirmButtonText: "تم",
+                    draggable: true
                 });
             </script>
-        
         @endif
 
-        
+
 
         <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
@@ -207,8 +223,8 @@
         }
 
         function confirmDelete(event) {
-        event.preventDefault(); // Prevent form submission
-        Swal.fire({
+            event.preventDefault(); // Prevent form submission
+            Swal.fire({
                 title: "هل أنت متأكد من الحذف؟",
                 text: "سيتم حذف البيانات بالكامل ، هل أنت متأكد ؟",
                 icon: "warning",
@@ -217,17 +233,17 @@
                 cancelButtonColor: "#d33",
                 confirmButtonText: "حذف",
                 cancelButtonText: "الغاء",
-                }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
                     event.target.submit(); // Submit the form if confirmed
                     Swal.fire({
-                    title: "تم الحذف",
-                    text: "تم الحذف بنجاح!",
-                    confirmButtonText: "تم",
-                    icon: "success"
+                        title: "تم الحذف",
+                        text: "تم الحذف بنجاح!",
+                        confirmButtonText: "تم",
+                        icon: "success"
                     });
                 }
-                });
-    }
+            });
+        }
     </script>
 @stop

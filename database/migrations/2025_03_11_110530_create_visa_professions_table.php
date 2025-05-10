@@ -13,8 +13,10 @@ return new class extends Migration
     {
         Schema::create('visa_professions', function (Blueprint $table) {
             $table->id();
+            $table->string('job_title');
             $table->string('job');
             $table->integer('profession_count');
+            $table->foreignId('customer_group_id')->constrained('customer_groups')->onDelete('cascade');
             $table->foreignId('visa_type_id')->constrained('visa_types')->onDelete('cascade');
             $table->timestamps();
         });

@@ -18,8 +18,9 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label class="font-weight-bold"> العدد </label>
-                                <input type="number" class="form-control" name="count" placeholder="أدخل العدد" required>
+                                <label class="font-weight-bold"> اسم التاشيرة </label>
+                                <input type="text" class="form-control" name="name" placeholder="أدخل اسم التاشيرة"
+                                    required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> رقم الصادر </label>
@@ -43,6 +44,16 @@
                                     <option value="6 شهور">6 شهور</option>
                                     <option value= "سنة">سنة </option>
                                 </select>
+                            </div>
+
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold"> العدد </label>
+                                <input type="number" class="form-control" name="count" placeholder="أدخل العدد" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold">الغرض</label>
+                                <input type="text" class="form-control" name="porpose" placeholder="أدخل الغرض" required>
+
                             </div>
 
                         </div>
@@ -88,9 +99,9 @@
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
-                                <label class="font-weight-bold"> العدد </label>
-                                <input type="number" class="form-control" name="count" value="{{ $visaTypeEdit->count }}"
-                                    placeholder="أدخل العدد" required>
+                                <label class="font-weight-bold"> اسم التاشيرة </label>
+                                <input type="text" class="form-control" name="name" value="{{ $visaTypeEdit->name }}"
+                                    placeholder="أدخل اسم التاشيرة" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> رقم الصادر </label>
@@ -122,7 +133,18 @@
                                         سنة </option>
                                 </select>
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold"> العدد </label>
+                                <input type="number" class="form-control" value="{{ $visaTypeEdit->count }}"
+                                    name="count" placeholder="أدخل العدد " required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold">الغرض</label>
+                                <input type="text" class="form-control" name="porpose"
+                                    value="{{ old('porpose', $visaTypeEdit->porpose ?? '') }}" placeholder="أدخل الغرض"
+                                    required>
 
+                            </div>
 
 
                         </div>
@@ -144,11 +166,14 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> الكفيل </label>
-                                <select class="form-control select2 fw-bold" style="border-color: #997a44;"
-                                    name="sponser_id" required>
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="sponser_id"
+                                    required>
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
-                                        <option value="{{ $sponser->id }}">{{ $sponser->name }}</option>
+                                        <option value="{{ $sponser->id }}"
+                                            {{ old('sponser_id', $visaTypeEdit->sponser_id ?? '') == $sponser->id ? 'selected' : '' }}>
+                                            {{ $sponser->name }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>

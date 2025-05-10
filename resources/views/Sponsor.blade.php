@@ -28,6 +28,16 @@
                                     required>
                             </div>
                             <div class="col-md-4 form-group">
+                                <label class="font-weight-bold">عنوان الكفيل</label>
+                                <input type="text" class="form-control" name="address" placeholder="أدخل عنوان الكفيل "
+                                    required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="font-weight-bold">رقم الهوية</label>
+                                <input type="text" class="form-control" name="id_number" placeholder="أدخل رقم الهوية"
+                                    required>
+                            </div>
+                            <div class="col-md-4 form-group">
                                 <label class="font-weight-bold">دولة الكفيل</label>
                                 <input type="text" class="form-control" name="city" placeholder="أدخل اسم الكفيل"
                                     required>
@@ -56,6 +66,16 @@
                                 <label class="font-weight-bold">رقم هاتف الكفيل</label>
                                 <input type="text" class="form-control" name="phone" value="{{ $sponserEdit->phone }}"
                                     placeholder="أدخل اسم الكفيل" required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="font-weight-bold">عنوان الكفيل</label>
+                                <input type="text" class="form-control" value="{{ $sponserEdit->address }}"
+                                    name="address" placeholder="أدخل عنوان الكفيل " required>
+                            </div>
+                            <div class="col-md-4 form-group">
+                                <label class="font-weight-bold">رقم الهوية</label>
+                                <input type="text" class="form-control" value="{{ $sponserEdit->id_number }}"
+                                    name="id_number" placeholder="أدخل رقم الهوية" required>
                             </div>
                             <div class="col-md-4 form-group">
                                 <label class="font-weight-bold">دولة الكفيل</label>

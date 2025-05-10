@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CustomerGroup;
+use App\Models\VisaType;
 use Illuminate\Http\Request;
 
 class CustomerGroupController extends Controller
@@ -19,11 +20,13 @@ class CustomerGroupController extends Controller
             $groupEdit = CustomerGroup::find($id);
         }
 
+        $visas = VisaType::all();
         $groups = CustomerGroup::all();
 
         return view('groups', [
             'groups' => $groups,
-            'groupEdit' => $groupEdit
+            'groupEdit' => $groupEdit,
+            'visas' => $visas
         ]);
     }
 
@@ -31,7 +34,8 @@ class CustomerGroupController extends Controller
     {
         # code...
         $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'visa_type_id' => 'required'
         ]);
 
         $group = new CustomerGroup($request->all());
@@ -42,13 +46,15 @@ class CustomerGroupController extends Controller
     {
         # code...
         $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'visa_type_id' => 'required'
         ]);
 
         $group = CustomerGroup::find($id);
         $group->title = $request->title;
+        $group->visa_type_id = $request->visa_type_id;
         $group->save();
-        return redirect()->route('customer-groups.index')->with('edit_success',value: $group->title);
+        return redirect()->route('customer-groups.index')->with('edit_success', value: $group->title);
     }
 
     public function delete($id)
@@ -62,6 +68,6 @@ class CustomerGroupController extends Controller
             ]);
         }
         $group->delete();
-        return redirect()->route('customer-groups.index')->with('delete_success','');
+        return redirect()->route('customer-groups.index')->with('delete_success', '');
     }
 }

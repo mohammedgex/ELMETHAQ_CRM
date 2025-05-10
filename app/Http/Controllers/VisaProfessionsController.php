@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CustomerGroup;
 use App\Models\VisaProfessions;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
@@ -23,12 +24,14 @@ class VisaProfessionsController extends Controller
         $visaType = VisaType::find($visa_id);
         $visas = $visaType->visa_professions;
         $jobs = array('محاسب', 'سائق');
+        $groups = CustomerGroup::all();
 
         return view('visa-professions', [
             'visas' => $visas,
             'visaEdit' => $visaEdit,
             'visa_id' => $visa_id,
-            "jobs" => $jobs
+            "jobs" => $jobs,
+            'groups' => $groups
         ]);
     }
 
@@ -37,7 +40,9 @@ class VisaProfessionsController extends Controller
         # code...
         $request->validate([
             'job' => 'required',
+            'job_title' => 'required',
             'profession_count' => 'required',
+            'customer_group_id' => 'required',
         ]);
 
         $visaType = VisaType::find($visa_id);
@@ -59,12 +64,16 @@ class VisaProfessionsController extends Controller
         # code...
         $request->validate([
             'job' => 'required',
+            'job_title' => 'required',
             'profession_count' => 'required',
+            'customer_group_id' => 'required',
         ]);
 
         $visa = VisaProfessions::find($id);
         $visa->job = $request->job;
         $visa->profession_count = $request->profession_count;
+        $visa->job_title = $request->job_title;
+        $visa->customer_group_id = $request->customer_group_id;
         $visaType = $visa->visa_type_id;
         $visa->save();
         return redirect()->route('visa-profession.index', ['visa_id' => $visaType, 'id' => null])->with('edit_success', value: $visa->title);
