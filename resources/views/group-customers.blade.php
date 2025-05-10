@@ -500,8 +500,8 @@
                                                     href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
                                             </td>
                                             <!-- <td class="highlight">{{ count($customer->payments) }}</td>
-                                                                                                                <td class="highlight">{{ $customer->created_at }}</td>
-                                                                                                                <td class="highlight">{{ $customer->updated_at }}</td> -->
+                                                                                                                    <td class="highlight">{{ $customer->created_at }}</td>
+                                                                                                                    <td class="highlight">{{ $customer->updated_at }}</td> -->
                                             <td>
                                                 <div class="btn-group">
                                                     <button

@@ -12,6 +12,8 @@ class bag extends Model
 
     protected $fillable = [
         'name',
+        'leave_date',
+        'transportation'
     ];
 
     // العلاقات:

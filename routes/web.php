@@ -20,6 +20,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
+use App\Http\Controllers\JopController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -44,6 +45,8 @@ Route::group([
     Route::get('/', function () {
         return redirect('admin/home');
     });
+    Route::get('/send-api/{id}', [JopController::class, 'net']);
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');

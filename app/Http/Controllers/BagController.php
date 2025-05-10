@@ -29,6 +29,8 @@ class BagController extends Controller
         # code...
         $request->validate([
             'name' => 'required',
+            'leave_date' => 'required',
+            'transportation' => 'required',
         ]);
         $bag = new bag($request->all());
         $bag->save();
@@ -39,9 +41,13 @@ class BagController extends Controller
         # code...
         $request->validate([
             'name' => 'required',
+            'transportation' => 'required',
+            'leave_date' => 'required',
         ]);
         $bag = bag::find($id);
         $bag->name = $request->name;
+        $bag->transportation = $request->transportation;
+        $bag->leave_date = $request->leave_date;
         $bag->save();
         return redirect()->route('bags.index')->with('edit_success', $bag->name);
     }

@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('customer_groups', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->foreignId('visa_type_id')->nullable()->constrained('visa_types')->onDelete('cascade');
             $table->timestamps();
         });
     }

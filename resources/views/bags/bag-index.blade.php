@@ -22,6 +22,18 @@
                                 <input type="text" class="form-control" name="name" placeholder="أدخل اسم الحقيبة"
                                     required>
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold"> تاريخ المغادرة</label>
+                                <input type="date" class="form-control" name="leave_date" placeholder="تاريخ المغادرة"
+                                    required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold">النقل</label>
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="transportation">
+                                    <option value="جوا">جوا</option>
+                                    <option value="بحرا">بحرا</option>
+                                </select>
+                            </div>
                         </div>
                         <!-- زر بعرض كامل -->
                         <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
@@ -41,6 +53,22 @@
                                 <label class="font-weight-bold">اسم الحقيبة</label>
                                 <input type="text" class="form-control" name="name" value="{{ $bagEdit->name }}"
                                     placeholder="أدخل اسم الحقيبة" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold"> تاريخ المغادرة</label>
+                                <input type="date" class="form-control"value="{{ $bagEdit->leave_date }}"
+                                    name="leave_date" placeholder="تاريخ المغادرة" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold">النقل</label>
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="transportation">
+                                    <option value="جوا"
+                                        {{ old('transportation', $bagEdit->transportation ?? '') == 'جوا' ? 'selected' : '' }}>
+                                        جوا</option>
+                                    <option value="بحرا"
+                                        {{ old('transportation', $bagEdit->transportation ?? '') == 'بحرا' ? 'selected' : '' }}>
+                                        بحرا</option>
+                                </select>
                             </div>
                         </div>
                         <!-- زر بعرض كامل -->
@@ -105,6 +133,8 @@
                             <tr>
                                 <th>كود الحقيبة</th>
                                 <th>اسم الحقيبة</th>
+                                <th>تاريخ المغادرة</th>
+                                <th>النقل</th>
                                 <th>عدد عملاء الحقيبة</th>
                                 <th>الإجراءات</th>
                             </tr>
@@ -114,6 +144,8 @@
                                 <tr class="table-light">
                                     <td>{{ $bag->id }}</td>
                                     <td class="highlight">{{ $bag->name }}</td>
+                                    <td class="highlight">{{ $bag->leave_date }}</td>
+                                    <td class="highlight">{{ $bag->transportation }}</td>
                                     <td class="highlight">{{ count($bag->customers) }}</td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('bags.index', $bag->id) }}">

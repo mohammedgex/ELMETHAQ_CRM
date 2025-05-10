@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('bags', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('leave_date');
+            $table->string('transportation');
             $table->timestamps();
         });
     }

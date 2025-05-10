@@ -17,12 +17,24 @@
                     <form action="{{ route('customer-groups.create') }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-12 form-group">
+                            <div class="col-md-6 form-group">
                                 <label class="font-weight-bold">اسم المجموعة</label>
                                 <input type="text" class="form-control" name="title" placeholder="أدخل اسم المجموعة"
                                     required>
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold">التاشيرة</label>
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_type_id"
+                                    required>
+                                    <option value="">اختر التاشيرة</option>
+                                    @foreach ($visas as $visa)
+                                        <option value="{{ $visa->id }}">{{ $visa->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
+
                         <!-- زر بعرض كامل -->
                         <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
                             style="background-color: #997a44; color: white;">
@@ -39,11 +51,25 @@
                     <form action="{{ route('customer-groups.edit', $groupEdit->id) }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-12 form-group">
+                            <div class="col-md-6 form-group">
                                 <label class="font-weight-bold">اسم المجموعة</label>
                                 <input type="text" class="form-control" name="title" value="{{ $groupEdit->title }}"
                                     placeholder="أدخل اسم المجموعة" required>
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold">التاشيرة</label>
+                                <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_type_id"
+                                    required>
+                                    <option value="">اختر التاشيرة</option>
+                                    @foreach ($visas as $visa)
+                                        <option value="{{ $visa->id }}"
+                                            {{ old('visa_type_id', $groupEdit->visa_type_id ?? '') == $visa->id ? 'selected' : '' }}>
+                                            {{ $visa->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
                         </div>
                         <!-- زر بعرض كامل -->
                         <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
@@ -105,6 +131,7 @@
                             <tr>
                                 <th>كود المجموعة</th>
                                 <th>اسم المجموعة</th>
+                                <th>التاشيرة</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
@@ -113,6 +140,7 @@
                                 <tr class="table-light">
                                     <td>#{{ $group->id }}</td>
                                     <td class="highlight">{{ $group->title }}</td>
+                                    <td class="highlight">{{ $group->visaType->name }}</td>
                                     <td class="d-flex justify-content-center">
                                         <a href="{{ route('customer-groups.index', $group->id) }}">
                                             <button class="btn btn-sm shadow-sm mx-1"
