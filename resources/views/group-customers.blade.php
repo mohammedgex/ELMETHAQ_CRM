@@ -451,20 +451,12 @@
                                         </th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
-                                        <th> الوظيفة </th>
                                         <th>الرقم القومي</th>
-                                        <th>رقم الهاتف</th>
-                                        <th>السن</th>
-                                        <th>المندوب</th>
                                         <th>المجموعة</th>
-                                        <!-- <th>نوع الرخصة</th> -->
                                         <th>نوع التأشيرة</th>
+                                        <th>رقم طلب التأشيرة</th>
+                                        <th>رقم مستند التأشيرة</th>
                                         <th>الحالة </th>
-                                        <!-- <th>رقم جواز السفر</th> -->
-                                        <th>عدد المرفقات</th>
-                                        <!-- <th>عدد المدفوعات</th> -->
-                                        <!-- <th> تاريخ التسجيل</th> -->
-                                        <!-- <th>اخر تعديل</th> -->
                                         <th> الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -481,15 +473,9 @@
                                             <td class="highlight"><a
                                                     href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
                                             </td>
-                                            <td class="highlight"><span
-                                                    class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
-                                            </td>
+                                            
                                             <td class="highlight">{{ $customer->card_id }}</td>
-                                            <td class="highlight">{{ $customer->phone }}</td>
-                                            <td class="highlight">{{ $customer->age }}</td>
-                                            <td class="highlight"><a
-                                                    href="#">{{ $customer->delegate->name ?? '' }}</a>
-                                            </td>
+                                            
                                             <td class="highlight"><a
                                                     href="#">{{ $customer->customerGroup->title ?? '' }}</a></td>
                                             <!-- <td class="highlight">{{ $customer->license_type }}</td> -->
