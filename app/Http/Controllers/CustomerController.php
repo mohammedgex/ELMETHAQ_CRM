@@ -105,20 +105,22 @@ class CustomerController extends Controller
 
     public function basicDetails(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'card_id' => 'required|unique:customers,card_id',
             'name_ar' => "required",
             'phone' => "required",
         ]);
 
+        $all = $request->all();
+
         // لو فيه صورة، ضيفها إلى الـ array
         if ($request->hasFile('image')) {
             $filePath = $request->file('image')->store('uploads', 'public');
-            $validatedData['image'] = $filePath;
+            $all['image'] = $filePath;
         }
 
         // إنشاء العميل بكل البيانات دفعة واحدة
-        $customer = Customer::create($validatedData);
+        $customer = Customer::create($all);
 
         // إضافة للسجل الأسود (block = false)
         $blackList = new BlackList();
