@@ -275,6 +275,8 @@
                                     <option value="عاملو النفايات" data-select2-id="266">عاملو النفايات</option>
                                     <option value="العاملون في المهن الأولية الآخرون" data-select2-id="267">العاملون في
                                         المهن الأولية الآخرون</option>
+                                    <option value="سائقو الشاحنات الثقيلة والباصات" data-select2-id="267"> 
+                                          سائقو الشاحنات الثقيلة والباصات</option>
                                     <option value="" data-select2-id="58">اختر</option>
 
                                 </select>
@@ -730,6 +732,10 @@
                                     <option value="العاملون الحِرفيّون الآخرون ومن يرتبط بهم"
                                         {{ old('job_title', $visaEdit->job_title ?? '') == 'العاملون الحِرفيّون الآخرون ومن يرتبط بهم' ? 'selected' : '' }}>
                                         العاملون الحِرفيّون الآخرون ومن يرتبط بهم
+                                    </option>
+                                    <option value="سائقو الشاحنات الثقيلة والباصات"
+                                        {{ old('job_title', $visaEdit->job_title ?? '') == 'سائقو الشاحنات الثقيلة والباصات' ? 'selected' : '' }}>
+                                        سائقو الشاحنات الثقيلة والباصات
                                     </option>
 
                                 </select>

@@ -658,10 +658,22 @@ class CustomerController extends Controller
             ]);
         }
 
+        $all = Customer::where('customer_group_id', null)->get();
+
         $customers = $group->customers;
         return view('group-customers', [
             'customers' => $customers,
-            'group' => $group
+            'group' => $group,
+            'all' => $all
         ]);
     }
+    public function addToGroup(Request $request,$group_id)
+    {
+        $customer = Customer::find($request->customer_id);
+        $customer->customer_group_id = $group_id;
+        $customer->save();
+        return redirect()->route('group.customer',$group_id);
+    }
+
+
 }

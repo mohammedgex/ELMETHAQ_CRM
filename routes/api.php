@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\FileTitleController;
+use App\Http\Controllers\JopController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 

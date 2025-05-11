@@ -41,11 +41,12 @@ Route::group([
     Route::get('/bulk-sms-view', action: function () {
         return view('bulk-sms');
     })->name('bulk-sms.index');
+    
 
     Route::get('/', function () {
         return redirect('admin/home');
     });
-    Route::get('/send-api/{id}', [JopController::class, 'net']);
+    Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
@@ -154,6 +155,7 @@ Route::group([
 
 
     Route::get('/customers/group/{group_id}', [CustomerController::class, 'customerGroup'])->name('group.customer');
+    Route::post('/group/{group_id}', [CustomerController::class, 'addToGroup'])->name('group.addToGroup');
 
     // عرض الحقائب
     Route::get('/bags-view/{id?}', [BagController::class, 'index'])->name('bags.index');
@@ -180,4 +182,6 @@ Route::group([
 
     Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
     Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
+
+    
 });

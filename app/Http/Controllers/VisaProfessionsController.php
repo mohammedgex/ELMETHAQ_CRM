@@ -23,7 +23,7 @@ class VisaProfessionsController extends Controller
 
         $visaType = VisaType::find($visa_id);
         $visas = $visaType->visa_professions;
-        $jobs = array('محاسب', 'سائق');
+        $jobs = array('محاسب','سائق حافلة');
         $groups = CustomerGroup::all();
 
         return view('visa-professions', [

@@ -3,36 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
-
-use Illuminate\Http\Request;
 
 class JopController extends Controller
 {
     public function net($id)
     {
+        ini_set('max_execution_time', 300); // 5 minutes
+
         $customer = Customer::find($id);
 
+        if (!$customer) {
+            return response()->json(['error' => 'Customer not found'], 404);
+        }
+
+        // Check required fields exist
+        if (
+            empty($customer->name_ar) || empty($customer->name_en_mrz) ||
+            empty($customer->passport_id) || empty($customer->passport_expire_date) ||
+            empty($customer->date_birth) || empty($customer->card_id) ||
+            !$customer->sponser || !$customer->visaType || !$customer->customerGroup ||
+            !$customer->customerGroup->visaProfession
+        ) {
+            return response()->json(['error' => 'Missing customer required data'], 400);
+        }
+
         $name_ar = explode(" ", $customer->name_ar);
-
-        $first_ar = $name_ar[0];  // "محمد"
-        $middle_ar = $name_ar[1]; // "سيد"
-        $last_ar = $name_ar[2];   // "احمد"
-        $end_ar = end($name_ar); // "صديق"
-
         $name_en = explode(" ", $customer->name_en_mrz);
 
-        $first_en = $name_en[0];  // "محمد"
-        $middle_en = $name_en[1]; // "سيد"
-        $last_en = $name_en[2];   // "احمد"
-        $end_en = end($name_en); // "صديق"
+        if (count($name_ar) < 3 || count($name_en) < 3) {
+            return response()->json(['error' => 'Invalid name format'], 400);
+        }
+
+        // Assign name parts safely
+        $first_ar = $name_ar[0];
+        $middle_ar = $name_ar[1] ?? '';
+        $last_ar = $name_ar[2] ?? '';
+        $end_ar = end($name_ar);
+
+        $first_en = $name_en[0];
+        $middle_en = $name_en[1] ?? '';
+        $last_en = $name_en[2] ?? '';
+        $end_en = end($name_en);
 
         $data = [
             "UserName" => "مكتب768",
             "Password" => "Ahmed121@@@",
-            "VisaKind" => "عمل مؤقت",
+            "VisaKind" => "تأشيرة العمل المؤقت لخدمات الحج والعمرة",
             "NATIONALITY" => "EGY",
             "ResidenceCountry" => "272",
             "EmbassyCode" => "320",
@@ -71,29 +89,22 @@ class JopController extends Controller
             "RELIGION" => "1",
             "SOCIAL_STATUS" => "2",
             "Sex" => "1",
-            "ClassifyOccupations" => "833",
-            "JOB_OR_RELATION_Id" => "833101"
+            "ClassifyOccupations" => $customer->customerGroup->visaProfession->job_title,
+            "JOB_OR_RELATION_Id" => $customer->customerGroup->visaProfession->job
         ];
 
-        try {
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json',
-            ])->post('http://localhost:3000/submit-all', $data);
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+        ])->timeout(0)->post('http://localhost:3000/submit-all', data: $data);
 
-            if ($response->successful()) {
-                return $response->json();
-            } else {
-                Log::error('فشل الإرسال إلى API', [
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-                return response()->json(['error' => 'فشل الإرسال إلى السيرفر الخارجي'], 500);
-            }
-        } catch (\Exception $e) {
-            Log::error('استثناء أثناء الإرسال إلى API', [
-                'message' => $e->getMessage()
-            ]);
-            return response()->json(['error' => 'حدث خطأ أثناء محاولة الإرسال'], 500);
+        $json = $response->json();
+
+        if (isset($json['appNo'])) {
+            $customer->e_visa_number = $json['appNo'];
+            $customer->save();
+            return redirect()->route('customer.indes')->with("success", "نجح حجز النت للعميل: " . $first_ar . " وتم تخزين الـ e number الخاص به");
+        } else {
+            return response()->json(['error' => 'Failed to get application number from response'], 500);
         }
     }
 }
