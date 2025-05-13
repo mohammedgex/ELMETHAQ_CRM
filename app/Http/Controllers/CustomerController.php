@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\bag;
 use App\Models\BlackList;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
@@ -283,54 +284,6 @@ class CustomerController extends Controller
         ]);
     }
 
-    // public function exportCustomers()
-    // {
-
-    //     // Define file path
-    //     $filePath = storage_path('app/public/all-customers.xlsx');
-
-    //     // Fetch delegates data
-    //     $customers = Customer::all();
-    //     // Define header style
-    //     /* Create a border around a cell */
-    //     $border = new Border(
-    //         new BorderPart(Border::BOTTOM, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-    //         new BorderPart(Border::LEFT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-    //         new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-    //         new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
-    //     );
-
-    //     $style = (new Style())
-    //         ->setFontBold()
-    //         ->setFontSize(15)
-    //         ->setFontColor(Color::BLUE)
-    //         ->setShouldWrapText()
-    //         ->setBackgroundColor(Color::YELLOW)
-    //         ->setBorder($border);
-
-    //     $headerStyle = (new Style())
-    //         ->setFontBold()
-    //         ->setFontSize(50)
-    //         ->setFontColor(Color::BLACK)
-    //         ->setBackgroundColor(Color::BLUE);
-
-    //     // Create and write to Excel file
-    //     $writer = SimpleExcelWriter::create($filePath)
-    //         ->addHeader(['ID', 'Name', 'Phone', 'Card ID'])
-    //         ->setHeaderStyle($style);
-
-    //     $writer->addRow([
-    //         $customers->id,
-    //         $customers->name,
-    //         $customers->phone,
-    //         $customers->card_id
-    //     ], $style);
-
-
-    //     // Return the file for download
-    //     return Response::download($filePath, name: 'customer_' . $customers->name . '.xlsx')->deleteFileAfterSend();
-    // }
-
     public function search(Request $request)
     {
         $request->validate([
@@ -505,6 +458,68 @@ class CustomerController extends Controller
             'visas' => $visas,
         ]);
     }
+    public function filterGroupAndBag(Request $request)
+    {
+        $query = Customer::query();
+
+        if ($request->filled('customer_group_id')) {
+            $query->where('customer_group_id', $request->customer_group_id);
+        }
+
+        if ($request->filled('bag_id')) {
+            $query->where('bag_id', $request->bag_id);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('marital_status')) {
+            $query->where('marital_status', $request->marital_status);
+        }
+
+        if ($request->filled('medical_examination')) {
+            $query->where('medical_examination', $request->medical_examination);
+        }
+
+        if ($request->filled('finger_print_examination')) {
+            $query->where('finger_print_examination', $request->finger_print_examination);
+        }
+
+        if ($request->filled('virus_examination')) {
+            $query->where('virus_examination', $request->virus_examination);
+        }
+
+        if ($request->filled('engaz_request')) {
+            $query->where('engaz_request', $request->engaz_request);
+        }
+
+        $customers = $query->get();
+
+        if ($request->filled('bag_id')) {
+            $bag = bag::find($request->bag_id);
+            return view("group-customers", [
+                'fillter' => $request->all(),
+                'customers' => $customers,
+                "bag" => $bag
+            ]);
+        } elseif ($request->filled('customer_group_id')) {
+            $group = CustomerGroup::find($request->customer_group_id);
+
+            return view("group-customers", [
+                'fillter' => $request->all(),
+                'customers' => $customers,
+                'group' => $group,
+            ]);
+        }
+
+
+        return view("group-customers", [
+            'fillter' => $request->all(),
+            'customers' => $customers,
+        ]);
+    }
+
     public function filterConsulate(Request $request)
     {
         $query = Customer::query();
@@ -667,22 +682,21 @@ class CustomerController extends Controller
             'all' => $all
         ]);
     }
-    public function addToGroup(Request $request,$group_id)
+    public function addToGroup(Request $request, $group_id)
     {
         $customer = Customer::find($request->customer_id);
         $customer->customer_group_id = $group_id;
         $customer->save();
-        return redirect()->route('group.customer',$group_id);
+        return redirect()->route('group.customer', $group_id);
     }
 
     public function hospitalBook($customer_id)
     {
         $customer = Customer::find($customer_id);
-        $customer->medical_examination= "تم الحجز";
+        $customer->medical_examination = "تم الحجز";
         $customer->save();
         return response()->json([
             'success' => 'done'
         ]);
     }
-
 }

@@ -48,7 +48,7 @@ Route::group([
     Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
     Route::get('/visa/{id}', function ($id) {
         $customer = Customer::find($id);
-    
+
         return view('print-customer.print-entry_application', [
             'customer' => $customer
         ]);
@@ -153,7 +153,8 @@ Route::group([
     Route::post('/customer-multi_Search', [CustomerController::class, 'multi_Search'])->name('customer.multi_search');
     Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
     Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
-    Route::post('/customer-consulate/fillter', [GoogleTranslateController::class, 'filterConsulate'])->name('consulate.filter');
+    Route::post('/customer-consulate/fillter', [CustomerController::class, 'filterConsulate'])->name('consulate.filter');
+    Route::post('/bag-and-group/fillter', [CustomerController::class, 'filterGroupAndBag'])->name('filterGroupAndBag');
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
