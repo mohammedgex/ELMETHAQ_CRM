@@ -21,6 +21,7 @@ use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\JopController;
+use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,9 +30,7 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 // Route::get('/workers', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/workers', function () {
-    return view('workers'); // This loads resources/views/dashboard.blade.php
-})->name('workers');
+
 
 
 Route::group([
@@ -41,13 +40,19 @@ Route::group([
     Route::get('/bulk-sms-view', action: function () {
         return view('bulk-sms');
     })->name('bulk-sms.index');
-    
+
 
     Route::get('/', function () {
         return redirect('admin/home');
     });
     Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
-
+    Route::get('/visa/{id}', function ($id) {
+        $customer = Customer::find($id);
+    
+        return view('print-customer.print-entry_application', [
+            'customer' => $customer
+        ]);
+    })->name(name: 'print_visaEntriy');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');
@@ -182,6 +187,4 @@ Route::group([
 
     Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
     Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
-
-    
 });

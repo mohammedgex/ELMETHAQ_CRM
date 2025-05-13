@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApiAppController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\JopController;
 use Illuminate\Http\Request;
@@ -16,3 +17,4 @@ Route::post('/complete-data', [ApiAppController::class, 'completeData'])->middle
 Route::post('/login', [ApiAppController::class, 'login']);
 
 Route::post('/send-file/{id}', [FileTitleController::class, 'sendFile']);
+Route::get('/hospital/{id}', [CustomerController::class, 'hospitalBook'])->name("hospital.book");

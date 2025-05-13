@@ -15,7 +15,8 @@ class JopController extends Controller
         $customer = Customer::find($id);
 
         if (!$customer) {
-            return response()->json(['error' => 'Customer not found'], 404);
+            return redirect()->back()->with(['error' => 'Customer not found']);
+
         }
 
         // Check required fields exist
@@ -26,7 +27,7 @@ class JopController extends Controller
             !$customer->sponser || !$customer->visaType || !$customer->customerGroup ||
             !$customer->customerGroup->visaProfession
         ) {
-            return response()->json(['error' => 'Missing customer required data'], 400);
+            return redirect()->back()->with(['error' => 'الرجاء التأكد من اكمال بيانات العميل']);
         }
 
         $name_ar = explode(" ", $customer->name_ar);
@@ -100,9 +101,10 @@ class JopController extends Controller
         $json = $response->json();
 
         if (isset($json['appNo'])) {
-            $customer->e_visa_number = $json['appNo'];
+            $customer->e_visa_number = "E".$json['appNo'];
+            $customer->engaz_request = 'تم الحجز';
             $customer->save();
-            return redirect()->route('customer.indes')->with("success", "نجح حجز النت للعميل: " . $first_ar . " وتم تخزين الـ e number الخاص به");
+            return redirect()->route('customer.indes')->with("success", "نجح حجز أنجاز للعميل: " . $first_ar . " وتم تخزين الـ e number الخاص به");
         } else {
             return response()->json(['error' => 'Failed to get application number from response'], 500);
         }

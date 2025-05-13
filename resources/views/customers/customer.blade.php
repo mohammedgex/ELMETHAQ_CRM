@@ -558,21 +558,26 @@
                                                             <li><a class="dropdown-item text-dark hover:bg-light"
                                                                     href="{{ route('net',$customer->id) }}"><i class="fas fa-globe"></i> حجز
                                                                     نت</a></li>
-                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                    href="#"><i class="fas fa-passport"></i>
-                                                                    بيانات التأشيرة</a></li>
-                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                    href="#"><i class="fas fa-virus"></i> كشف
-                                                                    الفايرس</a></li>
-                                                            <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
-                                                                    href="#"><i class="fas fa-hospital"></i>
-                                                                    نتيجة كشف طبي</a></li>
+                                                            <li><a class="dropdown-item text-dark hover:bg-light" target="_blank"
+                                                                    href="{{ route("print_visaEntriy", $customer->id) }}"><i class="fas fa-passport"></i>
+                                                                    طباعة طلب دخول </a></li>
+                                                            <li><a data-customer='@json($customer)' class="finger-print dropdown-item text-dark hover:bg-light"
+                                                                    href="#" id="virus"><i class="fas fa-virus"></i>بيانات البصمة</a></li>
+                                                            <li>
+                                                                <a data-customer='@json($customer)'
+                                                                    class="dropdown-item text-dark hover:bg-light check-medical-status"
+                                                                    id="check-medical-status"
+                                                                    href="#">
+                                                                    <i class="fas fa-hospital"></i> حجز كشف طبي
+                                                                </a>
+                                                            </li>
                                                             <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
                                                                     href="#"><i
                                                                         class="fas fa-clinic-medical"></i> نتيجة
                                                                     وبيانات المستشفى</a></li>
                                                         </ul>
                                                     </li>
+
 
                                                     <!-- الطباعة -->
                                                     <li class="dropdown">
@@ -603,22 +608,7 @@
                                                         </ul>
                                                     </li>
 
-                                                    <!-- المرفقات -->
-                                                    <li class="dropdown">
-                                                        <a class="dropdown-item text-primary dropdown-toggle"
-                                                            href="#" id="submenu-toggle">
-                                                            <i class="fas fa-file-upload"></i> المرفقات
-                                                        </a>
-                                                        <ul class="dropdown-menu dropdown-menu-end submenu"
-                                                            aria-labelledby="submenu-toggle">
-                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                    href="#"><i class="fas fa-download"></i>
-                                                                    تحميل </a></li>
-                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                    href="#"><i class="fas fa-eye"></i> عرض </a>
-                                                            </li>
-                                                        </ul>
-                                                    </li>
+
 
 
                                                     <!-- تصدير إلى إكسل -->
@@ -798,14 +788,28 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         Swal.fire({
-            position: "top-end",
+            position: "bottom-end",
             icon: "success",
             title: "{{ Session::get('success') }}",
             showConfirmButton: false,
-            timer: 1500
+            timer: 3000
         });
     </script>
     @endif
+    @if (Session::has('error'))
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            position: "center",
+            icon: "warning",
+            title: "{{ Session::get('error') }}",
+            showConfirmButton: false,
+            timer: 3000
+        });
+    </script>
+    @endif
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="{{ asset(path: 'js/entry_applocation.js') }}"></script>
 </div>
 
 @stop
@@ -872,7 +876,8 @@
 
 @stop
 
-@section('js')
+@section(section: 'js')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- jQuery & DataTables JS -->
 <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -885,58 +890,99 @@
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
 <script>
+    // fetch("http://localhost:3000/api/wafid", {
+    //         method: "POST",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(data)
+    //     })
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         return response.json();
+    //     })
+    //     .then(result => {
+    //         console.log("Success:", result);
+    //     })
+    //     .catch(error => {
+    //         console.error("Error:", error);
+    //     });
+    // #########################################################################################################
     document.addEventListener("DOMContentLoaded", function() {
         document.querySelectorAll(".check-medical-status").forEach(button => {
             button.addEventListener("click", async function(event) {
                 event.preventDefault();
+                const customer = JSON.parse(this.dataset.customer);
+                console.log("Customer ID:", customer.id);
+                let nameParts = customer.name_en_mrz.trim().split(' ');
+                const data = {
+                    firstName: nameParts[0],
+                    lastName: nameParts[nameParts.length - 1],
+                    passportNumber: customer.passport_id,
+                    country: "EGY",
+                    city: "87",
+                    destinationCountry: "SA",
+                    dateOfBirth: customer.date_birth,
+                    nationality: "1",
+                    gender: "male",
+                    maritalStatus: "unmarried",
+                    passportIssueDate: "01/01/2020",
+                    passportIssuePlace: customer.issue_place,
+                    passportExpiryDate: customer.passport_expire_date,
+                    visaType: "wv",
+                    email: "john.doe@example.com",
+                    phone: "+2" + customer.phone,
+                    nationalId: customer.card_id,
+                    position: "22"
+                };
+                console.log(data);
+                fetch("http://localhost:3000/api/wafid", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(result => {
+                        const routeUrl = "{{ route('hospital.book',  ['id' => 'customerId']) }}"; // توليد الرابط
+                        const customerId = customer.id; // مثال على ID العميل، يمكنك تمريره من الـ PHP أو الـ JavaScript
 
-                let mrzCode = this.getAttribute("data-mrz");
-                console.log(mrzCode);
-
-                try {
-                    let response = await fetch(
-                        "http://localhost:3000/check-status", { // Use 127.0.0.1 instead of localhost
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json"
-                            },
-                            body: JSON.stringify({
-                                mrzCode: mrzCode
+                        const url = routeUrl.replace('customerId', customerId);
+                        fetch(url, {
+                                method: "GET", // تأكد من استخدام الطريقة الصحيحة
+                                headers: {
+                                    "Content-Type": "application/json"
+                                },
                             })
-                        });
-
-                    if (!response.ok) throw new Error(
-                        `HTTP Error! Status: ${response.status}`);
-
-                    let result = await response.json();
-
-                    if (result.status === "success") {
-                        Swal.fire({
-                            title: "تم اصدار نتيجة الكشف الطبي بنجاح",
-                            icon: "success",
-                            confirmButtonText: "تم",
-                            showCancelButton: true,
-                            cancelButtonText: "عرض النتيجة",
-                            didOpen: () => {
-                                const cancelButton = document.querySelector(
-                                    ".swal2-cancel");
-                                if (cancelButton) {
-                                    cancelButton.addEventListener("click",
-                                        () => {
-                                            window.open(result.pdf_url,
-                                                "_blank"
-                                            ); // Replace with actual PDF link
-                                        });
+                            .then(response => {
+                                Swal.fire({
+                                    title: customer.name_ar + " تم حجز الكشف الطبي بنجاح",
+                                    icon: "success",
+                                    draggable: true
+                                });
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! Status: ${response.status}`);
                                 }
-                            }
-                        });
-                    } else {
-                        alert("⚠️ " + result.message);
-                    }
+                                return response.json();
+                            })
+                            .then(result => {
 
-                } catch (error) {
-                    alert("❌ Error: " + error.message);
-                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                            });
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
             });
         });
 
@@ -971,7 +1017,7 @@
                     if (result.hospitalName && result.address && result.phone) {
                         // عرض بيانات المستشفى في SweetAlert
                         Swal.fire({
-                            title: "✅ بيانات المستشفى",
+                            title: " بيانات المستشفى",
                             html: `
                         <b>🏥 اسم المركز الطبي:</b> ${result.hospitalName} <br><br>
                         <b>📍 العنوان:</b> ${result.address} <br><br>
@@ -1183,21 +1229,27 @@
         searching: false,
         pageLength: 100,
     });
+    document.querySelectorAll(".finger-print").forEach(button => {
+    button.addEventListener("click", function(e) {
+        // الحصول على بيانات العميل من data-customer
+        const customer = JSON.parse(this.dataset.customer);
 
+        // تقسيم الاسم إلى أجزاء (الاسم الأول، الاسم الثاني، إلخ)
+        let nameParts = customer.name_en_mrz.trim().split(' ');
 
+        // تحضير البيانات لتصديرها إلى Excel
+        const data = [
+            ["الاسم الأول", "الاسم الثاني", "جهة الإصدار", "تاريخ الانتهاء", "الإيميل", "رقم الهاتف", "تاريخ الإصدار", "الجنسية"],
+            [nameParts[0], nameParts[nameParts.length - 1], customer.issue_place, customer.passport_expire_date, "eslam@gmail.com", customer.phone, customer.passport_expire_date, customer.nationality]
+        ];
 
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     document.querySelectorAll(".dropdown-submenu > a").forEach((element) => {
-    //         element.addEventListener("click", function(e) {
-    //             e.preventDefault();
-    //             let submenu = this.nextElementSibling;
-    //             if (submenu.style.display === "block") {
-    //                 submenu.style.display = "none";
-    //             } else {
-    //                 submenu.style.display = "block";
-    //             }
-    //         });
-    //     });
-    // });
+        // إنشاء ملف Excel باستخدام SheetJS
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "البيانات");
+        XLSX.writeFile(workbook, "بيانات البصمة.xlsx");
+    });
+});
+
 </script>
 @stop
