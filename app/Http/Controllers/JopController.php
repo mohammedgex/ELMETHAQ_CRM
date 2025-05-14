@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class JopController extends Controller
 {
@@ -16,7 +17,6 @@ class JopController extends Controller
 
         if (!$customer) {
             return redirect()->back()->with(['error' => 'Customer not found']);
-
         }
 
         // Check required fields exist
@@ -101,12 +101,39 @@ class JopController extends Controller
         $json = $response->json();
 
         if (isset($json['appNo'])) {
-            $customer->e_visa_number = "E".$json['appNo'];
+            $customer->e_visa_number = "E" . $json['appNo'];
             $customer->engaz_request = 'تم الحجز';
             $customer->save();
             return redirect()->route('customer.indes')->with("success", "نجح حجز أنجاز للعميل: " . $first_ar . " وتم تخزين الـ e number الخاص به");
         } else {
             return response()->json(['error' => 'Failed to get application number from response'], 500);
         }
+    }
+
+    public function sendSms(Request $request)
+    {
+        $request->validate([
+            'customer_ids' => "required",
+            "templite"=>"required"
+        ]);
+        ini_set('max_execution_time', 300); // 5 minutes
+
+        $customers = Customer::whereIn("id", $request->customer_ids)->get();
+        foreach ($customers as $customer) {
+
+            Http::withHeaders([
+                'Authorization' => 'Bearer 490|iWcKkcltFVb9x4Or4r1uWDbUBiPXt1N4qU7bHmMM61249c65',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post('https://bulk.whysms.com/api/v3/sms/send', [
+                'recipient' => "2".$customer->phone, // make sure it's in correct international format
+                'sender_id' => 'Elmethaq Co',
+                'type' => 'plain',
+                'message' => $request->templite,
+            ]);
+        }
+        return response()->json([
+            'success'=>'true'
+        ]);
     }
 }

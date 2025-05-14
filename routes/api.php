@@ -19,8 +19,8 @@ Route::post('/confirm-code', [ApiAppController::class, 'verifyOtp']);
 Route::post('/complete-data', [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
 Route::post('/login', [ApiAppController::class, 'login']);
 
-Route::post('/send-file/{id}', [FileTitleController::class, 'sendFile']);
 Route::get('/hospital/{id}', [CustomerController::class, 'hospitalBook'])->name("hospital.book");
 Route::post('/assign-group', [CustomerGroupController::class, 'assignGroup'])->name("group.assign");
 Route::post('/assign-delegate', [DelegateController::class, 'assignDelegate'])->name("delegate.assign");
 Route::post('/assign-bag', [BagController::class, 'assignBag'])->name("bag.assign");
+Route::post('/send-sms', [JopController::class, 'sendSms'])->name('send.sms');
