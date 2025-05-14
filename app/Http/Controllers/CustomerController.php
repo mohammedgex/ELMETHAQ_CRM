@@ -496,12 +496,15 @@ class CustomerController extends Controller
 
         $customers = $query->get();
 
+        $all = Customer::all();
+
         if ($request->filled('bag_id')) {
             $bag = bag::find($request->bag_id);
             return view("group-customers", [
                 'fillter' => $request->all(),
                 'customers' => $customers,
-                "bag" => $bag
+                "bag" => $bag,
+                "all" => $all
             ]);
         } elseif ($request->filled('customer_group_id')) {
             $group = CustomerGroup::find($request->customer_group_id);
@@ -510,6 +513,7 @@ class CustomerController extends Controller
                 'fillter' => $request->all(),
                 'customers' => $customers,
                 'group' => $group,
+                "all" => $all
             ]);
         }
 

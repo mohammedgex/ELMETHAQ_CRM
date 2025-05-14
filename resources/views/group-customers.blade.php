@@ -573,46 +573,42 @@
         </div>
     </div>
     @if (!empty($group))
-
         <!-- النافذة المنبثقة -->
         <!-- Popup Container -->
         <form action="{{ route('group.addToGroup', $group->id) }}" method="post" id="popup"
             style="
-    display: none; 
-    position: fixed; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
-    background-color: #fff; 
-    padding: 30px 35px; 
-    border-radius: 12px; 
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); 
-    z-index: 1000; 
-    width: 400px; 
-    font-family: 'Arial', sans-serif;
-">
+                    display: none; 
+                    position: fixed; 
+                    top: 50%; 
+                    left: 50%; 
+                    transform: translate(-50%, -50%);
+                    background-color: #fff; 
+                    padding: 30px 35px; 
+                    border-radius: 12px; 
+                    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15); 
+                    z-index: 1000; 
+                    width: 400px; 
+                    font-family: 'Arial', sans-serif;">
             @csrf
 
             <!-- Title -->
             <h3
                 style="
-        text-align: center; 
-        margin-bottom: 25px; 
-        color: #2196F3; 
-        font-size: 22px;
-    ">
+                        text-align: center; 
+                        margin-bottom: 25px; 
+                        color: #2196F3; 
+                        font-size: 22px;">
                 اختـر العـميل</h3>
 
             <!-- Select Dropdown -->
             <select id="options" class="select2" name="customer_id"
                 style="
-        width: 100%; 
-        padding: 12px 15px; 
-        font-size: 16px; 
-        border: 1px solid #ccc; 
-        border-radius: 8px; 
-        background-color: #f7f7f7;
-    ">
+                        width: 100%; 
+                        padding: 12px 15px; 
+                        font-size: 16px; 
+                        border: 1px solid #ccc; 
+                        border-radius: 8px; 
+                        background-color: #f7f7f7;">
                 <option value="all">🔍 البحث في جميع الحقول</option>
                 @foreach ($all as $cu)
                     <option value="{{ $cu->id }}">
@@ -625,15 +621,14 @@
             <div style="text-align: center; margin-top: 25px;">
                 <button id="closePopupBtn"
                     style="
-            padding: 12px 25px; 
-            background-color: #e91e63; 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-size: 16px; 
-            width: 100%;
-        "
+                            padding: 12px 25px; 
+                            background-color: #e91e63; 
+                            color: white; 
+                            border: none; 
+                            border-radius: 8px; 
+                            cursor: pointer; 
+                            font-size: 16px; 
+                            width: 100%;"
                     type="submit">اضافة</button>
             </div>
         </form>

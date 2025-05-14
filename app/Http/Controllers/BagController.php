@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\bag;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 
 class BagController extends Controller
@@ -74,5 +75,22 @@ class BagController extends Controller
             'customers' => $bag->customers,
             'bag' => $bag
         ]);
+    }
+
+    public function assignBag(Request $request)
+    {
+        $request->validate([
+            'customers' => 'required|array',
+            'bag' => 'required|exists:bags,id'
+        ]);
+
+        $customers = Customer::whereIn('id', $request->customers)->get();
+
+        foreach ($customers as $customer) {
+            $customer->bag_id = $request->bag;
+            $customer->save();
+        }
+
+        return response()->json(['message' => 'تم تعيين الحقيبة بنجاح']);
     }
 }

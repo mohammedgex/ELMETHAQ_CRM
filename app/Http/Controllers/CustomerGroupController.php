@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
@@ -56,7 +57,6 @@ class CustomerGroupController extends Controller
         $group->save();
         return redirect()->route('customer-groups.index')->with('edit_success', value: $group->title);
     }
-
     public function delete($id)
     {
         # code...
@@ -69,5 +69,28 @@ class CustomerGroupController extends Controller
         }
         $group->delete();
         return redirect()->route('customer-groups.index')->with('delete_success', '');
+    }
+
+    public function assignGroup(Request $request)
+    {
+        # code...
+        $request->validate([
+            'customers' => "required|array",
+            "group" => 'required'
+        ]);
+        $group = CustomerGroup::findOrFail($request->group);  // جلب المجموعة من جدول groups
+
+        // تحديث جميع العملاء في المصفوفة وتعيين المجموعة لهم
+        $customers = Customer::whereIn('id', $request->customers)->get();
+        // return $customers;
+
+        foreach ($customers as $customer) {
+            $customer->customer_group_id = $group->id;  // تعيين المجموعة للعميل
+            $customer->save();  // حفظ التغييرات
+        }
+        return response()->json([
+            'message' => 'تم تعيين المجموعة بنجاح',
+            'status' => true
+        ]);
     }
 }

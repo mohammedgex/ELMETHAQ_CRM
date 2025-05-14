@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Customer;
 use TCPDF;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
@@ -63,7 +65,7 @@ class DelegateController extends Controller
         $delegate->phone = $request->phone;
         $delegate->card_id = $request->card_id;
         $delegate->save();
-        return redirect()->route('Delegates.create')->with('edit_success',value: $delegate->name);
+        return redirect()->route('Delegates.create')->with('edit_success', value: $delegate->name);
     }
 
     public function delete($id)
@@ -77,75 +79,42 @@ class DelegateController extends Controller
             ]);
         }
         $delegate->delete();
-        return redirect()->route('Delegates.create')->with('delete_success','');
+        return redirect()->route('Delegates.create')->with('delete_success', '');
     }
 
-     public function exportDelegates($id)
+    // طباعة pdf المندوب
+    public function downloadPdf($id)
     {
+        // Fetch delegate data (change '1' to a dynamic value if needed)
+        $delegate = Delegate::find($id);
 
-        // Define file path
-        $filePath = storage_path('app/public/delegates.xlsx');
 
-        // Fetch delegates data
-        $delegate = Delegate::find($id); 
-        // Define header style
-       /* Create a border around a cell */
-        $border = new Border(
-                new BorderPart(Border::BOTTOM, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-                new BorderPart(Border::LEFT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-                new BorderPart(Border::RIGHT, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID),
-                new BorderPart(Border::TOP, Color::LIGHT_BLUE, Border::WIDTH_THIN, Border::STYLE_SOLID)
-            );
+        // Check if delegate exists
+        if (!$delegate) {
+            return abort(404, message: 'Delegate not found');
+        }
 
-        $style = (new Style())
-        ->setFontBold()
-        ->setFontSize(15)
-        ->setFontColor(Color::BLUE)
-        ->setShouldWrapText()
-        ->setBackgroundColor(Color::YELLOW)
-        ->setBorder($border);
+        // Load the Blade view with delegate data
+        $pdf = SnappyPdf::loadView('pdf.invoice', ['delegate' => $delegate])
+            ->setPaper('a4');
 
-        $headerStyle = (new Style())
-            ->setFontBold()
-            ->setFontSize(50)
-            ->setFontColor(Color::BLACK)
-            ->setBackgroundColor(Color::BLUE);
-
-        // Create and write to Excel file
-        $writer = SimpleExcelWriter::create($filePath)
-            ->addHeader(['ID', 'Name', 'Phone', 'Card ID'])
-            ->setHeaderStyle($style);
-
-            $writer->addRow([
-                $delegate->id,
-                $delegate->name,
-                $delegate->phone,
-                $delegate->card_id
-            ], $style);
-        
-
-        // Return the file for download
-        return Response::download($filePath, name: 'delegate_'.$delegate->name.'.xlsx')->deleteFileAfterSend();
+        // Download the PDF
+        return $pdf->download("delegate_{$delegate->name}.pdf");
     }
 
-        // طباعة pdf المندوب
-        public function downloadPdf($id)
-            {
-                // Fetch delegate data (change '1' to a dynamic value if needed)
-                $delegate = Delegate::find($id); 
+    public function assignDelegate(Request $request)
+    {
+        # code...
+        $request->validate([
+            'customers' => 'required|array',
+            'delegate' => 'required|exists:delegates,id'
+        ]);
+        $customers = Customer::whereIn('id', $request->customers)->get();
 
-                
-                // Check if delegate exists
-                if (!$delegate) {
-                    return abort(404, message: 'Delegate not found');
-                }
-
-                // Load the Blade view with delegate data
-                $pdf = SnappyPdf::loadView('pdf.invoice', ['delegate' => $delegate])
-                    ->setPaper('a4');
-
-                // Download the PDF
-                return $pdf->download("delegate_{$delegate->name}.pdf");
-            }
-
+        foreach ($customers as $customer) {
+            $customer->delegate_id = $request->delegate;
+            $customer->save();
+        }
+        return response()->json(['message' => 'تم تعيين المندوب بنجاح']);
+    }
 }

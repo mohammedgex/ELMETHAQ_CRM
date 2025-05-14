@@ -76,23 +76,25 @@
                                                 رسالة واتساب</button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-info" onclick="sendSMS('option3')">تعيين
-                                                مجموعة</button>
+                                            <button class="dropdown-item text-info" data-bs-toggle="modal"
+                                                data-bs-target="#groupModal">
+                                                تعيين مجموعة
+                                            </button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-info" onclick="sendSMS('option4')">تعيين
-                                                مندوب</button>
+                                            <button class="dropdown-item text-info" data-bs-toggle="modal"
+                                                data-bs-target="#delegateModal">
+                                                تعيين مندوب
+                                            </button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-info" onclick="sendSMS('option5')">تعيين
-                                                تأشيرة</button>
+                                            <button class="dropdown-item text-info" data-bs-toggle="modal"
+                                                data-bs-target="#bagModal">
+                                                تعيين حقيبة
+                                            </button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-info" onclick="sendSMS('option5')">تعيين
-                                                تأشيرة</button>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item text-danger" onclick="sendSMS('option6')">بلاك
+                                            <button class="dropdown-item text-danger">بلاك
                                                 ليست</button>
                                         </li>
                                         <li>
@@ -468,11 +470,6 @@
                                 <button class="btn btn-outline-dark">أرشيف</button>
                             </div>
                         </div>
-
-
-
-
-
                         <div class="table-responsive">
                             <table class="table table-hover text-center animate__animated animate__fadeInUp"
                                 id="example">
@@ -490,336 +487,163 @@
                                         <th>السن</th>
                                         <th>المندوب</th>
                                         <th>المجموعة</th>
-                                        <!-- <th>نوع الرخصة</th> -->
                                         <th>نوع التأشيرة</th>
                                         <th>الحالة </th>
-                                        <!-- <th>رقم جواز السفر</th> -->
                                         <th>عدد المرفقات</th>
-                                        <!-- <th>عدد المدفوعات</th> -->
-                                        <!-- <th> تاريخ التسجيل</th> -->
-                                        <!-- <th>اخر تعديل</th> -->
                                         <th> الإجراءات</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <form action="" method="POST">
-                                        @csrf
-                                        @foreach ($customers as $customer)
-                                            <tr date-customer="{{ $customer }}"
-                                                class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
-                                                <td>
-                                                    <input type="checkbox" id="myCheckbox"
-                                                        class="row-checkbox form-check-input rounded" name="customer_id"
-                                                        value="{{ $customer->id }}">
-                                                </td>
-                                                <td>#{{ $customer->id }}</td>
-                                                <td class="highlight"><a
-                                                        href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
-                                                </td>
-                                                <td class="highlight"><span
-                                                        class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
-                                                </td>
-                                                <td class="highlight">{{ $customer->card_id }}</td>
-                                                <td class="highlight">{{ $customer->phone }}</td>
-                                                <td class="highlight">{{ $customer->age }}</td>
-                                                <td class="highlight"><a
-                                                        href="#">{{ $customer->delegate->name ?? '' }}</a>
-                                                </td>
-                                                <td class="highlight"><a
-                                                        href="#">{{ $customer->customerGroup->title ?? '' }}</a>
-                                                </td>
-                                                <!-- <td class="highlight">{{ $customer->license_type }}</td> -->
-                                                <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}
-                                                </td>
-                                                <td class="highlight">{{ $customer->status }}</td>
-                                                <!-- <td class="highlight">{{ $customer->passport_id }}</td> -->
-                                                <td class="highlight"><a
-                                                        href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
-                                                </td>
-                                                <!-- <td class="highlight">{{ count($customer->payments) }}</td>
-                                                                                                                                                    <td class="highlight">{{ $customer->created_at }}</td>
-                                                                                                                                                    <td class="highlight">{{ $customer->updated_at }}</td> -->
-                                                <td>
-                                                    <div class="btn-group">
-                                                        <button
-                                                            class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                            <i class="fas fa-ellipsis-v"></i>
-                                                        </button>
-                                                        <ul class="dropdown-menu"
-                                                            style="    top: 0;
-    left: -100%;
-    width: fit-content;">
-                                                            <!-- خيار التعديل -->
-                                                            <li>
-                                                                <a class="dropdown-item text-primary"
-                                                                    href="{{ route('customer.add', $customer->id) }}">
-                                                                    <i class="fas fa-edit"></i> تعديل
-                                                                </a>
-                                                            </li>
+                                    @foreach ($customers as $customer)
+                                        <tr date-customer="{{ $customer }}"
+                                            class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
+                                            <td>
+                                                <input type="checkbox" id="myCheckbox"
+                                                    class="row-checkbox form-check-input rounded row-checkbox"
+                                                    name="customer_id" value="{{ $customer->id }}">
+                                            </td>
+                                            <td>#{{ $customer->id }}</td>
+                                            <td class="highlight"><a
+                                                    href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
+                                            </td>
+                                            <td class="highlight"><span
+                                                    class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
+                                            </td>
+                                            <td class="highlight">{{ $customer->card_id }}</td>
+                                            <td class="highlight">{{ $customer->phone }}</td>
+                                            <td class="highlight">{{ $customer->age }}</td>
+                                            <td class="highlight"><a
+                                                    href="#">{{ $customer->delegate->name ?? '' }}</a>
+                                            </td>
+                                            <td class="highlight"><a
+                                                    href="#">{{ $customer->customerGroup->title ?? '' }}</a>
+                                            </td>
+                                            <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}
+                                            </td>
+                                            <td class="highlight">{{ $customer->status }}</td>
+                                            <td class="highlight"><a
+                                                    href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button
+                                                        class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
+                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu"
+                                                        style="top: 0;left: -100%;width: fit-content;">
+                                                        <!-- خيار التعديل -->
+                                                        <li>
+                                                            <a class="dropdown-item text-primary"
+                                                                href="{{ route('customer.add', $customer->id) }}">
+                                                                <i class="fas fa-edit"></i> تعديل
+                                                            </a>
+                                                        </li>
 
-                                                            <!-- خيار العرض -->
-                                                            <li>
-                                                                <a class="dropdown-item text-info"
-                                                                    href="{{ route('customer.show', $customer->id) }}">
-                                                                    <i class="fas fa-eye"></i> عرض
-                                                                </a>
-                                                            </li>
-                                                            @if ($customer->blackList)
-                                                                @if ($customer->blackList->block == false)
-                                                                    <li>
-                                                                        <a class="dropdown-item text-danger"
-                                                                            href="{{ route('customers.block', $customer->id) }}">
-                                                                            <i class="fas fa-users"></i> بلوك
-                                                                        </a>
-                                                                    </li>
-                                                                @elseif ($customer->blackList->block == true)
-                                                                    <li>
-                                                                        <a class="dropdown-item text-danger"
-                                                                            href="{{ route('customers.unblock', $customer->id) }}">
-                                                                            <i class="fas fa-users"></i> ازالة البلوك
-                                                                        </a>
-                                                                    </li>
-                                                                @endif
+                                                        <!-- خيار العرض -->
+                                                        <li>
+                                                            <a class="dropdown-item text-info"
+                                                                href="{{ route('customer.show', $customer->id) }}">
+                                                                <i class="fas fa-eye"></i> عرض
+                                                            </a>
+                                                        </li>
+                                                        @if ($customer->blackList)
+                                                            @if ($customer->blackList->block == false)
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="{{ route('customers.block', $customer->id) }}">
+                                                                        <i class="fas fa-users"></i> بلوك
+                                                                    </a>
+                                                                </li>
+                                                            @elseif ($customer->blackList->block == true)
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="{{ route('customers.unblock', $customer->id) }}">
+                                                                        <i class="fas fa-users"></i> ازالة البلوك
+                                                                    </a>
+                                                                </li>
                                                             @endif
-                                                            <!-- الكشوفات والحجوزات -->
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-item text-primary dropdown-toggle"
-                                                                    href="#" id="submenu-toggle">
-                                                                    <i class="fas fa-list-alt"></i> الكشوفات والحجوزات
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end submenu"
-                                                                    aria-labelledby="submenu-toggle">
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                            href="{{ route('net', $customer->id) }}"><i
-                                                                                class="fas fa-globe"></i> حجز
-                                                                            نت</a></li>
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                            target="_blank"
-                                                                            href="{{ route('print_visaEntriy', $customer->id) }}"><i
-                                                                                class="fas fa-passport"></i>
-                                                                            طباعة طلب دخول </a></li>
-                                                                    <li><a data-customer='@json($customer)'
-                                                                            class="finger-print dropdown-item text-dark hover:bg-light"
-                                                                            href="#" id="virus"><i
-                                                                                class="fas fa-virus"></i>بيانات البصمة</a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a data-customer='@json($customer)'
-                                                                            class="dropdown-item text-dark hover:bg-light check-medical-status"
-                                                                            id="check-medical-status" href="#">
-                                                                            <i class="fas fa-hospital"></i> حجز كشف طبي
-                                                                        </a>
-                                                                    </li>
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
-                                                                            href="#"><i
-                                                                                class="fas fa-clinic-medical"></i> نتيجة
-                                                                            وبيانات المستشفى</a></li>
-                                                                </ul>
-                                                            </li>
+                                                        @endif
+                                                        <!-- الكشوفات والحجوزات -->
+                                                        <li class="dropdown">
+                                                            <a class="dropdown-item text-primary dropdown-toggle"
+                                                                href="#" id="submenu-toggle">
+                                                                <i class="fas fa-list-alt"></i> الكشوفات والحجوزات
+                                                            </a>
+                                                            <ul class="dropdown-menu dropdown-menu-end submenu"
+                                                                aria-labelledby="submenu-toggle">
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                        href="{{ route('net', $customer->id) }}"><i
+                                                                            class="fas fa-globe"></i> حجز
+                                                                        نت</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                        target="_blank"
+                                                                        href="{{ route('print_visaEntriy', $customer->id) }}"><i
+                                                                            class="fas fa-passport"></i>
+                                                                        طباعة طلب دخول </a></li>
+                                                                <li><a data-customer='@json($customer)'
+                                                                        class="finger-print dropdown-item text-dark hover:bg-light"
+                                                                        href="#" id="virus"><i
+                                                                            class="fas fa-virus"></i>بيانات البصمة</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a data-customer='@json($customer)'
+                                                                        class="dropdown-item text-dark hover:bg-light check-medical-status"
+                                                                        id="check-medical-status" href="#">
+                                                                        <i class="fas fa-hospital"></i> حجز كشف طبي
+                                                                    </a>
+                                                                </li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
+                                                                        href="#"><i
+                                                                            class="fas fa-clinic-medical"></i> نتيجة
+                                                                        وبيانات المستشفى</a></li>
+                                                            </ul>
+                                                        </li>
 
 
-                                                            <!-- الطباعة -->
-                                                            <li class="dropdown">
-                                                                <a class="dropdown-item text-primary dropdown-toggle"
-                                                                    href="#" id="submenu-toggle">
-                                                                    <i class="fas fa-print"></i> طباعة
-                                                                </a>
-                                                                <ul class="dropdown-menu dropdown-menu-end submenu"
-                                                                    aria-labelledby="submenu-toggle">
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                            href="#"><i class="fas fa-file-alt"></i>
-                                                                            ملف
-                                                                            العميل</a></li>
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                            href="#"><i
-                                                                                class="fas fa-envelope-open-text"></i> خطاب
-                                                                            ترشيح</a></li>
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                            href="#"><i class="fas fa-history"></i>
-                                                                            تاريخ العميل</a></li>
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                            href="{{ route('clients.print.attachments', $customer->id) }}"><i
-                                                                                class="fas fa-paperclip"></i>
-                                                                            مرفقات العميل</a></li>
-                                                                    <li><a class="dropdown-item text-dark hover:bg-light "
-                                                                            href="{{ route('clients.print.payments', $customer->id) }}"><i
-                                                                                class="fas fa-money-check-alt"></i> عمليات
-                                                                            الدفع</a></li>
-                                                                </ul>
-                                                            </li>
+                                                        <!-- الطباعة -->
+                                                        <li class="dropdown">
+                                                            <a class="dropdown-item text-primary dropdown-toggle"
+                                                                href="#" id="submenu-toggle">
+                                                                <i class="fas fa-print"></i> طباعة
+                                                            </a>
+                                                            <ul class="dropdown-menu dropdown-menu-end submenu"
+                                                                aria-labelledby="submenu-toggle">
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                        href="#"><i class="fas fa-file-alt"></i>
+                                                                        ملف
+                                                                        العميل</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                        href="#"><i
+                                                                            class="fas fa-envelope-open-text"></i> خطاب
+                                                                        ترشيح</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                        href="#"><i class="fas fa-history"></i>
+                                                                        تاريخ العميل</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light"
+                                                                        href="{{ route('clients.print.attachments', $customer->id) }}"><i
+                                                                            class="fas fa-paperclip"></i>
+                                                                        مرفقات العميل</a></li>
+                                                                <li><a class="dropdown-item text-dark hover:bg-light "
+                                                                        href="{{ route('clients.print.payments', $customer->id) }}"><i
+                                                                            class="fas fa-money-check-alt"></i> عمليات
+                                                                        الدفع</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <!-- تصدير إلى إكسل -->
+                                                        <li><a class="dropdown-item text-success" href="#"><i
+                                                                    class="fas fa-file-excel"></i> تصدير العميل
+                                                                إكسيل</a>
+                                                        </li>
 
+                                                        <!-- إضافة العميل إلى القائمة السوداء -->
 
-
-
-                                                            <!-- تصدير إلى إكسل -->
-                                                            <li><a class="dropdown-item text-success" href="#"><i
-                                                                        class="fas fa-file-excel"></i> تصدير العميل
-                                                                    إكسيل</a>
-                                                            </li>
-
-                                                            <!-- إضافة العميل إلى القائمة السوداء -->
-
-                                                        </ul>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        <!-- <button type="submit">إرسال</button> -->
-                                    </form>
-                                    <!-- @foreach ($customers as $customer)
-    <tr date-customer="{{ $customer }}"
-                                                                                                                        class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : 'table-light' }}">
-                                                                                                                        <td>
-                                                                                                                            <input type="checkbox" id="myCheckbox"
-                                                                                                                                class="row-checkbox form-check-input rounded" value="{{ $customer->id }}">
-                                                                                                                        </td>
-                                                                                                                        <td>#{{ $customer->id }}</td>
-                                                                                                                        <td class="highlight"><a
-                                                                                                                                href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
-                                                                                                                        </td>
-                                                                                                                        <td class="highlight"><span
-                                                                                                                                class="badge bg-success text-white">{{ $customer->jobTitle->title ?? '' }}</span>
-                                                                                                                        </td>
-                                                                                                                        <td class="highlight">{{ $customer->card_id }}</td>
-                                                                                                                        <td class="highlight">{{ $customer->phone }}</td>
-                                                                                                                        <td class="highlight">{{ $customer->age }}</td>
-                                                                                                                        <td class="highlight"><a
-                                                                                                                                href="#">{{ $customer->delegate->name ?? '' }}</a>
-                                                                                                                        </td>
-                                                                                                                        <td class="highlight"><a
-                                                                                                                                href="#">{{ $customer->customerGroup->title ?? '' }}</a></td>
-                                                                                                                        <td class="highlight">{{ $customer->visaType->outgoing_number ?? '' }}</td>
-                                                                                                                        <td class="highlight">{{ $customer->status }}</td>
-                                                                                                                        <td class="highlight"><a
-                                                                                                                                href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach">{{ count($customer->documentTypes) }}</a>
-                                                                                                                        </td>
-                                                                                                                   
-                                                                                                                        <td>
-                                                                                                                            <div class="btn-group">
-                                                                                                                                <button
-                                                                                                                                    class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
-                                                                                                                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                                                                                    <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                </button>
-                                                                                                                                <ul class="dropdown-menu" style="    top: 0;
-    left: -100%;
-    width: fit-content;">
-                                                                                                                                    <li>
-                                                                                                                                        <a class="dropdown-item text-primary"
-                                                                                                                                            href="{{ route('customer.add', $customer->id) }}">
-                                                                                                                                            <i class="fas fa-edit"></i> تعديل
-                                                                                                                                        </a>
-                                                                                                                                    </li>
-
-                                                                                                                                    <li>
-                                                                                                                                        <a class="dropdown-item text-info"
-                                                                                                                                            href="{{ route('customer.show', $customer->id) }}">
-                                                                                                                                            <i class="fas fa-eye"></i> عرض
-                                                                                                                                        </a>
-                                                                                                                                    </li>
-                                                                                                                                    @if ($customer->blackList)
-    @if ($customer->blackList->block == false)
-    <li>
-                                                                                                                                        <a class="dropdown-item text-danger"
-                                                                                                                                            href="{{ route('customers.block', $customer->id) }}">
-                                                                                                                                            <i class="fas fa-users"></i> بلوك
-                                                                                                                                        </a>
-                                                                                                                                    </li>
-@elseif ($customer->blackList->block == true)
-    <li>
-                                                                                                                                        <a class="dropdown-item text-danger"
-                                                                                                                                            href="{{ route('customers.unblock', $customer->id) }}">
-                                                                                                                                            <i class="fas fa-users"></i> ازالة البلوك
-                                                                                                                                        </a>
-                                                                                                                                    </li>
-    @endif
-    @endif
-                                                                                                                                    <li class="dropdown">
-                                                                                                                                        <a class="dropdown-item text-primary dropdown-toggle"
-                                                                                                                                            href="#" id="submenu-toggle">
-                                                                                                                                            <i class="fas fa-list-alt"></i> الكشوفات والحجوزات
-                                                                                                                                        </a>
-                                                                                                                                        <ul class="dropdown-menu dropdown-menu-end submenu"
-                                                                                                                                            aria-labelledby="submenu-toggle">
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="{{ route('net', $customer->id) }}"><i class="fas fa-globe"></i> حجز
-                                                                                                                                                    نت</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i class="fas fa-passport"></i>
-                                                                                                                                                    بيانات التأشيرة</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i class="fas fa-virus"></i> كشف
-                                                                                                                                                    الفايرس</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light check-medical-status"
-                                                                                                                                                    href="#"><i class="fas fa-hospital"></i>
-                                                                                                                                                    نتيجة كشف طبي</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light check-medical-hospital"
-                                                                                                                                                    href="#"><i
-                                                                                                                                                        class="fas fa-clinic-medical"></i> نتيجة
-                                                                                                                                                    وبيانات المستشفى</a></li>
-                                                                                                                                        </ul>
-                                                                                                                                    </li>
-
-                                                                                                                                    <li class="dropdown">
-                                                                                                                                        <a class="dropdown-item text-primary dropdown-toggle"
-                                                                                                                                            href="#" id="submenu-toggle">
-                                                                                                                                            <i class="fas fa-print"></i> طباعة
-                                                                                                                                        </a>
-                                                                                                                                        <ul class="dropdown-menu dropdown-menu-end submenu"
-                                                                                                                                            aria-labelledby="submenu-toggle">
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i class="fas fa-file-alt"></i> ملف
-                                                                                                                                                    العميل</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i
-                                                                                                                                                        class="fas fa-envelope-open-text"></i> خطاب
-                                                                                                                                                    ترشيح</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i class="fas fa-history"></i>
-                                                                                                                                                    تاريخ العميل</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="{{ route('clients.print.attachments', $customer->id) }}"><i
-                                                                                                                                                        class="fas fa-paperclip"></i>
-                                                                                                                                                    مرفقات العميل</a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light "
-                                                                                                                                                    href="{{ route('clients.print.payments', $customer->id) }}"><i
-                                                                                                                                                        class="fas fa-money-check-alt"></i> عمليات
-                                                                                                                                                    الدفع</a></li>
-                                                                                                                                        </ul>
-                                                                                                                                    </li>
-
-                                                                                                                                    <li class="dropdown">
-                                                                                                                                        <a class="dropdown-item text-primary dropdown-toggle"
-                                                                                                                                            href="#" id="submenu-toggle">
-                                                                                                                                            <i class="fas fa-file-upload"></i> المرفقات
-                                                                                                                                        </a>
-                                                                                                                                        <ul class="dropdown-menu dropdown-menu-end submenu"
-                                                                                                                                            aria-labelledby="submenu-toggle">
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i class="fas fa-download"></i>
-                                                                                                                                                    تحميل </a></li>
-                                                                                                                                            <li><a class="dropdown-item text-dark hover:bg-light"
-                                                                                                                                                    href="#"><i class="fas fa-eye"></i> عرض </a>
-                                                                                                                                            </li>
-                                                                                                                                        </ul>
-                                                                                                                                    </li>
-
-
-                                                                                                                                    <li><a class="dropdown-item text-success" href="#"><i
-                                                                                                                                                class="fas fa-file-excel"></i> تصدير العميل إكسيل</a>
-                                                                                                                                    </li>
-
-
-                                                                                                                                </ul>
-                                                                                                                            </div>
-                                                                                                                        </td>
-
-
-
-                                                                                                                    </tr>
-    @endforeach -->
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -827,6 +651,91 @@
                 </div> <!-- End card -->
             </div>
         </div>
+        <!-- تعيين مجموعة -->
+        <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-semibold" id="groupModalLabel">تعيين مجموعة للعملاء المحددين</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <form id="assignGroupForm">
+                            <div class="mb-3">
+                                <label for="groupSelect" class="form-label">اختر المجموعة</label>
+                                <select class="form-select rounded" id="groupSelect" name="group_id" required>
+                                    <option value="" selected disabled>-- اختر المجموعة --</option>
+                                    @foreach ($groups as $group)
+                                        <option value="{{ $group->id }}">{{ $group->id }}:{{ $group->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary px-4">حفظ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- تعيين مندوب --}}
+        <div class="modal fade" id="delegateModal" tabindex="-1" aria-labelledby="delegateModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-semibold" id="delegateModalLabel">تعيين مندوب للعملاء المحددين</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <form id="assignDelegateForm">
+                            <div class="mb-3">
+                                <label for="delegateSelect" class="form-label">اختر المندوب</label>
+                                <select class="form-select rounded" id="delegateSelect" name="delegate_id" required>
+                                    <option value="" selected disabled>-- اختر المندوب --</option>
+                                    @foreach ($delegates as $delegate)
+                                        <option value="{{ $delegate->id }}">{{ $delegate->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary px-4">حفظ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- تعيين حقيبة --}}
+        <div class="modal fade" id="bagModal" tabindex="-1" aria-labelledby="bagModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header border-0 pb-0">
+                        <h5 class="modal-title fw-semibold" id="bagModalLabel">تعيين حقيبة للعملاء المحددين</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                    </div>
+                    <div class="modal-body pt-0">
+                        <form id="assignBagForm">
+                            <div class="mb-3">
+                                <label for="bagSelect" class="form-label">اختر الحقيبة</label>
+                                <select class="form-select rounded" id="bagSelect" name="bag_id" required>
+                                    <option value="" selected disabled>-- اختر الحقيبة --</option>
+                                    @foreach (App\Models\bag::all() as $bag)
+                                        <option value="{{ $bag->id }}">{{ $bag->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary px-4">حفظ</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         @if (Session::has('success'))
             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
@@ -913,6 +822,45 @@
         .dropdown-item:hover+.submenu,
         .submenu:hover {
             display: block;
+        }
+
+
+        /* تعيين مجموعة */
+        .modal-content {
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: none;
+            padding: 1rem;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-select {
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-color: #ddd;
+        }
+
+        .btn-primary {
+            border-radius: 0.5rem;
+        }
+
+        .btn-close {
+            background: none;
+            opacity: 0.7;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
         }
     </style>
 
@@ -1304,6 +1252,137 @@
                 XLSX.utils.book_append_sheet(workbook, worksheet, "البيانات");
                 XLSX.writeFile(workbook, "بيانات البصمة.xlsx");
             });
+        });
+        // ######################################################################### تعيين مجموعة
+        document.getElementById('assignGroupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const selectedGroupId = document.getElementById('groupSelect').value;
+
+            const selectedCustomerIds = Array.from(document.querySelectorAll('.row-checkbox:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedCustomerIds.length === 0) {
+                alert("يرجى تحديد عملاء أولاً.");
+                return;
+            }
+            console.log(selectedCustomerIds);
+
+            fetch('{{ route('group.assign') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        customers: selectedCustomerIds,
+                        group: selectedGroupId
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "تم تعيين المجموعة للعملاء بنجاح",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('حدث خطأ أثناء التعيين');
+                });
+        });
+        // ############################################################# تعيين مندوب
+        document.getElementById('assignDelegateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const delegateId = document.getElementById('delegateSelect').value;
+            const selectedCustomerIds = Array.from(document.querySelectorAll('input[name="customer_id"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedCustomerIds.length === 0) {
+                alert("الرجاء تحديد العملاء أولاً.");
+                return;
+            }
+
+            fetch('{{ route('delegate.assign') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        customers: selectedCustomerIds,
+                        delegate: delegateId
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "تم تعيين المندوب للعملاء بنجاح",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("حدث خطأ أثناء التعيين");
+                });
+        });
+        // ###################################################################### تعيين حقيبة 
+        document.getElementById('assignBagForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const bagId = document.getElementById('bagSelect').value;
+            const selectedCustomerIds = Array.from(document.querySelectorAll('input[name="customer_id"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            if (selectedCustomerIds.length === 0) {
+                alert("الرجاء تحديد العملاء أولاً.");
+                return;
+            }
+
+            fetch('{{ route('bag.assign') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        customers: selectedCustomerIds,
+                        bag: bagId
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "تم تعيين الحقيبة للعملاء بنجاح",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("حدث خطأ أثناء التعيين");
+                });
         });
     </script>
 @stop
