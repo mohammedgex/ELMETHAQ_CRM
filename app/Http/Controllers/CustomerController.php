@@ -17,12 +17,6 @@ use App\Models\PaymentTitle;
 use App\Models\Sponser;
 use App\Models\VisaType;
 use Carbon\Carbon;
-use Spatie\SimpleExcel\SimpleExcelWriter;
-use Illuminate\Support\Facades\Response;
-use OpenSpout\Common\Entity\Style\Border;
-use OpenSpout\Common\Entity\Style\BorderPart;
-use OpenSpout\Common\Entity\Style\Color;
-use OpenSpout\Common\Entity\Style\Style;
 use Illuminate\Http\Request;
 
 
@@ -91,8 +85,11 @@ class CustomerController extends Controller
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
         $visas = VisaType::all();
-        $customers = Customer::all();
-
+        $customers = Customer::with([
+            'sponser',
+            'visaType',
+            'customerGroup.visaProfession'
+        ])->get();
         return view("customers.customer", [
             'customers' => $customers,
             'delegates' => $delegates,
@@ -703,4 +700,15 @@ class CustomerController extends Controller
             'success' => 'done'
         ]);
     }
+    public function engaz_request(Request $request,)
+    {
+        $customer = Customer::find($request->customer_id);
+        $customer->e_visa_number = "E" . $request->e_number;
+        $customer->engaz_request = "تم الحجز";
+        $customer->save();
+        return response()->json([
+            'success' => 'done'
+        ]);
+    }
+
 }

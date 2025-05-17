@@ -72,7 +72,12 @@
                                             رسالة نصية</button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-success" >
+                                        <button class="dropdown-item text-primary" id="collectSelected">
+                                            إرسال حجز نت
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button class="dropdown-item text-success">
                                             إرسال رسالة واتساب
                                         </button>
                                     </li>
@@ -99,8 +104,7 @@
                                             ليست</button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-secondary"
-                                            onclick="sendSMS('option7')">أرشفة</button>
+                                        <button class="dropdown-item text-secondary">أرشفة</button>
                                     </li>
                                 </ul>
                             </div>
@@ -501,7 +505,7 @@
                                     <td>
                                         <input type="checkbox" id="myCheckbox"
                                             class="row-checkbox form-check-input rounded row-checkbox"
-                                            name="customer_id" value="{{ $customer->id }}">
+                                            name="customer_id" value="{{ $customer->id }}" data-customer='@json($customer)'>
                                     </td>
                                     <td>#{{ $customer->id }}</td>
                                     <td class="highlight"><a
@@ -764,7 +768,7 @@
                                 <option value="" disabled selected>-- اختر القالب --</option>
                                 <!-- يتم إضافة الأسماء هنا عبر JavaScript -->
                                 <option value="مبروك النجاح بالكشف الطبي">قالب لائق بالكشف الطبي</option>
-                                
+
                             </select>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -1543,7 +1547,7 @@
                 },
                 body: JSON.stringify({
                     customer_ids: selectedCustomerIds,
-                    templite : templite
+                    templite: templite
                 })
             })
             .then(res => res.json())
@@ -1564,6 +1568,109 @@
                 console.error(err);
                 alert("حدث خطأ أثناء التعيين");
             });
+    });
+
+    // ####################### انجاز
+    document.getElementById('collectSelected').addEventListener('click', function() {
+        const selectedCustomers = [];
+
+        document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
+            const customerData = checkbox.getAttribute('data-customer');
+            selectedCustomers.push(JSON.parse(customerData));
+        });
+
+        selectedCustomers.forEach(customer => {
+            const name_ar = customer.name_ar?.split(" ") || [];
+            const name_en = customer.name_en_mrz?.split(" ") || [];
+
+            if (name_ar.length < 3 || name_en.length < 3) {
+                console.error("Invalid name format");
+                // هنا يمكنك إظهار رسالة للمستخدم أو إيقاف العملية
+            }
+
+            // تقسيم الاسم العربي
+            const first_ar = name_ar[0] || "";
+            const middle_ar = name_ar[1] || "";
+            const last_ar = name_ar[2] || "";
+            const end_ar = name_ar[name_ar.length - 1] || "";
+
+            // تقسيم الاسم الإنجليزي
+            const first_en = name_en[0] || "";
+            const middle_en = name_en[1] || "";
+            const last_en = name_en[2] || "";
+            const end_en = name_en[name_en.length - 1] || "";
+
+            const data = {
+                UserName: "مكتب768",
+                Password: "Ahmed121@@@",
+                VisaKind: "تأشيرة العمل المؤقت لخدمات الحج والعمرة",
+                NATIONALITY: "EGY",
+                ResidenceCountry: "272",
+                EmbassyCode: "320",
+                NumberOfEntries: "0",
+                NumberEntryDay: "90",
+                ResidencyInKSA: "120",
+                AFIRSTNAME: first_ar,
+                AFATHER: middle_ar,
+                AGRAND: last_ar,
+                AFAMILY: end_ar,
+                EFIRSTNAME: first_en,
+                EFATHER: middle_en,
+                EGRAND: last_en,
+                EFAMILY: end_en,
+                PASSPORTnumber: customer.passport_id,
+                PASSPORType: "1",
+                PASSPORT_ISSUE_PLACE: "مصر",
+                PASSPORT_ISSUE_DATE: "05/04/2023",
+                PASSPORT_EXPIRY_DATE: customer.passport_expire_date,
+                BIRTH_PLACE: "القاهرة",
+                BIRTH_DATE: customer.date_birth,
+                PersonId: customer.card_id,
+                DEGREE: "-",
+                DEGREE_SOURCE: "-",
+                ADDRESS_HOME: "بحره",
+                Personal_Email: "moha@gmail.com",
+                SPONSER_NAME: customer.sponser.name,
+                SPONSER_NUMBER: customer.sponser.id_number,
+                SPONSER_ADDRESS: customer.sponser.address,
+                SPONSER_PHONE: customer.sponser.phone,
+                COMING_THROUGH: "2",
+                ENTRY_POINT: "1",
+                ExpectedEntryDate: new Date(new Date().setMonth(new Date().getMonth() + 2)).toLocaleDateString('en-GB'),
+                porpose: customer.visa_type.porpose,
+                car_number: "SV123",
+                RELIGION: "1",
+                SOCIAL_STATUS: "2",
+                Sex: "1",
+                ClassifyOccupations: customer.customer_group.visa_profession.job_title,
+                JOB_OR_RELATION_Id: customer.customer_group.visa_profession.job
+            };
+
+            fetch('http://localhost:3000/submit-all', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(res => res.json())
+            .then(response => 
+            fetch('{{ route("engaz_request") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    customer_id :customer.id,
+                    e_number: response["appNo"]
+                })
+            })
+            .then(res => res.json())
+            .then(response => console.log("done"))
+            .catch(err => console.error('فشل الإرسال', err))
+            )
+            .catch(err => console.error('فشل الإرسال', err));
+        });
     });
 </script>
 @stop
