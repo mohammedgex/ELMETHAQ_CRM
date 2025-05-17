@@ -369,6 +369,11 @@ return [
                     'icon' => 'fas fa-user-tag',
                 ],
                 [
+                    'text' => 'تعريف قوالب الرسائل',
+                    'url' => 'admin/template',
+                    'icon' => 'fas fa-user-tag',
+                ],
+                [
                     'text' => 'تعريف الحقائب',
                     'url' => 'admin/bags-view',
                     'icon' => 'fas fa-user-tag',

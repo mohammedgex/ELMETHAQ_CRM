@@ -15,6 +15,7 @@ use App\Models\JobTitle;
 use App\Models\Payments;
 use App\Models\PaymentTitle;
 use App\Models\Sponser;
+use App\Models\User;
 use App\Models\VisaType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -192,6 +193,9 @@ class CustomerController extends Controller
 
         if ($request->filled('issue_place')) {
             $customer->issue_place = $request->issue_place;
+        }
+        if ($request->filled('card_id')) {
+            $customer->card_id = $request->card_id;
         }
 
         if ($request->filled('name_en_mrz')) {
@@ -700,15 +704,29 @@ class CustomerController extends Controller
             'success' => 'done'
         ]);
     }
-    public function engaz_request(Request $request,)
+    public function engaz_request(Request $request)
     {
         $customer = Customer::find($request->customer_id);
         $customer->e_visa_number = "E" . $request->e_number;
         $customer->engaz_request = "تم الحجز";
         $customer->save();
+
+        $user = User::where("email", $request->email)->first();
+
+        if (!$user) {
+            return response()->json(['error' => 'User not found'], 404);
+        }
+
+        $history = new History();
+        $history->description = "تم حجز انجاز";
+        $history->date = now();
+
+        $history->customer_id = $customer->id;
+        $history->user_id = $user->id;
+        $history->save();
+
         return response()->json([
             'success' => 'done'
         ]);
     }
-
 }

@@ -21,6 +21,7 @@ use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\JopController;
+use App\Http\Controllers\TemplateController;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -158,6 +159,11 @@ Route::group([
     Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
+
+
+    Route::get('/template', [TemplateController::class, 'index'])->name('template.index');
+    Route::post('/template', [TemplateController::class, 'create'])->name('template.create');
+    Route::delete('/template/{id}', [TemplateController::class, 'delete'])->name('template.delete');
 
 
     Route::get('/customers/group/{group_id}', [CustomerController::class, 'customerGroup'])->name('group.customer');

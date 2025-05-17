@@ -114,7 +114,7 @@ class JopController extends Controller
     {
         $request->validate([
             'customer_ids' => "required",
-            "templite"=>"required"
+            "templite" => "required"
         ]);
         ini_set('max_execution_time', 300); // 5 minutes
 
@@ -126,14 +126,14 @@ class JopController extends Controller
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
             ])->post('https://bulk.whysms.com/api/v3/sms/send', [
-                'recipient' => "2".$customer->phone, // make sure it's in correct international format
+                'recipient' => "2" . $customer->phone, // make sure it's in correct international format
                 'sender_id' => 'Elmethaq Co',
                 'type' => 'plain',
-                'message' => $request->templite,
+                'message' =>  $request->templite,
             ]);
         }
         return response()->json([
-            'success'=>'true'
+            'success' => 'true'
         ]);
     }
 }

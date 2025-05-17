@@ -52,6 +52,15 @@
                             </a>
                             @endif
                         </div>
+                        <div class="d-flex" style="align-items: center;">
+                            <div id="gggg" class="loader mr-2"
+                                style=" border: 4px solid #f3f3f3; border-top: 4px solid #997a44; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none;">
+                            </div>
+                            <div id="hhhh" class="loading-text"
+                                style=" font-size: 14px; color: #997a44;display: none;">
+                                الرجاء الانتظار...
+                            </div>
+                        </div>
                         <!-- أزرار الإجراءات -->
                         <div class="mb-3 me-2 mx-2">
 
@@ -72,9 +81,7 @@
                                             رسالة نصية</button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-primary" id="collectSelected">
-                                            إرسال حجز نت
-                                        </button>
+                                        <button class="dropdown-item text-primary" id="collectSelected"> طلب انجاز</button>
                                     </li>
                                     <li>
                                         <button class="dropdown-item text-success">
@@ -104,7 +111,8 @@
                                             ليست</button>
                                     </li>
                                     <li>
-                                        <button class="dropdown-item text-secondary">أرشفة</button>
+                                        <button class="dropdown-item text-secondary"
+                                            onclick="sendSMS('option7')">أرشفة</button>
                                     </li>
                                 </ul>
                             </div>
@@ -615,7 +623,8 @@
                                                     </a>
                                                     <ul class="dropdown-menu dropdown-menu-end submenu"
                                                         aria-labelledby="submenu-toggle">
-                                                        <li><a data-customer_id="{{ $customer->id }}" class="dropdown-item text-dark hover:bg-light"
+                                                        <li><a data-customer_id="{{ $customer->id }}"
+                                                                class="dropdown-item text-dark hover:bg-light"
                                                                 href="#"><i class="fas fa-file-alt"></i>
                                                                 ملف
                                                                 العميل</a></li>
@@ -767,8 +776,9 @@
                             <select class="form-select-modal" id="customerSelect" required>
                                 <option value="" disabled selected>-- اختر القالب --</option>
                                 <!-- يتم إضافة الأسماء هنا عبر JavaScript -->
-                                <option value="مبروك النجاح بالكشف الطبي">قالب لائق بالكشف الطبي</option>
-
+                                @foreach ( App\Models\Template::all() as $template)
+                                <option value="{{ $template->description }}">{{ $template->title }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="d-flex justify-content-end">
@@ -935,29 +945,6 @@
         box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
     }
 
-    /* .btn-primary {
-        border-radius: var(--border-radius);
-        padding: 0.65rem 1.75rem;
-        font-size: 1rem;
-        font-weight: 500;
-        background-color: var(--primary-color);
-        border: none;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .btn-primary:hover {
-        background-color: var(--primary-hover);
-        transform: translateY(-2px);
-    }
-
-    .btn-primary:active {
-        transform: translateY(0);
-    } */
-
     .form-control:focus,
     .form-select:focus {
         box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
@@ -1003,6 +990,32 @@
         border-radius: var(--border-radius);
         padding: 0.65rem 1.5rem;
         transition: all 0.3s ease;
+    }
+
+    .loader {
+        border: 5px solid #f3f3f3;
+        /* لون الخلفية */
+        border-top: 5px solid #4caf50;
+        /* لون الدائرة المتحركة */
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .loading-text {
+        font-size: 16px;
+        text-align: center;
     }
 </style>
 
@@ -1275,6 +1288,8 @@
 
     document.querySelectorAll(".send-sms").forEach(button => {
         button.addEventListener("click", async function(event) {
+            document.getElementById("hhhh").style.display = "block"
+            document.getElementById("gggg").style.display = "block"
             event.preventDefault();
 
             try {
@@ -1295,6 +1310,8 @@
                 let smsResult = await smsResponse.json();
 
                 if (smsResult['status'] == 'success') {
+                    document.getElementById("hhhh").style.display = "none"
+                    document.getElementById("gggg").style.display = "none"
                     Swal.fire({
                         title: "✅ تم إرسال الرسالة بنجاح",
                         text: "تم إرسال بيانات المستشفى عبر الرسائل القصيرة.",
@@ -1302,6 +1319,8 @@
                         confirmButtonText: "حسناً"
                     });
                 } else {
+                    document.getElementById("hhhh").style.display = "none"
+                    document.getElementById("gggg").style.display = "none"
                     Swal.fire({
                         title: "⚠️ فشل في الإرسال",
                         text: "لم يتم إرسال الرسالة. حاول مرة أخرى لاحقًا.",
@@ -1310,6 +1329,8 @@
                     });
                 }
             } catch (error) {
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 Swal.fire({
                     title: "❌ خطأ",
                     text: "حدث خطأ أثناء إرسال الرسالة: " + error.message,
@@ -1369,6 +1390,8 @@
     });
     document.querySelectorAll(".finger-print").forEach(button => {
         button.addEventListener("click", function(e) {
+            document.getElementById("hhhh").style.display = "block"
+            document.getElementById("gggg").style.display = "block"
             // الحصول على بيانات العميل من data-customer
             const customer = JSON.parse(this.dataset.customer);
 
@@ -1393,10 +1416,14 @@
             const workbook = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(workbook, worksheet, "البيانات");
             XLSX.writeFile(workbook, "بيانات البصمة.xlsx");
+            document.getElementById("hhhh").style.display = "none"
+            document.getElementById("gggg").style.display = "none"
         });
     });
     // ######################################################################### تعيين مجموعة
     document.getElementById('assignGroupForm').addEventListener('submit', function(e) {
+        document.getElementById("hhhh").style.display = "block"
+        document.getElementById("gggg").style.display = "block"
         e.preventDefault();
 
         const selectedGroupId = document.getElementById('groupSelect').value;
@@ -1424,6 +1451,8 @@
             })
             .then(response => response.json())
             .then(data => {
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 Swal.fire({
                     position: "center",
                     icon: "success",
@@ -1436,12 +1465,16 @@
                 }, 3000);
             })
             .catch(error => {
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 console.error(error);
                 alert('حدث خطأ أثناء التعيين');
             });
     });
     // ############################################################# تعيين مندوب
     document.getElementById('assignDelegateForm').addEventListener('submit', function(e) {
+        document.getElementById("hhhh").style.display = "block";
+        document.getElementById("gggg").style.display = "block";
         e.preventDefault();
 
         const delegateId = document.getElementById('delegateSelect').value;
@@ -1467,6 +1500,9 @@
             })
             .then(res => res.json())
             .then(data => {
+                document.getElementById("hhhh").style.display = "none";
+                document.getElementById("gggg").style.display = "none";
+
                 Swal.fire({
                     position: "center",
                     icon: "success",
@@ -1479,12 +1515,16 @@
                 }, 3000);
             })
             .catch(err => {
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 console.error(err);
                 alert("حدث خطأ أثناء التعيين");
             });
     });
     // ###################################################################### تعيين حقيبة 
     document.getElementById('assignBagForm').addEventListener('submit', function(e) {
+        document.getElementById("hhhh").style.display = "block"
+        document.getElementById("gggg").style.display = "block"
         e.preventDefault();
 
         const bagId = document.getElementById('bagSelect').value;
@@ -1510,6 +1550,8 @@
             })
             .then(res => res.json())
             .then(data => {
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 Swal.fire({
                     position: "center",
                     icon: "success",
@@ -1523,14 +1565,19 @@
             })
             .catch(err => {
                 console.error(err);
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 alert("حدث خطأ أثناء التعيين");
             });
     });
 
     document.getElementById("whatsappForm").addEventListener("submit", async function(e) {
         e.preventDefault();
+        document.getElementById("hhhh").style.display = "block";
+        document.getElementById("gggg").style.display = "block";
         const templite = document.getElementById('customerSelect').value;
-        const selectedCustomerIds = Array.from(document.querySelectorAll('input[name="customer_id"]:checked'))
+        const selectedCustomerIds = Array.from(document.querySelectorAll(
+                'input[name="customer_id"]:checked'))
             .map(checkbox => checkbox.value);
 
         if (selectedCustomerIds.length === 0) {
@@ -1552,7 +1599,8 @@
             })
             .then(res => res.json())
             .then(data => {
-                console.log(data);
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 Swal.fire({
                     position: "center",
                     icon: "success",
@@ -1566,12 +1614,15 @@
             })
             .catch(err => {
                 console.error(err);
+                document.getElementById("hhhh").style.display = "none"
+                document.getElementById("gggg").style.display = "none"
                 alert("حدث خطأ أثناء التعيين");
             });
     });
 
-    // ####################### انجاز
     document.getElementById('collectSelected').addEventListener('click', function() {
+        document.getElementById("hhhh").style.display = "block";
+        document.getElementById("gggg").style.display = "block";
         const selectedCustomers = [];
 
         document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
@@ -1647,29 +1698,47 @@
             };
 
             fetch('http://localhost:3000/submit-all', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(data)
-            })
-            .then(res => res.json())
-            .then(response => 
-            fetch('{{ route("engaz_request") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    customer_id :customer.id,
-                    e_number: response["appNo"]
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
                 })
-            })
-            .then(res => res.json())
-            .then(response => console.log("done"))
-            .catch(err => console.error('فشل الإرسال', err))
-            )
-            .catch(err => console.error('فشل الإرسال', err));
+                .then(res => res.json())
+                .then(response => {
+                    console.log(response["appNo"])
+                    fetch('{{ route("engaz_request") }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                customer_id: customer.id,
+                                e_number: response["appNo"],
+                                email:"{{auth()->user()->email}}"
+                            })
+                        })
+                        .then(res => res.json())
+                        .then(ff => {
+                            console.log(ff)
+                            Swal.fire({
+                                title: "نجحت العملية!",
+                                text: "تم إصدار طلب إنجاز للعميل: " + customer.name_ar + " \n رقم الطلب: " + response["appNo"],
+                                icon: "success"
+                            });
+                            document.getElementById("hhhh").style.display = "none"
+                            document.getElementById("gggg").style.display = "none"
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            document.getElementById("hhhh").style.display = "none"
+                            document.getElementById("gggg").style.display = "none"
+                        })
+                })
+                .catch(err => {
+                    document.getElementById("hhhh").style.display = "none"
+                    document.getElementById("gggg").style.display = "none"
+                });
         });
     });
 </script>
