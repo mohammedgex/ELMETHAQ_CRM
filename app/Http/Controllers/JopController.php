@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DocumentType;
+use Google\Client;
+use Google\Service\Gmail;
+use Smalot\PdfParser\Parser;
 use App\Models\Customer;
+use App\Models\History;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class JopController extends Controller
 {
@@ -134,6 +141,167 @@ class JopController extends Controller
         }
         return response()->json([
             'success' => 'true'
+        ]);
+    }
+
+    public function sync()
+    {
+        $client = new Client();
+        $client->setAuthConfig(storage_path('app/gmail_Oauth.json'));
+        $client->addScope(Gmail::GMAIL_READONLY);
+        $client->setAccessToken(json_decode(file_get_contents(storage_path('app/gmail-token.json')), true));
+
+        $gmail = new Gmail($client);
+
+        // جلب الرسائل المقروءة التي تحتوي على عنوان التأشيرة
+        $messagesResponse = $gmail->users_messages->listUsersMessages('me', [
+            'q' => 'subject:"التأشيرة الإلكترونية" is:read'
+        ]);
+
+        $messages = $messagesResponse->getMessages();
+
+        $results = [];
+
+        if (!$messages) {
+            return response()->json(['message' => 'No relevant messages found']);
+        }
+
+        // دالة لفك تشفير محتوى الرسالة النصي أو HTML
+        function getMessageContent($parts)
+        {
+            $content = '';
+            foreach ($parts as $part) {
+                $mimeType = $part->getMimeType();
+                if (in_array($mimeType, ['text/plain', 'text/html'])) {
+                    $data = $part->getBody()->getData();
+                    if ($data) {
+                        $content .= base64_decode(strtr($data, '-_', '+/'));
+                    }
+                } elseif ($part->getParts()) {
+                    $content .= getMessageContent($part->getParts());
+                }
+            }
+            return $content;
+        }
+
+        // دالة لاستخراج رقم التأشيرة ورقم الجواز
+        function extractVisaPassport($text)
+        {
+            preg_match('/ﺭﻗﻢ\s*ﺍﻟﺘﺄﺷﻴﺮﺓ\s*(\d+)/u', $text, $visaMatches);
+            preg_match('/ﺭﻗﻢ\s*ﺍﻟﺠﻮﺍﺯ\s*([A-Z0-9]+)/u', $text, $passportMatches);
+            $passportNumber = isset($passportMatches[1]) ? substr($passportMatches[1], 0, -1) : null;
+
+
+            return [
+                'visa_number' => $visaMatches[1] ?? 'غير موجود',
+                'passport_number' => $passportNumber ?? 'غير موجود',
+            ];
+        }
+
+        $parser = new Parser();
+
+        foreach ($messages as $msg) {
+            $message = $gmail->users_messages->get('me', $msg->getId(), ['format' => 'full']);
+            $payload = $message->getPayload();
+
+            // قراءة النص من محتوى الرسالة
+            $content = '';
+            if ($payload->getParts()) {
+                $content = getMessageContent($payload->getParts());
+            } else {
+                $data = $payload->getBody()->getData();
+                $content = base64_decode(strtr($data, '-_', '+/'));
+            }
+
+            // استخراج مبدئي من نص الرسالة
+            $dataExtracted = extractVisaPassport($content);
+
+            // محاولة قراءة المرفقات لو فيه PDF
+            $parts = $payload->getParts();
+            if ($parts) {
+                foreach ($parts as $part) {
+                    $filename = $part->getFilename();
+                    $body = $part->getBody();
+                    $attachmentId = $body?->getAttachmentId();
+
+                    if ($filename && str_ends_with(strtolower($filename), '.pdf') && $attachmentId) {
+                        $attachment = $gmail->users_messages_attachments->get('me', $msg->getId(), $attachmentId);
+                        $data = $attachment->getData();
+                        $pdfData = base64_decode(strtr($data, '-_', '+/'));
+
+                        // ✅ حفظ ملف الـ PDF في التخزين
+                        $filename = 'visa_' . $msg->getId() . '.pdf';
+
+                        // استخراج النص من ملف الـ PDF
+                        $pdf = $parser->parseContent(content: $pdfData);
+                        $pdfText = $pdf->getText();
+
+                        // استخراج البيانات من النص داخل PDF
+                        $dataExtracted = extractVisaPassport($pdfText);
+                        break; // نكتفي بأول ملف PDF
+                    }
+                }
+            }
+
+            $visaNumber = $dataExtracted['visa_number'];
+            $passportNumber = $dataExtracted['passport_number'];
+
+            // ✅ تحديث العميل لو موجود
+            if ($passportNumber !== 'غير موجود') {
+                $customer = Customer::where(column: ['passport_id'=>$passportNumber,"notes" => null])->first();
+
+                if ($customer) {
+                    $customer->update(['notes' => $visaNumber]);
+                    $document = new DocumentType();
+                    Storage::disk('public')->put('visa-pdfs/' . $filename, contents: $pdfData);
+                    $document->file = 'visa-pdfs/' . $filename;
+                    $document->document_type = "تأشيرة";
+                    $document->status = "موجود بالمكتب";
+                    $document->customer_id = $customer->id;
+                    $document->order_status = "accept";
+                    $document->required = "اجباري";
+                    $document->save();
+
+                    $history = new History();
+                    $history->description = "تم اصدار التأشيرة";
+                    $history->date = now();
+            
+                    $history->customer_id = $customer->id;
+                    $history->user_id = auth()->user()->id;
+                    $history->save();
+                    $this->sendSmsToCustomers($customer->id, 'تم اصدر رقم تأشيرتك برقم ' . $visaNumber);
+                }
+            }
+
+            $results[] = [
+                'message_id' => $msg->getId(),
+                'visa_number' => $dataExtracted['visa_number'],
+                'passport_number' => $dataExtracted['passport_number'],
+                'snippet' => $message->getSnippet(),
+            ];
+
+            // يمكنك تعليم الرسالة كمقروءة بعد المعالجة:
+            // $gmail->users_messages->modify('me', $msg->getId(), new \Google\Service\Gmail\ModifyMessageRequest([
+            //     'removeLabelIds' => ['UNREAD']
+            // ]));
+        }
+
+        return redirect()->back()->with('success', 'تم جلب تأشيرات بنجاح');
+    }
+
+
+    public function sendSmsToCustomers($customerId, string $template)
+    {
+        $customer = Customer::find($customerId);
+        Http::withHeaders([
+            'Authorization' => 'Bearer 490|iWcKkcltFVb9x4Or4r1uWDbUBiPXt1N4qU7bHmMM61249c65',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])->post('https://bulk.whysms.com/api/v3/sms/send', [
+            'recipient' => "2" . $customer->phone,
+            'sender_id' => 'Elmethaq Co',
+            'type' => 'plain',
+            'message' =>  $template,
         ]);
     }
 }

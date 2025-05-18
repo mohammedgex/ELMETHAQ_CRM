@@ -84,9 +84,18 @@
                                         <button class="dropdown-item text-primary" id="collectSelected"> طلب انجاز</button>
                                     </li>
                                     <li>
+                                        <a href="{{ route("sync") }}">
+                                            <button class="dropdown-item text-success">
+                                                جلب تأشيرات العملاء
+                                            </button>
+                                        </a>
+                                    </li>
+                                    <li>
+
                                         <button class="dropdown-item text-success">
                                             إرسال رسالة واتساب
                                         </button>
+
                                     </li>
                                     <li>
                                         <button class="dropdown-item text-info" data-bs-toggle="modal"
@@ -1651,16 +1660,32 @@
             const last_en = name_en[2] || "";
             const end_en = name_en[name_en.length - 1] || "";
 
+            let NumberEntryDay;
+            let ResidencyInKSA;
+
+            if (customer.visa_type.visa_peroid == "تأشيرة العمل المؤقت لخدمات الحج والعمرة") {
+                NumberEntryDay = "90";
+                ResidencyInKSA = "120";
+            } else if (customer.visa_type.visa_peroid == "عمل") {
+                NumberEntryDay = "90";
+                ResidencyInKSA = "90";
+            } else if (customer.visa_type.visa_peroid == "عمل مؤقت") {
+                NumberEntryDay = "365";
+                ResidencyInKSA = "90";
+            } else {
+                NumberEntryDay = "90";
+                ResidencyInKSA = "120";
+            }
             const data = {
                 UserName: "مكتب768",
                 Password: "Ahmed121@@@",
-                VisaKind: "تأشيرة العمل المؤقت لخدمات الحج والعمرة",
+                VisaKind: customer.visa_type.visa_peroid,
                 NATIONALITY: "EGY",
                 ResidenceCountry: "272",
                 EmbassyCode: "320",
                 NumberOfEntries: "0",
-                NumberEntryDay: "90",
-                ResidencyInKSA: "120",
+                NumberEntryDay: NumberEntryDay,
+                ResidencyInKSA: ResidencyInKSA,
                 AFIRSTNAME: first_ar,
                 AFATHER: middle_ar,
                 AGRAND: last_ar,
@@ -1715,7 +1740,7 @@
                             body: JSON.stringify({
                                 customer_id: customer.id,
                                 e_number: response["appNo"],
-                                email:"{{auth()->user()->email}}"
+                                email: "{{auth()->user()->email}}"
                             })
                         })
                         .then(res => res.json())

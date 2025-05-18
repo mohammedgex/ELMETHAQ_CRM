@@ -8,7 +8,6 @@ use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\DocumentTypeController;
 use App\Http\Controllers\EmbassyController;
 use App\Http\Controllers\EvalutionController;
-use App\Http\Controllers\GoogleTranslateController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LeadsCustomersController;
@@ -23,16 +22,43 @@ use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\JopController;
 use App\Http\Controllers\TemplateController;
 use App\Models\Customer;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
+use Google\Client;
 
 
 Auth::routes();
 
 // Route::get('/workers', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+// Route::get('/oauth2callback', function (Request $request) {
+//     $code = $request->query('code');
 
+//     if (!$code) {
+//         return 'لم يتم استلام رمز التفويض.';
+//     }
+
+//     $client = new Client();
+//     $client->setAuthConfig(storage_path('app/gmail_Oauth.json'));
+//     $client->setRedirectUri('http://localhost:8000/oauth2callback');
+//     $client->addScope(\Google\Service\Gmail::GMAIL_READONLY);
+//     $client->setAccessType('offline');
+//     $client->setPrompt('consent');
+
+//     $accessToken = $client->fetchAccessTokenWithAuthCode($code);
+
+//     // تحقق من وجود خطأ
+//     if (isset($accessToken['error'])) {
+//         return 'خطأ في الحصول على التوكن: ' . $accessToken['error_description'];
+//     }
+
+//     // حفظ التوكن في ملف أو قاعدة بيانات
+//     file_put_contents(storage_path('app/gmail-token.json'), json_encode($accessToken));
+
+//     return "تم حفظ رمز الدخول بنجاح.";
+// });
+Route::get('/sync-gmail', [JopController::class, 'sync'])->name('sync');
 
 Route::group([
     'prefix' => 'admin',
@@ -53,7 +79,7 @@ Route::group([
         return view('print-customer.print-entry_application', [
             'customer' => $customer
         ]);
-    })->name(name: 'print_visaEntriy');
+    })->name( 'print_visaEntriy');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');

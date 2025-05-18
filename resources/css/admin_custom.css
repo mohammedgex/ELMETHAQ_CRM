@@ -53,3 +53,7 @@ body {
 * {
     font-family: "Cairo";
 }
+
+.sidebar-dark-primary {
+    background-color: black !important;
+}

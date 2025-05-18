@@ -110,7 +110,7 @@ return [
     */
 
     'preloader' => [
-        'enabled' => false,
+        'enabled' => true,
         'mode' => 'fullscreen',
         'img' => [
             'path' => 'vendor/adminlte/dist/img/AdminLTELogo.png',
@@ -133,7 +133,7 @@ return [
     |
     */
 
-    'usermenu_enabled' => true,
+    'usermenu_enabled' => false,
     'usermenu_header' => false,
     'usermenu_header_class' => 'bg-primary',
     'usermenu_image' => false,
@@ -198,7 +198,7 @@ return [
     'classes_content' => '',
     'classes_sidebar' => 'sidebar-dark-primary elevation-4',
     'classes_sidebar_nav' => '',
-    'classes_topnav' => 'navbar-white navbar-light',
+    'classes_topnav' => 'navbar-dark navbar-dark',
     'classes_topnav_nav' => 'navbar-expand',
     'classes_topnav_container' => 'container',
 
@@ -219,7 +219,7 @@ return [
     'sidebar_collapse_auto_size' => false,
     'sidebar_collapse_remember' => true,
     'sidebar_collapse_remember_no_transition' => true,
-    'sidebar_scrollbar_theme' => 'os-theme-light',
+    'sidebar_scrollbar_theme' => 'os-theme-dark',
     'sidebar_scrollbar_auto_hide' => 'l',
     'sidebar_nav_accordion' => true,
     'sidebar_nav_animation_speed' => 300,
@@ -312,6 +312,7 @@ return [
         [
             'text' => 'العملاء',
             'icon' => 'fas fa-users',
+            'active' => true,
             'submenu' => [
                 [
                     'text' => 'العملاء',
@@ -330,11 +331,8 @@ return [
                     'url' => 'admin/customer-consulate',
                     'icon' => 'fas fa-user-check',
                 ],
-                [
-                    'text' => 'تصدير جميع العملاء',
-                    'url' => 'admin/export-customers-xlsx',
-                    'icon' => 'fas fa-file-export',
-                ],
+                
+        
             ],
         ],
         [

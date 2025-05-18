@@ -58,7 +58,9 @@
                                 <form action="{{ route('history.delete', $history->id) }}" method="POST">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"><span
+                                    <button type="submit" style="    border: none;
+    border-radius: 50%;
+    background-color: white;"><span
                                             class="bg-danger text-white rounded-circle d-flex justify-content-center align-items-center"
                                             style="width: 35px; height: 35px; cursor: pointer;">
                                             <i class="fa-solid fa-trash"></i>
@@ -1283,9 +1285,20 @@
                         @foreach ($files as $file)
                         <tr>
                             <th class="text-success">{{ $file->document_type }}</th>
-                            <th><a href="{{ asset('storage/' . $file->file) }}" target="_blank"><img
-                                        src="{{ asset('storage/' . $file->file) }}" alt=""
-                                        style="width: 100px; height: auto; margin: 0 auto; display: block;"></a>
+                            <th>
+                                <a href="{{ asset('storage/' . $file->file) }}" target="_blank">
+                                    @php
+                                    $extension = pathinfo($file->file, PATHINFO_EXTENSION);
+                                    @endphp
+
+                                    @if(strtolower($extension) === 'pdf')
+                                    <img src="https://cdn-icons-png.freepik.com/512/4726/4726010.png" alt="PDF File"
+                                        style="width: 40px; height: auto; margin: 0 auto; display: block;">
+                                    @else
+                                    <img src="{{ asset('storage/' . $file->file) }}" alt="File Image"
+                                        style="width: 100px; height: auto; margin: 0 auto; display: block;">
+                                    @endif
+                                </a>
                             </th>
                             <th>
                                 <span
