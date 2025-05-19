@@ -187,16 +187,26 @@ class JopController extends Controller
         // دالة لاستخراج رقم التأشيرة ورقم الجواز
         function extractVisaPassport($text)
         {
-            preg_match('/ﺭﻗﻢ\s*ﺍﻟﺘﺄﺷﻴﺮﺓ\s*(\d+)/u', $text, $visaMatches);
-            preg_match('/ﺭﻗﻢ\s*ﺍﻟﺠﻮﺍﺯ\s*([A-Z0-9]+)/u', $text, $passportMatches);
-            $passportNumber = isset($passportMatches[1]) ? substr($passportMatches[1], 0, -1) : null;
+            // رقم التأشيرة
+            preg_match('/ﺭﻗﻢ\s*ﺍﻟﺘﺄﺷﻴﺮﺓ\s*[:\-]?\s*(\d+)/u', $text, $visaMatches);
 
+            // رقم الجواز
+            preg_match('/ﺭﻗﻢ\s*ﺍﻟﺠﻮﺍﺯ\s*[:\-]?\s*([A-Z0-9]+)/u', $text, $passportMatches);
+            $passportNumber = isset($passportMatches[1]) ? substr($passportMatches[1], 0, -1) : null;
+            // صالحة اعتباراً من
+            preg_match('/ﺻﺎﻟﺤﺔ\s+ﺍﻋﺘﺒﺎﺭﺍ\s+ﻣﻦ\s*(\d{2}\/\d{2}\/\d{4})/u', $text, $validFromMatches);
+
+            // صالحة لغاية
+            preg_match('/ﺻﺎﻟﺤﺔ\s+ﻟﻐﺎﻳﺔ\s*(\d{2}\/\d{2}\/\d{4})/u', $text, $validUntilMatches);
 
             return [
-                'visa_number' => $visaMatches[1] ?? 'غير موجود',
-                'passport_number' => $passportNumber ?? 'غير موجود',
+                'visa_number'       => $visaMatches[1]        ?? 'غير موجود',
+                'passport_number'   => $passportNumber        ?? 'غير موجود',
+                'valid_from'        => $validFromMatches[1]   ?? 'غير موجود',
+                'valid_until'       => $validUntilMatches[1]  ?? 'غير موجود',
             ];
         }
+
 
         $parser = new Parser();
 
@@ -236,8 +246,10 @@ class JopController extends Controller
                         $pdf = $parser->parseContent(content: $pdfData);
                         $pdfText = $pdf->getText();
 
+
                         // استخراج البيانات من النص داخل PDF
                         $dataExtracted = extractVisaPassport($pdfText);
+
                         break; // نكتفي بأول ملف PDF
                     }
                 }
@@ -245,13 +257,20 @@ class JopController extends Controller
 
             $visaNumber = $dataExtracted['visa_number'];
             $passportNumber = $dataExtracted['passport_number'];
+            $valid_from = isset($dataExtracted['valid_from'])
+                ? date('Y-m-d', strtotime(str_replace('/', '-', $dataExtracted['valid_from'])))
+                : null;
+
+            $valid_until = isset($dataExtracted['valid_until'])
+                ? date('Y-m-d', strtotime(str_replace('/', '-', $dataExtracted['valid_until'])))
+                : null;
 
             // ✅ تحديث العميل لو موجود
             if ($passportNumber !== 'غير موجود') {
-                $customer = Customer::where(column: ['passport_id'=>$passportNumber,"notes" => null])->first();
 
+                $customer = Customer::where(['passport_id' => $passportNumber, "visa_number" => null, "visa_issuance_date" => null, "visa_expiry_date" => null])->first();
                 if ($customer) {
-                    $customer->update(['notes' => $visaNumber]);
+                    $customer->update(['visa_number' => $visaNumber, 'visa_issuance_date' => $valid_from, 'visa_expiry_date' => $valid_until]);
                     $document = new DocumentType();
                     Storage::disk('public')->put('visa-pdfs/' . $filename, contents: $pdfData);
                     $document->file = 'visa-pdfs/' . $filename;
@@ -265,12 +284,18 @@ class JopController extends Controller
                     $history = new History();
                     $history->description = "تم اصدار التأشيرة";
                     $history->date = now();
-            
+
                     $history->customer_id = $customer->id;
                     $history->user_id = auth()->user()->id;
                     $history->save();
+                    $sms_message = "تم إصدار التأشيرة برقم: {$visaNumber}, رقم الجواز: {$passportNumber}, صالحة من: {$valid_from}, وتنتهي في: {$valid_until},'لتحميل التأشيرة:'". asset($document->file);
+                    $this->sendSmsToCustomers($customer->id, template: $sms_message);
                     $this->sendSmsToCustomers($customer->id, 'تم اصدر رقم تأشيرتك برقم ' . $visaNumber);
+                } else {
+                    return redirect()->back()->with('success', 'التأشيرة غير موجودة');
                 }
+            } else {
+                return redirect()->back()->with('success', 'التأشيرة غير موجودة');
             }
 
             $results[] = [

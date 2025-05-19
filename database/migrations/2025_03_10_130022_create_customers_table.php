@@ -35,10 +35,14 @@ return new class extends Migration
             $table->string('nationality')->nullable();
             $table->string('marital_status')->nullable();
             $table->string('education')->nullable();
+            $table->string(  'visa_number')->nullable();
+            $table->date('visa_issuance_date')->nullable();
+            $table->date('visa_expiry_date')->nullable();
             $table->text('notes')->nullable();
             $table->text('mrz')->nullable();
             $table->string('mrz_image')->nullable();
             $table->string('name_en_mrz')->nullable();
+            $table->date('passport_issuance_date')->nullable();
             $table->string('passport_id')->nullable();
             $table->string('date_birth')->nullable();
             $table->string('passport_expire_date')->nullable();

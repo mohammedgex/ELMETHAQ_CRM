@@ -17,7 +17,7 @@
             <form action="{{ route('visa-type.create') }}" method="POST">
                 @csrf
                 <div class="row">
-                <div class="col-md-6 form-group">
+                    <div class="col-md-6 form-group">
                         <label class="font-weight-bold"> نوع التأشيرة </label>
                         <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid"
                             required>
@@ -32,8 +32,8 @@
                         <input type="text" class="form-control" name="name" placeholder="أدخل اسم التاشيرة"
                             required>
                     </div>
-                    
-                    
+
+
 
                 </div>
                 <div class="row">
@@ -47,7 +47,7 @@
                         <input type="number" class="form-control" name="outgoing_number"
                             placeholder="أدخل رقم الصادر" required>
                     </div>
-                    
+
 
                     <div class="col-md-6 form-group">
                         <label class="font-weight-bold"> العدد </label>
@@ -94,6 +94,7 @@
                 </button>
             </form>
         </div>
+
         @else
         <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
             style="border-radius: 15px; background-color: #f8f9fa;">
@@ -102,15 +103,27 @@
                 @csrf
                 <div class="row">
                     <div class="col-md-6 form-group">
+                        <label class="font-weight-bold"> نوع التاشيرة التأشيرة </label>
+                        <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid" required>
+                            <option value="">اختر النوع</option>
+                            <option value="تأشيرة العمل المؤقت لخدمات الحج والعمرة" {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'تأشيرة العمل المؤقت لخدمات الحج والعمرة' ? 'selected' : '' }}>
+                                تأشيرة العمل المؤقت لخدمات الحج والعمرة
+                            </option>
+                            <option value="عمل" {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'عمل' ? 'selected' : '' }}>
+                                عمل
+                            </option>
+                            <option value="عمل مؤقت" {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'عمل مؤقت' ? 'selected' : '' }}>
+                                عمل مؤقت
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 form-group">
                         <label class="font-weight-bold"> اسم التاشيرة </label>
                         <input type="text" class="form-control" name="name" value="{{ $visaTypeEdit->name }}"
                             placeholder="أدخل اسم التاشيرة" required>
                     </div>
-                    <div class="col-md-6 form-group">
-                        <label class="font-weight-bold"> رقم الصادر </label>
-                        <input type="number" class="form-control" name="outgoing_number"
-                            placeholder="أدخل رقم الصادر" required value="{{ $visaTypeEdit->outgoing_number }}">
-                    </div>
+
+
                 </div>
                 <div class="row">
                     <div class="col-md-6 form-group">
@@ -119,23 +132,11 @@
                             name="registration_number" placeholder="أدخل رقم السجل" required>
                     </div>
                     <div class="col-md-6 form-group">
-                        <label class="font-weight-bold"> مدة التأشيرة </label>
-                        <select class="form-control fw-bold" style="border-color: #997a44;" name="visa_peroid"
-                            required>
-                            <option value="">اختر المدة</option>
-                            <option
-                                {{ $visaTypeEdit->visa_peroid == '3 شهور' ? 'selected class= bg-success ' : '' }}
-                                value='3 شهور'>3
-                                شهور</option>
-                            <option
-                                {{ $visaTypeEdit->visa_peroid == '6 شهور' ? 'selected class= bg-success' : '' }}
-                                value="6 شهور">
-                                6 شهور</option>
-                            <option {{ $visaTypeEdit->visa_peroid == 'سنة' ? 'selected class= bg-success' : '' }}
-                                value="سنة">
-                                سنة </option>
-                        </select>
+                        <label class="font-weight-bold"> رقم الصادر </label>
+                        <input type="number" class="form-control" name="outgoing_number"
+                            placeholder="أدخل رقم الصادر" required value="{{ $visaTypeEdit->outgoing_number }}">
                     </div>
+
                     <div class="col-md-6 form-group">
                         <label class="font-weight-bold"> العدد </label>
                         <input type="number" class="form-control" value="{{ $visaTypeEdit->count }}"

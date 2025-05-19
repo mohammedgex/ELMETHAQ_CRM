@@ -1180,6 +1180,7 @@
                         </div>
                     </div>
                     <input type="hidden" id="card_id" name="card_id" value="">
+                    <input type="hidden" id="date_of_issue" name="passport_issuance_date" value="">
                     <div class="d-flex justify-content-between mt-3">
                         <!-- زر الحفظ -->
                         <button type="submit" class="btn text-white fw-bold"
@@ -1957,6 +1958,7 @@ Extract all data from this passport in English. Convert the national ID to Engli
                         document.getElementById("gender").value = data.sex_ar;
                         document.getElementById("age").value = data.age;
                         document.getElementById("card_id").value = data.national_id;
+                        document.getElementById("date_of_issue").value = data.date_of_issue;
                         document.getElementById("hhhh").style.display = "none";
                         document.getElementById("gggg").style.display = "none";
 

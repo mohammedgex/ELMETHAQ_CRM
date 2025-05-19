@@ -73,13 +73,15 @@ Route::group([
         return redirect('admin/home');
     });
     Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
-    Route::get('/visa/{id}', function ($id) {
-        $customer = Customer::find($id);
+
+    Route::get('/vissa/{id}', function ($id) {
+        $customers = Customer::find($id);
 
         return view('print-customer.print-entry_application', [
-            'customer' => $customer
+            'customers' => [$customers]
         ]);
     })->name( 'print_visaEntriy');
+
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');

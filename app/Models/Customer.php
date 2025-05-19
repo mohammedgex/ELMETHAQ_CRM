@@ -47,7 +47,11 @@ class Customer extends Model
         'evaluation_id',
         'experience_years',
         'experience',
-        'mrz_image'
+        'mrz_image',
+        'visa_number',
+        'visa_issuance_date',
+        'visa_expiry_date',
+        'passport_issuance_date',
     ];
 
     public function delegate()
