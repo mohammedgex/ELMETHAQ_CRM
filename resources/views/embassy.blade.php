@@ -22,9 +22,9 @@
 
                                 <select class="form-control fw-bold" style="border-color: #997a44;" name="title" required>
                                     <option value="">اختر القنصلية</option>
-                                    <option value="قنصلية السويس">قنصلية السويس</option>
-                                    <option value="قنصلية القاهرة">قنصلية القاهرة</option>
-                                    <option value="قنصلية الاسكندرية">قنصلية الاسكندرية</option>
+                                    <option value="السويس">قنصلية السويس</option>
+                                    <option value="القاهرة">قنصلية القاهرة</option>
+                                    <option value="الاسكندرية">قنصلية الاسكندرية</option>
                                 </select>
 
                             </div>
@@ -48,15 +48,15 @@
 
                                 <select class="form-control fw-bold" style="border-color: #997a44;" name="title" required>
                                     <option value="">اختر القنصلية</option>
-                                    <option value="قنصلية السويس"
+                                    <option value="السويس"
                                         {{ old('title', $embassyEdit->title ?? '') == 'قنصلية السويس' ? 'selected' : '' }}>
                                         قنصلية
                                         السويس</option>
-                                    <option value="قنصلية القاهرة"
+                                    <option value="القاهرة"
                                         {{ old('title', $embassyEdit->title ?? '') == 'قنصلية القاهرة' ? 'selected' : '' }}>
                                         قنصلية
                                         القاهرة</option>
-                                    <option value="قنصلية الاسكندرية"
+                                    <option value="الاسكندرية"
                                         {{ old('title', $embassyEdit->title ?? '') == 'قنصلية الاسكندرية' ? 'selected' : '' }}>
                                         قنصلية الاسكندرية</option>
                                 </select>

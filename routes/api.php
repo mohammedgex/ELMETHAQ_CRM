@@ -24,4 +24,5 @@ Route::post('/assign-group', [CustomerGroupController::class, 'assignGroup'])->n
 Route::post('/assign-delegate', [DelegateController::class, 'assignDelegate'])->name("delegate.assign");
 Route::post('/assign-bag', [BagController::class, 'assignBag'])->name("bag.assign");
 Route::post('/send-sms', [JopController::class, 'sendSms'])->name('send.sms');
+Route::post('/savePDF', [JopController::class, 'savePDF'])->name('savePDF');
 Route::post('/send-engaz', [CustomerController::class, 'engaz_request'])->name('engaz_request');

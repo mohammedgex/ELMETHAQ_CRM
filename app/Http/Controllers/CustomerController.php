@@ -88,8 +88,12 @@ class CustomerController extends Controller
         $visas = VisaType::all();
         $customers = Customer::with([
             'sponser',
-            'visaType',
-            'customerGroup.visaProfession'
+            'visaType.embassy',              // مثال علاقة فرعية داخل visaType
+            'customerGroup.visaProfession',
+            'customerGroup.visaType',        // لو موجودة في CustomerGroup
+            'delegate',
+            'evaluation',
+            'jobTitle',
         ])->get();
         return view("customers.customer", [
             'customers' => $customers,
@@ -164,6 +168,9 @@ class CustomerController extends Controller
         // التاريخ: انتهاء الجواز
         if ($request->filled('passport_expire_date')) {
             $customer->passport_expire_date = Carbon::createFromFormat('d/m/Y', $request->passport_expire_date)->format('Y-m-d');
+        }
+        if ($request->filled('passport_issuance_date')) {
+            $customer->passport_issuance_date = Carbon::createFromFormat('d/m/Y', $request->passport_issuance_date)->format('Y-m-d');
         }
 
         if ($request->filled('mrz')) {

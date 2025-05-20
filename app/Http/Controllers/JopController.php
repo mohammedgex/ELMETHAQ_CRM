@@ -8,11 +8,11 @@ use Google\Service\Gmail;
 use Smalot\PdfParser\Parser;
 use App\Models\Customer;
 use App\Models\History;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class JopController extends Controller
 {
@@ -288,7 +288,7 @@ class JopController extends Controller
                     $history->customer_id = $customer->id;
                     $history->user_id = auth()->user()->id;
                     $history->save();
-                    $sms_message = "تم إصدار التأشيرة برقم: {$visaNumber}, رقم الجواز: {$passportNumber}, صالحة من: {$valid_from}, وتنتهي في: {$valid_until},'لتحميل التأشيرة:'". asset($document->file);
+                    $sms_message = "تم إصدار التأشيرة برقم: {$visaNumber}, رقم الجواز: {$passportNumber}, صالحة من: {$valid_from}, وتنتهي في: {$valid_until},'لتحميل التأشيرة:'" . asset($document->file);
                     $this->sendSmsToCustomers($customer->id, template: $sms_message);
                     $this->sendSmsToCustomers($customer->id, 'تم اصدر رقم تأشيرتك برقم ' . $visaNumber);
                 } else {
@@ -314,7 +314,6 @@ class JopController extends Controller
         return redirect()->back()->with('success', 'تم جلب تأشيرات بنجاح');
     }
 
-
     public function sendSmsToCustomers($customerId, string $template)
     {
         $customer = Customer::find($customerId);
@@ -328,5 +327,49 @@ class JopController extends Controller
             'type' => 'plain',
             'message' =>  $template,
         ]);
+    }
+
+    public function savePDF(Request $request)
+    {
+        $customer = Customer::find($request->customer_id);
+        if (!$customer) {
+            return response()->json(['error' => 'العميل غير موجود'], 404);
+        }
+
+        // اسم الملف
+        $filename = 'pdf_' . time() . '.pdf';
+
+        // تحميل محتوى PDF من الرابط
+        $response = Http::get($request->pdf);
+
+        if ($response->failed()) {
+            return response()->json(['error' => 'فشل تحميل ملف PDF'], 400);
+        }
+
+        // حفظ الملف داخل public/uploads
+        Storage::disk('public')->put('uploads/' . $filename, $response->body());
+
+        // حفظ معلومات المستند في قاعدة البيانات
+        $document = new DocumentType();
+        $document->file = 'uploads/' . $filename;  // نفس مسار التخزين
+        $document->document_type = "حجز كشف المعامل";
+        $document->status = "موجود بالمكتب";
+        $document->customer_id = $customer->id;
+        $document->order_status = "accept";
+        $document->required = "اجباري";
+        $document->save();
+
+        // حفظ سجل في التاريخ (history)
+        $user = User::where("email", $request->user)->first();
+        if ($user) {
+            $history = new History();
+            $history->description = "تم حجز كشف المعامل";
+            $history->date = now();
+            $history->customer_id = $customer->id;
+            $history->user_id = $user->id;
+            $history->save();
+        }
+
+        return response()->json(['message' => 'تم حفظ الملف بنجاح']);
     }
 }
