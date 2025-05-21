@@ -1447,10 +1447,17 @@
                         group: selectedGroupId
                     })
                 })
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById("hhhh").style.display = "none"
-                    document.getElementById("gggg").style.display = "none"
+                .then(async response => {
+                    document.getElementById("hhhh").style.display = "none";
+                    document.getElementById("gggg").style.display = "none";
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        // هنا حدث خطأ من السيرفر (مثل الحالة 400 أو 422)
+                        throw new Error(data.message || "حدث خطأ أثناء تنفيذ العملية");
+                    }
+
                     Swal.fire({
                         position: "center",
                         icon: "success",
@@ -1458,15 +1465,19 @@
                         showConfirmButton: false,
                         timer: 3000
                     });
+
                     setTimeout(() => {
                         location.reload();
                     }, 3000);
                 })
                 .catch(error => {
-                    document.getElementById("hhhh").style.display = "none"
-                    document.getElementById("gggg").style.display = "none"
-                    console.error(error);
-                    alert('حدث خطأ أثناء التعيين');
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: error.message,
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                 });
         });
         // ############################################################# تعيين مندوب

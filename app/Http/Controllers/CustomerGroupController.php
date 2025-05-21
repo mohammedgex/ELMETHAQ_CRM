@@ -82,7 +82,24 @@ class CustomerGroupController extends Controller
 
         // تحديث جميع العملاء في المصفوفة وتعيين المجموعة لهم
         $customers = Customer::whereIn('id', $request->customers)->get();
-        // return $customers;
+
+        $currentCount = count($group->customers);
+        $newCount = count($customers);
+        $limit = intval($group->visaProfession->profession_count);
+
+        if ($currentCount == $limit) {
+            return response()->json([
+                'message' => "المجموعة مكتملة",
+                'error' => true
+            ], 400);
+        }
+
+        if ($currentCount + $newCount > $limit) {
+            return response()->json([
+                'message' => "العدد المحدد تخطى العدد المتبقي في المجموعة",
+                'error' => true
+            ], 400);
+        }
 
         foreach ($customers as $customer) {
             $customer->customer_group_id = $group->id;  // تعيين المجموعة للعميل

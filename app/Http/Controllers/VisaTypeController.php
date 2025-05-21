@@ -70,7 +70,7 @@ class VisaTypeController extends Controller
 
             foreach ($data['data'] as $item) {
                 $group = new CustomerGroup();
-                $group->title = $item['job'] . " " . $visa_type->name;
+                $group->title = $item['job'] . " (" . $visa_type->name . ")";
                 $group->visa_type_id = $visa_type->id;
                 $group->save();
 
@@ -81,14 +81,10 @@ class VisaTypeController extends Controller
                 $profession->visa_type_id = $visa_type->id;
                 $profession->save();
             }
-            return redirect()->back();
+            return redirect()->route("home");
         } else {
-            // التعامل مع الخطأ
-            $status = $response->status();
-            $error = $response->body();
-            dd($error);
+            return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
         }
-
         return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
     }
 
