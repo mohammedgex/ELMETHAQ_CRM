@@ -75,7 +75,7 @@
                             </p>
                         </div>
                         <div class="group-count text-muted " style='color:#000 !important'>
-                            {{ count($group->customers) }} عميل
+                            {{ count($group->customers) }} من {{ $group->visaProfession->profession_count }}
                         </div>
                     </div>
                 </a>
