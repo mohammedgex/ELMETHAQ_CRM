@@ -20,6 +20,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role',
         'password',
     ];
 
@@ -48,6 +49,10 @@ class User extends Authenticatable
     public function histories()
     {
         return $this->hasMany(History::class);
+    }
+    public function permissions()
+    {
+        return $this->hasMany(Permissions::class);
     }
 
     /**

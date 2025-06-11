@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\bag;
 use App\Models\BlackList;
+use App\Models\CompanySetting;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
@@ -86,6 +87,7 @@ class CustomerController extends Controller
         $jobs = JobTitle::all();
         $sponsers = Sponser::all();
         $visas = VisaType::all();
+        $company = CompanySetting::first();
         $customers = Customer::with([
             'sponser',
             'visaType.embassy',              // مثال علاقة فرعية داخل visaType
@@ -103,6 +105,7 @@ class CustomerController extends Controller
             'jobs' => $jobs,
             'sponsers' => $sponsers,
             'visas' => $visas,
+            "company" => $company
         ]);
     }
 

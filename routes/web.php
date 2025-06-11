@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\BlackListController;
+use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
@@ -20,44 +21,16 @@ use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\JopController;
+use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\TemplateController;
 use App\Models\Customer;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Google\Client;
 
 
 Auth::routes();
 
-// Route::get('/workers', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-// Route::get('/oauth2callback', function (Request $request) {
-//     $code = $request->query('code');
-
-//     if (!$code) {
-//         return 'لم يتم استلام رمز التفويض.';
-//     }
-
-//     $client = new Client();
-//     $client->setAuthConfig(storage_path('app/gmail_Oauth.json'));
-//     $client->setRedirectUri('http://localhost:8000/oauth2callback');
-//     $client->addScope(\Google\Service\Gmail::GMAIL_READONLY);
-//     $client->setAccessType('offline');
-//     $client->setPrompt('consent');
-
-//     $accessToken = $client->fetchAccessTokenWithAuthCode($code);
-
-//     // تحقق من وجود خطأ
-//     if (isset($accessToken['error'])) {
-//         return 'خطأ في الحصول على التوكن: ' . $accessToken['error_description'];
-//     }
-
-//     // حفظ التوكن في ملف أو قاعدة بيانات
-//     file_put_contents(storage_path('app/gmail-token.json'), json_encode($accessToken));
-
-//     return "تم حفظ رمز الدخول بنجاح.";
-// });
 Route::get('/sync-gmail', [JopController::class, 'sync'])->name('sync');
 
 Route::group([
@@ -72,6 +45,13 @@ Route::group([
     Route::get('/', function () {
         return redirect('admin/home');
     });
+
+    Route::get('/user/permissions/{id}', [PermissionsController::class, 'permissions'])->name('user.permissions');
+    Route::post('/user/permissions/{userId}', [PermissionsController::class, 'edit'])->name('permissions.edit');
+
+    Route::get('/company', [CompanySettingController::class, 'index'])->name('company.index');
+    Route::post('/company/update', [CompanySettingController::class, 'update'])->name('company.update');
+
     Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
 
     Route::get('/vissa/{id}', function ($id) {
@@ -80,7 +60,7 @@ Route::group([
         return view('print-customer.print-entry_application', [
             'customers' => [$customers]
         ]);
-    })->name( 'print_visaEntriy');
+    })->name('print_visaEntriy');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');

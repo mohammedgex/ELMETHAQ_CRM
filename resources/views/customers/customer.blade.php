@@ -82,7 +82,8 @@
                                                 رسالة نصية</button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-primary" id="collectSelected"> طلب
+                                            <button data-company='@json($company)'
+                                                class="dropdown-item text-primary" id="collectSelected"> طلب
                                                 انجاز</button>
                                         </li>
                                         <li>
@@ -570,12 +571,17 @@
                                                         </li>
 
                                                         <!-- خيار العرض -->
-                                                        <li>
-                                                            <a class="dropdown-item text-info"
-                                                                href="{{ route('customer.show', $customer->id) }}">
-                                                                <i class="fas fa-eye"></i> عرض
-                                                            </a>
-                                                        </li>
+                                                        @if (auth()->user() &&
+                                                                (auth()->user()->permissions->contains('permission', 'show-customer') || auth()->user()->role == 'admin'))
+                                                            <li>
+                                                                <a class="dropdown-item text-info"
+                                                                    href="{{ route('customer.show', $customer->id) }}">
+                                                                    <i class="fas fa-eye"></i> عرض
+                                                                </a>
+                                                            </li>
+                                                        @endif
+
+
                                                         @if ($customer->blackList)
                                                             @if ($customer->blackList->block == false)
                                                                 <li>
@@ -1041,7 +1047,7 @@
 
 @stop
 
-@section(section: 'js')
+@section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
@@ -1677,10 +1683,17 @@
                     ResidencyInKSA = "120";
                 }
 
+
+                // "مكتب768"
+                // "Ahmed121@@@"
+                const btn = document.getElementById('collectSelected');
+                const companyData = JSON.parse(btn.getAttribute('data-company'));
+                console.log(companyData);
+
                 console.log(customer);
                 const data = {
-                    UserName: "مكتب768",
-                    Password: "Ahmed121@@@",
+                    UserName: companyData.engaz_email,
+                    Password: companyData.engaz_password,
                     VisaKind: customer.visa_type.visa_peroid,
                     NATIONALITY: "EGY",
                     ResidenceCountry: "272",

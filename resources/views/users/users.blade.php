@@ -32,19 +32,22 @@
                         </thead>
                         <tbody>
                             @foreach ($users as $user)
-                            <tr class="table-light">
+                                <tr class="table-light">
                                     <td>#{{ $user->id }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
-                                    <td><span class="badge bg-info text-white">{{ $user->name }}</span></td>
+                                    <td><span class="badge bg-info text-white">{{ $user->role }}</span></td>
                                     <td>
+                                        <a href="{{ route('user.permissions', $user->id) }}"><button
+                                                class="btn btn-sm btn-outline-success shadow-sm"><i class="fas fa-edit"></i>
+                                                تعديل الصلاحيات</button></a>
                                         <button class="btn btn-sm btn-outline-success shadow-sm"><i class="fas fa-edit"></i>
                                             تعديل</button>
                                         <button class="btn btn-sm btn-outline-danger shadow-sm"><i class="fas fa-trash"></i>
                                             حذف</button>
                                     </td>
                                 </tr>
-                                @endforeach
+                            @endforeach
                         </tbody>
                     </table>
                 </div>

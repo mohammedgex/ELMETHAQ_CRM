@@ -314,93 +314,93 @@ return [
             'icon' => 'fas fa-users',
             'active' => true,
             'submenu' => [
-                [
-                    'text' => 'العملاء',
-                    'url' => 'admin/customers',
-                    'icon' => 'fas fa-eye',
-                    'label' => 4,
-                    'label_color' => 'success',
-                ],
-                [
-                    'text' => 'اضافة عميل',
-                    'url' => 'admin/customer-create',
-                    'icon' => 'fas fa-user-plus',
-                ],
-                [
-                    'text' => 'المؤهلون للقنصلية',
-                    'url' => 'admin/customer-consulate',
-                    'icon' => 'fas fa-user-check',
-                ],
-                
-        
+                // [
+                //     'text' => 'العملاء',
+                //     'url' => 'admin/customers',
+                //     'icon' => 'fas fa-eye',
+                //     'label' => 4,
+                //     'label_color' => 'success',
+                // ],
+                // [
+                //     'text' => 'اضافة عميل',
+                //     'url' => 'admin/customer-create',
+                //     'icon' => 'fas fa-user-plus',
+                // ],
+                // [
+                //     'text' => 'المؤهلون للقنصلية',
+                //     'url' => 'admin/customer-consulate',
+                //     'icon' => 'fas fa-user-check',
+                // ],
+
+
             ],
         ],
         [
             'text' => 'تعريفات التأشيرة',
             'icon' => 'fas fa-passport',
             'submenu' => [
-                [
-                    'text' => 'تعريف التأشيرات',
-                    'url' => 'admin/visa-type-view',
-                    'icon' => 'fab fa-cc-visa',
-                    'label_color' => 'success',
-                ],
-                [
-                    'text' => 'تعريف القنصلية',
-                    'url' => 'admin/embassy-view',
-                    'icon' => 'fas fa-landmark',
-                ],
-                [
-                    'text' => 'تعريف الكفيل',
-                    'url' => 'admin/sponsor-view',
-                    'icon' => 'fas fa-user-tie',
-                ],
+                // [
+                //     'text' => 'تعريف التأشيرات',
+                //     'url' => 'admin/visa-type-view',
+                //     'icon' => 'fab fa-cc-visa',
+                //     'label_color' => 'success',
+                // ],
+                // [
+                //     'text' => 'تعريف القنصلية',
+                //     'url' => 'admin/embassy-view',
+                //     'icon' => 'fas fa-landmark',
+                // ],
+                // [
+                //     'text' => 'تعريف الكفيل',
+                //     'url' => 'admin/sponsor-view',
+                //     'icon' => 'fas fa-user-tie',
+                // ],
             ],
         ],
         [
             'text' => 'تعريفات العملاء',
             'icon' => 'fas fa-cogs',
             'submenu' => [
-                [
-                    'text' => 'تعريف المناديب',
-                    'url' => 'admin/Delegates-create',
-                    'icon' => 'fas fa-user-tag',
-                ],
-                [
-                    'text' => 'تعريف قوالب الرسائل',
-                    'url' => 'admin/template',
-                    'icon' => 'fas fa-user-tag',
-                ],
-                [
-                    'text' => 'تعريف الحقائب',
-                    'url' => 'admin/bags-view',
-                    'icon' => 'fas fa-user-tag',
-                ],
+                // [
+                //     'text' => 'تعريف المناديب',
+                //     'url' => 'admin/Delegates-create',
+                //     'icon' => 'fas fa-user-tag',
+                // ],
+                // [
+                //     'text' => 'تعريف قوالب الرسائل',
+                //     'url' => 'admin/template',
+                //     'icon' => 'fas fa-user-tag',
+                // ],
+                // [
+                //     'text' => 'تعريف الحقائب',
+                //     'url' => 'admin/bags-view',
+                //     'icon' => 'fas fa-user-tag',
+                // ],
                 [
                     'text' => 'تعريف الوظائف',
                     'url' => 'admin/job-type-view',
                     'icon' => 'fas fa-briefcase',
                 ],
-                [
-                    'text' => 'تعريف المجموعات',
-                    'url' => 'admin/customer-groups',
-                    'icon' => 'fas fa-layer-group',
-                ],
+                // [
+                //     'text' => 'تعريف المجموعات',
+                //     'url' => 'admin/customer-groups',
+                //     'icon' => 'fas fa-layer-group',
+                // ],
                 [
                     'text' => 'تعريف التقييم',
                     'url' => 'admin/evaluation-view',
                     'icon' => 'fas fa-star-half-alt',
                 ],
-                [
-                    'text' => 'تعريف المستندات',
-                    'url' => 'admin/document-type-view',
-                    'icon' => 'fas fa-file-alt',
-                ],
-                [
-                    'text' => 'تعريف المعاملات المالية',
-                    'url' => 'admin/payment-type-view',
-                    'icon' => 'fas fa-money-check-alt',
-                ],
+                // [
+                //     'text' => 'تعريف المستندات',
+                //     'url' => 'admin/document-type-view',
+                //     'icon' => 'fas fa-file-alt',
+                // ],
+                // [
+                //     'text' => 'تعريف المعاملات المالية',
+                //     'url' => 'admin/payment-type-view',
+                //     'icon' => 'fas fa-money-check-alt',
+                // ],
             ],
         ],
         ['header' => 'اضافي'],
@@ -424,6 +424,11 @@ return [
         [
             'text' => 'المستخدم',
             'url' => 'admin/users',
+            'icon' => 'fas fa-user-cog',
+        ],
+        [
+            'text' => 'اعدادات الشركة',
+            'url' => 'admin/company',
             'icon' => 'fas fa-user-cog',
         ],
 
