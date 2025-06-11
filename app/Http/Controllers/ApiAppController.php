@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Customer;
 use App\Models\LeadsCustomers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Otp;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class ApiAppController extends Controller
@@ -33,9 +35,14 @@ class ApiAppController extends Controller
         }
 
         // التحقق من صحة كلمة المرور
-        if (!Hash::check($request->password, $user->password)) {
-            return response()->json(['message' => 'Invalid password'], 401);
-        }
+        // if (!Hash::check($request->password, $user->password)) {
+        //     return response()->json(['message' => 'Invalid password'], 401);
+        // }
+
+
+
+        // $customer = Customer::where('phone', $request->phone)->first();
+
 
         // إنشاء توكن للمستخدم باستخدام Sanctum
         $token = $user->createToken('YourAppName')->plainTextToken;
@@ -56,6 +63,21 @@ class ApiAppController extends Controller
                 'user' => $user,
             ], 200);
         }
+    }
+
+    public function getUserData(Request $request)
+    {
+        $user = Auth::user(); // يجلب المستخدم من التوكن المرسل في الهيدر
+
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        return response()->json([
+            'message' => 'User data retrieved successfully',
+            'user' => $user,
+            'customer' => $user->customer ? $user->customer->load('documentTypes') : null
+        ], 200);
     }
     public function register(Request $request)
     {

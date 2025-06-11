@@ -51,21 +51,21 @@
                                                 width="45" height="45" style="border-radius: 10px;"></a>
                                     </td>
                                     <!--
-                                                                                                                        <td>
-                                                                                                                            <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
-                                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                                        </td>
-                                                                                                                        <td>
-                                                                                                                            <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
-                                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                                        </td>
-                                                                                                                        <td>
-                                                                                                                            <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
-                                                                                                                                    src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
-                                                                                                                                    width="45" height="45" style="border-radius: 10px;"></a>
-                                                                                                                        </td> -->
+                                                                                                                            <td>
+                                                                                                                                <a href="{{ asset('storage/' . $lead->license_photo) }}" target="blank"><img
+                                                                                                                                        src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                                        width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                            </td>
+                                                                                                                            <td>
+                                                                                                                                <a href="{{ asset('storage/' . $lead->img_national_id_card) }}" target="blank"><img
+                                                                                                                                        src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                                        width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                            </td>
+                                                                                                                            <td>
+                                                                                                                                <a href="{{ asset('storage/' . $lead->passport_photo) }}" target="blank"><img
+                                                                                                                                        src="{{ asset('storage/' . $lead->image) }}" alt="{{ $lead->name }}"
+                                                                                                                                        width="45" height="45" style="border-radius: 10px;"></a>
+                                                                                                                            </td> -->
                                     <td><span class="badge bg-info text-white">{{ $lead->age }} عام</span></td>
                                     <td>{{ $lead->card_id }}</td>
                                     <td> {{ $lead->governorate }} </td>
@@ -190,6 +190,11 @@
                         <div class="mb-3 col-md-6">
                             <label class="font-weight-bold"> رقم الهاتف </label>
                             <input type="text" class="form-control" name="phone" placeholder="أدخل رقم الهاتف"
+                                required>
+                        </div>
+                        <div class="mb-3 col-md-6">
+                            <label class="font-weight-bold"> رقم الهاتف اخر</label>
+                            <input type="text" class="form-control" name="phone_two" placeholder="أدخل رقم الهاتف"
                                 required>
                         </div>
                     </div>

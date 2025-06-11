@@ -16,8 +16,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [ApiAppController::class, 'register']);
 Route::post('/confirm-code', [ApiAppController::class, 'verifyOtp']);
-Route::post('/complete-data', [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
+Route::post('/complete-data', action: [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
 Route::post('/login', [ApiAppController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/user-data', action: [ApiAppController::class, 'getUserData']);
 
 Route::get('/hospital/{id}', [CustomerController::class, 'hospitalBook'])->name("hospital.book");
 Route::post('/assign-group', [CustomerGroupController::class, 'assignGroup'])->name("group.assign");

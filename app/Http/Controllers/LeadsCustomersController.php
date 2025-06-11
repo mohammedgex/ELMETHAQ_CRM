@@ -129,6 +129,10 @@ class LeadsCustomersController extends Controller
     {
         # code...
         $lead = LeadsCustomers::find($leadId);
+        if ($lead->customer_id !== null) {
+            # code...
+            return redirect()->route('customer.indes');
+        }
         $customer = new Customer();
         $customer->image = $lead->image;
         $customer->name_ar = $lead->name;
@@ -160,6 +164,7 @@ class LeadsCustomersController extends Controller
         $img_national_id_card->file = $lead->img_national_id_card;
         $img_national_id_card->note = 'قادم من عميل محتمل';
         $img_national_id_card->customer_id = $customer->id;
+        $img_national_id_card->required = "اجباري";
         $img_national_id_card->save();
 
         $license_photo = new DocumentType();
@@ -168,6 +173,7 @@ class LeadsCustomersController extends Controller
         $license_photo->file = $lead->license_photo;
         $license_photo->note = 'قادم من عميل محتمل';
         $license_photo->customer_id = $customer->id;
+        $license_photo->required = "اجباري";
         $license_photo->save();
 
         $blackList = new BlackList();
