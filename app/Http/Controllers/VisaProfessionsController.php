@@ -6,6 +6,7 @@ use App\Models\CustomerGroup;
 use App\Models\VisaProfessions;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
+use phpseclib3\Crypt\RC2;
 
 class VisaProfessionsController extends Controller
 {
@@ -62,6 +63,7 @@ class VisaProfessionsController extends Controller
         $visa->save();
         return redirect()->back()->with('success', 'تمت إضافة المجموعة بنجاح!');
     }
+
     public function edit(Request $request, $id)
     {
         # code...
@@ -95,5 +97,41 @@ class VisaProfessionsController extends Controller
         }
         $visa->delete();
         return redirect()->route('visa-profession.index', ['visa_id' => $visaType, 'id' => null])->with('delete_success', '');
+    }
+
+    public function professionFromAtutomition(Request $request)
+    {
+        # code...
+
+        $visa_type = VisaType::find($request->visa_id);
+
+        $count = $visa_type->count ?? 0;
+        foreach ($request->data as $item) {
+            $groupTitle = $item['job'] . " (" . $visa_type->name . ")";
+            $groupOld = CustomerGroup::where("title", $groupTitle)->first();
+
+            if (!$groupOld) {
+                # code...
+                $group = new CustomerGroup();
+                $group->title = $item['job'] . " (" . $visa_type->name . ")";
+                $group->visa_type_id = $visa_type->id;
+                $group->save();
+
+                $profession = new VisaProfessions();
+                $profession->job = $item['job'];
+                $profession->profession_count = intval($item['numberOfPeople']) - intval($item['remaining']);
+                $count += $profession->profession_count;
+                $profession->customer_group_id = $group->id;
+                $profession->visa_type_id = $visa_type->id;
+                $profession->save();
+            }
+        }
+        $visa_type->count = $count;
+        $visa_type->save();
+        return response()->json(
+            [
+                "succes" => true
+            ]
+        );
     }
 }

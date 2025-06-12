@@ -17,7 +17,7 @@
                         <h4 class="mb-3 text-dark font-weight-bold">إضافة تأشيرة جديدة</h4>
 
                     </div>
-                    <form action="{{ route('visa-type.create') }}" method="POST">
+                    <form action="{{ route('visa-type.create') }}" method="POST" id="visa-type">
                         @csrf
                         <div class="row">
                             <div class="col-md-6 form-group">
@@ -41,12 +41,12 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> رقم السجل </label>
-                                <input type="number" class="form-control" name="registration_number"
-                                    placeholder="أدخل رقم السجل" required>
+                                <input type="number" id="registration_number" class="form-control"
+                                    name="registration_number" placeholder="أدخل رقم السجل" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> رقم الصادر </label>
-                                <input type="number" class="form-control" name="outgoing_number"
+                                <input type="number" id="outgoing_number" class="form-control" name="outgoing_number"
                                     placeholder="أدخل رقم الصادر" required>
                             </div>
                         </div>
@@ -54,8 +54,8 @@
                         <div class="row">
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> القنصلية </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="embassy_id"
-                                    required>
+                                <select class="form-control fw-bold" id="embassy_id" style="border-color: #997a44;"
+                                    name="embassy_id" required>
                                     <option value="">اختر الحالة</option>
                                     @foreach ($embassions as $embassy)
                                         <option value="{{ $embassy->id }}">{{ $embassy->title }}</option>
@@ -263,6 +263,15 @@
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li>
+                                                    <a data-embassy="{{ $visa_type->embassy->title }}"
+                                                        data-outgoing_number="{{ $visa_type->outgoing_number }}"
+                                                        data-registration_number="{{ $visa_type->registration_number }}"
+                                                        data-visa="{{ $visa_type->id }}"
+                                                        class="dropdown-item text-success" id="profession">
+                                                        <i class="fas fa-edit"></i> جلب المهن
+                                                    </a>
+                                                </li>
+                                                <li>
                                                     <a class="dropdown-item text-success"
                                                         href="{{ route('visa-profession.index', $visa_type->id) }}">
                                                         <i class="fas fa-edit"></i> المهن
@@ -414,37 +423,61 @@
         }
 
 
+        document.getElementById('profession').addEventListener('click', function(e) {
+            const element = e.currentTarget;
+
+            const visaType = {
+                VisaNumber: element.dataset.outgoing_number,
+                Embassy: element.dataset.embassy,
+                SponserID: element.dataset.registration_number
+            };
 
 
-        const visaType = {
-            outgoing_number: "123456",
-            embassy: {
-                title: "Saudi Embassy"
-            },
-            sponser: {
-                id_number: "987654321"
-            }
-        };
-
-        document.getElementById('analyzeBtn').addEventListener('click', function() {
+            // إذا كنت تريد إرسال الطلب لجلب المهن مثلاً:
             fetch('http://localhost:3000/getVisaInfo', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
+                        'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({
-                        VisaNumber: visaType.outgoing_number,
-                        Embassy: visaType.embassy.title,
-                        SponserID: visaType.sponser.id_number,
-                    }),
+                    body: JSON.stringify(visaType)
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log('البيانات المستلمة:', data);
-                    // يمكنك عرض البيانات في صفحة HTML هنا
+                    data.visa_id = element.dataset.visa;
+
+                    fetch("{{ route('profession') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+                                    .getAttribute('content')
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('خطأ في الاستجابة من السيرفر');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            Swal.fire({
+                                title: "نجحت العملية!",
+                                icon: "success"
+                            });
+
+                            setTimeout(() => {
+                                location.reload();
+                            }, 3000);
+                        })
+                        .catch(error => {
+                            console.error("حدث خطأ أثناء جلب المهن:", error);
+                        });
+
                 })
                 .catch(error => {
-                    console.error('حدث خطأ:', error);
+                    console.error('حدث خطأ أثناء جلب المهن:', error);
                 });
         });
     </script>

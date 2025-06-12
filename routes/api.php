@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\JopController;
+use App\Http\Controllers\VisaProfessionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,3 +28,4 @@ Route::post('/assign-bag', [BagController::class, 'assignBag'])->name("bag.assig
 Route::post('/send-sms', [JopController::class, 'sendSms'])->name('send.sms');
 Route::post('/savePDF', [JopController::class, 'savePDF'])->name('savePDF');
 Route::post('/send-engaz', [CustomerController::class, 'engaz_request'])->name('engaz_request');
+Route::post('/professions', [VisaProfessionsController::class, 'professionFromAtutomition'])->name('profession');

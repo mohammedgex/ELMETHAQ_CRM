@@ -74,9 +74,11 @@
                                 {{ $group->title }}
                             </p>
                         </div>
-                        <div class="group-count text-muted " style='color:#000 !important'>
-                            {{ count($group->customers) }} من {{ $group->visaProfession->profession_count }}
-                        </div>
+                        @if ($group->visaProfession)
+                            <div class="group-count text-muted " style='color:#000 !important'>
+                                {{ count($group->customers) }} من {{ $group->visaProfession->profession_count }}
+                            </div>
+                        @endif
                     </div>
                 </a>
             </div>
