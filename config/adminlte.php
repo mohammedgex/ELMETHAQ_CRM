@@ -309,6 +309,11 @@ return [
             'url' => 'admin/home'
         ],
         [
+            'text' => 'العملاء المحتملون',
+            'url' => 'admin/leads-customers',
+            'icon' => 'fas fa-hourglass-half',
+        ],
+        [
             'text' => 'العملاء',
             'icon' => 'fas fa-users',
             'active' => true,
@@ -403,11 +408,6 @@ return [
             ],
         ],
         ['header' => 'اضافي'],
-        [
-            'text' => 'العملاء المحتملون',
-            'url' => 'admin/leads-customers',
-            'icon' => 'fas fa-user-clock',
-        ],
         [
             'text' => 'ارسال رسائل',
             'url' => 'admin/bulk-sms-view',

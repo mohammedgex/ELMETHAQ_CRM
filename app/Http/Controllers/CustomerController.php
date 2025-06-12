@@ -34,15 +34,14 @@ class CustomerController extends Controller
         $sponsers = Sponser::all();
         $paymentTitles = PaymentTitle::all();
         $visas = VisaType::all();
-        $validVisas = [];
 
-        foreach ($visas as $visa) {
-            $visasCount = $visa->visa_professions()->sum('profession_count');
+        // foreach ($visas as $visa) {
+        //     $visasCount = $visa->visa_professions()->sum('profession_count');
 
-            if (intval($visasCount) < intval($visa->count)) {
-                $validVisas[] = $visa;
-            }
-        }
+        //     if (intval($visasCount) < intval($visa->count)) {
+        //         $validVisas[] = $visa;
+        //     }
+        // }
 
         $customer = [];
         if ($id == null) {
@@ -68,7 +67,7 @@ class CustomerController extends Controller
             'groups' => $groups,
             'jobs' => $jobs,
             'sponsers' => $sponsers,
-            'visas' => $validVisas,
+            'visas' => $visas,
             'fileTitles' => $fileTitles,
             'paymentTitles' => $paymentTitles,
             'histories' => $histories,
@@ -92,7 +91,8 @@ class CustomerController extends Controller
             'sponser',
             'visaType.embassy',              // مثال علاقة فرعية داخل visaType
             'customerGroup.visaProfession',
-            'customerGroup.visaType',        // لو موجودة في CustomerGroup
+            'customerGroup.visaType.embassy',        // لو موجودة في CustomerGroup
+            'customerGroup.visaType.sponser',        // لو موجودة في CustomerGroup
             'delegate',
             'evaluation',
             'jobTitle',

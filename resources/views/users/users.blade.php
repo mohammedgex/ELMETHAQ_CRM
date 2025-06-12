@@ -11,10 +11,10 @@
         <div class="col-md-12">
             <div class="card shadow-lg p-4 border-0" style="border-radius: 15px; background-color: #eae0d5;">
                 <div class="d-flex align-items-center my-3">
-                    <button class="btn btn-sm btn-success shadow-sm mx-1" style="height: 40px;" data-bs-toggle="modal"
-                        data-bs-target="#addUserModal">
+                    <a class="btn btn-sm btn-success shadow-sm mx-1" href="{{ route('user.index') }}" style="height: 40px;"
+                        data-bs-toggle="modal" data-bs-target="#addUserModal">
                         <i class="fas fa-user-plus"></i> إضافة مستخدم
-                    </button>
+                    </a>
                     <input type="text" class="form-control form-control-sm mx-1" placeholder="بحث عن مستخدم"
                         style="width: 300px;height: 40px;">
                 </div>

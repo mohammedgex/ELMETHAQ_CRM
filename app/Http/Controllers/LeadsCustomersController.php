@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BlackList;
 use App\Models\Customer;
+use App\Models\CustomerGroup;
 use App\Models\Delegate;
 use App\Models\DocumentType;
 use App\Models\History;
@@ -21,14 +22,53 @@ class LeadsCustomersController extends Controller
         $leads = LeadsCustomers::all();
         $delegates = Delegate::all();
         $jobs = JobTitle::all();
+        $groups = CustomerGroup::all();
+        $governorates = [
+            'القاهرة',
+            'الجيزة',
+            'الأسكندرية',
+            'الدقهلية',
+            'البحر الأحمر',
+            'البحيرة',
+            'الفيوم',
+            'الغربية',
+            'الإسماعيلية',
+            'المنوفية',
+            'المنيا',
+            'القليوبية',
+            'الوادي الجديد',
+            'السويس',
+            'أسوان',
+            'أسيوط',
+            'بني سويف',
+            'بورسعيد',
+            'دمياط',
+            'الشرقية',
+            'جنوب سيناء',
+            'كفر الشيخ',
+            'مطروح',
+            'الأقصر',
+            'قنا',
+            'شمال سيناء',
+            'سوهاج'
+        ];
         return view('leads-customers.leads-customers', [
             'leads' => $leads,
             'jobs' => $jobs,
-            'delegates' => $delegates
+            'delegates' => $delegates,
+            "governorates" => $governorates,
+            "groups" => $groups,
         ]);
     }
+
     public function create(Request $request)
     {
+        $request->validate([
+            "card_id" => 'required|unique:leads_customers,card_id',
+        ], [
+            'card_id.unique' => 'الرقم القومي موجود من قبل.',
+            'card_id.required' => 'الرقم القومي مطلوب.',
+        ]);
         $lead = $request->all();
 
         // رفع الصور إذا كانت موجودة
@@ -75,6 +115,7 @@ class LeadsCustomersController extends Controller
             'jobs' => $jobs
         ]);
     }
+
     public function edit(Request $request, $id)
     {
         // جلب البيانات من قاعدة البيانات
@@ -116,70 +157,72 @@ class LeadsCustomersController extends Controller
 
         return redirect()->route('leads-customers.index')->with('success', 'تم تحديث البيانات بنجاح');
     }
-    public function delete($id)
-    {
-        // جلب البيانات من قاعدة البيانات
-        $lead = LeadsCustomers::findOrFail($id);
-        $lead->delete();
 
-        return redirect()->route('leads-customers.index')->with('success', 'تم حذف البيانات بنجاح');
-    }
-
-    public function leadToCustomer($leadId)
+    public function leadToCustomer(Request $request)
     {
-        # code...
-        $lead = LeadsCustomers::find($leadId);
-        if ($lead->customer_id !== null) {
-            # code...
-            return redirect()->route('customer.indes');
+        $request->validate([
+            'leads' => "required",
+            'group_id' => "required",
+        ]);
+        $leads = json_decode($request->leads, true);
+        if (!is_array($leads)) {
+            return response()->json(['error' => 'بيانات العملاء غير صحيحة'], 422);
         }
-        $customer = new Customer();
-        $customer->image = $lead->image;
-        $customer->name_ar = $lead->name;
-        $customer->age = $lead->age;
-        $customer->card_id = $lead->card_id;
-        $customer->governorate_live = $lead->governorate;
-        $customer->phone = $lead->phone;
-        $customer->license_type = $lead->licence_type;
-        $customer->card_id = $lead->card_id;
-        $customer->mrz_image = $lead->passport_photo;
-        $customer->job_title_id = $lead->job_title_id;
-        $customer->delegate_id = $lead->delegate_id;
-        $customer->save();
-        $lead->status = 'عميل اساسي';
-        $lead->customer_id = $customer->id;
-        $lead->evaluation = 'مقبول';
-        $lead->save();
 
-        $history = new History();
-        $history->description = 'انتقل من عميل محتمل الي عميل اساسي';
-        $history->date = Carbon::now();
-        $history->customer_id = $customer->id;
-        $history->user_id = auth()->id();
-        $history->save();
+        foreach ($leads as $leadId) {
+            $lead = LeadsCustomers::find($leadId);
+            $customer = new Customer();
+            $customer->image = $lead->image;
+            $customer->name_ar = $lead->name;
+            $customer->age = $lead->age;
+            $customer->card_id = $lead->card_id;
+            $customer->governorate_live = $lead->governorate;
+            $customer->phone = $lead->phone;
+            $customer->license_type = $lead->licence_type;
+            $customer->card_id = $lead->card_id;
+            $customer->mrz_image = $lead->passport_photo;
+            $customer->job_title_id = $lead->job_title_id;
+            $customer->delegate_id = $lead->delegate_id;
+            $customer->customer_group_id = $request->group_id;
+            $customer->save();
+            $lead->status = 'عميل اساسي';
+            $lead->customer_id = $customer->id;
+            $lead->evaluation = 'مقبول';
+            $lead->save();
 
-        $img_national_id_card = new DocumentType();
-        $img_national_id_card->document_type = "البطاقة الشخصية";
-        $img_national_id_card->status = "لا يوجد بالمكتب";
-        $img_national_id_card->file = $lead->img_national_id_card;
-        $img_national_id_card->note = 'قادم من عميل محتمل';
-        $img_national_id_card->customer_id = $customer->id;
-        $img_national_id_card->required = "اجباري";
-        $img_national_id_card->save();
+            $history = new History();
+            $history->description = 'انتقل من عميل محتمل الي عميل اساسي';
+            $history->date = Carbon::now();
+            $history->customer_id = $customer->id;
+            $history->user_id = auth()->id();
+            $history->save();
 
-        $license_photo = new DocumentType();
-        $license_photo->document_type = "صورة الرخصة";
-        $license_photo->status = "لا يوجد في المكتب";
-        $license_photo->file = $lead->license_photo;
-        $license_photo->note = 'قادم من عميل محتمل';
-        $license_photo->customer_id = $customer->id;
-        $license_photo->required = "اجباري";
-        $license_photo->save();
+            $img_national_id_card = new DocumentType();
+            $img_national_id_card->document_type = "البطاقة الشخصية";
+            $img_national_id_card->status = "لا يوجد بالمكتب";
+            $img_national_id_card->file = $lead->img_national_id_card;
+            $img_national_id_card->note = 'قادم من عميل محتمل';
+            $img_national_id_card->customer_id = $customer->id;
+            $img_national_id_card->required = "اجباري";
+            $img_national_id_card->save();
 
-        $blackList = new BlackList();
-        $blackList->block = false;
-        $blackList->customer_id = $customer->id;
-        $blackList->save();
+            $license_photo = new DocumentType();
+            $license_photo->document_type = "صورة الرخصة";
+            $license_photo->status = "لا يوجد بالمكتب";
+            $license_photo->file = $lead->license_photo;
+            $license_photo->note = 'قادم من عميل محتمل';
+            $license_photo->customer_id = $customer->id;
+            $license_photo->required = "اجباري";
+            $license_photo->save();
+
+            $blackList = new BlackList();
+            $blackList->block = false;
+            $blackList->customer_id = $customer->id;
+            $blackList->save();
+        }
+
+        # code...
+
         return redirect()->route('customer.indes');
     }
 }

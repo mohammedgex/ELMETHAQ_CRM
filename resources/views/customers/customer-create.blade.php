@@ -176,11 +176,11 @@
                                 </div>
 
                                 <!-- <div class="col-md-6">
-                                                                                                                                                                                                                                                                                                                                                                                    <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                                                                                                                                                                                                                                                                                                                                                    <input type="text" class="form-control fw-bold"
-                                                                                                                                                                                                                                                                                                                                                                                        style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
-                                                                                                                                                                                                                                                                                                                                                                                        name="age">
-                                                                                                                                                                                                                                                                                                                                                                                </div> -->
+                                                                                                                                                                                                                                                                                                                                                                                                            <label class="fw-bold" style="color: #997a44;">السن</label>
+                                                                                                                                                                                                                                                                                                                                                                                                            <input type="text" class="form-control fw-bold"
+                                                                                                                                                                                                                                                                                                                                                                                                                style="height: 60px; border-color: #997a44;" placeholder="أدخل العمر"
+                                                                                                                                                                                                                                                                                                                                                                                                                name="age">
+                                                                                                                                                                                                                                                                                                                                                                                                        </div> -->
                             </div>
                             <div class="row">
                                 <div class="col-md-6">
@@ -1600,16 +1600,16 @@
 
 
         /* body,
-            html {
-                height: 100%;
-                margin: 0;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                background-color: #fff;
-                font-family: Arial, sans-serif;
-                color: #333;
-            } */
+                                    html {
+                                        height: 100%;
+                                        margin: 0;
+                                        display: flex;
+                                        justify-content: center;
+                                        align-items: center;
+                                        background-color: #fff;
+                                        font-family: Arial, sans-serif;
+                                        color: #333;
+                                    } */
 
         .loader {
             border: 5px solid #f3f3f3;
@@ -1878,6 +1878,12 @@
 
         const genAI = new GoogleGenerativeAI("AIzaSyDjk68-pr2IRQ5oJOb6AkAZe219EpJAHh4");
 
+        async function convertImageUrlToBase64(imageUrl) {
+            const response = await fetch(imageUrl);
+            const blob = await response.blob();
+            return await fileToBase64(blob);
+        }
+
         async function fileToBase64(file) {
             const buffer = await file.arrayBuffer();
             const bytes = new Uint8Array(buffer);
@@ -1889,17 +1895,25 @@
         document.getElementById("analyzeBtn").addEventListener("click", async () => {
             document.getElementById("hhhh").style.display = "block";
             document.getElementById("gggg").style.display = "block";
+
             const fileInput = document.getElementById("passportInput");
             const file = fileInput.files[0];
             const resultBox = document.getElementById("resultBox");
 
-            if (!file) {
-                alert("يرجى اختيار صورة جواز السفر.");
-                return;
-            }
+            let base64Image = "";
+            let mimeType = "image/jpeg"; // default
 
             try {
-                const base64Image = await fileToBase64(file);
+                if (file) {
+                    base64Image = await fileToBase64(file);
+                    mimeType = file.type;
+                } else {
+                    const imageUrl = document.getElementById('imagePreview').src;
+                    base64Image = await convertImageUrlToBase64(imageUrl);
+                    // ممكن نحاول تحديد نوع الصورة من الامتداد
+                    mimeType = imageUrl.endsWith(".png") ? "image/png" : "image/jpeg";
+                }
+
                 const model = genAI.getGenerativeModel({
                     model: "gemini-2.0-flash"
                 });
@@ -1926,72 +1940,55 @@ Extract all data from this passport in English. Convert the national ID to Engli
   "full_mrz",
   "age"
 }
-        `;
+`;
 
                 const result = await model.generateContent({
                     contents: [{
                         role: "user",
                         parts: [{
                                 inlineData: {
-                                    mimeType: file.type,
+                                    mimeType: mimeType,
                                     data: base64Image,
                                 },
                             },
                             {
-                                text: prompt
+                                text: prompt,
                             },
                         ],
-                    }, ],
+                    }],
                 });
+
                 let text = await result.response.text();
-
-                // تنظيف النص من Markdown إن وجد
                 text = text.trim();
+
                 if (text.startsWith("```json")) {
-                text = text.replace(/^```json/, '').replace(/```$/, '').trim();
-
-                    try {
-                        // تحويل النص إلى كائن JSON
-                        const data = JSON.parse(text);
-
-                        // التحقق من وجود full_mrz في الكائن
-                        if (data.passport_type !== 'null') {
-                            document.getElementById("mrz_input").value = data.full_mrz;
-                            document.getElementById("issue_place").value = data.issuing_office;
-                            document.getElementById("full_name").value = data.full_name_english;
-                            document.getElementById("passport_number").value = data.passport_number;
-                            document.getElementById("nationality").value = data.nationality_ar;
-                            document.getElementById("dob").value = data.date_of_birth;
-                            document.getElementById("expiry_date").value = data.date_of_expiry;
-                            document.getElementById("gender").value = data.sex_ar;
-                            document.getElementById("age").value = data.age;
-                            document.getElementById("card_id").value = data.national_id;
-                            document.getElementById("date_of_issue").value = data.date_of_issue;
-                            document.getElementById("hhhh").style.display = "none";
-                            document.getElementById("gggg").style.display = "none";
-
-                        } else {
-                            document.getElementById("hhhh").style.display = "none";
-                            document.getElementById("gggg").style.display = "none";
-                            alert("The passport photo is not clear.");
-                        }
-                    } catch (error) {
-                        document.getElementById("hhhh").style.display = "none";
-                        document.getElementById("gggg").style.display = "none";
-                        console.error("Error parsing JSON:", error);
-                    }
+                text = text.replace(/^```json/, "").replace(/```$/, "").trim();
                 }
-                console.log(text)
+
+                const data = JSON.parse(text);
+
+                if (data.passport_type !== 'null') {
+                    document.getElementById("mrz_input").value = data.full_mrz;
+                    document.getElementById("issue_place").value = data.issuing_office;
+                    document.getElementById("full_name").value = data.full_name_english;
+                    document.getElementById("passport_number").value = data.passport_number;
+                    document.getElementById("nationality").value = data.nationality_ar;
+                    document.getElementById("dob").value = data.date_of_birth;
+                    document.getElementById("expiry_date").value = data.date_of_expiry;
+                    document.getElementById("gender").value = data.sex_ar;
+                    document.getElementById("age").value = data.age;
+                    document.getElementById("card_id").value = data.national_id;
+                    document.getElementById("date_of_issue").value = data.date_of_issue;
+                } else {
+                    alert("The passport photo is not clear.");
+                }
             } catch (error) {
-                document.getElementById("hhhh").style.display = "none";
-                document.getElementById("gggg").style.display = "none";
                 console.error("❌ Error:", error);
                 alert("حدث خطأ أثناء تحليل الصورة");
+            } finally {
+                document.getElementById("hhhh").style.display = "none";
+                document.getElementById("gggg").style.display = "none";
             }
-        });
-
-        window.addEventListener("load", function() {
-            console.log('uguygyugtyu');
         });
     </script>
 @stop

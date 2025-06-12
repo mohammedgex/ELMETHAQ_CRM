@@ -45,6 +45,9 @@ Route::group([
     Route::get('/', function () {
         return redirect('admin/home');
     });
+    Route::get('/user/create', [UserController::class, "show"])->name("user.index");
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+
 
     Route::get('/user/permissions/{id}', [PermissionsController::class, 'permissions'])->name('user.permissions');
     Route::post('/user/permissions/{userId}', [PermissionsController::class, 'edit'])->name('permissions.edit');
@@ -160,7 +163,7 @@ Route::group([
     Route::post('/customer-search', [CustomerController::class, 'search'])->name('customer.search');
     Route::post('/consulate-search', [CustomerController::class, 'searchConsulate'])->name('consulate.search');
     Route::post('/customer-multi_Search', [CustomerController::class, 'multi_Search'])->name('customer.multi_search');
-    Route::get('/lead-to-customer/{id}', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
+    Route::post('/lead-to-customer', [LeadsCustomersController::class, 'leadToCustomer'])->name('customer.leadToCustomer');
     Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
     Route::post('/customer-consulate/fillter', [CustomerController::class, 'filterConsulate'])->name('consulate.filter');
     Route::post('/bag-and-group/fillter', [CustomerController::class, 'filterGroupAndBag'])->name('filterGroupAndBag');

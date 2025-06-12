@@ -31,7 +31,7 @@
                         </div>
                         <div class="col-md-4 form-group">
                             <label class="font-weight-bold">البريد الإلكتروني لإنجاز</label>
-                            <input type="email" class="form-control" name="engaz_email"
+                            <input type="text" class="form-control" name="engaz_email"
                                 value="{{ $company->engaz_email ?? '' }}" required>
                         </div>
                         <div class="col-md-4 form-group">

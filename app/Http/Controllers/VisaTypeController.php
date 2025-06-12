@@ -44,13 +44,11 @@ class VisaTypeController extends Controller
     {
         # code...
         $request->validate([
-            'count' => 'required',
             'outgoing_number' => 'required',
             'registration_number' => 'required',
             'visa_peroid' => 'required',
             'sponser_id' => 'required',
             'embassy_id' => 'required',
-            'porpose' => "required",
             'name' => "required"
         ]);
 
@@ -68,6 +66,7 @@ class VisaTypeController extends Controller
         if ($response->successful()) {
             $data = $response->json();
 
+            $count = 0;
             foreach ($data['data'] as $item) {
                 $group = new CustomerGroup();
                 $group->title = $item['job'] . " (" . $visa_type->name . ")";
@@ -77,10 +76,13 @@ class VisaTypeController extends Controller
                 $profession = new VisaProfessions();
                 $profession->job = $item['job'];
                 $profession->profession_count = intval($item['numberOfPeople']) - intval($item['remaining']);
+                $count += $profession->profession_count;
                 $profession->customer_group_id = $group->id;
                 $profession->visa_type_id = $visa_type->id;
                 $profession->save();
             }
+            $visa_type->count = $count;
+            $visa_type->save();
             return redirect()->route("home");
         } else {
             return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
@@ -92,22 +94,18 @@ class VisaTypeController extends Controller
     {
         # code...
         $request->validate([
-            'count' => 'required',
             'outgoing_number' => 'required',
             'registration_number' => 'required',
             'visa_peroid' => 'required',
             'sponser_id' => 'required',
             'embassy_id' => 'required',
-            'porpose' => "required",
             'name' => "required"
         ]);
 
         $visa_type = VisaType::find($id);
-        $visa_type->count = $request->count;
         $visa_type->outgoing_number = $request->outgoing_number;
         $visa_type->registration_number = $request->registration_number;
         $visa_type->visa_peroid = $request->visa_peroid;
-        $visa_type->porpose = $request->porpose;
         $visa_type->name = $request->name;
         $visa_type->sponser_id = $request->sponser_id;
         $visa_type->embassy_id = $request->embassy_id;

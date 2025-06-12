@@ -17,29 +17,36 @@ class CompanySettingController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'name'            => 'required|string|max:255',
-            'address'         => 'nullable|string|max:255',
-            'license_number'  => 'nullable|string|max:100',
-            'engaz_email'     => 'required|email',
-            'engaz_password'  => 'required|string',
-            'logo'            => 'nullable|image|max:2048', // max 2MB
+            'name'            => 'required',
+            'address'         => 'nullable',
+            'license_number'  => 'nullable',
+            'engaz_email'     => 'required',
+            'engaz_password'  => 'required',
+            'logo'            => 'nullable|image',
         ]);
 
         $company = CompanySetting::first();
 
+        // لو مفيش سجل، ننشئ جديد
         if (!$company) {
             $company = new CompanySetting();
         }
 
-        // رفع الشعار إذا تم رفعه
-        if ($request->hasFile('logo')) {
-            // حذف الشعار القديم
-            $data['logo'] = $request->file('logo')->store('uploads', 'public');
+        // تحديث الحقول
+        $company->name           = $data['name'];
+        $company->address        = $data['address'] ?? null;
+        $company->license_number = $data['license_number'] ?? null;
+        $company->engaz_email    = $data['engaz_email'];
+        $company->engaz_password = $data['engaz_password'];
 
-            $data['logo'] = $request->file('logo')->store('logos', 'public');
+        // التعامل مع الشعار
+        if ($request->hasFile('logo')) {
+
+            $path = $request->file('logo')->store('logos', 'public');
+            $company->logo = $path;
         }
 
-        $company->fill($data)->save();
+        $company->save();
 
         return redirect()->back()->with('success', 'تم تحديث معلومات الشركة بنجاح');
     }

@@ -1668,14 +1668,16 @@
 
                 let NumberEntryDay;
                 let ResidencyInKSA;
+                console.log(customer);
 
-                if (customer.visa_type.visa_peroid == "تأشيرة العمل المؤقت لخدمات الحج والعمرة") {
+                if (customer.customer_group.visa_type.visa_peroid ==
+                    "تأشيرة العمل المؤقت لخدمات الحج والعمرة") {
                     NumberEntryDay = "90";
                     ResidencyInKSA = "120";
-                } else if (customer.visa_type.visa_peroid == "عمل") {
+                } else if (customer.customer_group.visa_type.visa_peroid == "عمل") {
                     NumberEntryDay = "90";
                     ResidencyInKSA = "90";
-                } else if (customer.visa_type.visa_peroid == "عمل مؤقت") {
+                } else if (customer.customer_group.visa_type.visa_peroid == "عمل مؤقت") {
                     NumberEntryDay = "365";
                     ResidencyInKSA = "90";
                 } else {
@@ -1688,16 +1690,15 @@
                 // "Ahmed121@@@"
                 const btn = document.getElementById('collectSelected');
                 const companyData = JSON.parse(btn.getAttribute('data-company'));
-                console.log(companyData);
+                console.log(btn);
 
-                console.log(customer);
                 const data = {
                     UserName: companyData.engaz_email,
                     Password: companyData.engaz_password,
-                    VisaKind: customer.visa_type.visa_peroid,
+                    VisaKind: customer.customer_group.visa_type.visa_peroid,
                     NATIONALITY: "EGY",
                     ResidenceCountry: "272",
-                    EmbassyCode: customer.visa_type.embassy.title,
+                    EmbassyCode: customer.customer_group.visa_type.embassy.title,
                     NumberOfEntries: "0",
                     NumberEntryDay: NumberEntryDay,
                     ResidencyInKSA: ResidencyInKSA,
@@ -1721,15 +1722,15 @@
                     DEGREE_SOURCE: "-",
                     ADDRESS_HOME: "بحره",
                     Personal_Email: "moha@gmail.com",
-                    SPONSER_NAME: customer.sponser.name,
-                    SPONSER_NUMBER: customer.sponser.id_number,
-                    SPONSER_ADDRESS: customer.sponser.address,
-                    SPONSER_PHONE: customer.sponser.phone,
+                    SPONSER_NAME: customer.customer_group.visa_type.sponser.name,
+                    SPONSER_NUMBER: customer.customer_group.visa_type.sponser.id_number,
+                    SPONSER_ADDRESS: customer.customer_group.visa_type.sponser.address,
+                    SPONSER_PHONE: customer.customer_group.visa_type.sponser.phone,
                     COMING_THROUGH: "2",
                     ENTRY_POINT: "1",
                     ExpectedEntryDate: new Date(new Date().setMonth(new Date().getMonth() + 2))
                         .toLocaleDateString('en-GB'),
-                    porpose: customer.visa_type.porpose,
+                    porpose: "عمل",
                     car_number: "SV123",
                     RELIGION: "1",
                     SOCIAL_STATUS: "2",
@@ -1747,34 +1748,45 @@
                     .then(res => res.json())
                     .then(response => {
                         console.log(response["appNo"])
-                        fetch('{{ route('engaz_request') }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({
-                                    customer_id: customer.id,
-                                    e_number: response["appNo"],
-                                    email: "{{ auth()->user()->email }}"
+                        if (response["appNo"] != undefined) {
+                            fetch('{{ route('engaz_request') }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        customer_id: customer.id,
+                                        e_number: response["appNo"],
+                                        email: "{{ auth()->user()->email }}"
+                                    })
                                 })
-                            })
-                            .then(res => res.json())
-                            .then(ff => {
-                                console.log(ff)
-                                Swal.fire({
-                                    title: "نجحت العملية!",
-                                    text: "تم إصدار طلب إنجاز للعميل: " + customer.name_ar +
-                                        " \n رقم الطلب: " + response["appNo"],
-                                    icon: "success"
-                                });
-                                document.getElementById("hhhh").style.display = "none"
-                                document.getElementById("gggg").style.display = "none"
-                            })
-                            .catch(err => {
-                                console.log(err)
-                                document.getElementById("hhhh").style.display = "none"
-                                document.getElementById("gggg").style.display = "none"
-                            })
+                                .then(res => res.json())
+                                .then(ff => {
+                                    console.log(ff)
+                                    Swal.fire({
+                                        title: "نجحت العملية!",
+                                        text: "تم إصدار طلب إنجاز للعميل: " + customer
+                                            .name_ar +
+                                            " \n رقم الطلب: " + response["appNo"],
+                                        icon: "success"
+                                    });
+                                    document.getElementById("hhhh").style.display = "none"
+                                    document.getElementById("gggg").style.display = "none"
+                                })
+                                .catch(err => {
+                                    console.log(err)
+                                    document.getElementById("hhhh").style.display = "none"
+                                    document.getElementById("gggg").style.display = "none"
+                                })
+                        } else {
+                            document.getElementById("hhhh").style.display = "none"
+                            document.getElementById("gggg").style.display = "none"
+                            Swal.fire({
+                                title: "فشلت العملية!",
+                                text: "هناك مشكلة غير معروفة",
+                                icon: "error" // يمكن استخدام: success, error, warning, info, question
+                            });
+                        }
                     })
                     .catch(err => {
                         document.getElementById("hhhh").style.display = "none"

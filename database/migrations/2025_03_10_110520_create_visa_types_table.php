@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('visa_types', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('count');
+            $table->string('count')->nullable();
             $table->string('outgoing_number');
             $table->string('registration_number');
-            $table->text('porpose');
+            $table->text('porpose')->nullable();
             $table->string('visa_peroid');
             $table->foreignId('sponser_id')->constrained('sponsers')->onDelete('cascade');
             $table->foreignId('embassy_id')->constrained('embassies')->onDelete('cascade');
