@@ -54,39 +54,40 @@ class VisaTypeController extends Controller
 
         $visa_type = new VisaType($request->all());
         $visa_type->save();
-        $response = Http::post('http://localhost:3000/getVisaInfo', [
-            'VisaNumber' =>  $visa_type->outgoing_number,
-            'Embassy' => $visa_type->embassy->title,
-            'SponserID' => $visa_type->sponser->id_number,
-        ]);
+        try {
+            $response = Http::post('http://localhost:3000/getVisaInfo', [
+                'VisaNumber' =>  $visa_type->outgoing_number,
+                'Embassy' => $visa_type->embassy->title,
+                'SponserID' => $visa_type->sponser->id_number,
+            ]);
+            if ($response->successful()) {
+                $data = $response->json();
 
+                $count = 0;
+                foreach ($data['data'] as $item) {
+                    $group = new CustomerGroup();
+                    $group->title = $item['job'] . " (" . $visa_type->name . ")";
+                    $group->visa_type_id = $visa_type->id;
+                    $group->save();
 
-
-        // التعامل مع الاستجابة
-        if ($response->successful()) {
-            $data = $response->json();
-
-            $count = 0;
-            foreach ($data['data'] as $item) {
-                $group = new CustomerGroup();
-                $group->title = $item['job'] . " (" . $visa_type->name . ")";
-                $group->visa_type_id = $visa_type->id;
-                $group->save();
-
-                $profession = new VisaProfessions();
-                $profession->job = $item['job'];
-                $profession->profession_count = intval($item['numberOfPeople']) - intval($item['remaining']);
-                $count += $profession->profession_count;
-                $profession->customer_group_id = $group->id;
-                $profession->visa_type_id = $visa_type->id;
-                $profession->save();
+                    $profession = new VisaProfessions();
+                    $profession->job = $item['job'];
+                    $profession->profession_count = intval($item['numberOfPeople']) - intval($item['remaining']);
+                    $count += $profession->profession_count;
+                    $profession->customer_group_id = $group->id;
+                    $profession->visa_type_id = $visa_type->id;
+                    $profession->save();
+                }
+                $visa_type->count = $count;
+                $visa_type->save();
+                return redirect()->route("home");
+            } else {
+                return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
             }
-            $visa_type->count = $count;
-            $visa_type->save();
-            return redirect()->route("home");
-        } else {
+        } catch (\Throwable $th) {
             return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
         }
+
         return redirect()->route('visa-profession.index', ['visa_id' => $visa_type->id, 'id' => null]);
     }
 
