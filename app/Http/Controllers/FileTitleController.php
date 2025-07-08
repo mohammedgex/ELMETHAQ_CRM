@@ -47,7 +47,7 @@ class FileTitleController extends Controller
         $title = "تهانينا!";
         $body = "تم قبول المستند بنجاح.";
         $icon = null; // أو رابط أيقونة
-        app(ApiAppController::class)->sendFcmMessage("lead", $lead->id, $title, $body, $icon);
+        app(ApiAppController::class)->sendFcmMessage("customer", $document->customer_id, $title, $body, $icon);
         return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');
     }
     public function reject($id)
@@ -67,7 +67,7 @@ class FileTitleController extends Controller
         $title = "مستند مرفوض!";
         $body = "تم رفض المستند, يرجى إعادة إرساله.";
         $icon = null; // أو رابط أيقونة
-        app(ApiAppController::class)->sendFcmMessage("lead", $lead->id, $title, $body, $icon);
+        app(ApiAppController::class)->sendFcmMessage("customer", $document->customer_id, $title, $body, $icon);
         return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');
     }
     public function showedit($id)

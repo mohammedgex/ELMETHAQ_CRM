@@ -237,7 +237,7 @@ class CustomerController extends Controller
             $title = "مستند اجبارى!";
             $body = " تم ارفاق مستند جديد لك , يرجى التحقق من التطبيق.";
             $icon = null; // أو رابط أيقونة
-            app(ApiAppController::class)->sendFcmMessage("lead", $customer->id, $title, $body, $icon);
+            app(ApiAppController::class)->sendFcmMessage("customer", $customer->id, $title, $body, $icon);
         }
 
         $document->document_type = $request->document_type;
