@@ -1,0 +1,369 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Customer;
+use App\Models\DocumentType;
+use App\Models\LeadsCustomers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\Otp;
+use App\Models\User;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
+use DevKandil\NotiFire\Facades\Fcm;
+use DevKandil\NotiFire\Enums\MessagePriority;
+use Kreait\Laravel\Firebase\Facades\Firebase;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Kreait\Firebase\Messaging\Notification;
+
+class ApiAppController extends Controller
+{
+    //
+    public function sendFcmMessage($type, $id, $title, $body, $icon = null)
+    {
+        if ($type === 'lead') {
+            $model = LeadsCustomers::find($id);
+        } elseif ($type === 'customer') {
+            $model = Customer::find($id);
+        } else {
+            $model = User::find($id);
+        }
+
+        if (!$model || !$model->fcm_token) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'User not found or FCM token missing'
+            ], 404);
+        }
+
+        try {
+            $messaging = Firebase::messaging();
+
+            $message = CloudMessage::withTarget('token', $model->fcm_token)
+                ->withNotification(Notification::create($title, $body))
+                ->withData([
+                    'click_action' => 'FLUTTER_NOTIFICATION_CLICK',
+                    'type' => $type,
+                    'id' => (string) $id,
+                    'icon' => $icon ?? '',
+                ]);
+
+            $messaging->send($message);
+
+            return response()->json(['status' => 'success', 'message' => 'Notification sent successfully']);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to send notification',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function login(Request $request)
+    {
+        // التحقق من المدخلات
+        $request->validate([
+            'phone' => 'required',
+            'password' => 'required',
+        ]);
+
+        // البحث عن المستخدم بناءً على رقم الهاتف
+        $user = LeadsCustomers::where('phone', $request->phone)->first();
+
+        // التحقق من وجود المستخدم
+        if (!$user) {
+            return response()->json(['message' => 'الحساب غير موجود'], 404);
+        }
+
+        // التحقق من صحة كلمة المرور
+        if (!Hash::check($request->password, $user->password)) {
+            return response()->json(['message' => 'كلمة المرور خطأ'], 401);
+        }
+
+        // إنشاء توكن للمستخدم باستخدام Sanctum
+        $token = $user->createToken($user->name)->plainTextToken;
+
+        // إرجاع التوكن في الاستجابة
+        if ($user->customer_id !== null) {
+            # code...
+            return response()->json([
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => $user,
+                'customer' => $user->customer
+            ], 200);
+        } else {
+            return response()->json([
+                'message' => 'Login successful',
+                'token' => $token,
+                'user' => $user,
+            ], 200);
+        }
+    }
+
+    public function getUserData()
+    {
+        $user = auth('sanctum')->user(); // Use sanctum guard to get LeadsCustomers
+
+        if (!$user) {
+            return response()->json(['message' => 'انتهاء صلاحية التسجيل'], 401);
+        }
+
+        return response()->json([
+            'message' => 'User data retrieved successfully',
+            'user' => $user->load('jobTitle'), // تحميل بيانات الوظيفة مع المستخدم
+            'customer' => $user->customer ? $user->customer->load('documentTypes') : null
+        ], 200);
+    }
+    public function register(Request $request)
+    {
+        # code...
+        $request->validate([
+            'image' => 'required',
+            'phone' => 'required|unique:leads_customers,phone',
+            'job_title_id' => 'required',
+            'password' => 'required',
+            'fcm_token' => 'nullable|string',
+        ], [
+            'image.required' => 'صورة المستخدم مطلوبة.',
+            'phone.required' => 'رقم الهاتف مطلوب.',
+            'phone.unique' => 'رقم الهاتف مستخدم بالفعل.',
+            'job_title_id.required' => 'يرجى اختيار الوظيفة.',
+            'password.required' => 'كلمة المرور مطلوبة.',
+            'fcm_token.string' => 'رمز الإشعارات يجب أن يكون نصًا.',
+        ]);
+        // حفظ الصورة
+        $filePath = $request->file('image')->store('uploads', 'public');
+        // إنشاء سجل جديد
+        $user = LeadsCustomers::create([
+            'phone' => $request->phone,
+            'image' => $filePath,
+            'job_title_id' => $request->job_title_id,
+            'password' => Hash::make($request->password),
+            'status' => 'عميل محتمل',
+            'fcm_token' => $request->fcm_token,
+            "registration_date" => Carbon::now(),
+        ]);
+
+        $this->sendOtp($request->phone);
+
+        // لا ترسل OTP هنا لأن الهاتف لم يُسجل بعد
+        return response()->json([
+            'status' => 'success',
+            'message' => 'OTP sent successfully!',
+            'data' => $user->id,
+        ], 201);
+    }
+
+    public function sendOtp($phone)
+    {
+        $code = rand(1000, 9999);
+
+        // حفظ الكود في جدول OTP
+        Otp::create([
+            'phone' => $phone,
+            'code' => $code,
+            'expires_at' => Carbon::now()->addMinutes(5), // مدة صلاحية الكود
+        ]);
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer 714|qEOqBniIAUxUDwelNt6yR243dSFztZgBeEOmcm8Hb27a6438',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])->post('https://bulk.whysms.com/api/v3/sms/send', [
+            'recipient' => '2' . $phone,
+            'sender_id' => 'Elmethaq Co',
+            'type' => 'plain',
+            'message' => 'الكود الخاص بك:' . $code . " يرجى إدخاله لتأكيد رقم هاتفك. ",
+        ]);
+
+        if ($response->successful()) {
+            return response()->json([
+                'message' => 'OTP sent successfully!',
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Failed to send OTP',
+                'error' => $response->body(),
+            ], 400);
+        }
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required',
+            'code' => 'required'
+        ]);
+
+        $otp = Otp::where('phone', $request->phone)
+            ->where('code', $request->code)
+            ->where('expires_at', '>', now())
+            ->latest()
+            ->first();
+
+        if (!$otp) {
+            return response()->json(['message' => 'كود التاكيد خطأ'], 422);
+        }
+
+        // حذف الكود بعد التحقق (اختياري)
+        $otp->delete();
+        $user = LeadsCustomers::where('phone', $request->phone)->first();
+        $user->phone_verified_at = now();
+        $user->save();
+        $token = $user->createToken($user->name ?: 'lead-customer')->plainTextToken;
+
+
+        return response()->json([
+            'message' => 'OTP verified successfully',
+            'token' => $token
+        ]);
+    }
+    public function completeData(Request $request)
+    {
+        # code...
+        $request->validate([
+            'name' => 'required',
+            'phone_two' => 'nullable',
+            'card_id' => 'required|digits:14|unique:leads_customers,card_id',
+            'date_of_birth' => 'required',
+            'age' => 'required',
+            'img_national_id_card' => 'required',
+            'img_national_id_card_back' => 'required',
+            'passport_numder' => 'nullable',
+            'passport_photo' => 'nullable',
+            'license_photo' => 'required',
+            'have_you_ever_traveled_before?' => 'required',
+            'governorate' => 'required',
+            'fcm_token' => 'nullable|string',
+        ], [
+            'name.required' => 'الاسم مطلوب.',
+            'card_id.required' => 'رقم البطاقة مطلوب.',
+            'card_id.digits' => 'رقم البطاقة يجب أن يكون 14 رقمًا.',
+            'card_id.unique' => 'رقم البطاقة مستخدم بالفعل.',
+            'date_of_birth.required' => 'تاريخ الميلاد مطلوب.',
+            'age.required' => 'العمر مطلوب.',
+            'img_national_id_card.required' => 'صورة البطاقة الشخصية (الوجه الأمامي) مطلوبة.',
+            'img_national_id_card_back.required' => 'صورة البطاقة الشخصية (الوجه الخلفي) مطلوبة.',
+            'license_photo.required' => 'صورة الرخصة مطلوبة.',
+            'have_you_ever_traveled_before?.required' => 'يرجى تحديد ما إذا كنت قد سافرت من قبل.',
+            'governorate.required' => 'المحافظة مطلوبة.',
+            'fcm_token.string' => 'رمز الإشعارات يجب أن يكون نصًا.',
+        ]);
+        $user = auth('sanctum')->user(); // Use sanctum guard to get LeadsCustomers
+        // تحديث الاسم والهاتف الثاني
+        $user->name = $request->name;
+        $user->phone_two = $request->phone_two;
+        // حفظ الصور
+        $imgNationalIdCardPath = $request->file('img_national_id_card')->store('uploads/', 'public');
+        $imgNationalIdCardBackPath = $request->file('img_national_id_card_back')->store('uploads/', 'public');
+        $passportPhotoPath = null;
+        if ($request->hasFile('passport_photo')) {
+            $passportPhotoPath = $request->file('passport_photo')->store('uploads/', 'public');
+        }
+        $licensePhotoPath = $request->file('license_photo')->store('uploads/', 'public');
+        // تحديث باقي البيانات
+        $user->card_id = $request->card_id;
+        $user->date_of_birth = $request->date_of_birth;
+        $user->age = $request->age;
+        $user->img_national_id_card = $imgNationalIdCardPath;
+        $user->img_national_id_card_back = $imgNationalIdCardBackPath;
+        $user->passport_numder = $request->passport_numder;
+        $user->passport_photo = $passportPhotoPath;
+        $user->license_photo = $licensePhotoPath;
+        $user->evaluation = "جارى المعالجة";
+        $user['have_you_ever_traveled_before?'] = $request['have_you_ever_traveled_before?'];
+        $user->governorate = $request->governorate;
+        if ($request->filled('fcm_token')) {
+            $user->fcm_token = $request->fcm_token;
+        }
+        $user->save();
+
+        // إرسال رسالة SMS عادية
+        $this->sendSms($user->phone, 'تم استلام بياناتك بنجاح وهي قيد المراجعة. شكراً لتسجيلك في المنصة.');
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $user
+        ], 201);
+    }
+
+    public function send_file(Request $request, $id)
+    {
+        # code...
+        $document = DocumentType::find($id);
+        if (!$document) {
+            return response()->json(['message' => 'Document not found'], 404);
+        }
+        $request->validate([
+            'file' => 'required',
+        ]);
+        // حفظ الملف
+        $filePath = $request->file('file')->store('uploads/documents', 'public');
+        $document->file = $filePath;
+        $document->order_status =  'panding';
+        $document->save();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'File uploaded successfully',
+            "document" => $document->customer->documentTypes,
+        ], 201);
+    }
+
+    public function saveAnyFcmToken(Request $request)
+    {
+        $request->validate([
+            'type' => 'required|in:lead,customer',
+            'id' => 'required|integer',
+            'fcm_token' => 'required|string',
+        ]);
+        if ($request->type === 'lead') {
+            $model = \App\Models\LeadsCustomers::find($request->id);
+        } else if ($request->type === 'customer') {
+            $model = \App\Models\Customer::find($request->id);
+        }
+        if (!$model) {
+            return response()->json(['status' => 'error', 'message' => 'Not found'], 404);
+        }
+        $model->fcm_token = $request->fcm_token;
+        $model->save();
+        return response()->json(['status' => 'success']);
+    }
+
+    public function sendSms($phone, $message)
+    {
+        $response = \Illuminate\Support\Facades\Http::withHeaders([
+            'Authorization' => 'Bearer 714|qEOqBniIAUxUDwelNt6yR243dSFztZgBeEOmcm8Hb27a6438',
+            'Content-Type' => 'application/json',
+            'Accept' => 'application/json',
+        ])->post('https://bulk.whysms.com/api/v3/sms/send', [
+            'recipient' => '2' . $phone,
+            'sender_id' => 'Elmethaq Co',
+            'type' => 'plain',
+            'message' => $message,
+        ]);
+
+        return $response->successful();
+    }
+
+    public function sendNotifaction(Request $request)
+    {
+        $request->validate([
+            'fcm_token' => 'required|string',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'icon' => 'nullable|url',
+        ]);
+
+        // استخدام FCM لإرسال الإشعار مباشرة إلى التوكن
+        Fcm::withTitle($request->title)
+            ->withBody($request->description)
+            ->withImage($request->icon ?? 'https://yourdomain.com/default-icon.png')
+            ->withPriority(MessagePriority::HIGH)
+            ->sendNotification($request->fcm_token);
+
+        return response()->json(['message' => 'تم إرسال الإشعار بنجاح']);
+    }
+}

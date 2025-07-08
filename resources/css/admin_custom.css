@@ -1,0 +1,127 @@
+.small-box {
+    position: relative;
+    border-radius: 10px;
+    padding: 20px;
+    color: white;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+}
+
+.small-box:hover {
+    transform: translateY(-5px);
+}
+
+body {
+    font-family: 'Cairo';
+}
+
+.small-box .inner h3 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.small-box .inner p {
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.small-box .small-box-icon {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+    opacity: 0.3;
+}
+
+.small-box-footer {
+    display: block;
+    padding: 10px;
+    font-size: 1rem;
+    text-align: center;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+}
+
+.small-box-footer:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+}
+
+* {
+    font-family: "Cairo";
+}
+
+.sidebar-dark-primary {
+    background-color: #6c757d !important;
+}
+
+/* تخصيصات إضافية للـ sidebar */
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link:hover {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #28a745 !important;
+    /* color: #fff !important; */
+}
+.nav-link.active {
+    background-color: #28a745 !important;
+    /* color: #fff !important; */
+}
+
+.sidebar-dark-primary .nav-treeview > .nav-item > .nav-link {
+    color: rgba(255, 255, 255, 0.7) !important;
+}
+
+.sidebar-dark-primary .nav-treeview > .nav-item > .nav-link:hover {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+.sidebar-dark-primary .nav-header {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* تخصيص لون الـ navbar الرئيسي في AdminLTE */
+.main-header,
+.main-header.navbar,
+.main-header.navbar-light,
+.main-header.navbar-white,
+.navbar-light,
+.navbar-white {
+    background-color: #6c757d !important;
+    color: #fff !important;
+}
+
+.main-header .navbar-nav .nav-link,
+.main-header .navbar-brand,
+.navbar-light .navbar-nav .nav-link,
+.navbar-light .navbar-brand {
+    color: #fff !important;
+}
+
+.main-header .navbar-nav .nav-link:hover,
+.main-header .navbar-brand:hover,
+.navbar-light .navbar-nav .nav-link:hover,
+.navbar-light .navbar-brand:hover {
+    color: #ffe6b0 !important;
+}
+
+/* تخصيص قوي للـ navbar-dark */
+.navbar-dark,
+.main-header.navbar-dark {
+    background-color: #6c757d !important;
+    border-color: black !important;
+}
+
+.main-sidebar {
+    background-color: #343a40 !important;
+}
