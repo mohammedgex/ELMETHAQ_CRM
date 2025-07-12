@@ -24,6 +24,7 @@ class CompanySettingController extends Controller
             'engaz_password'  => 'required',
             'logo'            => 'nullable|image',
             'token'            => 'nullable',
+            'medical_email'            => 'nullable',
         ]);
 
         $company = CompanySetting::first();
@@ -40,6 +41,7 @@ class CompanySettingController extends Controller
         $company->engaz_email    = $data['engaz_email'];
         $company->engaz_password = $data['engaz_password'];
         $company->token = $data['token'] ?? null;
+        $company->medical_email = $data['medical_email'] ?? null;
 
         // التعامل مع الشعار
         if ($request->hasFile('logo')) {

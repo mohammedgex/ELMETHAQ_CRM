@@ -283,19 +283,15 @@
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold" style="color: #343a40;"> المهنة </label>
-                                <select class="form-control fw-bold" style="border-color: #343a40;" name="job">
-                                    <option value="">اختر المهنة بالتأشيرة</option>
-                                    @foreach ($jobs as $job)
-                                        <option value="{{ $job }}">{{ $job }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" style="border-color: #343a40;" name="job"
+                                    placeholder="اسم المهنة في انجاز" required>
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold" style="color: #343a40;"> المجموعة </label>
                                 <select class="form-control fw-bold" style="border-color: #343a40;"
                                     name="customer_group_id">
                                     <option value="">اختر المجموعة</option>
-                                    @foreach ($groups as $group)
+                                    @foreach ($groups->where('visa_type_id', $visa_id)->all() as $group)
                                         <option value="{{ $group->id }}">{{ $group->title }}</option>
                                     @endforeach
                                 </select>

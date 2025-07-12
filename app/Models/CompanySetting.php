@@ -15,5 +15,6 @@ class CompanySetting extends Model
         'engaz_email',
         'engaz_password',
         'token',
+        'medical_email',
     ];
 }

@@ -14,7 +14,7 @@
             <h3 class="card-title">إضافة عميل جديد</h3>
         </div>
 
-        <form action="{{ route('leads-customers.create') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('leads-customers.create') }}" id="add" method="POST" enctype="multipart/form-data">
             @csrf
 
             <div class="card-body">
@@ -201,7 +201,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center ccccc" style="">
 
-                <form method="GET" action="{{ route('leads-customers.search') }}" class="d-flex mb-3">
+                <form method="GET" id="leadForm" action="{{ route('leads-customers.search') }}" class="d-flex mb-3">
                     @csrf
 
                     <select class="form-select w-auto me-2" id="searchBy" name="searchBy">
@@ -333,8 +333,8 @@
                                             class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('leads-customers.delete', $lead->id) }}" method="POST"
-                                            class="d-inline">
+                                        <form id="delete" action="{{ route('leads-customers.delete', $lead->id) }}"
+                                            method="POST" class="d-inline">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
@@ -396,6 +396,15 @@
             </div>
         </div>
     </div>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay"
+        style="display: none; position: fixed; z-index: 9999; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.8);">
+        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+            <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+                <span class="sr-only">جارٍ التحميل...</span>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -453,6 +462,14 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script>
+        ['assignGroupForm', 'leadForm', "delete", "add"].forEach(function(formId) {
+            var form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', function() {
+                    document.getElementById('loading-overlay').style.display = 'block';
+                });
+            }
+        });
         document.getElementById('select-all').addEventListener('change', function() {
             let checkboxes = document.querySelectorAll('.lead-checkbox');
             checkboxes.forEach(cb => cb.checked = this.checked);

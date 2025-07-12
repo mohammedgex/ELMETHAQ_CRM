@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('license_number')->nullable();
             $table->string('logo')->nullable();
             $table->string("token")->nullable();
+            $table->string("medical_email")->nullable();
             $table->string("engaz_email");
             $table->string("engaz_password");
             $table->timestamps();

@@ -55,6 +55,16 @@
                                 </div>
                             @endif
                         </div>
+                        <div class="col-md-4 form-group">
+                            <label class="font-weight-bold">ايميل الكشف الطبي</label>
+                            <input type="text" class="form-control" name="medical_email"
+                                value="{{ $company->medical_email ?? '' }}" required>
+                            @if ($errors->has('medical_email'))
+                                <div class="text-danger">
+                                    {{ $errors->first('medical_email') }}
+                                </div>
+                            @endif
+                        </div>
 
                         <div class="col-md-4 form-group">
                             <label class="font-weight-bold">كلمة المرور لإنجاز</label>
