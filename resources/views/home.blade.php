@@ -18,7 +18,8 @@
                     <div class="icon">
                         <i class="fas fa-user-friends"></i>
                     </div>
-                    <a href="#" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-left"></i></a>
+                    <a href="{{ route('leads-customers.index') }}" class="small-box-footer">المزيد <i
+                            class="fas fa-arrow-circle-left"></i></a>
                 </div>
             </div>
 
@@ -31,7 +32,8 @@
                     <div class="icon">
                         <i class="fas fa-eye"></i>
                     </div>
-                    <a href="#" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-left"></i></a>
+                    <a href="{{ route('Delegates.create') }}" class="small-box-footer">المزيد <i
+                            class="fas fa-arrow-circle-left"></i></a>
                 </div>
             </div>
 
@@ -44,7 +46,8 @@
                     <div class="icon">
                         <i class="fas fa-users"></i>
                     </div>
-                    <a href="#" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-left"></i></a>
+                    <a href="{{ route('customer-groups.create') }}" class="small-box-footer">المزيد <i
+                            class="fas fa-arrow-circle-left"></i></a>
                 </div>
             </div>
 
@@ -57,7 +60,8 @@
                     <div class="icon">
                         <i class="fas fa-user-tie"></i>
                     </div>
-                    <a href="#" class="small-box-footer">المزيد <i class="fas fa-arrow-circle-left"></i></a>
+                    <a href="{{ route('users') }}" class="small-box-footer">المزيد <i
+                            class="fas fa-arrow-circle-left"></i></a>
                 </div>
             </div>
         </div>
@@ -82,15 +86,24 @@
                                                 {{ $group->visaProfession->profession_count }}
                                             </span>
                                         @endif
-                                        @if ($group->visaProfession)
+                                        @if ($group->visaProfession && $group->visaType)
                                             <div class="progress">
                                                 <div class="progress-bar"
                                                     style="width: {{ (count($group->customers) / $group->visaProfession->profession_count) * 100 }}%">
                                                 </div>
                                             </div>
+                                        @elseif (!$group->visaProfession && $group->visaType)
+                                            <span style="font-size: 12px;color: black;text-decoration: underline;">
+                                                مربوطة بالتاشيرة وغير مربوطة بالمهنة
+                                            </span>
+                                        @elseif ($group->visaProfession && !$group->visaType)
+                                            <span style="font-size: 12px;color: black;text-decoration: underline;">
+                                                مربوطة بالمهنة وغير مربوطة بالتاشيرة
+                                            </span>
                                         @else
-                                            <span style="font-size: 12px;color: black;text-decoration: underline;">غير
-                                                مربوطة بتاشيرة</span>
+                                            <span style="font-size: 12px;color: black;text-decoration: underline;">
+                                                غير مربوطة بمهنة او تاشيرة
+                                            </span>
                                         @endif
                                     </div>
                                 </div>

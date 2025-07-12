@@ -21,6 +21,22 @@
                 <div class="row">
                     <!-- الحقول الرئيسية -->
                     <div class="col-md-8">
+                        <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                            <label for="image">الصورة الشخصية</label>
+
+                            <div class="custom-file mb-2">
+                                <input type="file" name="image" class="custom-file-input preview-image-input"
+                                    data-preview="#preview_image" id="dd" required="">
+                                <label class="custom-file-label">اختر صورة</label>
+                            </div>
+
+                            <div id="preview_image" class="border rounded p-2 text-center bg-light"
+                                style="min-height: 130px;">
+                                <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
+                                    style="max-width: 100px; display: none;" alt="Preview">
+                            </div>
+
+                        </div>
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <label>اسم العميل</label>
@@ -128,10 +144,10 @@
                         @php
                             $images = [
                                 ['name' => 'passport_photo', 'label' => 'صورة جواز السفر', 'id' => 'passportInput'],
-                                ['name' => 'image', 'label' => 'الصورة الشخصية', 'id' => 'dd'],
+                                // ['name' => 'image', 'label' => 'الصورة الشخصية', 'id' => 'dd'],
                                 [
                                     'name' => 'img_national_id_card',
-                                    'label' => ' بطاقة الرقم القومي من الامام',
+                                    'label' => 'بطاقة الرقم القومي من الامام',
                                     'id' => 'ss',
                                 ],
                                 [
@@ -143,52 +159,87 @@
                             ];
                         @endphp
 
-                        @foreach ($images as $img)
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
-                                <label for="{{ $img['name'] }}">{{ $img['label'] }}</label>
+                        @foreach ($images as $index => $img)
+                            {{-- إذا كنا عند صورة البطاقة من الأمام، نبدأ div العرض الجانبي --}}
+                            @if ($img['name'] == 'img_national_id_card')
+                                <div class="d-flex flex-wrap gap-3">
+                            @endif
 
-                                <div class="custom-file mb-2">
-                                    <input type="file" name="{{ $img['name'] }}"
-                                        class="custom-file-input preview-image-input"
-                                        data-preview="#preview_{{ $img['name'] }}" id="{{ $img['id'] }}" required>
-                                    <label class="custom-file-label">اختر صورة</label>
-                                </div>
+                            {{-- إذا كنا داخل صور البطاقة الشخصية (أمام أو خلف) --}}
+                            @if (in_array($img['name'], ['img_national_id_card', 'img_national_id_card_back']))
+                                <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm" style="flex: 1 1 48%;">
+                                    <label for="{{ $img['name'] }}">{{ $img['label'] }}</label>
 
-                                <div id="preview_{{ $img['name'] }}" class="border rounded p-2 text-center bg-light"
-                                    style="min-height: 130px;">
-                                    <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
-                                        style="max-width: 100px; display: none;" alt="Preview">
-                                </div>
-
-                                @if ($img['name'] == 'passport_photo')
-                                    <div class="mt-3 d-flex align-items-center gap-3 flex-wrap justify-content-between">
-                                        <button type="button" id="analyzeBtn"
-                                            style="padding: 8px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
-                                            فك البيانات
-                                        </button>
-
-                                        <div id="{{ $img['id'] }}_loader" class="loader"
-                                            style="display: none; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;">
-                                        </div>
-
-                                        <div id="{{ $img['id'] }}_loader_text" class="loading-text"
-                                            style="display: none; font-size: 14px; color: #007bff;">
-                                            الرجاء الانتظار...
-                                        </div>
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="{{ $img['name'] }}"
+                                            class="custom-file-input preview-image-input"
+                                            data-preview="#preview_{{ $img['name'] }}" id="{{ $img['id'] }}"
+                                            required>
+                                        <label class="custom-file-label">اختر صورة</label>
                                     </div>
-                                @endif
-                            </div>
-                        @endforeach
+
+                                    <div id="preview_{{ $img['name'] }}" class="border rounded p-2 text-center bg-light"
+                                        style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
+                                            style="max-width: 100px; display: none;" alt="Preview">
+                                    </div>
+                                </div>
+                            @else
+                                {{-- باقي الصور (كل واحدة في صف مستقل) --}}
+                                <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                                    <label for="{{ $img['name'] }}">{{ $img['label'] }}</label>
+
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="{{ $img['name'] }}"
+                                            class="custom-file-input preview-image-input"
+                                            data-preview="#preview_{{ $img['name'] }}" id="{{ $img['id'] }}"
+                                            required>
+                                        <label class="custom-file-label">اختر صورة</label>
+                                    </div>
+
+                                    <div id="preview_{{ $img['name'] }}" class="border rounded p-2 text-center bg-light"
+                                        style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
+                                            style="max-width: 100px; display: none;" alt="Preview">
+                                    </div>
+
+                                    @if ($img['name'] == 'passport_photo')
+                                        <div
+                                            class="mt-3 d-flex align-items-center gap-3 flex-wrap justify-content-between">
+                                            <button type="button" id="analyzeBtn"
+                                                style="padding: 8px 20px; background-color: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                                                فك البيانات
+                                            </button>
+
+                                            <div id="{{ $img['id'] }}_loader" class="loader"
+                                                style="display: none; border: 4px solid #f3f3f3; border-top: 4px solid #007bff; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite;">
+                                            </div>
+
+                                            <div id="{{ $img['id'] }}_loader_text" class="loading-text"
+                                                style="display: none; font-size: 14px; color: #007bff;">
+                                                الرجاء الانتظار...
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+
+                            {{-- إذا كنا عند آخر صورة من البطاقة الشخصية، نغلق div --}}
+                            @if ($img['name'] == 'img_national_id_card_back')
                     </div>
+                    @endif
+                    @endforeach
+
                 </div>
             </div>
+    </div>
 
-            <div class="card-footer text-center">
-                <button type="submit" class="btn btn-success" style="width: 250px">
-                    <i class="fas fa-plus-circle"></i> إضافة
-                </button>
-            </div>
-        </form>
+    <div class="card-footer text-center">
+        <button type="submit" id="submitBtn" class="btn btn-success" style="width: 250px">
+            <i class="fas fa-plus-circle"></i> إضافة (f2)
+        </button>
+    </div>
+    </form>
     </div>
 
 
@@ -462,6 +513,12 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script>
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'F2') {
+                event.preventDefault(); // منع السلوك الافتراضي لـ F2
+                document.getElementById('submitBtn').click(); // الضغط على زر الإضافة
+            }
+        });
         ['assignGroupForm', 'leadForm', "delete", "add"].forEach(function(formId) {
             var form = document.getElementById(formId);
             if (form) {
@@ -594,29 +651,29 @@
                 });
 
                 const prompt = `
-Extract all data from this passport in English. Convert the national ID to English digits if it's in Arabic. Return response as clean JSON only with these keys:
-{
-"passport_type",
-"country_code",
-"passport_number",
-"full_name_arabic",
-"full_name_english",
-"date_of_birth",
-"place_of_birth_ar",
-"nationality_ar",
-"sex_ar",
-"date_of_issue",
-"date_of_expiry",
-"issuing_office",
-"national_id",
-"profession",
-"military_status",
-"address",
-"full_mrz",
-}
+                                Extract all data from this passport in English. Convert the national ID to English digits if it's in Arabic. Return response as clean JSON only with these keys:
+                                {
+                                "passport_type",
+                                "country_code",
+                                "passport_number",
+                                "full_name_arabic",
+                                "full_name_english",
+                                "date_of_birth",
+                                "place_of_birth_ar",
+                                "nationality_ar",
+                                "sex_ar",
+                                "date_of_issue",
+                                "date_of_expiry",
+                                "issuing_office",
+                                "national_id",
+                                "profession",
+                                "military_status",
+                                "address",
+                                "full_mrz",
+                                }
 
-If the image is not clear, send me a JSON with error. The image is not clear.
-    `;
+                                If the image is not clear, send me a JSON with error. The image is not clear.
+                                    `;
 
                 const result = await model.generateContent({
                     contents: [{
@@ -755,8 +812,8 @@ If the image is not clear, send me a JSON with error. The image is not clear.
                 const selectedDate = dateFilter.value;
 
                 tableRows.forEach(row => {
-                    const age = row.cells[4]?.textContent.trim(); // السن
-                    const gov = row.cells[6]?.textContent.trim().toLowerCase(); // المحافظة
+                    const age = row.cells[5]?.textContent.trim(); // السن
+                    const gov = row.cells[7]?.textContent.trim().toLowerCase(); // المحافظة
                     const status = row.cells[8]?.textContent.trim().toLowerCase(); // الحالة
                     const date = row.cells[10]?.textContent.trim(); // تاريخ التسجيل
 

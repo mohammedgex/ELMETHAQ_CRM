@@ -477,10 +477,6 @@ class ApiAppController extends Controller
         ]);
     }
 
-
-
-
-
     public function TokenCheckMedical(Request $request)
     {
         $customer = Customer::where('card_id', $request->card_id)->first();

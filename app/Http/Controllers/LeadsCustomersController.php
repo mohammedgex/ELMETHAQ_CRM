@@ -10,10 +10,8 @@ use App\Models\DocumentType;
 use App\Models\History;
 use App\Models\JobTitle;
 use App\Models\LeadsCustomers;
-use App\Notifications\PushNotification;
 use Carbon\Carbon;
-use DevKandil\NotiFire\Enums\MessagePriority;
-use DevKandil\NotiFire\Facades\Fcm;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
 class LeadsCustomersController extends Controller
@@ -22,7 +20,7 @@ class LeadsCustomersController extends Controller
     public function index()
     {
         # code...
-        $leads = LeadsCustomers::all();
+        $leads = LeadsCustomers::where("status", "عميل محتمل")->get();
         $delegates = Delegate::all();
         $jobs = JobTitle::all();
         $groups = CustomerGroup::all();
@@ -102,6 +100,7 @@ class LeadsCustomersController extends Controller
         $lead['status'] = 'عميل محتمل';
         $lead['customer_id'] = null;
         $lead['evaluation'] = "جارى المعالجة";
+        $lead['password'] = Hash::make($lead["phone"]);
 
         LeadsCustomers::create($lead);
 
@@ -168,15 +167,12 @@ class LeadsCustomersController extends Controller
         $request->validate([
             "card_id" => 'required|unique:leads_customers,card_id,' . $lead->id,
             "phone" => 'required|unique:leads_customers,phone,' . $lead->id,
-            "phone_two" => 'required|unique:leads_customers,phone_two,' . $lead->id,
+            "phone_two" => 'nullable|unique:leads_customers,phone_two,' . $lead->id,
         ], [
             'card_id.required' => 'الرقم القومي مطلوب.',
             'card_id.unique' => 'الرقم القومي موجود من قبل.',
-
             'phone.required' => 'رقم الهاتف مطلوب.',
             'phone.unique' => 'رقم الهاتف موجود من قبل.',
-
-            'phone_two.required' => 'رقم الهاتف الآخر مطلوب.',
             'phone_two.unique' => 'رقم الهاتف الآخر موجود من قبل.',
         ]);
 
@@ -231,11 +227,6 @@ class LeadsCustomersController extends Controller
 
         foreach ($leads as $leadId) {
             $lead = LeadsCustomers::find($leadId);
-            // إرسال إشعار بعد التحديث
-            $title = "تهانينا!";
-            $body = "تم تحويلك من عميل محتمل الي عميل اساسي , يمكنك الآن الاستفادة من خدماتنا.";
-            $icon = null; // أو رابط أيقونة
-            app(ApiAppController::class)->sendFcmMessage("lead", $lead->id, $title, $body, $icon);
             $customer = new Customer();
             $customer->image = $lead->image;
             $customer->name_ar = $lead->name;
@@ -256,6 +247,11 @@ class LeadsCustomersController extends Controller
             $lead->customer_id = $customer->id;
             $lead->evaluation = 'مقبول';
             $lead->save();
+            // إرسال إشعار بعد التحديث
+            $title = "تهانينا!";
+            $body = "تم تحويلك من عميل محتمل الي عميل اساسي , يمكنك الآن الاستفادة من خدماتنا.";
+            $icon = null; // أو رابط أيقونة
+            app(ApiAppController::class)->sendFcmMessage("customer", $customer->id, $title, $body, $icon);
 
             $history = new History();
             $history->description = 'انتقل من عميل محتمل الي عميل اساسي';
