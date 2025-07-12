@@ -19,11 +19,10 @@ Route::post('/register', [ApiAppController::class, 'register']);
 Route::post('/confirm-code', [ApiAppController::class, 'verifyOtp']);
 Route::post('/complete-data', action: [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
 Route::post('/login', [ApiAppController::class, 'login']);
-Route::post('/visa/{id}', [ApiAppController::class, 'visa']);
+Route::post('/visa/{id}', [ApiAppController::class, 'visa']); // به مشكلة
 Route::middleware('auth:sanctum')->get('/user-data', action: [ApiAppController::class, 'getUserData']);
 Route::middleware('auth:sanctum')->post('/send-file/{id}', action: [ApiAppController::class, 'send_file']);
 Route::get('/jobs', [JobController::class, 'apiIndex']);
-Route::post('/save-fcm-token', [ApiAppController::class, 'saveFcmToken'])->middleware('auth:sanctum');
 Route::post('/save-any-fcm-token', [ApiAppController::class, 'saveAnyFcmToken']);
 Route::post('/send-otp/{phone}', [ApiAppController::class, 'sendOtp']);
 
@@ -35,3 +34,5 @@ Route::post('/send-sms', [JopController::class, 'sendSms'])->name('send.sms');
 Route::post('/savePDF', [JopController::class, 'savePDF'])->name('savePDF');
 Route::post('/send-engaz', [CustomerController::class, 'engaz_request'])->name('engaz_request');
 Route::post('/professions', [VisaProfessionsController::class, 'professionFromAtutomition'])->name('profession');
+Route::post('/check-medical-status', [ApiAppController::class, 'checkMedicalStatus']);
+Route::post('/token/check-medical', [ApiAppController::class, 'TokenCheckMedical']);

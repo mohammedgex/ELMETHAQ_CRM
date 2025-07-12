@@ -169,7 +169,6 @@
                                                 <th>اسم العميل</th>
                                                 <th>الصورة</th>
                                                 <th>الهاتف</th>
-                                                <th>الحالة</th>
                                                 <th width="120px">الكشف الطبي</th>
                                                 <th width="120px">البصمة</th>
                                                 <th width="120px">كشف المعامل</th>
@@ -202,14 +201,8 @@
                                                     <td>{{ $customer->phone }}</td>
                                                     <td>
                                                         <span
-                                                            class="badge bg-{{ $customer->status == 'نشط' ? 'primary' : 'secondary' }}">
-                                                            {{ $customer->status }}
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span
-                                                            class="badge bg-{{ $customer->medical_examination == 'تم الحجز' ? 'success' : 'light text-dark' }}">
-                                                            {{ $customer->medical_examination == 'تم الحجز' ? '✓' : '✗' }}
+                                                            class="badge bg-{{ $customer->medical_examination == 'لائق' ? 'success' : 'light text-dark' }}">
+                                                            {{ $customer->medical_examination == 'لائق' ? '✓' : '✗' }}
                                                         </span>
                                                     </td>
                                                     <td>

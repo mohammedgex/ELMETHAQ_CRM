@@ -142,7 +142,6 @@ class FileTitleController extends Controller
         return redirect()->route("customer.add", $id)->with('tap', 'attach');
     }
 
-
     public function delete($id)
     {
         # code...

@@ -608,11 +608,23 @@
                                                                         data-customer='@json($customer)'
                                                                         href="#"><i class="fas fa-virus me-1"></i>
                                                                         بيانات البصمة</a></li>
-                                                                <li><a class="dropdown-item check-medical-status"
-                                                                        data-customer='@json($customer)'
-                                                                        href="#"><i
-                                                                            class="fas fa-hospital me-1"></i> حجز كشف
-                                                                        طبي</a></li>
+                                                                <li>
+                                                                    <button id="check-medical" class="dropdown-item"
+                                                                        data-customer='@json($customer)'>
+                                                                        <i class="fas fa-hospital me-1"></i>
+                                                                        حجز الكشف الطبي
+                                                                    </button>
+                                                                </li>
+                                                                @if ($customer->token_medical)
+                                                                    <li>
+                                                                        <a href="{{ route('check.medical.status', $customer->token_medical) }}"
+                                                                            class="dropdown-item show-loading">
+                                                                            <i class="fas fa-hospital me-1"></i>
+
+                                                                            تحقق من الحالة الطبية
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
                                                                 <li><a class="dropdown-item check-medical-hospital"
                                                                         href="#"><i
                                                                             class="fas fa-clinic-medical me-1"></i> نتيجة
@@ -792,9 +804,22 @@
                 </div>
             </div>
         </div>
+        <!-- Loading Overlay -->
+        <div id="loading-overlay"
+            style="display: none; position: fixed; z-index: 9999; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.8);">
+            <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+                <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+                    <span class="sr-only">جارٍ التحميل...</span>
+                </div>
+            </div>
+        </div>
+        @if (session('swal'))
+            <script>
+                Swal.fire(@json(session('swal')));
+            </script>
+        @endif
 
         @if (Session::has('success'))
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 Swal.fire({
                     position: "bottom-end",
@@ -806,7 +831,6 @@
             </script>
         @endif
         @if (Session::has('error'))
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script>
                 Swal.fire({
                     position: "center",
@@ -868,8 +892,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
 
         .dt-button {
             padding: 8px 15px;
@@ -1082,6 +1106,9 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script>
+        $(document).on('click', '.show-loading', function(e) {
+            $('#loading-overlay').fadeIn();
+        });
         // #########################################################################################################
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".check-medical-status").forEach(button => {
@@ -2127,6 +2154,134 @@
                     });
 
                 }
+            }
+        });
+
+        document.getElementById('check-medical').addEventListener('click', async function() {
+            const customer = JSON.parse(this.getAttribute('data-customer'));
+            Swal.fire({
+                title: 'جاري فتح المتصفح لك...',
+                text: 'في انتظار',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            function reverseDateFormat(dateStr) {
+                if (!dateStr) return null;
+
+                const parts = dateStr.split("-");
+                if (parts.length !== 3) return null;
+
+                const [year, month, day] = parts;
+                return `${day}-${month}-${year}`;
+            }
+
+            const payload = {
+                firstName: extractFirstName(customer.name_en_mrz),
+                lastName: extractLastName(customer.name_en_mrz),
+                passportNumber: customer.passport_id,
+                dateOfBirth: reverseDateFormat(customer.date_birth),
+                maritalStatus: customer.marital_status,
+                passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
+                passportIssuePlace: customer.issue_place,
+                passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
+                phone: "+" + customer.phone,
+                nationalId: customer.card_id,
+                position: customer.customer_group.visa_profession.job,
+            };
+            console.log(customer.card_id);
+
+            const fieldLabels = {
+                firstName: "الاسم الأول",
+                lastName: "اسم العائلة",
+                passportNumber: "رقم الجواز",
+                dateOfBirth: "تاريخ الميلاد",
+                maritalStatus: "الحالة الاجتماعية",
+                passportIssueDate: "تاريخ إصدار الجواز",
+                passportIssuePlace: "مكان إصدار الجواز",
+                passportExpiryDate: "تاريخ انتهاء الجواز",
+                phone: "رقم الهاتف",
+                nationalId: "الرقم القومي",
+                position: "المهنة الخاصة بمجموعته"
+            };
+
+            // التحقق من القيم الناقصة فقط لهذه الحقول
+            const missingFields = [];
+
+            for (const [key, value] of Object.entries(payload)) {
+                if (!value || value === "N/A" || value === "unknown") {
+                    missingFields.push(fieldLabels[key] || key);
+                }
+            }
+
+            if (missingFields.length > 0) {
+                Swal.close(); // إغلاق الانتظار
+
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'بيانات ناقصة',
+                    html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields.join(
+                        '<br>') + '</b>',
+                });
+                return;
+            }
+
+            // باقي البيانات ثابتة أو افتراضية
+            payload.country = "EGY";
+            payload.city = "87";
+            payload.destinationCountry = "SA";
+            payload.nationality = "55";
+            payload.visaType = "wv";
+            payload.gender = "male";
+            payload.email = "unknown@example.com";
+            payload.userEmail = "{{ auth()->user()->email }}";
+
+            try {
+                const response = await fetch('http://localhost:3000/api/wafid', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+                console.log('Result:', result);
+                Swal.close(); // إغلاق الانتظار
+                if (result.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم الحجز',
+                        text: 'تم إرسال البيانات بنجاح.',
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ',
+                        text: 'حدث خطأ أثناء الاتصال بالخادم.',
+                    });
+                }
+
+            } catch (error) {
+                console.error('Fetch error:', error);
+                Swal.close(); // إغلاق الانتظار
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء الاتصال بالخادم.',
+                });
+            }
+
+            // مساعدات لتقسيم الاسم
+            function extractFirstName(fullName) {
+                return fullName?.split(" ")[0] ?? "Unknown";
+            }
+
+            function extractLastName(fullName) {
+                const parts = fullName?.split(" ");
+                return parts?.slice(1).join(" ") ?? "Unknown";
             }
         });
     </script>

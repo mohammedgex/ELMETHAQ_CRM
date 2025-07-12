@@ -366,8 +366,8 @@
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
                                         name="marital_status">
                                         <option value="">اختر الحالة الاجتماعية</option>
-                                        <option value="أعزب">أعزب</option>
-                                        <option value="متزوج">متزوج</option>
+                                        <option value="unmarried">أعزب</option>
+                                        <option value="married">متزوج</option>
                                     </select>
                                 </div>
                             </div>
@@ -771,11 +771,11 @@
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
                                         name="marital_status">
                                         <option value="">اختر الحالة الاجتماعية</option>
-                                        <option value="أعزب"
-                                            {{ old('marital_status', $edit->marital_status ?? '') == 'أعزب' ? 'selected' : '' }}>
+                                        <option value="unmarried"
+                                            {{ old('marital_status', $edit->marital_status ?? '') == 'unmarried' ? 'selected' : '' }}>
                                             أعزب</option>
-                                        <option value="متزوج"
-                                            {{ old('marital_status', $edit->marital_status ?? '') == 'متزوج' ? 'selected' : '' }}>
+                                        <option value="married"
+                                            {{ old('marital_status', $edit->marital_status ?? '') == 'married' ? 'selected' : '' }}>
                                             متزوج</option>
                                     </select>
                                 </div>
@@ -1228,21 +1228,29 @@
                                                     <td class="text-success fw-bold">{{ $file->document_type }}</td>
 
                                                     <td>
-                                                        <a href="{{ asset('storage/' . $file->file) }}" target="_blank">
-                                                            @php
-                                                                $extension = pathinfo($file->file, PATHINFO_EXTENSION);
-                                                            @endphp
-
-                                                            @if (strtolower($extension) === 'pdf')
+                                                        @php
+                                                            $extension = pathinfo($file->file, PATHINFO_EXTENSION);
+                                                        @endphp
+                                                        @if (!empty($extension))
+                                                            <a href="{{ asset('storage/' . $file->file) }}"
+                                                                target="_blank">
+                                                                @if (strtolower($extension) === 'pdf')
+                                                                    <img src="https://cdn-icons-png.freepik.com/512/4726/4726010.png"
+                                                                        alt="PDF" class="img-fluid"
+                                                                        style="width: 40px;">
+                                                                @else
+                                                                    <img src="{{ asset('storage/' . $file->file) }}"
+                                                                        alt="File" class="img-thumbnail"
+                                                                        style="max-width: 100px;">
+                                                                @endif
+                                                            </a>
+                                                        @elseif (empty($extension))
+                                                            <a href="{{ $file->file }}" target="_blank">
                                                                 <img src="https://cdn-icons-png.freepik.com/512/4726/4726010.png"
                                                                     alt="PDF" class="img-fluid"
                                                                     style="width: 40px;">
-                                                            @else
-                                                                <img src="{{ asset('storage/' . $file->file) }}"
-                                                                    alt="File" class="img-thumbnail"
-                                                                    style="max-width: 100px;">
-                                                            @endif
-                                                        </a>
+                                                            </a>
+                                                        @endif
                                                     </td>
 
                                                     <td>
@@ -1557,16 +1565,16 @@
 
 
         /* body,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        html {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            height: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            margin: 0;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            background-color: #fff;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            font-family: Arial, sans-serif;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            color: #333;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                html {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    height: 100%;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin: 0;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    align-items: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background-color: #fff;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-family: Arial, sans-serif;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: #333;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
 
         .loader {
             border: 5px solid #f3f3f3;

@@ -312,7 +312,7 @@ class CustomerController extends Controller
         // البحث في جدول العملاء
         $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
 
-
+        $company = CompanySetting::first();
         $delegates = Delegate::all();
         $evalutions = Evaluation::all();
         $groups = CustomerGroup::all();
@@ -327,6 +327,7 @@ class CustomerController extends Controller
             'jobs' => $jobs,
             'sponsers' => $sponsers,
             'visas' => $visas,
+            "company" => $company
         ]);
     }
     public function searchConsulate(Request $request)

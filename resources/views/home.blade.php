@@ -82,7 +82,7 @@
                                                 {{ $group->visaProfession->profession_count }}
                                             </span>
                                         @endif
-                                        @if ($group->visaType && $group->visaProfession)
+                                        @if ($group->visaProfession)
                                             <div class="progress">
                                                 <div class="progress-bar"
                                                     style="width: {{ (count($group->customers) / $group->visaProfession->profession_count) * 100 }}%">

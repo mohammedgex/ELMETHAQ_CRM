@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\DocumentType;
+use App\Models\History;
 use App\Models\LeadsCustomers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -365,5 +366,140 @@ class ApiAppController extends Controller
             ->sendNotification($request->fcm_token);
 
         return response()->json(['message' => 'تم إرسال الإشعار بنجاح']);
+    }
+
+    public function checkMedicalStatus($token)
+    {
+        $medicalUrl = "https://wafid.com/medical-status-display/" . $token;
+        $slipUrl = "https://wafid.com/appointment/" . $token . "/slip";
+
+        if (!$token) {
+            return redirect()->back()->with('swal', [
+                'icon' => 'error',
+                'title' => 'خطأ',
+                'text' => 'التوكن مطلوب'
+            ]);
+        }
+        $customer = Customer::where("token_medical", $token)->first();
+        $user = auth()->user();
+
+        $status = 'غير معروف';
+        $address = 'لم يتم العثور على العنوان';
+        $errors = [];
+
+        try {
+            // ✅ أولا: فحص صفحة الـ Slip
+            $slipResponse = Http::get($slipUrl);
+            if ($slipResponse->status() === 404) {
+                $errors[] = 'لا يوجد عنوان للمستشفي, تاكد من عملية الدفع';
+            } elseif (!$slipResponse->successful()) {
+                $errors[] = 'خطا غير معروف';
+            } else {
+                $slipHtml = $slipResponse->body();
+                preg_match('/<td class="field_value" colspan="2">\s*<i[^>]*><\/i>\s*(.*?)\s*<\/td>/s', $slipHtml, $match);
+                $address = isset($match[1]) ? trim(strip_tags($match[1])) : 'لم يتم العثور على العنوان';
+                if ($address != 'لم يتم العثور على العنوان') {
+                    # code...
+                    $customer->hospital_address = $address;
+                    $customer->save();
+                    $history = new History();
+                    $history->description = "تم جلب عنوان المستشفي وتخزينه";
+                    $history->date = now();
+                    $history->customer_id = $customer->id;
+                    $history->user_id = $user->id;
+                    $history->save();
+                    $document = new DocumentType();
+                    $document->document_type = "المستشفي";
+                    $document->status = "موجود بالمكتب";
+                    $document->file = "https://wafid.com/appointment/" . $token . "/slip/print";
+                    $document->customer_id = $customer->id;
+                    $document->required = "اجباري";
+                    $document->save();
+                }
+            }
+
+            // ✅ ثانياً: فحص صفحة الحالة الطبية
+            $medicalResponse = Http::get($medicalUrl);
+            if ($medicalResponse->status() === 404) {
+                $errors[] = 'النتيجة لم تظهر';
+            } elseif (!$medicalResponse->successful()) {
+                $errors[] = "خطا غير معروف";
+            } else {
+                $html = $medicalResponse->body();
+
+                if (preg_match('/<span[^>]*style="[^"]*color\s*:\s*green[^"]*"[^>]*>\s*<i[^>]*><\/i>\s*Fit\s*<\/span>/i', $html)) {
+                    $status = 'Fit';
+                    $customer->medical_examination = "لائق";
+                    $customer->save();
+                    $history = new History();
+                    $history->description = "تم جلب نتيجة الكشف الطبي وهو :لائق";
+                    $history->date = now();
+                    $history->customer_id = $customer->id;
+                    $history->user_id = $user->id;
+                    $history->save();
+                    $document = new DocumentType();
+                    $document->document_type = "نتيجة الكشف الطبي";
+                    $document->status = "موجود بالمكتب";
+                    $document->file = "https://wafid.com/medical-status/" . $token . "/print";
+                    $document->customer_id = $customer->id;
+                    $document->required = "اجباري";
+                    $document->save();
+                } elseif (preg_match('/<span[^>]*style="[^"]*color\s*:\s*red[^"]*"[^>]*>\s*<i[^>]*><\/i>\s*Unfit\s*<\/span>/i', $html)) {
+                    $status = 'Unfit';
+                    $customer->marital_status = "غير لائق";
+                    $customer->save();
+                    $history = new History();
+                    $history->description = "تم جلب نتيجة الكشف الطبي وهو : غير لائق";
+                    $history->date = now();
+                    $history->customer_id = $customer->id;
+                    $history->user_id = $user->id;
+                    $history->save();
+                    $document = new DocumentType();
+                    $document->document_type = "نتيجة الكشف الطبي";
+                    $document->status = "موجود بالمكتب";
+                    $document->file = "https://wafid.com/medical-status/" . $token . "/print";
+                    $document->customer_id = $customer->id;
+                    $document->required = "اجباري";
+                    $document->save();
+                }
+            }
+        } catch (\Exception $e) {
+            $errors[] = 'حدث خطأ في الاتصال: ' . $e->getMessage();
+        }
+
+        // ✅ الإرجاع النهائي
+        return redirect()->back()->with('swal', [
+            'icon' => empty($errors) ? 'success' : 'error',
+            'title' => empty($errors) ? 'تم التحقق بنجاح' : 'حدثت بعض الأخطاء',
+            'html' => empty($errors)
+                ? "<b>الحالة الطبية:</b> $status<br><b>العنوان:</b> $address"
+                : implode('<br>', $errors),
+        ]);
+    }
+
+
+
+
+
+    public function TokenCheckMedical(Request $request)
+    {
+        $customer = Customer::where('card_id', $request->card_id)->first();
+        if (!$customer) {
+            return response()->json(['success' => false, 'message' => 'العميل غير موجود'], 404);
+        }
+        $customer->token_medical = $request->token_medical;
+        $customer->marital_status = "تم الحجز";
+        $customer->save();
+
+        $user = User::where('email', $request->email)->first();
+        $history = new History();
+        $history->description = "تم حجز الكشف الطبي للعميل";
+        $history->date = now();
+
+        $history->customer_id = $customer->id;
+        $history->user_id = $user->id;
+        $history->save();
+
+        return response()->json(['success' => true, 'message' => 'تم حفظ التوكن بنجاح']);
     }
 }

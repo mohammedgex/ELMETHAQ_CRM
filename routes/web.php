@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\BlackListController;
 use App\Http\Controllers\CompanySettingController;
@@ -153,6 +154,8 @@ Route::group([
     Route::post('/customer-editBasicDetails/{id}', [CustomerController::class, 'editBasicDetails'])->name('customer.editBasicDetails')->middleware("check.permission:create-customer");
     Route::post('/customer-mrz/{id}', [CustomerController::class, 'mrz'])->name('customer.mrz')->middleware("check.permission:create-customer");
     Route::post('/customer-attachments/{id}', [CustomerController::class, 'attachments'])->name('customer.attachments')->middleware("check.permission:create-customer");
+
+    Route::get('/check-medical-status/{token}', [ApiAppController::class, 'checkMedicalStatus'])->name('check.medical.status');
 
     Route::get('/show-attachments/{id}', [FileTitleController::class, 'showedit'])->name('attachments.show');
     Route::post('/edit-attachments/{id}', [FileTitleController::class, 'updateAttachment'])->name('attachments.edit');

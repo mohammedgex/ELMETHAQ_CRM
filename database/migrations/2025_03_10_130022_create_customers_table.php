@@ -47,6 +47,8 @@ return new class extends Migration
             $table->string('date_birth')->nullable();
             $table->string('passport_expire_date')->nullable();
             $table->string('gender')->nullable();
+            $table->string('token_medical')->nullable();
+            $table->string('hospital_address')->nullable();
             $table->string('issue_place')->nullable();
             $table->boolean('travel_before')->nullable();
             $table->foreignId('delegate_id')->nullable()->constrained('delegates')->onDelete('cascade');
