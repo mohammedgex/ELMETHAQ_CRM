@@ -20,7 +20,9 @@ class LeadsCustomersController extends Controller
     public function index()
     {
         # code...
-        $leads = LeadsCustomers::where("status", "عميل محتمل")->get();
+        $leads = LeadsCustomers::where('status', 'عميل محتمل')
+            ->whereNotNull('name')
+            ->get();
         $delegates = Delegate::all();
         $jobs = JobTitle::all();
         $groups = CustomerGroup::all();
@@ -67,7 +69,7 @@ class LeadsCustomersController extends Controller
         $request->validate([
             "card_id" => 'required|unique:leads_customers,card_id',
             "phone" => 'required|unique:leads_customers,phone',
-            "phone_two" => 'required|unique:leads_customers,phone_two',
+            "phone_two" => 'nullable|unique:leads_customers,phone_two',
         ], [
             'card_id.required' => 'الرقم القومي مطلوب.',
             'card_id.unique' => 'الرقم القومي موجود من قبل.',
@@ -75,7 +77,6 @@ class LeadsCustomersController extends Controller
             'phone.required' => 'رقم الهاتف مطلوب.',
             'phone.unique' => 'رقم الهاتف موجود من قبل.',
 
-            'phone_two.required' => 'رقم الهاتف الاخر مطلوب.',
             'phone_two.unique' => 'رقم الهاتف الاخر موجود من قبل.',
         ]);
         $lead = $request->all();

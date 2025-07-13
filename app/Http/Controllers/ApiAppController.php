@@ -125,7 +125,7 @@ class ApiAppController extends Controller
             'image' => 'required',
             'phone' => 'required|unique:leads_customers,phone',
             'job_title_id' => 'required',
-            'password' => 'required',
+            'password' => 'required|digits:8',
             'fcm_token' => 'nullable|string',
         ], [
             'image.required' => 'صورة المستخدم مطلوبة.',
@@ -133,6 +133,7 @@ class ApiAppController extends Controller
             'phone.unique' => 'رقم الهاتف مستخدم بالفعل.',
             'job_title_id.required' => 'يرجى اختيار الوظيفة.',
             'password.required' => 'كلمة المرور مطلوبة.',
+            'password.digits' => 'كلمة المرور يجب أن تتكون من 8 أرقام.',
             'fcm_token.string' => 'رمز الإشعارات يجب أن يكون نصًا.',
         ]);
         // حفظ الصورة

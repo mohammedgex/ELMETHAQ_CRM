@@ -13,6 +13,17 @@
         <div class="card-header bg-secondary">
             <h3 class="card-title">إضافة عميل جديد</h3>
         </div>
+        @if ($errors->any())
+            <script>
+                let errorMessages = `{!! implode('<br>', $errors->all()) !!}`;
+                Swal.fire({
+                    icon: 'error',
+                    title: 'حدثت أخطاء في الإدخال:',
+                    html: errorMessages,
+                    confirmButtonText: 'حسناً'
+                });
+            </script>
+        @endif
 
         <form action="{{ route('leads-customers.create') }}" id="add" method="POST" enctype="multipart/form-data">
             @csrf
@@ -26,7 +37,7 @@
 
                             <div class="custom-file mb-2">
                                 <input type="file" name="image" class="custom-file-input preview-image-input"
-                                    data-preview="#preview_image" id="dd" required="">
+                                    data-preview="#preview_image" id="dd" required>
                                 <label class="custom-file-label">اختر صورة</label>
                             </div>
 
@@ -308,12 +319,16 @@
                         <input type="date" id="filter-date" class="form-control" placeholder="تاريخ التسجيل">
                     </div>
                 </div>
+                <div>
+                    عدد المحددين: <span id="selected-count">0</span>
+                </div>
 
                 <div class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         العمليات
                     </button>
+
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="operationsDropdown">
                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
                             <i class="fas fa-plus text-success"></i> تحويل كعميل أساسي
@@ -323,7 +338,7 @@
             </div>
 
             <div class="card-body table-responsive p-0">
-                <table class="table table-hover text-center">
+                <table id="example" class="table table-hover text-center">
                     <thead class="bg-secondary text-white">
                         <tr>
                             <th>
@@ -350,7 +365,10 @@
                                         value="{{ $lead->id }}">
                                 </td>
                                 <td>#{{ $lead->id }}</td>
-                                <td>{{ $lead->name }}</td>
+                                <td>
+                                    <a href="{{ route('leads-customers.show', $lead->id) }}" class="">
+                                        {{ $lead->name }} </a>
+                                </td>
                                 <td>
                                     <a href="{{ asset('storage/' . $lead->image) }}" target="blank">
                                         <img src="{{ asset('storage/' . $lead->image) }}" width="40" height="40"
@@ -373,10 +391,6 @@
                                 <td>{{ $lead->registration_date }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-1 flex-nowrap">
-                                        <a href="{{ route('leads-customers.show', $lead->id) }}"
-                                            class="btn btn-sm btn-info">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
                                         <a href="#" class="btn btn-sm btn-warning">
                                             <i class="fas fa-star"></i>
                                         </a>
@@ -527,45 +541,36 @@
                 });
             }
         });
+        // تحديث العداد
+        function updateSelectedCount() {
+            let count = document.querySelectorAll('.lead-checkbox:checked').length;
+            document.getElementById('selected-count').textContent = count;
+        }
+
+        // تحديد الكل
         document.getElementById('select-all').addEventListener('change', function() {
             let checkboxes = document.querySelectorAll('.lead-checkbox');
             checkboxes.forEach(cb => cb.checked = this.checked);
+            updateSelectedCount(); // تحديث العداد بعد التحديد الكلي
+        });
+
+        // عند تغيير أي checkbox فرعي
+        document.querySelectorAll('.lead-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateSelectedCount);
         });
         $('#example').DataTable({
-            dom: 'Bfrtip', // تخصيص ترتيب العناصر
-            buttons: [{
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
-                    className: 'buttons-excel',
-                    exportOptions: {
-                        columns: [0, 1, 2, 3] // Specify which columns to export (0-based index)
-                    }
-                },
-
-                {
-                    extend: 'print',
-                    text: '<i class="fa fa-file-pdf"></i> طباعة',
-                    className: 'buttons-pdf',
-                    customize: function(win) {
-                        $(win.document.body).css('direction', 'rtl'); // Set text direction to right-to-left
-                        $(win.document.body).find('table')
-                            .addClass('compact')
-                            .css('font-size', '12px'); // Adjust font size
-                    }
-                },
-
+            dom: 'ltp', // l = lengthMenu (قائمة تغيير عدد الصفوف), t = الجدول, p = ترقيم الصفحات
+            pageLength: 20, // القيمة الافتراضية
+            lengthMenu: [
+                [10, 20, 50, -1],
+                [10, 25, 50, 100, 250, 500, 'الكل']
             ],
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
             },
             searching: false,
-            pageLength: 10,
-            lengthMenu: [
-                [10, 25, 50, -1],
-                [10, 25, 50, "الكل"]
-            ],
+            ordering: true
         });
-
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll('.preview-image-input').forEach(function(input) {
                 input.addEventListener('change', function(e) {

@@ -21,7 +21,8 @@
 @section('content')
     <div class="card card-primary card-outline shadow">
         <div class="card-body">
-            <form action="{{ route('leads-customers.edit', $lead->id) }}" method="POST" enctype="multipart/form-data">
+            <form id="myForm" action="{{ route('leads-customers.edit', $lead->id) }}" method="POST"
+                enctype="multipart/form-data">
                 @csrf
                 <div class="row">
                     {{-- معلومات أساسية --}}
@@ -201,12 +202,20 @@
 
                     {{-- زر الحفظ --}}
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-success btn-block font-weight-bold">
+                        <button type="submit" id="save-button" class="btn btn-success btn-block font-weight-bold">
                             <i class="fas fa-save ml-2"></i> حفظ التعديلات
                         </button>
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+    <div id="loading-overlay"
+        style="display: none; position: fixed; z-index: 9999; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.8);">
+        <div class="d-flex justify-content-center align-items-center" style="height: 100%;">
+            <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+                <span class="sr-only">جارٍ التحميل...</span>
+            </div>
         </div>
     </div>
     <script>
@@ -222,5 +231,24 @@
                 reader.readAsDataURL(file);
             }
         }
+
+        document.addEventListener('keydown', function(e) {
+            // إذا تم الضغط على F2
+            if (e.key === 'F2') {
+                e.preventDefault(); // منع السلوك الافتراضي لـ F2
+                let saveBtn = document.getElementById('save-button');
+                if (saveBtn) {
+                    saveBtn.click(); // اضغط الزر برمجياً
+                }
+            }
+        });
+        ["myForm"].forEach(function(formId) {
+            var form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', function() {
+                    document.getElementById('loading-overlay').style.display = 'block';
+                });
+            }
+        });
     </script>
 @stop
