@@ -447,7 +447,7 @@ class ApiAppController extends Controller
                     $document->save();
                 } elseif (preg_match('/<span[^>]*style="[^"]*color\s*:\s*red[^"]*"[^>]*>\s*<i[^>]*><\/i>\s*Unfit\s*<\/span>/i', $html)) {
                     $status = 'Unfit';
-                    $customer->marital_status = "غير لائق";
+                    $customer->medical_examination = "غير لائق";
                     $customer->save();
                     $history = new History();
                     $history->description = "تم جلب نتيجة الكشف الطبي وهو : غير لائق";
@@ -468,6 +468,7 @@ class ApiAppController extends Controller
             $errors[] = 'حدث خطأ في الاتصال: ' . $e->getMessage();
         }
 
+        $customer->save();
         // ✅ الإرجاع النهائي
         return redirect()->back()->with('swal', [
             'icon' => empty($errors) ? 'success' : 'error',

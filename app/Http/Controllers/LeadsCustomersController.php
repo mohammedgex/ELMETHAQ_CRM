@@ -10,6 +10,7 @@ use App\Models\DocumentType;
 use App\Models\History;
 use App\Models\JobTitle;
 use App\Models\LeadsCustomers;
+use App\Models\Test;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -20,12 +21,14 @@ class LeadsCustomersController extends Controller
     public function index()
     {
         # code...
-        $leads = LeadsCustomers::where('status', 'عميل محتمل')
+        $leads = LeadsCustomers::whereIn('status', ['عميل محتمل', 'عميل اساسي'])
             ->whereNotNull('name')
+            ->orderByRaw("FIELD(status, 'عميل محتمل', 'عميل اساسي')")
             ->get();
         $delegates = Delegate::all();
         $jobs = JobTitle::all();
         $groups = CustomerGroup::all();
+        $tests = Test::all();
         $governorates = [
             'القاهرة',
             'الجيزة',
@@ -35,7 +38,7 @@ class LeadsCustomersController extends Controller
             'البحيرة',
             'الفيوم',
             'الغربية',
-            'الإسماعيلية',
+            'الاسماعيلية',
             'المنوفية',
             'المنيا',
             'القليوبية',
@@ -47,12 +50,12 @@ class LeadsCustomersController extends Controller
             'بورسعيد',
             'دمياط',
             'الشرقية',
-            'جنوب سيناء',
+            'ج سيناء',
             'كفر الشيخ',
             'مطروح',
-            'الأقصر',
+            'الاقصر',
             'قنا',
-            'شمال سيناء',
+            'ش سيناء',
             'سوهاج'
         ];
         return view('leads-customers.leads-customers', [
@@ -61,6 +64,7 @@ class LeadsCustomersController extends Controller
             'delegates' => $delegates,
             "governorates" => $governorates,
             "groups" => $groups,
+            "tests" => $tests
         ]);
     }
 
@@ -211,7 +215,7 @@ class LeadsCustomersController extends Controller
         // التحديث النهائي
         $lead->update($data);
 
-        return redirect()->route('leads-customers.index')->with('success', 'تم تحديث البيانات بنجاح');
+        return redirect()->back()->with('success', 'تم تحديث البيانات بنجاح');
     }
 
 

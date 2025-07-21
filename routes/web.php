@@ -25,6 +25,7 @@ use App\Http\Controllers\GoogleTranslateController;
 use App\Http\Controllers\JopController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\TestController;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -41,48 +42,46 @@ Route::group([
 ], function () {
     Route::get('/bulk-sms-view', action: function () {
         return view('bulk-sms');
-    })->name('bulk-sms.index');
-
+    })->name('bulk-sms.index')->middleware("check.permission:bulk-sms-access");
 
     Route::get('/', function () {
-        return redirect('admin/home');
+        return redirect('admin/login');
     });
-    Route::get('/user/create', [UserController::class, "show"])->name("user.index");
-    Route::post('/users/store', [UserController::class, 'store'])->name('users.store');
+    Route::get('/user/create', [UserController::class, "show"])->name("user.index")->middleware("check.permission:users-manage");
+    Route::post('/users/store', [UserController::class, 'store'])->name('users.store')->middleware("check.permission:users-manage");
 
 
-    Route::get('/user/permissions/{id}', [PermissionsController::class, 'permissions'])->name('user.permissions');
-    Route::post('/user/permissions/{userId}', [PermissionsController::class, 'edit'])->name('permissions.edit');
+    Route::get('/user/permissions/{id}', [PermissionsController::class, 'permissions'])->name('user.permissions')->middleware("check.permission:users-manage");
+    Route::post('/user/permissions/{userId}', [PermissionsController::class, 'edit'])->name('permissions.edit')->middleware("check.permission:users-manage");
 
-    Route::get('/company', [CompanySettingController::class, 'index'])->name('company.index');
-    Route::post('/company/update', [CompanySettingController::class, 'update'])->name('company.update');
+    Route::get('/company', [CompanySettingController::class, 'index'])->name('company.index')->middleware("check.permission:company-settings");
+    Route::post('/company/update', [CompanySettingController::class, 'update'])->name('company.update')->middleware("check.permission:company-settings");
 
     Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
 
     Route::get('/vissa/{id}', function ($id) {
-        $customers = Customer::find($id);
+        $customer = Customer::find($id);
 
         return view('print-customer.print-entry_application', [
-            'customers' => [$customers]
+            'customers' => [$customer]
         ]);
     })->name('print_visaEntriy');
 
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index');
-    Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create');
-    Route::get('/leads-show/{id}', [LeadsCustomersController::class, 'show'])->name('leads-customers.show');
-    Route::get('/leads-edit/{id}', [LeadsCustomersController::class, 'update'])->name('leads-customers.update');
-    Route::post('/leads-edit/{id}', [LeadsCustomersController::class, 'edit'])->name('leads-customers.edit');
-    Route::delete('/leads-delete/{id}', [LeadsCustomersController::class, 'delete'])->name('leads-customers.delete');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware("check.permission:dashboard-access");
+    Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index')->middleware("check.permission:leads-customers-show");
+    Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create')->middleware("check.permission:leads-customers-show");
+    Route::get('/leads-show/{id}', [LeadsCustomersController::class, 'show'])->name('leads-customers.show')->middleware("check.permission:leads-customers-show");
+    Route::get('/leads-edit/{id}', [LeadsCustomersController::class, 'update'])->name('leads-customers.update')->middleware("check.permission:leads-customers-show");
+    Route::post('/leads-edit/{id}', [LeadsCustomersController::class, 'edit'])->name('leads-customers.edit')->middleware("check.permission:leads-customers-show");
+    Route::delete('/leads-delete/{id}', [LeadsCustomersController::class, 'delete'])->name('leads-customers.delete')->middleware("check.permission:leads-customers-show");
     Route::get('/leads-search', [LeadsCustomersController::class, 'search'])->name('leads-customers.search');
 
-
-    Route::get('/users', [UserController::class, 'index'])->name('users');
+    Route::get('/users', [UserController::class, 'index'])->name('users')->middleware("check.permission:users-manage");
 
     // عرض المهام
-    Route::get('/user-tasks', [TaskController::class, 'index'])->name('user-tasks.index');
-    Route::get('/user-tasks/done/{id}', [TaskController::class, 'done'])->name('user-tasks.done');
-    Route::post('/user-tasks', [TaskController::class, 'create'])->name('user-tasks.create');
+    Route::get('/user-tasks', [TaskController::class, 'index'])->name('user-tasks.index')->middleware("check.permission:tasks-access");
+    Route::get('/user-tasks/done/{id}', [TaskController::class, 'done'])->name('user-tasks.done')->middleware("check.permission:tasks-access");
+    Route::post('/user-tasks', [TaskController::class, 'create'])->name('user-tasks.create')->middleware("check.permission:tasks-access");
 
     // عرض أنواع التأشيرات
     Route::get('/visa-type-view/{id?}', [VisaTypeController::class, 'index'])->name('visa-type.index')->middleware("check.permission:visa-type-create");
@@ -97,10 +96,10 @@ Route::group([
     Route::delete('/visa-professions/{id}', [VisaProfessionsController::class, 'delete'])->name('visa-profession.delete')->middleware("check.permission:visa-type-create");
 
     // عرض الوظائف
-    Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index');
-    Route::post('/job-type-view', [JobController::class, 'create'])->name('job-type.create');
-    Route::post('/job-type-view/edit/{id}', [JobController::class, 'edit'])->name('job-type.edit');
-    Route::delete('/job-type-view/{id}', [JobController::class, 'delete'])->name('job-type.delete');
+    Route::get('/job-type-view/{id?}', [JobController::class, 'index'])->name('job-type.index')->middleware("check.permission:job-create");
+    Route::post('/job-type-view', [JobController::class, 'create'])->name('job-type.create')->middleware("check.permission:job-create");
+    Route::post('/job-type-view/edit/{id}', [JobController::class, 'edit'])->name('job-type.edit')->middleware("check.permission:job-create");
+    Route::delete('/job-type-view/{id}', [JobController::class, 'delete'])->name('job-type.delete')->middleware("check.permission:job-create");
 
     // عرض القنصلية
     Route::get('/embassy-view/{id?}', [EmbassyController::class, 'index'])->name('embassy.index')->middleware("check.permission:embassy-create");
@@ -140,6 +139,8 @@ Route::group([
     Route::post('/customer-groups', [CustomerGroupController::class, 'create'])->name('customer-groups.create')->middleware("check.permission:bag-create");
     Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit')->middleware("check.permission:bag-create");;
     Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete')->middleware("check.permission:bag-create");;
+    Route::get('/groups/{group}/customers/{customer}/remove', [CustomerGroupController::class, 'removeFromGroup'])->name('groups.removeCustomer');
+
 
     // المناديب
     Route::get('/Delegates-create/{id?}', [DelegateController::class, 'index'])->name('Delegates.create')->middleware("check.permission:delegate-create");
@@ -209,6 +210,23 @@ Route::group([
 
     Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
     Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
+
+    Route::prefix('tests')->name('test.')->group(function () {
+        // صفحة عرض الاختبارات + نموذج الإضافة أو التعديل
+        Route::get('/{id?}', [TestController::class, 'index'])->name('index')->middleware("check.permission:test-create");
+        // إضافة اختبار جديد
+        Route::post('/create', [TestController::class, 'store'])->name('create')->middleware("check.permission:test-create");
+        // حذف اختبار
+        Route::delete('/delete/{id}', [TestController::class, 'destroy'])->name('delete')->middleware("check.permission:test-create");
+        Route::get('/{test_id}/leads/', [TestController::class, 'customerTest'])->name('leads');
+    });
+
+    // تنفيذ الإضافة
+    Route::post('/tests/add-customer', [TestController::class, 'addCustomers'])->name('tests.addCustomer');
+    Route::delete('/tests/{test}/remove-lead/{lead}', [TestController::class, 'removeLead'])->name('tests.removeLead');
+    Route::get('/tests/{test}/show-evaluations/{lead}', [TestController::class, 'show_evaluation'])->name('tests.showEvaluation');
+    Route::post('/evaluations/create', [TestController::class, 'createEvaluation'])->name('evaluations.create');
+    Route::post('/evaluations/{id}', [TestController::class, 'storeEvaluation'])->name('evaluations.store');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

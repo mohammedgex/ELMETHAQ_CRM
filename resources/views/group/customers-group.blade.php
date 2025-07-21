@@ -3,12 +3,7 @@
 @section('title', 'العملاء')
 
 @section('content_header')
-    @if (request()->is('customer-consulate'))
-        <h1>
-            العملاء المؤهلون للقنصلية</h1>
-    @else
-        <h1>العملاء</h1>
-    @endif
+    <h1>العملاء في مجموعة : ({{ $group->title }})</h1>
 @stop
 
 @section('content')
@@ -20,36 +15,6 @@
 
                     <div class="card-body">
                         <div class="row d-flex justify-content-between">
-                            <div class="mb-3 d-flex">
-                                <!-- نموذج البحث -->
-                                <form
-                                    @if (request()->is('customer-consulate')) action="{{ route('consulate.search') }}"
-                                @else action="{{ route('customer.search') }}" @endif
-                                    method="POST" class="d-flex">
-                                    @csrf
-                                    <select class="form-select w-auto me-2 rounded shadow-sm border-primary mx-2"
-                                        id="searchBy" name="searchBy">
-                                        <option value="id">السريال</option>
-                                        <option value="name_ar">الاسم</option>
-                                        <option value="phone">رقم الهاتف</option>
-                                        <option selected value="card_id">الرقم القومي</option>
-                                        <option value="mrz">الـ MRZ</option>
-                                        <option value="age">السن</option>
-                                        <option value="e_visa_number">رقم طلب التأشيرة</option>
-                                        <option value="passport_id">رقم الجواز</option>
-                                        <option value="issue_place">جهة الإصدار</option>
-                                    </select>
-
-                                    <input type="text" class="form-control flex-grow-1" id="searchInput"
-                                        name="searchInput" style="width: 300px;" placeholder="اكتب هنا للبحث" autofocus>
-                                    <button type="submit" class="btn btn-primary mx-1">بحث</button>
-                                </form>
-                                @if (Route::currentRouteName() == 'customer.search')
-                                    <a href="{{ route('customer.indes') }}">
-                                        <button class="btn btn-primary mx-1">كل العملاء</button>
-                                    </a>
-                                @endif
-                            </div>
                             <div class="d-flex" style="align-items: center;">
                                 <div id="gggg" class="loader mr-2"
                                     style=" border: 4px solid #f3f3f3; border-top: 4px solid #997a44; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none;">
@@ -61,13 +26,6 @@
                             </div>
                             <!-- أزرار الإجراءات -->
                             <div class="mb-3 me-2 mx-2">
-
-                                <!-- زر تصفية -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#filterModal">
-                                    <i class="fas fa-filter"></i> تصفية العملاء
-                                </button>
-
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -85,17 +43,8 @@
                                                 انجاز</button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-success" id="medical-examination">الكشف
-                                                الطبي</button>
-                                        </li>
-                                        <li>
                                             <button class="dropdown-item text-success" id="visa">
                                                 جلب التاشيرة او طلب الدخول
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button id="labBookingBtn" class="dropdown-item text-success">
-                                                حجز كشف المعامل
                                             </button>
                                         </li>
                                         <li>
@@ -117,12 +66,7 @@
                                             </button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-danger">بلاك
-                                                ليست</button>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item text-secondary"
-                                                onclick="sendSMS('option7')">أرشفة</button>
+                                            <button class="dropdown-item text-secondary">أرشفة</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -130,314 +74,8 @@
                             </div>
                         </div>
 
-                        <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel"
-                            aria-hidden="true">
-                            <div class="modal-dialog modal-lg">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title fw-bold" id="filterModalLabel">تصفية العملاء</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="filterForm" method="POST" action="{{ route('customers.filter') }}">
-                                            @csrf
-
-                                            <div class="col-md-12 my-2">
-                                                <label class="fw-bold" style="color: #997a44;">MRZ جواز السفر</label>
-                                                <textarea class="form-control fw-bold" name="mrz">{{ old('mrz', $fillter['mrz'] ?? '') }}</textarea>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الاسم الكامل</label>
-                                                    <input type="text" class="form-control fw-bold" name="name_ar"
-                                                        value="{{ old('name_ar', $fillter['name_ar'] ?? '') }}">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الرقم القومي</label>
-                                                    <input type="text" class="form-control fw-bold" name="card_id"
-                                                        value="{{ old('card_id', $fillter['card_id'] ?? '') }}">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">رقم الهاتف</label>
-                                                    <input type="text" class="form-control fw-bold" name="phone"
-                                                        value="{{ old('phone', $fillter['phone'] ?? '') }}">
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">محافظة الإقامة</label>
-                                                    @php
-                                                        $governorates = [
-                                                            'القاهرة',
-                                                            'الجيزة',
-                                                            'الإسكندرية',
-                                                            'الدقهلية',
-                                                            'البحر الأحمر',
-                                                            'البحيرة',
-                                                            'الفيوم',
-                                                            'الغربية',
-                                                            'الإسماعلية',
-                                                            'المنوفية',
-                                                            'المنيا',
-                                                            'القليوبية',
-                                                            'الوادي الجديد',
-                                                            'السويس',
-                                                            'أسوان',
-                                                            'أسيوط',
-                                                            'بني سويف',
-                                                            'بورسعيد',
-                                                            'دمياط',
-                                                            'الشرقية',
-                                                            'جنوب سيناء',
-                                                            'كفر الشيخ',
-                                                            'مطروح',
-                                                            'الأقصر',
-                                                            'قنا',
-                                                            'شمال سيناء',
-                                                            'سوهاج',
-                                                        ];
-                                                    @endphp
-                                                    <select class="form-control fw-bold" name="governorate_live">
-                                                        <option value="">اختر المحافظة</option>
-                                                        @foreach ($governorates as $gov)
-                                                            <option value="{{ $gov }}"
-                                                                {{ old('governorate_live', $fillter['governorate_live'] ?? '') == $gov ? 'selected' : '' }}>
-                                                                {{ $gov }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الحالة</label>
-                                                    <select class="form-control fw-bold" name="status">
-                                                        <option value="">اختر الحالة</option>
-                                                        @foreach (['جديد', 'ناجح', 'تجهيز الأوراق'] as $status)
-                                                            <option value="{{ $status }}"
-                                                                {{ old('status', $fillter['status'] ?? '') == $status ? 'selected' : '' }}>
-                                                                {{ $status }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">نوع الرخصة</label>
-                                                    <select class="form-control fw-bold" name="license_type">
-                                                        <option value="">اختر النوع</option>
-                                                        @foreach (['خاصة', 'عامة'] as $type)
-                                                            <option value="{{ $type }}"
-                                                                {{ old('license_type', $fillter['license_type'] ?? '') == $type ? 'selected' : '' }}>
-                                                                {{ $type }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">السن</label>
-                                                    <input type="text" class="form-control fw-bold" name="age"
-                                                        value="{{ old('age', $fillter['age'] ?? '') }}">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">رقم جواز السفر</label>
-                                                    <input type="text" class="form-control fw-bold" name="passport_id"
-                                                        value="{{ old('passport_id', $fillter['passport_id'] ?? '') }}">
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">نوع التأشيرة</label>
-                                                    <select class="form-control fw-bold" name="visa_type_id">
-                                                        <option value="">اختر التأشيرة</option>
-                                                        @foreach ($visas as $visa)
-                                                            <option value="{{ $visa->id }}"
-                                                                {{ old('visa_type_id', $fillter['visa_type_id'] ?? '') == $visa->id ? 'selected' : '' }}>
-                                                                {{ $visa->outgoing_number }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الكفيل</label>
-                                                    <select class="form-control fw-bold" name="sponser_id">
-                                                        <option value="">اختر الكفيل</option>
-                                                        @foreach ($sponsers as $sponser)
-                                                            <option value="{{ $sponser->id }}"
-                                                                {{ old('sponser_id', $fillter['sponser_id'] ?? '') == $sponser->id ? 'selected' : '' }}>
-                                                                {{ $sponser->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">المجموعة</label>
-                                                    <select class="form-control fw-bold" name="customer_group_id">
-                                                        <option value="">اختر المجموعة</option>
-                                                        @foreach ($groups as $group)
-                                                            <option value="{{ $group->id }}"
-                                                                {{ old('customer_group_id', $fillter['customer_group_id'] ?? '') == $group->id ? 'selected' : '' }}>
-                                                                {{ $group->title }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">الوظيفة</label>
-                                                    <select class="form-control fw-bold" name="job_title_id">
-                                                        <option value="">اختر الوظيفة</option>
-                                                        @foreach ($jobs as $job)
-                                                            <option value="{{ $job->id }}"
-                                                                {{ old('job_title_id', $fillter['job_title_id'] ?? '') == $job->id ? 'selected' : '' }}>
-                                                                {{ $job->title }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <label class="fw-bold" style="color: #997a44;">المندوب</label>
-                                                    <select class="form-control fw-bold" name="delegate_id">
-                                                        <option value="">اختر المندوب</option>
-                                                        @foreach ($delegates as $delegate)
-                                                            <option value="{{ $delegate->id }}"
-                                                                {{ old('delegate_id', $fillter['delegate_id'] ?? '') == $delegate->id ? 'selected' : '' }}>
-                                                                {{ $delegate->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">المؤهل الدراسي</label>
-                                                    <select class="form-control fw-bold" name="education">
-                                                        <option value="">اختر المؤهل</option>
-                                                        @foreach (['محو امية', 'مؤهل متوسط'] as $edu)
-                                                            <option value="{{ $edu }}"
-                                                                {{ old('education', $fillter['education'] ?? '') == $edu ? 'selected' : '' }}>
-                                                                {{ $edu }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">الحالة
-                                                        الاجتماعية</label>
-                                                    <select class="form-control fw-bold" name="marital_status">
-                                                        <option value="">اختر الحالة الاجتماعية</option>
-                                                        @foreach (['اعزب', 'متزوج'] as $marital)
-                                                            <option value="{{ $marital }}"
-                                                                {{ old('marital_status', $fillter['marital_status'] ?? '') == $marital ? 'selected' : '' }}>
-                                                                {{ $marital }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <h4 class="fw-bold mt-3">المراحل</h4>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">الكشف الطبي</label>
-                                                    <select class="form-control fw-bold" name="medical_examination">
-                                                        <option value="">اختر المرحلة</option>
-                                                        @foreach (['في انتظار الحجز', 'تم الحجز', 'لائق', 'غير لائق'] as $med)
-                                                            <option value="{{ $med }}"
-                                                                {{ old('medical_examination', $fillter['medical_examination'] ?? '') == $med ? 'selected' : '' }}>
-                                                                {{ $med }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">البصمة</label>
-                                                    <select class="form-control fw-bold" name="finger_print_examination">
-                                                        <option value="">اختر المرحلة</option>
-                                                        @foreach (['في انتظار الحجز', 'تم تصدير الاكسيل'] as $finger)
-                                                            <option value="{{ $finger }}"
-                                                                {{ old('finger_print_examination', $fillter['finger_print_examination'] ?? '') == $finger ? 'selected' : '' }}>
-                                                                {{ $finger }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mt-2">
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">كشف المعامل</label>
-                                                    <select class="form-control fw-bold" name="virus_examination">
-                                                        <option value="">اختر المرحلة</option>
-                                                        @foreach (['بأنتظار ايصال المعامل', 'تم اصدار ايصال المعامل', 'سالب', 'موجب'] as $virus)
-                                                            <option value="{{ $virus }}"
-                                                                {{ old('virus_examination', $fillter['virus_examination'] ?? '') == $virus ? 'selected' : '' }}>
-                                                                {{ $virus }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label class="fw-bold" style="color: #997a44;">حجز النت</label>
-                                                    <select class="form-control fw-bold" name="engaz_request">
-                                                        <option value="">اختر المرحلة</option>
-                                                        @foreach (['في انتظار الطلب', 'تم الحجز', 'تم اصدار التأشيرة'] as $engaz)
-                                                            <option value="{{ $engaz }}"
-                                                                {{ old('engaz_request', $fillter['engaz_request'] ?? '') == $engaz ? 'selected' : '' }}>
-                                                                {{ $engaz }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <div class="d-flex flex-column gap-3 mt-3">
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" name="travel_before"
-                                                        value="1"
-                                                        {{ old('travel_before', $fillter['travel_before'] ?? false) ? 'checked' : '' }}>
-                                                    <label class="form-check-label fw-bold">هل سافر من قبل؟</label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        name="e_visa_number_issued" value="1"
-                                                        {{ old('e_visa_number_issued', $fillter['e_visa_number_issued'] ?? false) ? 'checked' : '' }}>
-                                                    <label class="form-check-label fw-bold">هل أصدر له رقم تأشيرة؟</label>
-                                                </div>
-                                                <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        name="e_visa_number_entered" value="1"
-                                                        {{ old('e_visa_number_entered', $fillter['e_visa_number_entered'] ?? false) ? 'checked' : '' }}>
-                                                    <label class="form-check-label fw-bold">هل ورقه دخل القنصلية؟</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">إغلاق</button>
-                                                <button type="button" class="btn btn-warning" id="resetFilter">إعادة
-                                                    تعيين</button>
-                                                <button type="submit" class="btn btn-primary">تطبيق الفلترة</button>
-                                            </div>
-                                        </form>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                         <hr> <!-- Divider -->
-
+                        {{--
                         <div class="d-flex flex-wrap gap-2 mb-4">
                             <div>
                                 <a href="{{ route('customer.indes') }}">
@@ -490,7 +128,7 @@
                             <div>
                                 <button class="btn btn-outline-dark">أرشيف</button>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="table-responsive">
                             <table class="table table-hover text-center" id="example">
@@ -501,11 +139,10 @@
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
-                                        <th>السن</th>
-                                        <th>المندوب</th>
-                                        <th>المجموعة</th>
-                                        <th>الحالة</th>
-                                        <th>المرفقات</th>
+                                        <th width="120px">الكشف الطبي</th>
+                                        <th width="120px">البصمة</th>
+                                        <th width="120px">كشف المعامل</th>
+                                        <th width="120px">انجاز</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -531,27 +168,15 @@
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
-                                            <td>{{ $customer->age }}</td>
-                                            <td>{{ $customer->delegate->name ?? '-' }}</td>
+                                            <td>{{ $customer->medical_examination ?? '-' }}</td>
                                             <td>
-                                                @if ($customer->customerGroup)
-                                                    <a href="{{ route('group.customer', $customer->customerGroup->id) }}">
-                                                        {{ $customer->customerGroup->title ?? '-' }}
-                                                    </a>
-                                                @else
-                                                    {{ $customer->customerGroup->title ?? '-' }}
-                                                @endif
+                                                {{ $customer->finger_print_examination ?? '-' }}
                                             </td>
                                             <td>
-                                                <span>
-                                                    {{ $customer->status }}
-                                                </span>
+                                                {{ $customer->virus_examination ?? '-' }}
                                             </td>
                                             <td>
-                                                <a href="{{ route('attachments.toAttach', $customer->id) }}?tap=attach"
-                                                    class="badge bg-dark">
-                                                    {{ count($customer->documentTypes) }}
-                                                </a>
+                                                {{ $customer->e_visa_number ?? '-' }}
                                             </td>
                                             <td>
                                                 <div class="btn-group">
@@ -566,6 +191,12 @@
                                                             <a class="dropdown-item text-primary"
                                                                 href="{{ route('customer.add', $customer->id) }}">
                                                                 <i class="fas fa-edit me-1"></i> تعديل
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-primary"
+                                                                href="{{ route('groups.removeCustomer', [$group->id, $customer->id]) }}">
+                                                                ازالة من المجموعة
                                                             </a>
                                                         </li>
 
@@ -597,8 +228,7 @@
 
                                                                 <li><a class="dropdown-item"
                                                                         href="{{ route('print_visaEntriy', $customer->id) }}"
-                                                                        target="_blank"><i
-                                                                            class="fas fa-passport me-1"></i>
+                                                                        target="_blank"><i class="fas fa-passport me-1"></i>
                                                                         طباعة طلب
                                                                         دخول</a></li>
                                                                 @if ($customer->token_medical)
@@ -611,6 +241,14 @@
                                                                         </a>
                                                                     </li>
                                                                 @endif
+                                                                <li>
+                                                                    <a href="#" class="dropdown-item show-loading"
+                                                                        id="check-medical"
+                                                                        data-customer='@json($customer)'>
+                                                                        <i class="fas fa-hospital me-1"></i>
+                                                                        حجز الكشف الطبي
+                                                                    </a>
+                                                                </li>
                                                             </ul>
                                                         </li>
 
@@ -873,10 +511,6 @@
             overflow: visible;
         }
 
-        /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
-
         .dt-button {
             padding: 8px 15px;
             margin: 5px;
@@ -1091,201 +725,6 @@
         $(document).on('click', '.show-loading', function(e) {
             $('#loading-overlay').fadeIn();
         });
-        // #########################################################################################################
-        // document.addEventListener("DOMContentLoaded", function() {
-        //     document.querySelectorAll(".check-medical-status").forEach(button => {
-        //         button.addEventListener("click", async function(event) {
-        //             event.preventDefault();
-        //             const customer = JSON.parse(this.dataset.customer);
-        //             console.log("Customer ID:", customer.id);
-        //             let nameParts = customer.name_en_mrz.trim().split(' ');
-        //             const data = {
-        //                 firstName: nameParts[0],
-        //                 lastName: nameParts[nameParts.length - 1],
-        //                 passportNumber: customer.passport_id,
-        //                 country: "EGY",
-        //                 city: "87",
-        //                 destinationCountry: "SA",
-        //                 dateOfBirth: customer.date_birth,
-        //                 nationality: "1",
-        //                 gender: "male",
-        //                 maritalStatus: "unmarried",
-        //                 passportIssueDate: "01/01/2020",
-        //                 passportIssuePlace: customer.issue_place,
-        //                 passportExpiryDate: customer.passport_expire_date,
-        //                 visaType: "wv",
-        //                 email: "john.doe@example.com",
-        //                 phone: "+2" + customer.phone,
-        //                 nationalId: customer.card_id,
-        //                 position: "22"
-        //             };
-        //             console.log(data);
-        //             fetch("http://localhost:3000/api/wafid", {
-        //                     method: "POST",
-        //                     headers: {
-        //                         "Content-Type": "application/json"
-        //                     },
-        //                     body: JSON.stringify(data)
-        //                 })
-        //                 .then(response => {
-        //                     if (!response.ok) {
-        //                         throw new Error(`HTTP error! Status: ${response.status}`);
-        //                     }
-        //                     return response.json();
-        //                 })
-        //                 .then(result => {
-        //                     const routeUrl =
-        //                         "{{ route('hospital.book', ['id' => 'customerId']) }}"; // توليد الرابط
-        //                     const customerId = customer
-        //                         .id; // مثال على ID العميل، يمكنك تمريره من الـ PHP أو الـ JavaScript
-
-        //                     const url = routeUrl.replace('customerId', customerId);
-        //                     fetch(url, {
-        //                             method: "GET", // تأكد من استخدام الطريقة الصحيحة
-        //                             headers: {
-        //                                 "Content-Type": "application/json"
-        //                             },
-        //                         })
-        //                         .then(response => {
-        //                             Swal.fire({
-        //                                 title: customer.name_ar +
-        //                                     " تم حجز الكشف الطبي بنجاح",
-        //                                 icon: "success",
-        //                                 draggable: true
-        //                             });
-        //                             if (!response.ok) {
-        //                                 throw new Error(
-        //                                     `HTTP error! Status: ${response.status}`
-        //                                 );
-        //                             }
-        //                             return response.json();
-        //                         })
-        //                         .then(result => {
-
-        //                         })
-        //                         .catch(error => {
-        //                             console.error("Error:", error);
-        //                         });
-        //                 })
-        //                 .catch(error => {
-        //                     console.error("Error:", error);
-        //                 });
-        //         });
-        //     });
-
-
-        //     // المستشفي
-
-        //     document.querySelectorAll(".check-medical-hospital").forEach(button => {
-        //         button.addEventListener("click", async function(event) {
-        //             let phone = this.getAttribute("data-phone");
-        //             console.log(phone);
-
-        //             event.preventDefault();
-
-        //             try {
-        //                 // إرسال الطلب لجلب بيانات المستشفى
-        //                 let response = await fetch("http://localhost:3000/get-hospital", {
-        //                     method: "POST",
-        //                     headers: {
-        //                         "Content-Type": "application/json"
-        //                     },
-        //                     body: JSON.stringify({
-        //                         passport: "A23294560",
-        //                         nationality: "Egyptian"
-        //                     })
-        //                 });
-
-        //                 if (!response.ok) throw new Error(
-        //                     `HTTP Error! Status: ${response.status}`);
-
-        //                 let result = await response.json();
-
-        //                 if (result.hospitalName && result.address && result.phone) {
-        //                     // عرض بيانات المستشفى في SweetAlert
-        //                     Swal.fire({
-        //                         title: " بيانات المستشفى",
-        //                         html: `
-    //                 <b>🏥 اسم المركز الطبي:</b> ${result.hospitalName} <br><br>
-    //                 <b>📍 العنوان:</b> ${result.address} <br><br>
-    //                 <b>📞 رقم الهاتف:</b> ${result.phone}
-    //             `,
-        //                         icon: "info",
-        //                         showCancelButton: true,
-        //                         confirmButtonText: "إغلاق",
-        //                         cancelButtonText: "📩 إرسال رسالة",
-        //                     }).then(async (swalResult) => {
-        //                         if (swalResult.dismiss === Swal.DismissReason
-        //                             .cancel) {
-        //                             await sendSms(result);
-        //                         }
-        //                     });
-        //                 } else {
-        //                     Swal.fire({
-        //                         title: "⚠️ لم يتم العثور على البيانات",
-        //                         text: "يرجى التحقق من رقم جواز السفر والجنسية والمحاولة مرة أخرى.",
-        //                         icon: "warning",
-        //                         confirmButtonText: "إغلاق"
-        //                     });
-        //                 }
-
-        //             } catch (error) {
-        //                 Swal.fire({
-        //                     title: "❌ خطأ",
-        //                     text: "حدث خطأ أثناء معالجة الطلب: " + error.message,
-        //                     icon: "error",
-        //                     confirmButtonText: "إغلاق"
-        //                 });
-        //             }
-        //         });
-        //     });
-
-        //     // دالة لإرسال الرسالة النصية
-        //     async function sendSms(hospitalData) {
-        //         try {
-        //             let smsResponse = await fetch("http://localhost:3000/send-sms", {
-        //                 method: "POST",
-        //                 headers: {
-        //                     "Content-Type": "application/json",
-        //                     "Accept": "application/json"
-        //                 },
-        //                 body: JSON.stringify({
-        //                     recipient: `2${phone}`,
-        //                     hospitalName: hospitalData.hospitalName,
-        //                     address: hospitalData.address,
-        //                     phone: hospitalData.phone
-        //                 })
-        //             });
-
-        //             let smsResult = await smsResponse.json();
-
-        //             if (smsResult.status === 'success') {
-        //                 Swal.fire({
-        //                     title: "✅ تم إرسال الرسالة بنجاح",
-        //                     text: "تم إرسال بيانات المستشفى عبر الرسائل القصيرة.",
-        //                     icon: "success",
-        //                     confirmButtonText: "حسناً"
-        //                 });
-        //             } else {
-        //                 Swal.fire({
-        //                     title: "⚠️ فشل في الإرسال",
-        //                     text: "لم يتم إرسال الرسالة. حاول مرة أخرى لاحقًا.",
-        //                     icon: "warning",
-        //                     confirmButtonText: "إغلاق"
-        //                 });
-        //             }
-        //         } catch (error) {
-        //             Swal.fire({
-        //                 title: "❌ خطأ",
-        //                 text: "حدث خطأ أثناء إرسال الرسالة: " + error.message,
-        //                 icon: "error",
-        //                 confirmButtonText: "إغلاق"
-        //             });
-        //         }
-        //     }
-
-
-        // });
 
         document.addEventListener('keydown', function(event) {
             if (event.key == 's') {
@@ -1322,61 +761,6 @@
             });
         });
 
-        document.querySelectorAll(".send-sms").forEach(button => {
-            button.addEventListener("click", async function(event) {
-                document.getElementById("hhhh").style.display = "block"
-                document.getElementById("gggg").style.display = "block"
-                event.preventDefault();
-
-                try {
-                    let smsResponse = await fetch("http://localhost:3000/send-sms", {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Accept": "application/json"
-                        },
-                        body: JSON.stringify({
-                            "recipient": "201117831932",
-                            "hospitalName": "dfdf",
-                            "address": "sfddfdf",
-                            "phone": "5455"
-                        })
-                    });
-
-                    let smsResult = await smsResponse.json();
-
-                    if (smsResult['status'] == 'success') {
-                        document.getElementById("hhhh").style.display = "none"
-                        document.getElementById("gggg").style.display = "none"
-                        Swal.fire({
-                            title: "✅ تم إرسال الرسالة بنجاح",
-                            text: "تم إرسال بيانات المستشفى عبر الرسائل القصيرة.",
-                            icon: "success",
-                            confirmButtonText: "حسناً"
-                        });
-                    } else {
-                        document.getElementById("hhhh").style.display = "none"
-                        document.getElementById("gggg").style.display = "none"
-                        Swal.fire({
-                            title: "⚠️ فشل في الإرسال",
-                            text: "لم يتم إرسال الرسالة. حاول مرة أخرى لاحقًا.",
-                            icon: "warning",
-                            confirmButtonText: "إغلاق"
-                        });
-                    }
-                } catch (error) {
-                    document.getElementById("hhhh").style.display = "none"
-                    document.getElementById("gggg").style.display = "none"
-                    Swal.fire({
-                        title: "❌ خطأ",
-                        text: "حدث خطأ أثناء إرسال الرسالة: " + error.message,
-                        icon: "error",
-                        confirmButtonText: "إغلاق"
-                    });
-                }
-            })
-        });
-
         // check all
         document.getElementById("checkAll").addEventListener("change", function() {
             let checkboxes = document.querySelectorAll(".form-check-input");
@@ -1384,7 +768,6 @@
                 checkbox.checked = this.checked;
             });
         });
-
         $('#example').DataTable({
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
@@ -1393,38 +776,6 @@
             pageLength: 100,
         });
 
-        document.querySelectorAll(".finger-print").forEach(button => {
-            button.addEventListener("click", function(e) {
-                document.getElementById("hhhh").style.display = "block"
-                document.getElementById("gggg").style.display = "block"
-                // الحصول على بيانات العميل من data-customer
-                const customer = JSON.parse(this.dataset.customer);
-
-                // تقسيم الاسم إلى أجزاء (الاسم الأول، الاسم الثاني، إلخ)
-                let nameParts = customer.name_en_mrz.trim().split(' ');
-
-                // تحضير البيانات لتصديرها إلى Excel
-                const data = [
-                    ["الاسم الأول", "الاسم الثاني", " e-number", "جهة الإصدار", "تاريخ الانتهاء",
-                        "الإيميل",
-                        "رقم الهاتف", "تاريخ الإصدار", "الجنسية"
-                    ],
-                    [nameParts[0], nameParts[nameParts.length - 1], customer.e_visa_number, customer
-                        .issue_place, customer
-                        .passport_expire_date, "eslam@gmail.com", customer.phone, customer
-                        .passport_expire_date, customer.nationality
-                    ]
-                ];
-
-                // إنشاء ملف Excel باستخدام SheetJS
-                const worksheet = XLSX.utils.aoa_to_sheet(data);
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, "البيانات");
-                XLSX.writeFile(workbook, "بيانات البصمة.xlsx");
-                document.getElementById("hhhh").style.display = "none"
-                document.getElementById("gggg").style.display = "none"
-            });
-        });
         // ######################################################################### تعيين مجموعة
         document.getElementById('assignGroupForm').addEventListener('submit', function(e) {
             document.getElementById("hhhh").style.display = "block"
@@ -1587,6 +938,7 @@
                 });
         });
 
+        // ###################################################################### ارسال رسالة نصية
         document.getElementById("whatsappForm").addEventListener("submit", async function(e) {
             e.preventDefault();
             document.getElementById("whatsappModal").style.display = "none";
@@ -1661,175 +1013,16 @@
                     console.error(err);
                     document.getElementById("hhhh").style.display = "none"
                     document.getElementById("gggg").style.display = "none"
-                    alert("حدث خطأ أثناء التعيين");
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "حدث خطأ أثناء ارسال الرسالة",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                 });
         });
-
-        document.getElementById('labBookingBtn').addEventListener('click', function() {
-            const selectedCustomers = [];
-
-            document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
-                const customerData = checkbox.getAttribute('data-customer');
-                selectedCustomers.push(JSON.parse(customerData));
-            });
-
-            selectedCustomers.forEach(customer => {
-                console.log(customer.e_visa_number);
-                fetch('http://localhost:3000/submit-form', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            nationalId: customer.card_id,
-                            passportNumber: customer.passport_id,
-                            fullName: customer.name_ar,
-                            e_visa_number: customer.e_visa_number,
-                        })
-                    })
-                    .then(response => {
-                        return response.json(); // إذا كنت تتوقع JSON كرد
-                    })
-                    .then(data => {
-                        fetch("{{ route('savePDF') }}", {
-                                method: "POST",
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    pdf: data.pdf,
-                                    customer_id: customer.id,
-                                    user: "{{ auth()->user()->email }}"
-                                })
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                Swal.fire({
-                                    title: "نجحت العملية!",
-                                    text: "تم حجز كشف المعامل بنجاح!",
-                                    icon: "success"
-                                });
-                            })
-                            .catch(err => {
-                                console.error("خطأ:", err);
-                                alert("فشل في حفظ PDF");
-                            });
-                    })
-                    .catch(error => {
-                        console.error('خطأ أثناء الإرسال:', error);
-                    });
-            });
-
-        });
-
-        // document.getElementById('medical-examination').addEventListener('click', function() {
-        //     const selectedCustomers = [];
-
-        //     document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
-        //         const customerData = checkbox.getAttribute('data-customer');
-        //         selectedCustomers.push(JSON.parse(customerData));
-        //     });
-
-        //     if (selectedCustomers.length === 0) {
-        //         Swal.fire({
-        //             title: 'تنبيه',
-        //             text: 'يرجى تحديد العملاء أولاً',
-        //             icon: 'warning',
-        //             confirmButtonText: 'حسناً'
-        //         });
-        //         return;
-        //     }
-
-        //     selectedCustomers.forEach(customer => {
-        //         const name_ar = customer.name_ar?.split(" ") || [];
-        //         const name_en = customer.name_en_mrz?.split(" ") || [];
-
-        //         if (name_ar.length < 3 || name_en.length < 3) {
-        //             Swal.fire({
-        //                 title: "فشلت العملية!",
-        //                 text: "هناك مشكلة في الاسم: " + customer.name_ar,
-        //                 icon: "error"
-        //             });
-        //             return; // لا تكمل هذا العميل
-        //         }
-
-        //         const first_ar = name_ar[0] || "";
-        //         const middle_ar = name_ar[1] || "";
-        //         const last_ar = name_ar[2] || "";
-        //         const end_ar = name_ar[name_ar.length - 1] || "";
-
-        //         const first_en = name_en[0] || "";
-        //         const middle_en = name_en[1] || "";
-        //         const last_en = name_en[2] || "";
-        //         const end_en = name_en[name_en.length - 1] || "";
-
-        //         const payload = {
-        //             firstName: first_en,
-        //             lastName: middle_en,
-        //             passportNumber: customer.passport_id,
-        //             country: "EGY",
-        //             city: "87",
-        //             destinationCountry: "SA",
-        //             dateOfBirth: customer.date_birth,
-        //             nationality: "55",
-        //             gender: "male",
-        //             maritalStatus: "unmarried",
-        //             passportIssueDate: customer.passport_issuance_date,
-        //             passportIssuePlace: customer.issue_place,
-        //             passportExpiryDate: customer.passport_expire_date,
-        //             visaType: "wv",
-        //             email: "",
-        //             phone: "+2" + customer.phone,
-        //             nationalId: customer.card_id,
-        //             position: customer.customer_group?.visa_profession?.job,
-        //         };
-
-        //         const requiredFields = [
-        //             "firstName", "lastName", "passportNumber", "country", "city", "destinationCountry",
-        //             "dateOfBirth", "nationality", "gender", "maritalStatus", "passportIssueDate",
-        //             "passportIssuePlace", "passportExpiryDate", "visaType", "phone", "nationalId",
-        //             "position"
-        //         ];
-
-        //         const missingFields = requiredFields.filter(key => {
-        //             const value = payload[key];
-        //             return value === undefined || value === null || value === "";
-        //         });
-
-        //         if (missingFields.length > 0) {
-        //             Swal.fire({
-        //                 title: "بيانات ناقصة!",
-        //                 html: `
-    //             <div>العميل: <strong>${customer.name_ar}</strong></div>
-    //             <div>الحقول الناقصة:</div>
-    //             <ul style="text-align:right">
-    //                 ${missingFields.map(f => `<li>${f}</li>`).join("")}
-    //             </ul>
-    //         `,
-        //                 icon: "error"
-        //             });
-        //             return; // لا تكمل لهذا العميل
-        //         }
-
-        //         // إرسال الطلب إذا كانت البيانات مكتملة
-        //         fetch('http://localhost:3000/api/wafid', {
-        //                 method: 'POST',
-        //                 headers: {
-        //                     'Content-Type': 'application/json'
-        //                 },
-        //                 body: JSON.stringify(payload)
-        //             })
-        //             .then(response => response.json())
-        //             .then(data => {
-        //                 console.log('Response:', data);
-        //             })
-        //             .catch(error => {
-        //                 console.error('Error:', error);
-        //             });
-        //     });
-        // });
-
-
+        // ###################################################################### الكشف عن التأشيرة أو طلب الدخول
         document.getElementById('visa').addEventListener('click', async function() {
 
             const selectedCustomers = [];
@@ -1941,6 +1134,7 @@
             }
         }
 
+        // ###################################################################### طلب انجاز
         document.getElementById('collectSelected').addEventListener('click', async function() {
             const selectedCustomers = [];
 
@@ -1994,17 +1188,48 @@
                     await new Promise(resolve => setTimeout(resolve, 3000));
                     continue;
                 }
+                // تحديد عدد الدخول ومدة الإقامة بناءً على نوع التأشيرة
+                let NumberEntryDay;
+                let ResidencyInKSA;
+
+                if (customer?.customer_group && customer.customer_group?.visa_type) {
+                    const visaPeriod = customer.customer_group.visa_type.visa_peroid?.trim();
+
+                    if (visaPeriod === "تأشيرة العمل المؤقت لخدمات الحج والعمرة") {
+                        NumberEntryDay = "90";
+                        ResidencyInKSA = "120";
+                    } else if (visaPeriod === "عمل") {
+                        NumberEntryDay = "90";
+                        ResidencyInKSA = "90";
+                    } else if (visaPeriod === "عمل مؤقت") {
+                        NumberEntryDay = "365";
+                        ResidencyInKSA = "90";
+                    } else {
+                        NumberEntryDay = "90";
+                        ResidencyInKSA = "120";
+                    }
+                } else {
+                    console.warn("بيانات التأشيرة غير متوفرة داخل customer.customer_group.visa_type");
+                    Swal.fire({
+                        icon: "error",
+                        title: "خطأ في البيانات",
+                        text: "لا توجد معلومات تأشيرة كافية للعميل المحدد"
+                    });
+                    return;
+                }
 
                 const data = {
                     UserName: companyData.engaz_email,
                     Password: companyData.engaz_password,
                     VisaKind: customer.customer_group.visa_type.visa_peroid,
+                    DocumentNumber: customer.customer_group?.visa_type?.outgoing_number,
                     NATIONALITY: "EGY",
                     ResidenceCountry: "272",
-                    EmbassyCode: customer.customer_group.visa_type.embassy.title,
+                    EmbassyCode: customer.customer_group?.visa_type?.embassy?.title,
                     NumberOfEntries: "0",
-                    NumberEntryDay: "90",
-                    ResidencyInKSA: "120",
+                    NumberEntryDay: NumberEntryDay,
+                    ResidencyInKSA: ResidencyInKSA,
+                    imageUrl: `{{ asset('storage') }}/${customer.image}`,
                     AFIRSTNAME: name_ar[0] || "",
                     AFATHER: name_ar[1] || "",
                     AGRAND: name_ar[2] || "",
@@ -2014,33 +1239,83 @@
                     EGRAND: name_en[2] || "",
                     EFAMILY: name_en[name_en.length - 1] || "",
                     PASSPORTnumber: customer.passport_id,
-                    imageUrl: `{{ asset('storage') }}/${customer.image}`,
                     PASSPORType: "1",
                     PASSPORT_ISSUE_PLACE: "مصر",
-                    PASSPORT_ISSUE_DATE: "05/04/2023",
+                    PASSPORT_ISSUE_DATE: customer.passport_issuance_date,
                     PASSPORT_EXPIRY_DATE: customer.passport_expire_date,
-                    BIRTH_PLACE: "القاهرة",
+                    BIRTH_PLACE: customer.governorate_live,
                     BIRTH_DATE: customer.date_birth,
                     PersonId: customer.card_id,
                     DEGREE: "-",
                     DEGREE_SOURCE: "-",
                     ADDRESS_HOME: "بحره",
                     Personal_Email: "moha@gmail.com",
-                    SPONSER_NAME: customer.customer_group.visa_type.sponser.name,
-                    SPONSER_NUMBER: customer.customer_group.visa_type.sponser.id_number,
-                    SPONSER_ADDRESS: customer.customer_group.visa_type.sponser.address,
-                    SPONSER_PHONE: customer.customer_group.visa_type.sponser.phone,
+                    SPONSER_NAME: customer.customer_group?.visa_type?.sponser?.name,
+                    SPONSER_NUMBER: customer.customer_group?.visa_type?.sponser?.id_number,
+                    SPONSER_ADDRESS: customer.customer_group?.visa_type?.sponser.address,
+                    SPONSER_PHONE: customer.customer_group?.visa_type?.sponser?.phone,
                     COMING_THROUGH: "2",
                     ENTRY_POINT: "1",
                     ExpectedEntryDate: new Date(new Date().setMonth(new Date().getMonth() + 2))
                         .toLocaleDateString('en-GB'),
-                    porpose: "عمل",
+                    porpose: customer.customer_group?.visa_type?.porpose,
                     car_number: "SV123",
                     RELIGION: "1",
                     SOCIAL_STATUS: "2",
                     Sex: "1",
-                    JOB_OR_RELATION_Id: customer.customer_group.visa_profession.job
+                    JOB_OR_RELATION_Id: customer.customer_group?.visa_profession?.job
                 };
+                const requiredFields = {
+                    UserName: "اسم المستخدم",
+                    Password: "كلمة المرور",
+                    VisaKind: "نوع التأشيرة",
+                    DocumentNumber: "رقم المستند",
+                    EmbassyCode: "السفارة",
+                    imageUrl: "الصورة الشخصية",
+                    AFIRSTNAME: "الاسم الأول بالعربية",
+                    AFAMILY: "اسم العائلة بالعربية",
+                    EFIRSTNAME: "الاسم الأول بالإنجليزية",
+                    EFAMILY: "اسم العائلة بالإنجليزية",
+                    PASSPORTnumber: "رقم الجواز",
+                    PASSPORT_EXPIRY_DATE: "تاريخ انتهاء الجواز",
+                    BIRTH_DATE: "تاريخ الميلاد",
+                    PersonId: "رقم الهوية",
+                    SPONSER_NAME: "اسم الكفيل",
+                    SPONSER_NUMBER: "رقم هوية الكفيل",
+                    SPONSER_ADDRESS: "عنوان الكفيل",
+                    SPONSER_PHONE: "هاتف الكفيل",
+                    ExpectedEntryDate: "تاريخ الدخول المتوقع",
+                    porpose: "الغرض من التأشيرة",
+                    JOB_OR_RELATION_Id: "المهنة"
+                };
+
+                // تحقق من النواقص
+                const missingFields = [];
+
+                for (const field in requiredFields) {
+                    if (
+                        data[field] === null ||
+                        data[field] === undefined ||
+                        data[field] === ''
+                    ) {
+                        missingFields.push(requiredFields[field]);
+                    }
+                }
+
+                console.log(missingFields);
+                // لو في نواقص، أوقف العملية وأظهرها
+                if (missingFields.length > 0) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'يرجى استكمال البيانات',
+                        html: `<ul style="text-align:right; direction:rtl;">` +
+                            missingFields.map(f => `<li>${f}</li>`).join('') +
+                            `</ul>`,
+                        confirmButtonText: 'حسناً'
+                    });
+
+                    return; // أوقف الاستمرار في المعالجة
+                }
 
                 try {
                     const res = await fetch('http://localhost:3000/submit-all', {
@@ -2108,9 +1383,10 @@
             }
         });
 
+        // ###################################################################### الكشف الطبي
         document.getElementById('check-medical').addEventListener('click', async function() {
+            const btn = document.getElementById('collectSelected');
             const companyData = JSON.parse(btn.getAttribute('data-company'));
-            console.log(companyData);
 
             const customer = JSON.parse(this.getAttribute('data-customer'));
             Swal.fire({
@@ -2131,6 +1407,7 @@
                 const [year, month, day] = parts;
                 return `${day}-${month}-${year}`;
             }
+            console.log();
 
             const payload = {
                 firstName: extractFirstName(customer.name_en_mrz),
@@ -2145,7 +1422,6 @@
                 nationalId: customer.card_id,
                 position: customer.customer_group.visa_profession.job,
             };
-            console.log(customer.card_id);
 
             const fieldLabels = {
                 firstName: "الاسم الأول",
@@ -2204,13 +1480,16 @@
                 const result = await response.json();
                 console.log('Result:', result);
                 Swal.close(); // إغلاق الانتظار
+                $('#loading-overlay').fadeOut();
                 if (result.success) {
+                    $('#loading-overlay').fadeOut();
                     Swal.fire({
                         icon: 'success',
                         title: 'تم الحجز',
                         text: 'تم إرسال البيانات بنجاح.',
                     });
                 } else {
+                    $('#loading-overlay').fadeOut();
                     Swal.fire({
                         icon: 'error',
                         title: 'خطأ',
@@ -2220,6 +1499,8 @@
 
             } catch (error) {
                 console.error('Fetch error:', error);
+                $('#loading-overlay').fadeOut();
+
                 Swal.close(); // إغلاق الانتظار
                 Swal.fire({
                     icon: 'error',
@@ -2234,8 +1515,9 @@
             }
 
             function extractLastName(fullName) {
-                const parts = fullName?.split(" ");
-                return parts?.slice(1).join(" ") ?? "Unknown";
+                if (!fullName) return '';
+                const parts = fullName.trim().split(/\s+/); // يفصل على أساس المسافات
+                return parts[parts.length - 1]; // يأخذ آخر كلمة
             }
         });
     </script>

@@ -113,4 +113,23 @@ class CustomerGroupController extends Controller
             'status' => true
         ]);
     }
+
+    public function removeFromGroup($group_id, $customer_id)
+    {
+        # code...
+        $group = CustomerGroup::findOrFail($group_id);
+        $customer = Customer::findOrFail($customer_id);
+
+        if ($customer->customer_group_id != $group->id) {
+            return response()->json([
+                'message' => 'العميل ليس في هذه المجموعة',
+                'status' => false
+            ], 400);
+        }
+
+        $customer->customer_group_id = null;  // إزالة العميل من المجموعة
+        $customer->save();  // حفظ التغييرات
+
+        return redirect()->back()->with('success', 'تم إزالة العميل من المجموعة بنجاح');
+    }
 }

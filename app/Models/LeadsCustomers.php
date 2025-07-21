@@ -80,4 +80,13 @@ class LeadsCustomers extends Model
     {
         return $this->fcm_token;
     }
+    public function tests()
+    {
+        return $this->belongsToMany(Test::class, 'leads_customer_test', 'lead_id', 'test_id');
+    }
+
+    public function evaluations()
+    {
+        return $this->hasMany(Evaluation::class, 'client_id');
+    }
 }

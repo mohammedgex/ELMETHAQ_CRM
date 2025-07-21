@@ -14,6 +14,7 @@ use App\Models\JobTitle;
 use App\Models\Payments;
 use App\Models\PaymentTitle;
 use App\Models\Sponser;
+use App\Models\Test;
 use App\Models\User;
 use App\Models\VisaType;
 
@@ -46,6 +47,7 @@ class HomeController extends Controller
         $customers = Customer::all();
         $bags = bag::all();
         $users = User::all();
+        $tests = Test::all();
         return view('home', [
             'customers' => $customers,
             'visas' => $visas,
@@ -55,6 +57,7 @@ class HomeController extends Controller
             'delegates' => $delegates,
             'users' => $users,
             'bags' => $bags,
+            "tests" => $tests
         ]);
     }
 }

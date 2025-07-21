@@ -90,7 +90,7 @@
                                 <div class="form-group">
                                     <div class="d-flex align-items-center">
                                         <input type="file" class="form-control fw-bold" name="image">
-                                        <img id="imagePreview" src="" alt="معاينة"
+                                        <img id="imagePreviewl" src="" alt="معاينة"
                                             style=" width: 200px; height: 150px; object-fit: cover; margin-right: 30px; border-radius: 6px; border: 2px solid #997a44;">
                                     </div>
                                 </div>
@@ -503,9 +503,10 @@
                                             <label class="custom-file-label" for="imageInput">اختر صورة</label>
                                         </div>
 
-                                        <div id="personal_preview" class="border rounded p-2 text-center bg-light"
+                                        <div id="" class="border rounded p-2 text-center bg-light"
                                             style="min-height: 130px;">
-                                            <img src="{{ $edit->image ? asset('storage/' . $edit->image) : 'https://via.placeholder.com/100x100?text=No+Image' }}"
+                                            <img id="imagePreview"
+                                                src="{{ $edit->image ? asset('storage/' . $edit->image) : 'https://via.placeholder.com/100x100?text=No+Image' }}"
                                                 class="img-thumbnail"
                                                 style="max-width: 100px; {{ $edit->image ? '' : 'display: none;' }}"
                                                 alt="Preview">
@@ -707,22 +708,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6 my-2">
-                                    <label class="fw-bold" style="color: #343a40;">اختر الكفيل</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                        name="sponser_id">
-                                        <option value="">اختر الكفيل</option>
-                                        @foreach ($sponsers as $sponser)
-                                            <option value="{{ $sponser->id }}"
-                                                {{ old('sponser_id', $edit->sponser_id ?? '') == $sponser->id ? 'selected' : '' }}>
-                                                {{ $sponser->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #343a40;">عدد سنوات الخبرة</label>
                                     <input type="text" class="form-control fw-bold"
@@ -730,7 +715,15 @@
                                         value="{{ $edit->experience_years }}" placeholder="أدخل عدد سنين الخبرة"
                                         name="experience_years">
                                 </div>
+                                <div class="col-md-12">
+                                    <label class="fw-bold" style="color: #343a40;">عنوان المستشفي</label>
+                                    <input type="text" class="form-control fw-bold"
+                                        style="height: 60px; border-color: #343a40;"
+                                        value="{{ $edit->hospital_address }}" name="hospital_address">
+                                </div>
+                            </div>
 
+                            <div class="row my-2">
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #343a40;">الخبرة</label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
@@ -750,21 +743,7 @@
                         <!-- القسم: معلومات إضافية -->
                         <div class="section-container">
                             <h4 class="fw-bold mb-3">معلومات إضافية</h4>
-
                             <div class="row my-2">
-                                <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #343a40;">الجنسية</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                        name="nationality">
-                                        <option value="">اختر الجنسية</option>
-                                        <option value="مصري"
-                                            {{ old('nationality', $edit->nationality ?? '') == 'مصري' ? 'selected' : '' }}>
-                                            مصري</option>
-                                        <option value="غير ذلك"
-                                            {{ old('nationality', $edit->nationality ?? '') == 'غير ذلك' ? 'selected' : '' }}>
-                                            غير ذلك</option>
-                                    </select>
-                                </div>
 
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #343a40;">الحالة الاجتماعية</label>
@@ -779,20 +758,20 @@
                                             متزوج</option>
                                     </select>
                                 </div>
-                            </div>
-
-                            <div class="col-md-12">
-                                <label class="fw-bold" style="color: #343a40;">المؤهل الدراسي</label>
-                                <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                    name="education">
-                                    <option value="">اختر المؤهل</option>
-                                    <option value="محو امية"
-                                        {{ old('education', $edit->education ?? '') == 'محو امية' ? 'selected' : '' }}>محو
-                                        امية</option>
-                                    <option value="مؤهل متوسط"
-                                        {{ old('education', $edit->education ?? '') == 'مؤهل متوسط' ? 'selected' : '' }}>
-                                        مؤهل متوسط</option>
-                                </select>
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #343a40;">المؤهل الدراسي</label>
+                                    <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
+                                        name="education">
+                                        <option value="">اختر المؤهل</option>
+                                        <option value="محو امية"
+                                            {{ old('education', $edit->education ?? '') == 'محو امية' ? 'selected' : '' }}>
+                                            محو
+                                            امية</option>
+                                        <option value="مؤهل متوسط"
+                                            {{ old('education', $edit->education ?? '') == 'مؤهل متوسط' ? 'selected' : '' }}>
+                                            مؤهل متوسط</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div class="col-md-12 my-2">
@@ -905,11 +884,6 @@
                                         MRZ</label>
                                     <textarea id="mrz_input" name="mrz" class="form-control fw-bold" style="border-color: #997a44; height: 110px;"
                                         rows="2" placeholder="ضع هنا منطقة القراءة الآلية من جواز السفر">{{ $edit->mrz }}</textarea>
-
-                                    <button type="button" id="click" class="btn text-white fw-bold mt-2"
-                                        style="background-color: #28a745;" onclick="extractMRZData()">
-                                        استخراج البيانات
-                                    </button>
                                 </div>
 
                                 <!-- الفاصل -->
@@ -1244,10 +1218,9 @@
                                                                         style="max-width: 100px;">
                                                                 @endif
                                                             </a>
-                                                        @elseif (empty($extension))
+                                                        @elseif (empty($extension) && $file->file != null)
                                                             <a href="{{ $file->file }}" target="_blank">
-                                                                <img src="https://cdn-icons-png.freepik.com/512/4726/4726010.png"
-                                                                    alt="PDF" class="img-fluid"
+                                                                <img src="" alt="PDF" class="img-fluid"
                                                                     style="width: 40px;">
                                                             </a>
                                                         @endif
@@ -1565,16 +1538,16 @@
 
 
         /* body,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                html {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    height: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin: 0;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background-color: #fff;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-family: Arial, sans-serif;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: #333;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                html {
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    height: 100%;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    margin: 0;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    display: flex;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    justify-content: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    align-items: center;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    background-color: #fff;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    font-family: Arial, sans-serif;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    color: #333;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
 
         .loader {
             border: 5px solid #f3f3f3;
@@ -1646,11 +1619,10 @@
                 event.preventDefault();
                 document.getElementById("addAttachmentFile").click();
             }
-            if (event.key == 'F4') {
+            if (event.key === 'F4') {
                 event.preventDefault();
-                window.location.href = "http://192.168.1.219:8000/customers";
+                window.history.back();
             }
-
         });
 
         $(document).ready(function() {
@@ -1882,28 +1854,28 @@
                 });
 
                 const prompt = `
-Extract all data from this passport in English. Convert the national ID to English digits if it's in Arabic. Return response as clean JSON only with these keys:
-{
-  "passport_type",
-  "country_code",
-  "passport_number",
-  "full_name_arabic",
-  "full_name_english",
-  "date_of_birth",
-  "place_of_birth",
-  "nationality_ar",
-  "sex_ar",
-  "date_of_issue",
-  "date_of_expiry",
-  "issuing_office",
-  "national_id",
-  "profession",
-  "military_status",
-  "address",
-  "full_mrz",
-  "age"
-}
-`;
+                                    Extract all data from this passport in English. Convert the national ID to English digits if it's in Arabic. Return response as clean JSON only with these keys:
+                                    {
+                                    "passport_type",
+                                    "country_code",
+                                    "passport_number",
+                                    "full_name_arabic"=>ترجمه من الاسم الانجليزي لازالة المسافات في الاسماء المركبة,
+                                    "full_name_english",
+                                    "date_of_birth",
+                                    "place_of_birth",
+                                    "nationality_ar",
+                                    "sex_ar",
+                                    "date_of_issue",
+                                    "date_of_expiry",
+                                    "issuing_office",
+                                    "national_id",
+                                    "profession",
+                                    "military_status",
+                                    "address",
+                                    "full_mrz"=> اريده بدون مسافات,
+                                    "age"
+                                    }
+                                    `;
 
                 const result = await model.generateContent({
                     contents: [{
@@ -1977,6 +1949,7 @@ Extract all data from this passport in English. Convert the national ID to Engli
 
                 reader.onload = function(e) {
                     preview.src = e.target.result;
+                    preview.style.display = 'inline-block'; // في حال كانت مخفية
                 }
 
                 reader.readAsDataURL(input.files[0]);

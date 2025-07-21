@@ -210,6 +210,8 @@ class CustomerController extends Controller
 
         if ($request->filled('name_en_mrz')) {
             $customer->name_en_mrz = $request->name_en_mrz;
+        }
+        if ($request->filled('name_ar')) {
             $customer->name_ar = $request->name_ar;
         }
         $customer->save();
@@ -696,13 +698,36 @@ class CustomerController extends Controller
             ]);
         }
 
-        $all = Customer::where('customer_group_id', null)->get();
-
-        $customers = $group->customers;
-        return view('group-customers', [
+        $delegates = Delegate::all();
+        $evalutions = Evaluation::all();
+        $groups = CustomerGroup::all();
+        $jobs = JobTitle::all();
+        $sponsers = Sponser::all();
+        $visas = VisaType::all();
+        $company = CompanySetting::first();
+        $customers = Customer::with([
+            'visaType',
+            'sponser',
+            'visaType.embassy',              // مثال علاقة فرعية داخل visaType
+            'customerGroup.visaType',
+            'customerGroup.visaProfession',
+            'customerGroup.visaType.embassy',        // لو موجودة في CustomerGroup
+            'customerGroup.visaType.sponser',        // لو موجودة في CustomerGroup
+            'delegate',
+            'evaluation',
+            'jobTitle',
+        ])->get();
+        // $customers = $group->customers;
+        return view('group.customers-group', [
             'customers' => $customers,
-            'group' => $group,
-            'all' => $all
+            'delegates' => $delegates,
+            'evalutions' => $evalutions,
+            'groups' => $groups,
+            'jobs' => $jobs,
+            'sponsers' => $sponsers,
+            'visas' => $visas,
+            "company" => $company,
+            "group" => $group
         ]);
     }
     public function addToGroup(Request $request, $group_id)

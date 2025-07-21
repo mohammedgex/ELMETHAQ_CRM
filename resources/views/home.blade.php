@@ -66,6 +66,34 @@
             </div>
         </div>
 
+        <!-- قسم الاختبارات -->
+        <div class="card card-primary card-outline">
+            <div class="card-header">
+                <h3 class="card-title">الاختبارات ({{ $tests->count() }})</h3>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    @foreach ($tests as $test)
+                        <div class="col-md-3 col-6 mb-4">
+                            <a href="{{ route('test.leads', $test->id) }}" class="text-decoration-none">
+                                <div class="info-box bg-gradient-primary">
+                                    <span class="info-box-icon"><i class="fas fa-file-alt"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">{{ $test->title }}</span>
+                                        <span class="info-box-number">{{ $test->leads->count() }}</span>
+                                        <div class="progress">
+                                            <div class="progress-bar" style="width: 100%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+
+
         <!-- قسم المجموعات -->
         <div class="card card-primary card-outline">
             <div class="card-header">
@@ -88,9 +116,9 @@
                                         @endif
                                         @if ($group->visaProfession && $group->visaType)
                                             <div class="progress">
-                                                <div class="progress-bar"
+                                                {{-- <div class="progress-bar"
                                                     style="width: {{ (count($group->customers) / $group->visaProfession->profession_count) * 100 }}%">
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         @elseif (!$group->visaProfession && $group->visaType)
                                             <span style="font-size: 12px;color: black;text-decoration: underline;">

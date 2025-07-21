@@ -75,7 +75,8 @@
                             <div class="form-group col-md-4">
                                 <label>رقم الهاتف</label>
                                 <input type="text" name="phone" class="form-control" required
-                                    placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}">
+                                    placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}" pattern="\d{11}"
+                                    title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا">
                                 @if ($errors->has('phone'))
                                     <div class="text-danger">
                                         {{ $errors->first('phone') }}
@@ -109,7 +110,9 @@
                             <div class="form-group col-md-12">
                                 <label>الرقم القومي</label>
                                 <input type="text" name="card_id" id="card_id" class="form-control" required
-                                    placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}">
+                                    placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}" pattern="\d{14}"
+                                    maxlength="14" title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
+                                    oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                 @if ($errors->has('card_id'))
                                     <div class="text-danger">
                                         {{ $errors->first('card_id') }}
@@ -331,7 +334,7 @@
 
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="operationsDropdown">
                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
-                            <i class="fas fa-plus text-success"></i> تحويل كعميل أساسي
+                            <i class="fas fa-plus text-success"></i> تعيين اختبار
                         </button>
                     </div>
                 </div>
@@ -347,12 +350,12 @@
                             <th>كود</th>
                             <th>الاسم</th>
                             <th>صورة</th>
-                            <th>الرقم القومي</th>
                             <th>السن</th>
                             <th>الهاتف</th>
                             <th>المحافظة</th>
                             <th>الحالة</th>
                             <th>المندوب</th>
+                            <th>الاختبارات</th>
                             <th>تاريخ التسجيل</th>
                             <th>الإجراءات</th>
                         </tr>
@@ -375,7 +378,6 @@
                                             class="img-circle" alt="صورة">
                                     </a>
                                 </td>
-                                <td>{{ $lead->card_id }}</td>
                                 <td>{{ $lead->age }}</td>
                                 <td>{{ $lead->phone }}</td>
                                 <td>{{ $lead->governorate }}</td>
@@ -388,12 +390,26 @@
                                     </span>
                                 </td>
                                 <td>{{ $lead->delegate->name ?? '-' }}</td>
+                                <td>
+                                    @if ($lead->tests->count())
+                                        <div class="dropdown">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                {{ $lead->tests->count() }}
+                                            </a>
+                                            <div class="dropdown-menu">
+                                                @foreach ($lead->tests as $test)
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('test.leads', $test->id) }}">{{ $test->title }}</a>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td>{{ $lead->registration_date }}</td>
                                 <td>
                                     <div class="d-flex align-items-center gap-1 flex-nowrap">
-                                        <a href="#" class="btn btn-sm btn-warning">
-                                            <i class="fas fa-star"></i>
-                                        </a>
                                         <a href="{{ route('leads-customers.update', $lead->id) }}"
                                             class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
@@ -408,9 +424,9 @@
                                 </td>
                             </tr>
                         @empty
-                            <tr>
+                            {{-- <tr>
                                 <td colspan="12">لا يوجد بيانات حالياً.</td>
-                            </tr>
+                            </tr> --}}
                         @endforelse
                     </tbody>
                 </table>
@@ -419,30 +435,29 @@
 
     </div>
 
-
     <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title">
-                        <i class="fas fa-users mr-2"></i> تعيين مجموعة للعملاء المحددين
+                        <i class="fas fa-users mr-2"></i> تعيين اختبار للعملاء المحددين
                     </h5>
                     <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="إغلاق">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
 
-                <form id="assignGroupForm" action="{{ route('customer.leadToCustomer') }}" method="POST">
+                <form id="assignGroupForm" action="{{ route('tests.addCustomer') }}" method="POST">
                     @csrf
                     <div class="modal-body">
                         <input type="hidden" name="leads" id="selectedLeadsInput">
 
                         <div class="form-group">
-                            <label for="groupSelect">اختر المجموعة</label>
-                            <select class="form-control" id="groupSelect" name="group_id" required>
-                                <option value="" disabled selected>-- اختر المجموعة --</option>
-                                @foreach ($groups as $group)
-                                    <option value="{{ $group->id }}">{{ $group->id }}: {{ $group->title }}
+                            <label for="groupSelect">اختر الاختبار</label>
+                            <select class="form-control" id="groupSelect" name="test_id" required>
+                                <option value="" disabled selected>-- اختر الاختبار --</option>
+                                @foreach ($tests as $test)
+                                    <option value="{{ $test->id }}">{{ $test->id }}: {{ $test->title }}
                                     </option>
                                 @endforeach
                             </select>
@@ -470,9 +485,6 @@
             </div>
         </div>
     </div>
-
-
-
 @stop
 
 
@@ -526,7 +538,15 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
         document.addEventListener('keydown', function(event) {
             if (event.key === 'F2') {
                 event.preventDefault(); // منع السلوك الافتراضي لـ F2
@@ -654,31 +674,63 @@
                 const model = genAI.getGenerativeModel({
                     model: "gemini-2.0-flash"
                 });
+                const prompt = `"Extract all information from the passport image with high accuracy, ensuring no errors, and present the output as a JSON object. The JSON should include the following keys:
 
-                const prompt = `
-                                Extract all data from this passport in English. Convert the national ID to English digits if it's in Arabic. Return response as clean JSON only with these keys:
-                                {
-                                "passport_type",
-                                "country_code",
-                                "passport_number",
-                                "full_name_arabic",
-                                "full_name_english",
-                                "date_of_birth",
-                                "place_of_birth_ar",
-                                "nationality_ar",
-                                "sex_ar",
-                                "date_of_issue",
-                                "date_of_expiry",
-                                "issuing_office",
-                                "national_id",
-                                "profession",
-                                "military_status",
-                                "address",
-                                "full_mrz",
-                                }
+                    passport_no
 
-                                If the image is not clear, send me a JSON with error. The image is not clear.
-                                    `;
+                    type
+
+                    country_code
+
+                    full_name_english
+
+                    full_name_arabic (ensure 'ماهر' is one word, e.g., 'ماهر محمد عبد العزيز مرسي')
+
+                    date_of_birth
+
+                    place_of_birth (must be one of: 'القاهرة', 'الجيزة', 'الأسكندرية', 'الدقهلية', 'البحر الأحمر', 'البحيرة', 'الفيوم', 'الغربية', 'الإسماعيلية', 'المنوفية', 'المنيا', 'القليوبية', 'الوادي الجديد', 'السويس', 'أسوان', 'أسيوط', 'بني سويف', 'بورسعيد', 'دمياط', 'الشرقية', 'جنوب سيناء', 'كفر الشيخ', 'مطروح', 'الأقصر', 'قنا', 'شمال سيناء', 'سوهاج')
+
+                    nationality
+
+                    sex
+
+                    date_of_issue
+
+                    date_of_expiry
+
+                    issuing_office
+
+                    national_id (should be in Western/English numerals, e.g., '28101191800397')
+
+                    profession
+
+                    mrz_lines (an array containing each line of the Machine Readable Zone)
+
+                    Example of desired JSON structure:
+
+                    JSON
+
+                    {
+                    "passport_no": "VALUE",
+                    "type": "VALUE",
+                    "country_code": "VALUE",
+                    "full_name_english": "VALUE",
+                    "full_name_arabic": "ماهر محمد عبد العزيز مرسي",
+                    "date_of_birth": "VALUE",
+                    "place_of_birth": "VALUE_FROM_LIST",
+                    "nationality": "VALUE",
+                    "sex": "VALUE",
+                    "date_of_issue": "VALUE",
+                    "date_of_expiry": "VALUE",
+                    "issuing_office": "VALUE",
+                    "national_id": "VALUE_IN_ENGLISH_NUMERALS",
+                    "profession": "VALUE",
+                    "mrz_lines": [
+                        "VALUE_LINE_1",
+                        "VALUE_LINE_2"
+                    ]
+                    }
+                    "`;
 
                 const result = await model.generateContent({
                     contents: [{
@@ -712,8 +764,8 @@
                             document.getElementById("card_id").value = data.national_id;
                             document.getElementById("age").value = calculateAge(data.date_of_birth);
                             const govSelect = document.getElementById('governorate');
-                            if (data.place_of_birth_ar) {
-                                const valueToSelect = data.place_of_birth_ar.trim();
+                            if (data.place_of_birth) {
+                                const valueToSelect = data.place_of_birth.trim();
                                 for (let option of govSelect.options) {
                                     if (option.value.trim() === valueToSelect) {
                                         option.selected = true;
@@ -779,22 +831,9 @@
             checkboxes.forEach(cb => {
                 const leadId = parseInt(cb.value);
                 const row = cb.closest('tr');
-                const status = row.querySelector('.lead-status')?.dataset.status;
-                if (status === 'عميل اساسي') {
-                    hasExistingCustomer = true;
-                }
 
                 selectedIds.push(leadId);
             });
-
-            if (hasExistingCustomer) {
-                Swal.fire({
-                    title: "يوجد عميل أساسي بالفعل في الاختيارات.",
-                    icon: "error",
-                    draggable: true
-                });
-                return;
-            }
 
             // تعبئة hidden input بقائمة الـ IDs
             document.getElementById('selectedLeadsInput').value = JSON.stringify(selectedIds);
@@ -817,10 +856,10 @@
                 const selectedDate = dateFilter.value;
 
                 tableRows.forEach(row => {
-                    const age = row.cells[5]?.textContent.trim(); // السن
-                    const gov = row.cells[7]?.textContent.trim().toLowerCase(); // المحافظة
-                    const status = row.cells[8]?.textContent.trim().toLowerCase(); // الحالة
-                    const date = row.cells[10]?.textContent.trim(); // تاريخ التسجيل
+                    const age = row.cells[4]?.textContent.trim(); // السن
+                    const gov = row.cells[6]?.textContent.trim().toLowerCase(); // المحافظة
+                    const status = row.cells[7]?.textContent.trim().toLowerCase(); // الحالة
+                    const date = row.cells[9]?.textContent.trim(); // تاريخ التسجيل
 
                     const matchesAge = !selectedAge || age === selectedAge;
                     const matchesGov = !selectedGov || gov === selectedGov;
