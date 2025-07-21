@@ -82,14 +82,22 @@ class TestController extends Controller
         // إضافة العملاء بدون حذف الموجودين سابقًا
         foreach ($leads as $lead) {
             $test->leads()->syncWithoutDetaching($lead);
-            $lastCode = Evaluation::where('test_id', $test->id)->max('code');
-            $nextCode = $lastCode ? $lastCode + 1 : 1;
 
-            Evaluation::create([
-                'lead_id' => $lead,
-                'test_id' => $test->id,
-                'code'    => $nextCode,
-            ]);
+            // تحقق من وجود تقييم سابق لنفس العميل والاختبار
+            $alreadyExists = Evaluation::where('lead_id', $lead)
+                ->where('test_id', $test->id)
+                ->exists();
+
+            if (! $alreadyExists) {
+                $lastCode = Evaluation::where('test_id', $test->id)->max('code');
+                $nextCode = $lastCode ? $lastCode + 1 : 1;
+
+                Evaluation::create([
+                    'lead_id' => $lead,
+                    'test_id' => $test->id,
+                    'code'    => $nextCode,
+                ]);
+            }
         }
         return redirect()->back();
     }
@@ -97,9 +105,16 @@ class TestController extends Controller
     public function removeLead($testId, $leadId)
     {
         $test = Test::findOrFail($testId);
+
+        // 1. إزالة الربط بين العميل والاختبار
         $test->leads()->detach($leadId);
 
-        return redirect()->back()->with('success', 'تم إزالة العميل من الاختبار بنجاح.');
+        // 2. حذف كل التقييمات المتعلقة بهذا العميل وهذا الاختبار
+        Evaluation::where('lead_id', $leadId)
+            ->where('test_id', $testId)
+            ->delete();
+
+        return redirect()->back()->with('success', 'تم إزالة العميل وجميع تقييماته من الاختبار بنجاح.');
     }
     public function show_evaluation($testId, $leadId)
     {
@@ -124,7 +139,6 @@ class TestController extends Controller
             'score'      => 'required',
             'notes'      => 'nullable',
             'attach'     => 'nullable|file',
-            'code'     => 'nullable',
         ]);
 
         // حساب ترتيب الكود داخل نفس الاختبار
