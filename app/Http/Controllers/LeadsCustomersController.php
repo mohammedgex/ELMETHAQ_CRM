@@ -355,12 +355,14 @@ class LeadsCustomersController extends Controller
             'شمال سيناء',
             'سوهاج'
         ];
+        $tests = Test::all();
         return view('leads-customers.leads-customers', [
             'leads' => $leads,
             'jobs' => $jobs,
             'delegates' => $delegates,
             "governorates" => $governorates,
             "groups" => $groups,
+            "tests" => $tests,
         ]);
     }
 
