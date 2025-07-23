@@ -138,7 +138,24 @@
     @yield('adminlte_js')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
+    <footer
+        style="
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #007bff;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+    padding: 5px 0;
+    z-index: 9999;
+">
+        <p style="margin: 0;">جميع الحقوق محفوظة &copy; {{ date('Y') }} <a href="https://www.elmethaq.com"
+                target="_blank" style="color: white; text-decoration: underline;">الميثاق</a>
+            <span style="margin-right: 50px;">نسخة تجريبية</س>
+        </p>
+    </footer>
 </body>
 
 </html>

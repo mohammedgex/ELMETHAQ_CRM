@@ -242,7 +242,7 @@
                                                                     </li>
                                                                 @endif
                                                                 <li>
-                                                                    <a href="#" class="dropdown-item show-loading"
+                                                                    <a href="#" class="dropdown-item"
                                                                         id="check-medical"
                                                                         data-customer='@json($customer)'>
                                                                         <i class="fas fa-hospital me-1"></i>
@@ -252,38 +252,31 @@
                                                             </ul>
                                                         </li>
 
-                                                        {{-- <!-- الطباعة -->
-                                                        <li class="dropdown-submenu dropstart">
-                                                            <a class="dropdown-item dropdown-toggle" href="#"><i
-                                                                    class="fas fa-print me-1"></i> طباعة</a>
-                                                            <ul class="dropdown-menu"
-                                                                style="position: absolute; left: 100% !important; right: auto;">
-                                                                <li><a class="dropdown-item" href="#"><i
-                                                                            class="fas fa-file-alt me-1"></i> ملف
-                                                                        العميل</a></li>
-                                                                <li><a class="dropdown-item" href="#"><i
-                                                                            class="fas fa-envelope-open-text me-1"></i>
-                                                                        خطاب ترشيح</a></li>
-                                                                <li><a class="dropdown-item" href="#"><i
-                                                                            class="fas fa-history me-1"></i> تاريخ
-                                                                        العميل</a></li>
-                                                                <li><a class="dropdown-item"
-                                                                        href="{{ route('clients.print.attachments', $customer->id) }}"><i
-                                                                            class="fas fa-paperclip me-1"></i> مرفقات
-                                                                        العميل</a></li>
-                                                                <li><a class="dropdown-item"
-                                                                        href="{{ route('clients.print.payments', $customer->id) }}"><i
-                                                                            class="fas fa-money-check-alt me-1"></i> عمليات
-                                                                        الدفع</a></li>
-                                                            </ul>
-                                                        </li> --}}
-
-                                                        <!-- تصدير -->
-                                                        {{-- <li>
-                                                            <a class="dropdown-item text-success" href="#"><i
-                                                                    class="fas fa-file-excel me-1"></i> تصدير لإكسل</a>
-                                                        </li> --}}
-
+                                                        @if (is_null($customer->archived_at))
+                                                            {{-- العميل غير مؤرشف => أظهر زر الأرشفة --}}
+                                                            <li>
+                                                                <form
+                                                                    action="{{ route('customers.archive', $customer->id) }}"
+                                                                    method="POST" style="display:inline;">
+                                                                    @csrf
+                                                                    <button type="submit" class="dropdown-item">
+                                                                        أرشفة
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        @else
+                                                            {{-- العميل مؤرشف => أظهر زر الاسترجاع --}}
+                                                            <li>
+                                                                <form
+                                                                    action="{{ route('customers.unarchive', $customer->id) }}"
+                                                                    method="POST" style="display:inline;">
+                                                                    @csrf
+                                                                    <button type="submit" class="dropdown-item">
+                                                                        استرجاع
+                                                                    </button>
+                                                                </form>
+                                                            </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>

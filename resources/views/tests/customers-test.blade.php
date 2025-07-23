@@ -43,9 +43,6 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-4">
-                            <input type="date" id="filter-date" class="form-control" placeholder="تاريخ التسجيل">
-                        </div>
                     </div>
                     <div>
                         عدد المحددين: <span id="selected-count">0</span>
@@ -80,8 +77,8 @@
                                 <th>المحافظة</th>
                                 <th>الحالة</th>
                                 <th>المندوب</th>
-                                <th>الاختبارات</th>
-                                <th>تاريخ التسجيل</th>
+                                <th>عدد التقييمات</th>
+                                <th>التقييم</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
@@ -92,7 +89,8 @@
                                         <input type="checkbox" class="lead-checkbox" name="lead_ids[]"
                                             value="{{ $lead->id }}">
                                     </td>
-                                    <td>#{{ $lead->id }}</td>
+                                    <td>#{{ $lead->evaluations()->latest()->first()->code }}
+                                    </td>
                                     <td>
                                         <a href="{{ route('leads-customers.update', $lead->id) }}" class="">
                                             {{ $lead->name }} </a>
@@ -108,15 +106,41 @@
                                     <td>{{ $lead->governorate }}</td>
                                     <td data-status="{{ $lead->status }}" class="lead-status">
                                         <span
-                                            class="badge 
-                                        @if ($lead->status == 'عميل محتمل') bg-secondary 
+                                            class="badge
+                                        @if ($lead->status == 'عميل محتمل') bg-secondary
                                         @elseif ($lead->status == 'عميل اساسي') bg-success @endif">
                                             {{ $lead->status }}
                                         </span>
                                     </td>
                                     <td>{{ $lead->delegate->name ?? '-' }}</td>
-                                    <td>{{ $lead->tests->count() ?? '-' }}</td>
-                                    <td>{{ $lead->registration_date }}</td>
+                                    @php
+                                        $evaluationCount = $lead
+                                            ->evaluations()
+                                            ->where('test_id', $test->id) // تأكد أن $test موجود في الـ View
+                                            ->whereNotNull('evaluation') // لو كنت تريد فقط التقييمات التي لها نتيجة
+                                            ->count();
+                                    @endphp
+
+                                    <td>{{ $evaluationCount }}</td> @php
+                                        $lastEvaluation = $lead
+                                            ->evaluations()
+                                            ->whereNotNull('evaluation')
+                                            ->latest()
+                                            ->first();
+
+                                        $evaluationText = $lastEvaluation->evaluation ?? 'لا يوجد تقييم';
+                                        $colorClass = match ($evaluationText) {
+                                            'مقبول' => 'text-success',
+                                            'غير مقبول' => 'text-danger',
+                                            'احتياطي' => 'text-primary',
+                                            default => 'text-muted',
+                                        };
+                                    @endphp
+                                    <td>
+                                        <span class="{{ $colorClass }}">
+                                            {{ $evaluationText }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-1 flex-nowrap">
                                             <a href="{{ route('leads-customers.show', $lead->id) }}"

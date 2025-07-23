@@ -716,8 +716,7 @@ class CustomerController extends Controller
             'delegate',
             'evaluation',
             'jobTitle',
-        ])->get();
-        // $customers = $group->customers;
+        ])->where('customer_group_id', $group_id)->get();
         return view('group.customers-group', [
             'customers' => $customers,
             'delegates' => $delegates,
@@ -771,5 +770,47 @@ class CustomerController extends Controller
         return response()->json([
             'success' => 'done'
         ]);
+    }
+
+    public function archive($id)
+    {
+        $customer = Customer::findOrFail($id);
+        // أرشفة العميل
+        $customer->update([
+            'archived_at' => now(),
+        ]);
+        $customer->customer_group_id = null; // إلغاء ربط العميل بأي مجموعة
+        $customer->save();
+        // إضافة سجل في التاريخ
+        $history = new History();
+        $history->description = "تم أرشفة العميل";
+        $history->date = now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->user()->id; // أو أي مستخدم آخر
+        $history->save();
+        return redirect()->back()->with('success', 'تم أرشفة العميل بنجاح.');
+    }
+
+    public function unarchive($id)
+    {
+        $customer = Customer::findOrFail($id);
+        // فك الأرشفة
+        $customer->update([
+            'archived_at' => null,
+        ]);
+        // إضافة سجل في التاريخ
+        $history = new History();
+        $history->description = "تم استرجاع العميل من الأرشيف";
+        $history->date = now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->user()->id; // أو أي مستخدم آخر
+        $history->save();
+        return redirect()->back()->with('success', 'تم استرجاع العميل بنجاح.');
+    }
+
+    public function archived()
+    {
+        $customers = Customer::archived()->get(); // باستخدام الـ scope اللي عملناه
+        return view('customers.archived', compact('customers'));
     }
 }

@@ -198,6 +198,14 @@ class AppServiceProvider extends ServiceProvider
                     'icon' => 'fas fa-user-cog',
                 ];
             }
+            // اعدادات الشركة
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'archived-customers')) {
+                $existingMenu[] = [
+                    'text' => 'ارشيف العملاء',
+                    'url' => 'admin/customers/archived',
+                    'icon' => 'fas fa-archive',
+                ];
+            }
 
             // تحميل القائمة النهائية
             Config::set('adminlte.menu', $existingMenu);

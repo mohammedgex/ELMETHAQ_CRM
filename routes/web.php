@@ -155,6 +155,12 @@ Route::group([
     Route::post('/customer-editBasicDetails/{id}', [CustomerController::class, 'editBasicDetails'])->name('customer.editBasicDetails')->middleware("check.permission:create-customer");
     Route::post('/customer-mrz/{id}', [CustomerController::class, 'mrz'])->name('customer.mrz')->middleware("check.permission:create-customer");
     Route::post('/customer-attachments/{id}', [CustomerController::class, 'attachments'])->name('customer.attachments')->middleware("check.permission:create-customer");
+    Route::prefix('customers')->group(function () {
+        Route::post('{id}/archive', [CustomerController::class, 'archive'])->name('customers.archive');
+        Route::post('{id}/unarchive', [CustomerController::class, 'unarchive'])->name('customers.unarchive');
+    });
+    Route::get('customers/archived', [CustomerController::class, 'archived'])->name('customers.archived')->middleware("check.permission:archived-customers");
+
 
     Route::get('/check-medical-status/{token}', [ApiAppController::class, 'checkMedicalStatus'])->name('check.medical.status');
 

@@ -169,8 +169,7 @@ class TestController extends Controller
         ]);
 
         // حساب الكود التالي
-        $lastCode = Evaluation::where('lead_id', $request->lead_id)
-            ->where('test_id', $request->test_id)
+        $lastCode = Evaluation::where('test_id', $request->test_id)
             ->max('code');
         $nextCode = $lastCode ? $lastCode + 1 : 1;
 

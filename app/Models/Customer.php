@@ -54,6 +54,7 @@ class Customer extends Model
         'visa_issuance_date',
         'visa_expiry_date',
         'passport_issuance_date',
+        'archived_at',
         'fcm_token',
     ];
 
@@ -112,5 +113,14 @@ class Customer extends Model
     public function routeNotificationForFcm()
     {
         return $this->fcm_token;
+    }
+    public function scopeArchived($query)
+    {
+        return $query->whereNotNull('archived_at');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereNull('archived_at');
     }
 }

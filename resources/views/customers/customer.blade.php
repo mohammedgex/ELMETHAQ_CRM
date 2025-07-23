@@ -80,22 +80,8 @@
                                                 رسالة نصية</button>
                                         </li>
                                         <li>
-                                            <button data-company='@json($company)'
-                                                class="dropdown-item text-primary" id="collectSelected"> طلب
-                                                انجاز</button>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item text-success" id="medical-examination">الكشف
-                                                الطبي</button>
-                                        </li>
-                                        <li>
                                             <button class="dropdown-item text-success" id="visa">
                                                 جلب التاشيرة او طلب الدخول
-                                            </button>
-                                        </li>
-                                        <li>
-                                            <button id="labBookingBtn" class="dropdown-item text-success">
-                                                حجز كشف المعامل
                                             </button>
                                         </li>
                                         <li>
@@ -121,8 +107,7 @@
                                                 ليست</button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-secondary"
-                                                onclick="sendSMS('option7')">أرشفة</button>
+                                            <button class="dropdown-item text-secondary" onclick="">أرشفة</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -874,8 +859,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
 
         .dt-button {
             padding: 8px 15px;

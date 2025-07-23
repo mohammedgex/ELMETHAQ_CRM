@@ -52,6 +52,7 @@
                                     'tasks-access' => 'المهام',
                                     'users-manage' => 'المستخدم',
                                     'company-settings' => 'اعدادات الشركة',
+                                    'archived-customers' => 'ارشيف العملاء',
                                 ];
                             @endphp
 
