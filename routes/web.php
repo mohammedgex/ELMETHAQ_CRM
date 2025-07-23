@@ -45,7 +45,7 @@ Route::group([
     })->name('bulk-sms.index')->middleware("check.permission:bulk-sms-access");
 
     Route::get('/', function () {
-        return redirect('admin/login');
+        return redirect('admin/home');
     });
     Route::get('/user/create', [UserController::class, "show"])->name("user.index")->middleware("check.permission:users-manage");
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store')->middleware("check.permission:users-manage");

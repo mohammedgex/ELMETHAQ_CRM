@@ -48,7 +48,8 @@
                         عدد المحددين: <span id="selected-count">0</span>
                     </div>
                     <div>
-                        عدد التقييمات: <span id="selected-count">{{ $test->evaluations()->count() }}</span>
+                        عدد التقييمات: <span
+                            id="selected-count">{{ $test->evaluations()->whereNotNull('evaluation')->count() }}</span>
                     </div>
 
                     <div class="dropdown">
