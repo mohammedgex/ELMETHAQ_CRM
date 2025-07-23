@@ -409,6 +409,9 @@ class ApiAppController extends Controller
                     $history->customer_id = $customer->id;
                     $history->user_id = $user->id;
                     $history->save();
+                    // حذف أي مستندات سابقة من نوع "المستشفي"
+                    $customer->documentTypes()->where('document_type', 'المستشفي')->delete();
+                    // إنشاء مستند جديد
                     $document = new DocumentType();
                     $document->document_type = "المستشفي";
                     $document->status = "موجود بالمكتب";
@@ -438,6 +441,9 @@ class ApiAppController extends Controller
                     $history->customer_id = $customer->id;
                     $history->user_id = $user->id;
                     $history->save();
+                    // حذف أي مستندات سابقة من نوع نتيجة الكشف الطبي
+                    $customer->documentTypes()->where('document_type', "نتيجة الكشف الطبي")->delete();
+                    // إنشاء مستند جديد
                     $document = new DocumentType();
                     $document->document_type = "نتيجة الكشف الطبي";
                     $document->status = "موجود بالمكتب";
@@ -455,6 +461,9 @@ class ApiAppController extends Controller
                     $history->customer_id = $customer->id;
                     $history->user_id = $user->id;
                     $history->save();
+                    // حذف أي مستندات سابقة من نوع نتيجة الكشف الطبي
+                    $customer->documentTypes()->where('document_type', "نتيجة الكشف الطبي")->delete();
+                    // إنشاء مستند جديد
                     $document = new DocumentType();
                     $document->document_type = "نتيجة الكشف الطبي";
                     $document->status = "موجود بالمكتب";
@@ -499,5 +508,62 @@ class ApiAppController extends Controller
         $history->save();
 
         return response()->json(['success' => true, 'message' => 'تم حفظ التوكن بنجاح']);
+    }
+
+    public function visa(Request $request, $id)
+    {
+        $request->validate([
+            'visa' => 'required|file', // max 10MB
+            'type' => 'required|string',
+            'email' => 'required|email',
+        ]);
+        $customer = Customer::find($id);
+        $user = User::where('email', $request->email)->first();
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
+
+        if ($request->type == "request") {
+            # code...
+            $customer->documentTypes()->where('document_type', 'طلب الدخول')->delete();
+            $document = new DocumentType();
+            $document->document_type = "طلب الدخول";
+            $document->status = "موجود بالمكتب";
+            $document->file = $request->file('visa')->store('uploads', 'public');
+            $document->customer_id = $customer->id;
+            $document->required = "اجباري";
+            $document->save();
+            // انشاء سجل تاريخي
+            $history = new History();
+            $history->description = "تم رفع طلب الدخول";
+            $history->date = now();
+            $history->customer_id = $customer->id;
+            $history->user_id = $user->id;
+            $history->save();
+        } elseif ($request->type == "visa") {
+            # code...
+            $customer->visa_number = $request->visa_number;
+            $customer->save();
+            $customer->documentTypes()->where('document_type', 'التاشيرة')->delete();
+            $document = new DocumentType();
+            $document->document_type = "التاشيرة";
+            $document->status = "موجود بالمكتب";
+            $document->file = $request->file('visa')->store('uploads', 'public');
+            $document->customer_id = $customer->id;
+            $document->required = "اجباري";
+            $document->save();
+            // انشاء سجل تاريخي
+            $history = new History();
+            $history->description = "تم رفع التأشيرة";
+            $history->date = now();
+            $history->customer_id = $customer->id;
+            $history->user_id = $user->id;
+            $history->save();
+        }
+        return response()->json([
+            'status' => 'success',
+            'message' => 'تم رفع الملف بنجاح',
+            'document' => $document,
+        ]);
     }
 }

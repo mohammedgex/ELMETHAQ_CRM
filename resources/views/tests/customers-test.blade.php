@@ -47,6 +47,9 @@
                     <div>
                         عدد المحددين: <span id="selected-count">0</span>
                     </div>
+                    <div>
+                        عدد التقييمات: <span id="selected-count">{{ $test->evaluations()->count() }}</span>
+                    </div>
 
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
