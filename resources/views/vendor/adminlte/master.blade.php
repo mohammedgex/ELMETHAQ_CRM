@@ -156,6 +156,55 @@
             <span style="margin-right: 50px;">نسخة تجريبية</س>
         </p>
     </footer>
+    {{-- <script>
+        // منع اختصارات DevTools مثل F12 و Ctrl+Shift+I/J و Ctrl+U
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+J
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+U
+            if (e.ctrlKey && e.key === 'u') {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+C (أداة تحديد العناصر)
+            if (e.ctrlKey && e.shiftKey && e.key === 'C') {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // منع كليك يمين
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // كشف فتح أدوات المطور عن طريق console.log + Object.defineProperty
+        (function devtoolsDetector() {
+            const element = new Image();
+            Object.defineProperty(element, 'id', {
+                get: function() {
+                    // تم فتح أدوات المطور
+                    alert('تم اكتشاف فتح أدوات المطور!');
+                    window.location.href = '/'; // يمكنك تغيير الإجراء هنا
+                }
+            });
+            console.log(element);
+        })();
+    </script> --}}
+
 </body>
 
 </html>

@@ -84,6 +84,26 @@
                                         </div>
                                     @endif
                                 </div>
+                                <div class="form-group col-md-4">
+                                    <label>رقم جواز السفر</label>
+                                    <input type="text" class="form-control" name="passport_numder"
+                                        value="{{ $lead->passport_numder }}">
+                                    @if ($errors->has('passport_numder'))
+                                        <div class="text-danger">
+                                            {{ $errors->first('passport_numder') }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>تاريخ الميلاد</label>
+                                    <input type="date" class="form-control" name="date_of_birth"
+                                        value="{{ $lead->date_of_birth ? \Carbon\Carbon::parse($lead->date_of_birth)->format('Y-m-d') : '' }}">
+                                    @if ($errors->has('date_of_birth'))
+                                        <div class="text-danger">
+                                            {{ $errors->first('date_of_birth') }}
+                                        </div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
                     </div>

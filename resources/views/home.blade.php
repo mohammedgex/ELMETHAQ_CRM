@@ -197,6 +197,35 @@
                 </div>
             </div>
         </div>
+
+        <div class="card">
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-center">
+                    <thead>
+                        <tr>
+                            <th>اسم الموظف</th>
+                            <th>اسم العميل</th>
+                            <th>الوصف</th>
+                            <th>تاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($histories as $history)
+                            <tr>
+                                <td>{{ $history->user->name ?? '-' }}</td>
+                                <td>{{ $history->customer->name_ar ?? '-' }}</td>
+                                <td>{{ $history->description }}</td>
+                                <td>{{ $history->created_at->format('Y-m-d H:i') }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5">لا توجد تقييمات حالياً</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
 

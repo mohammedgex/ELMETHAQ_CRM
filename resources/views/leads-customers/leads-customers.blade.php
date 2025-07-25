@@ -54,7 +54,7 @@
                                 <input type="text" name="name" id="name" class="form-control"
                                     placeholder="أدخل اسم العميل" required value="{{ old('name') }}">
                             </div>
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label>الوظيفة المقدم عليها</label>
                                 <select name="job_title_id" class="form-control" required>
                                     <option value="">اختر الوظيفة</option>
@@ -62,6 +62,18 @@
                                         <option value="{{ $job->id }}"
                                             {{ old('job_title_id') == $job->id ? 'selected' : '' }}>
                                             {{ $job->title }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>المندوب</label>
+                                <select name="delegate_id" class="form-control" required>
+                                    <option value="">اختر المندوب</option>
+                                    @foreach ($delegates as $delegate)
+                                        <option value="{{ $delegate->id }}"
+                                            {{ old('delegate_id') == $delegate->id ? 'selected' : '' }}>
+                                            {{ $delegate->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -94,20 +106,7 @@
                                 @endif
                             </div>
 
-                            <div class="form-group col-md-12">
-                                <label>المندوب</label>
-                                <select name="delegate_id" class="form-control" required>
-                                    <option value="">اختر المندوب</option>
-                                    @foreach ($delegates as $delegate)
-                                        <option value="{{ $delegate->id }}"
-                                            {{ old('delegate_id') == $delegate->id ? 'selected' : '' }}>
-                                            {{ $delegate->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-md-6">
                                 <label>الرقم القومي</label>
                                 <input type="text" name="card_id" id="card_id" class="form-control" required
                                     placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}" pattern="\d{14}"
@@ -116,6 +115,16 @@
                                 @if ($errors->has('card_id'))
                                     <div class="text-danger">
                                         {{ $errors->first('card_id') }}
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>رقم الجواز</label>
+                                <input type="text" name="passport_numder" id="passport_numder" class="form-control"
+                                    required placeholder="ادخل رقم الجواز" value="{{ old('passport_numder') }}">
+                                @if ($errors->has('passport_numder'))
+                                    <div class="text-danger">
+                                        {{ $errors->first('passport_numder') }}
                                     </div>
                                 @endif
                             </div>
@@ -149,6 +158,11 @@
                                 <label>موعد التسجيل</label>
                                 <input type="date" name="registration_date" class="form-control"
                                     value="{{ date('Y-m-d') }}" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>تاريخ الميلاد</label>
+                                <input id="date_of_birth" type="date" name="date_of_birth" class="form-control"
+                                    required>
                             </div>
                         </div>
                     </div>
@@ -277,8 +291,6 @@
                         <option value="age" {{ request('searchBy') == 'age' ? 'selected' : '' }}>السن</option>
                         <option value="phone" {{ request('searchBy') == 'phone' ? 'selected' : '' }}>الهاتف</option>
                         <option value="governorate" {{ request('searchBy') == 'governorate' ? 'selected' : '' }}>المحافظة
-                        </option>
-                        <option value="licence_type" {{ request('searchBy') == 'licence_type' ? 'selected' : '' }}>الرخصة
                         </option>
                         <option value="status" {{ request('searchBy') == 'status' ? 'selected' : '' }}>الحالة</option>
                         <option value="delegate_name" {{ request('searchBy') == 'delegate_name' ? 'selected' : '' }}>
@@ -715,7 +727,7 @@
                     "type": "VALUE",
                     "country_code": "VALUE",
                     "full_name_english": "VALUE",
-                    "full_name_arabic": "ماهر محمد عبد العزيز مرسي",
+                    "full_name_arabic": "VALUE",
                     "date_of_birth": "VALUE",
                     "place_of_birth": "VALUE_FROM_LIST",
                     "nationality": "VALUE",
@@ -754,15 +766,23 @@
                 if (text.startsWith("```json")) {
                 text = text.replace(/^```json/, '').replace(/```$/, '').trim();
 
-                    try {
-                        // تحويل النص إلى كائن JSON
-                        const data = JSON.parse(text);
+                try {
+                    // تحويل النص إلى كائن JSON
+                    const data = JSON.parse(text);
 
-                        // التحقق من وجود full_mrz في الكائن
-                        if (data.passport_type !== 'null') {
-                            document.getElementById("name").value = data.full_name_arabic;
-                            document.getElementById("card_id").value = data.national_id;
-                            document.getElementById("age").value = calculateAge(data.date_of_birth);
+                    // التحقق من وجود full_mrz في الكائن
+                    if (data.passport_type !== 'null') {
+                        document.getElementById("name").value = data.full_name_arabic;
+                        document.getElementById("card_id").value = data.national_id;
+                        document.getElementById("age").value = calculateAge(data.date_of_birth);
+                        document.getElementById("passport_numder").value = data.passport_no;
+                        if (data.date_of_birth) {
+                            let parts = data.date_of_birth.split('/');
+                            if (parts.length === 3) {
+                                let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                                    document.getElementById("date_of_birth").value = formattedDate;
+                                }
+                            }
                             const govSelect = document.getElementById('governorate');
                             if (data.place_of_birth) {
                                 const valueToSelect = data.place_of_birth.trim();
@@ -784,7 +804,6 @@
                             });
                             document.getElementById("passportInput_loader").style.display = "none";
                             document.getElementById("passportInput_loader_text").style.display = "none";
-                            alert("The passport photo is not clear.");
                         }
 
                         console.log(data);

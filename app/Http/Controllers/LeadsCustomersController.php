@@ -185,6 +185,8 @@ class LeadsCustomersController extends Controller
         // بيانات التحديث الأساسية
         $data = [
             'name' => $request->input('name'),
+            'date_of_birth' => $request->input('date_of_birth'),
+            'passport_numder' => $request->input('passport_numder'),
             'age' => $request->input('age'),
             'card_id' => $request->input('card_id'),
             'governorate' => $request->input('governorate'),

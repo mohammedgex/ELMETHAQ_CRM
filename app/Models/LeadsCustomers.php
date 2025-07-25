@@ -26,7 +26,7 @@ class LeadsCustomers extends Model
         'password',
         'phone_verified_at',
         'passport_photo',
-        'passport_number',
+        'passport_numder',
         'img_national_id_card',
         'img_national_id_card_back',
         'license_photo',

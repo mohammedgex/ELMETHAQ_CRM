@@ -423,7 +423,7 @@
 
                         <hr> <!-- Divider -->
 
-                        <div class="d-flex flex-wrap gap-2 mb-4">
+                        {{-- <div class="d-flex flex-wrap gap-2 mb-4">
                             <div>
                                 <a href="{{ route('customer.indes') }}">
                                     <button class="btn btn-outline-primary active">الكل</button>
@@ -475,7 +475,7 @@
                             <div>
                                 <button class="btn btn-outline-dark">أرشيف</button>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="table-responsive">
                             <table class="table table-hover text-center" id="example">
@@ -497,7 +497,11 @@
                                 <tbody>
                                     @foreach ($customers as $customer)
                                         <tr
-                                            class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : '' }}">
+                                            class="
+                                                        @if ($customer->blackList && $customer->blackList->block) table-danger
+                                                        @elseif(is_null($customer->passport_expire_date))
+                                                            table-warning @endif
+                                                    ">
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
@@ -859,8 +863,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .dt-button {
             padding: 8px 15px;

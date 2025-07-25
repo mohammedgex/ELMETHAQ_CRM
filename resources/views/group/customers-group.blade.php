@@ -149,7 +149,11 @@
                                 <tbody>
                                     @foreach ($customers as $customer)
                                         <tr
-                                            class="{{ $customer->blackList && $customer->blackList->block ? 'table-danger' : '' }}">
+                                            class="
+                                                        @if ($customer->blackList && $customer->blackList->block) table-danger
+                                                        @elseif(is_null($customer->passport_expire_date))
+                                                            table-warning @endif
+                                                    ">
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"

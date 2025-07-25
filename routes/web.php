@@ -33,17 +33,12 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-
 Route::get('/sync-gmail', [JopController::class, 'sync'])->name('sync');
 
 Route::group([
     'prefix' => 'admin',
     'middleware' => ['auth'] // أو أي Middleware آخر تريده
 ], function () {
-    Route::get('/bulk-sms-view', action: function () {
-        return view('bulk-sms');
-    })->name('bulk-sms.index')->middleware("check.permission:bulk-sms-access");
-
     Route::get('/', function () {
         return redirect('admin/home');
     });

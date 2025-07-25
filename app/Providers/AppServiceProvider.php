@@ -160,15 +160,6 @@ class AppServiceProvider extends ServiceProvider
             // قسم إضافي
             $existingMenu[] = ['header' => 'اضافي'];
 
-            // ارسال رسائل
-            if ($user->role === 'admin' || $user->permissions->contains('permission', 'bulk-sms-access')) {
-                $existingMenu[] = [
-                    'text' => 'ارسال رسائل',
-                    'url' => 'admin/bulk-sms-view',
-                    'icon' => 'fas fa-sms',
-                ];
-            }
-
             // المهام
             if ($user->role === 'admin' || $user->permissions->contains('permission', 'tasks-access')) {
                 $existingMenu[] = [

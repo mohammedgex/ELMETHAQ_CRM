@@ -148,7 +148,6 @@ class ApiAppController extends Controller
             'fcm_token' => $request->fcm_token,
             "registration_date" => Carbon::now(),
         ]);
-
         $this->sendOtp($request->phone);
 
         // لا ترسل OTP هنا لأن الهاتف لم يُسجل بعد

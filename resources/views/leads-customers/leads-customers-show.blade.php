@@ -30,6 +30,10 @@
                     disabled />
                 <x-adminlte-input name="delegate" label="المندوب" value="{{ $lead->delegate->name ?? '-' }}"
                     fgroup-class="col-md-6" disabled />
+                <x-adminlte-input name="passport_numder" label="رقم الجواز" value="{{ $lead->passport_numder ?? '-' }}"
+                    fgroup-class="col-md-6" disabled />
+                <x-adminlte-input name="date_of_birth" label="تايرخ الميلاد" value="{{ $lead->date_of_birth }}"
+                    fgroup-class="col-md-6" disabled />
             </div>
 
             <!-- عرض الملفات -->

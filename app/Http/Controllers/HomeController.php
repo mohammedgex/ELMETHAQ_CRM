@@ -48,6 +48,7 @@ class HomeController extends Controller
         $bags = bag::all();
         $users = User::all();
         $tests = Test::all();
+        $histories = History::latest()->take(10)->get();
         return view('home', [
             'customers' => $customers,
             'visas' => $visas,
@@ -57,7 +58,8 @@ class HomeController extends Controller
             'delegates' => $delegates,
             'users' => $users,
             'bags' => $bags,
-            "tests" => $tests
+            "tests" => $tests,
+            'histories' => $histories,
         ]);
     }
 }
