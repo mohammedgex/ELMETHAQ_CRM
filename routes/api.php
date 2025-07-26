@@ -36,3 +36,4 @@ Route::post('/send-engaz', [CustomerController::class, 'engaz_request'])->name('
 Route::post('/professions', [VisaProfessionsController::class, 'professionFromAtutomition'])->name('profession');
 Route::post('/check-medical-status', [ApiAppController::class, 'checkMedicalStatus']);
 Route::post('/token/check-medical', [ApiAppController::class, 'TokenCheckMedical']);
+Route::post('/store-medical-result', [ApiAppController::class, 'store']);

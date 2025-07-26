@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use DevKandil\NotiFire\Facades\Fcm;
 use DevKandil\NotiFire\Enums\MessagePriority;
+use GPBMetadata\Google\Api\Log;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
@@ -564,5 +565,78 @@ class ApiAppController extends Controller
             'message' => 'تم رفع الملف بنجاح',
             'document' => $document,
         ]);
+    }
+    public function store(Request $request)
+    {
+        $customer = Customer::where("token_medical", $request->token)->first();
+        if (!$customer) {
+            return response()->json(['message' => 'Customer not found'], 404);
+        }
+        $user = User::where('email', $request->email)->first();
+
+        $customer->hospital_address =  $request->address . "||" . $request->address;
+        $customer->save();
+        $history = new History();
+        $history->description = "تم جلب عنوان المستشفي وتخزينه";
+        $history->date = now();
+        $history->customer_id = $customer->id;
+        $history->user_id = $user->id; // يجب تعديل هذا إلى معرف المستخدم الصحيح
+        $history->save();
+        // حذف أي مستندات سابقة من نوع "المستشفي"
+        $customer->documentTypes()->where('document_type', 'المستشفي')->delete();
+        // إنشاء مستند جديد
+        $document = new DocumentType();
+        $document->document_type = "المستشفي";
+        $document->status = "موجود بالمكتب";
+        $document->file = "https://wafid.com/appointment/" . $request->token . "/slip/print";
+        $document->customer_id = $customer->id;
+        $document->required = "اجباري";
+        $document->save();
+
+        if ($request->status == 'Fit') {
+            # code...
+            $customer->medical_examination = 'لائق';
+            $customer->save();
+            $history = new History();
+            $history->description = "تم جلب نتيجة الكشف الطبي وهو :لائق";
+            $history->date = now();
+            $history->customer_id = $customer->id;
+            $history->user_id = $user->id; // يجب تعديل هذا إلى معرف المستخدم الصحيح
+            $history->save();
+            // حذف أي مستندات سابقة من نوع نتيجة الكشف الطبي
+            $customer->documentTypes()->where('document_type', "نتيجة الكشف الطبي")->delete();
+            // إنشاء مستند جديد
+            $document = new DocumentType();
+            $document->document_type = "نتيجة الكشف الطبي";
+            $document->status = "موجود بالمكتب";
+            $document->file = "https://wafid.com/medical-status/" . $request->token . "/print";
+            $document->customer_id = $customer->id;
+            $document->required = "اجباري";
+            $document->save();
+        } elseif ($request->status == 'Unfit') {
+            # code...
+            $customer->medical_examination = "غير لائق";
+            $customer->save();
+            $history = new History();
+            $history->description = "تم جلب نتيجة الكشف الطبي وهو : غير لائق";
+            $history->date = now();
+            $history->customer_id = $customer->id;
+            $history->user_id = $user->id;
+            $history->save();
+            // حذف أي مستندات سابقة من نوع نتيجة الكشف الطبي
+            $customer->documentTypes()->where('document_type', "نتيجة الكشف الطبي")->delete();
+            // إنشاء مستند جديد
+            $document = new DocumentType();
+            $document->document_type = "نتيجة الكشف الطبي";
+            $document->status = "موجود بالمكتب";
+            $document->file = "https://wafid.com/medical-status/" . $request->token . "/print";
+            $document->customer_id = $customer->id;
+            $document->required = "اجباري";
+            $document->save();
+        }
+
+        // أضف هنا إنشاء History وDocumentType إن أردت
+
+        return response()->json(['message' => 'تم التحديث بنجاح']);
     }
 }
