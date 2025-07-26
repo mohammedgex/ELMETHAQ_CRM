@@ -1392,142 +1392,142 @@
         });
 
         // ###################################################################### الكشف الطبي
-        // document.getElementById('check-medical').addEventListener('click', async function() {
-        //     const btn = document.getElementById('collectSelected');
-        //     const companyData = JSON.parse(btn.getAttribute('data-company'));
+        document.getElementById('check-medical').addEventListener('click', async function() {
+            const btn = document.getElementById('collectSelected');
+            const companyData = JSON.parse(btn.getAttribute('data-company'));
 
-        //     const customer = JSON.parse(this.getAttribute('data-customer'));
-        //     Swal.fire({
-        //         title: 'جاري فتح المتصفح لك...',
-        //         text: 'في انتظار',
-        //         allowOutsideClick: false,
-        //         didOpen: () => {
-        //             Swal.showLoading();
-        //         }
-        //     });
+            const customer = JSON.parse(this.getAttribute('data-customer'));
+            Swal.fire({
+                title: 'جاري فتح المتصفح لك...',
+                text: 'في انتظار',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
 
-        //     function reverseDateFormat(dateStr) {
-        //         if (!dateStr) return null;
+            function reverseDateFormat(dateStr) {
+                if (!dateStr) return null;
 
-        //         const parts = dateStr.split("-");
-        //         if (parts.length !== 3) return null;
+                const parts = dateStr.split("-");
+                if (parts.length !== 3) return null;
 
-        //         const [year, month, day] = parts;
-        //         return `${day}-${month}-${year}`;
-        //     }
-        //     console.log();
+                const [year, month, day] = parts;
+                return `${day}-${month}-${year}`;
+            }
+            console.log();
 
-        //     const payload = {
-        //         firstName: extractFirstName(customer.name_en_mrz),
-        //         lastName: extractLastName(customer.name_en_mrz),
-        //         passportNumber: customer.passport_id,
-        //         dateOfBirth: reverseDateFormat(customer.date_birth),
-        //         maritalStatus: customer.marital_status,
-        //         passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
-        //         passportIssuePlace: customer.issue_place,
-        //         passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
-        //         phone: "+" + customer.phone,
-        //         nationalId: customer.card_id,
-        //         position: customer.customer_group.visa_profession.job,
-        //     };
+            const payload = {
+                firstName: extractFirstName(customer.name_en_mrz),
+                lastName: extractLastName(customer.name_en_mrz),
+                passportNumber: customer.passport_id,
+                dateOfBirth: reverseDateFormat(customer.date_birth),
+                maritalStatus: customer.marital_status,
+                passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
+                passportIssuePlace: customer.issue_place,
+                passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
+                phone: "+" + customer.phone,
+                nationalId: customer.card_id,
+                position: customer.customer_group.visa_profession.job,
+            };
 
-        //     const fieldLabels = {
-        //         firstName: "الاسم الأول",
-        //         lastName: "اسم العائلة",
-        //         passportNumber: "رقم الجواز",
-        //         dateOfBirth: "تاريخ الميلاد",
-        //         maritalStatus: "الحالة الاجتماعية",
-        //         passportIssueDate: "تاريخ إصدار الجواز",
-        //         passportIssuePlace: "مكان إصدار الجواز",
-        //         passportExpiryDate: "تاريخ انتهاء الجواز",
-        //         phone: "رقم الهاتف",
-        //         nationalId: "الرقم القومي",
-        //         position: "المهنة الخاصة بمجموعته"
-        //     };
+            const fieldLabels = {
+                firstName: "الاسم الأول",
+                lastName: "اسم العائلة",
+                passportNumber: "رقم الجواز",
+                dateOfBirth: "تاريخ الميلاد",
+                maritalStatus: "الحالة الاجتماعية",
+                passportIssueDate: "تاريخ إصدار الجواز",
+                passportIssuePlace: "مكان إصدار الجواز",
+                passportExpiryDate: "تاريخ انتهاء الجواز",
+                phone: "رقم الهاتف",
+                nationalId: "الرقم القومي",
+                position: "المهنة الخاصة بمجموعته"
+            };
 
-        //     // التحقق من القيم الناقصة فقط لهذه الحقول
-        //     const missingFields = [];
+            // التحقق من القيم الناقصة فقط لهذه الحقول
+            const missingFields = [];
 
-        //     for (const [key, value] of Object.entries(payload)) {
-        //         if (!value || value === "N/A" || value === "unknown") {
-        //             missingFields.push(fieldLabels[key] || key);
-        //         }
-        //     }
+            for (const [key, value] of Object.entries(payload)) {
+                if (!value || value === "N/A" || value === "unknown") {
+                    missingFields.push(fieldLabels[key] || key);
+                }
+            }
 
-        //     if (missingFields.length > 0) {
-        //         Swal.close(); // إغلاق الانتظار
+            if (missingFields.length > 0) {
+                Swal.close(); // إغلاق الانتظار
 
-        //         Swal.fire({
-        //             icon: 'warning',
-        //             title: 'بيانات ناقصة',
-        //             html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields.join(
-        //                 '<br>') + '</b>',
-        //         });
-        //         return;
-        //     }
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'بيانات ناقصة',
+                    html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields.join(
+                        '<br>') + '</b>',
+                });
+                return;
+            }
 
-        //     // باقي البيانات ثابتة أو افتراضية
-        //     payload.country = "EGY";
-        //     payload.city = "87";
-        //     payload.destinationCountry = "SA";
-        //     payload.nationality = "55";
-        //     payload.visaType = "wv";
-        //     payload.gender = "male";
-        //     payload.email = companyData.medical_email;
-        //     payload.userEmail = "{{ auth()->user()->email }}";
+            // باقي البيانات ثابتة أو افتراضية
+            payload.country = "EGY";
+            payload.city = "87";
+            payload.destinationCountry = "SA";
+            payload.nationality = "55";
+            payload.visaType = "wv";
+            payload.gender = "male";
+            payload.email = companyData.medical_email;
+            payload.userEmail = "{{ auth()->user()->email }}";
 
-        //     try {
-        //         const response = await fetch('http://localhost:3000/api/wafid', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify(payload),
-        //         });
+            try {
+                const response = await fetch('http://localhost:3000/api/wafid', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
 
-        //         const result = await response.json();
-        //         console.log('Result:', result);
-        //         Swal.close(); // إغلاق الانتظار
-        //         $('#loading-overlay').fadeOut();
-        //         if (result.success) {
-        //             $('#loading-overlay').fadeOut();
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'تم الحجز',
-        //                 text: 'تم إرسال البيانات بنجاح.',
-        //             });
-        //         } else {
-        //             $('#loading-overlay').fadeOut();
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'خطأ',
-        //                 text: 'حدث خطأ أثناء الاتصال بالخادم.',
-        //             });
-        //         }
+                const result = await response.json();
+                console.log('Result:', result);
+                Swal.close(); // إغلاق الانتظار
+                $('#loading-overlay').fadeOut();
+                if (result.success) {
+                    $('#loading-overlay').fadeOut();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'تم الحجز',
+                        text: 'تم إرسال البيانات بنجاح.',
+                    });
+                } else {
+                    $('#loading-overlay').fadeOut();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطأ',
+                        text: 'حدث خطأ أثناء الاتصال بالخادم.',
+                    });
+                }
 
-        //     } catch (error) {
-        //         console.error('Fetch error:', error);
-        //         $('#loading-overlay').fadeOut();
+            } catch (error) {
+                console.error('Fetch error:', error);
+                $('#loading-overlay').fadeOut();
 
-        //         Swal.close(); // إغلاق الانتظار
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'خطأ',
-        //             text: 'حدث خطأ أثناء الاتصال بالخادم.',
-        //         });
-        //     }
+                Swal.close(); // إغلاق الانتظار
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ',
+                    text: 'حدث خطأ أثناء الاتصال بالخادم.',
+                });
+            }
 
-        //     // مساعدات لتقسيم الاسم
-        //     function extractFirstName(fullName) {
-        //         return fullName?.split(" ")[0] ?? "Unknown";
-        //     }
+            // مساعدات لتقسيم الاسم
+            function extractFirstName(fullName) {
+                return fullName?.split(" ")[0] ?? "Unknown";
+            }
 
-        //     function extractLastName(fullName) {
-        //         if (!fullName) return '';
-        //         const parts = fullName.trim().split(/\s+/); // يفصل على أساس المسافات
-        //         return parts[parts.length - 1]; // يأخذ آخر كلمة
-        //     }
-        // });
+            function extractLastName(fullName) {
+                if (!fullName) return '';
+                const parts = fullName.trim().split(/\s+/); // يفصل على أساس المسافات
+                return parts[parts.length - 1]; // يأخذ آخر كلمة
+            }
+        });
 
         // ###################################################################### الكشف الطبي
         document.getElementById('checkMedicalStatus').addEventListener('click', async function() {
