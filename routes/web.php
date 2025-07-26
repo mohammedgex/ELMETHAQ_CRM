@@ -22,6 +22,7 @@ use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\GoogleTranslateController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JopController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\TemplateController;
@@ -228,6 +229,7 @@ Route::group([
     Route::get('/tests/{test}/show-evaluations/{lead}', [TestController::class, 'show_evaluation'])->name('tests.showEvaluation');
     Route::post('/evaluations/create', [TestController::class, 'createEvaluation'])->name('evaluations.create');
     Route::post('/evaluations/{id}', [TestController::class, 'storeEvaluation'])->name('evaluations.store');
+    Route::get('/groups-visa/{visaid}', [HomeController::class, 'groupVisa'])->name('groups.visa');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

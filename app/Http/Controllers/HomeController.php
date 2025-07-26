@@ -62,4 +62,15 @@ class HomeController extends Controller
             'histories' => $histories,
         ]);
     }
+
+    public function groupVisa($visaid)
+    {
+        # code...
+        $visa = VisaType::findOrFail($visaid);
+        $groups = CustomerGroup::where('visa_type_id', $visaid)->get();
+        return view('visa.visa-groups', [
+            'visa' => $visa,
+            'groups' => $groups,
+        ]);
+    }
 }

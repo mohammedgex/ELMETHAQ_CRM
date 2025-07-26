@@ -168,7 +168,7 @@
                 </div>
             </div>
         </div>
-        <!-- قسم الحقائب -->
+        <!-- قسم التاشيرات -->
         <div class="card card-success card-outline">
             <div class="card-header">
                 <h3 class="card-title">التأشيرات ({{ $visas->count() }})</h3>
@@ -177,7 +177,7 @@
                 <div class="row text-center">
                     @foreach ($visas as $visa)
                         <div class="col-md-3 col-6 mb-4">
-                            <a href="" class="text-decoration-none">
+                            <a href="{{ route('groups.visa', $visa->id) }}" class="text-decoration-none">
                                 <div class="info-box bg-gradient-success">
                                     <span class="info-box-icon"><i class="fas fa-passport"></i></span>
                                     <div class="info-box-content">
@@ -213,7 +213,9 @@
                         @forelse($histories as $history)
                             <tr>
                                 <td>{{ $history->user->name ?? '-' }}</td>
-                                <td>{{ $history->customer->name_ar ?? '-' }}</td>
+                                <td><a
+                                        href="{{ route('customer.show', $history->customer->id) }}">{{ $history->customer->name_ar ?? '-' }}</a>
+                                </td>
                                 <td>{{ $history->description }}</td>
                                 <td>{{ $history->created_at->format('Y-m-d H:i') }}</td>
                             </tr>
