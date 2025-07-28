@@ -1387,6 +1387,7 @@
         </div>
     </div>
 
+    <span data-customer='@json($edit)' id="customer"></span>
 
     <!-- مؤشر التحميل -->
     <div id="loadingIndicator" style="display: none; color: #997a44; font-weight: bold;">
@@ -1535,21 +1536,6 @@
             font-size: 18px;
         }
 
-
-
-
-        /* body,
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            html {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                height: 100%;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                margin: 0;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                display: flex;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                justify-content: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                align-items: center;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                background-color: #fff;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                font-family: Arial, sans-serif;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                color: #333;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
-
         .loader {
             border: 5px solid #f3f3f3;
             /* لون الخلفية */
@@ -1592,6 +1578,79 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let htmlMessage = "";
+
+            // --- التحقق من تطابق عدد الأسماء ---
+            const el = document.getElementById("customer");
+            const customerData = el.dataset.customer;
+
+            if (customerData) {
+                const customer = JSON.parse(customerData);
+
+                const nameAr = customer.name_ar || "";
+                const nameEn = customer.name_en_mrz || "";
+
+                const wordsAr = nameAr.trim().split(/\s+/).length;
+                const wordsEn = nameEn.trim().split(/\s+/).length;
+
+                if (wordsAr !== wordsEn) {
+                    htmlMessage += `
+                    <div style="text-align:right;">
+                        <strong>تحذير - اختلاف عدد الأسماء:</strong><br>
+                        الاسم العربي يحتوي على <strong>${wordsAr}</strong> كلمة<br>
+                        الاسم الإنجليزي يحتوي على <strong>${wordsEn}</strong> كلمة
+                    </div><hr>`;
+                }
+            }
+
+            // --- التحقق من اقتراب انتهاء الجواز ---
+            const input = document.getElementById("expiry_date");
+            const value = input.value;
+
+            if (value) {
+                const [day, month, year] = value.split('/');
+                const expireDate = new Date(`${year}-${month}-${day}`);
+                const now = new Date();
+
+                const diffInTime = expireDate.getTime() - now.getTime();
+                const diffInDays = diffInTime / (1000 * 60 * 60 * 24);
+                const diffInMonths = Math.floor(diffInDays / 30.44);
+
+                if (diffInDays <= 365) {
+                    input.style.borderColor = 'red';
+                    input.title = 'تنبيه: أقل من سنة على انتهاء الجواز';
+
+                    htmlMessage += `
+                    <div style="text-align:right;">
+                        <strong>تنبيه انتهاء الجواز:</strong><br>
+                        تبقى أقل من سنة على انتهاء الجواز<br>
+                        <strong>${diffInMonths}</strong> شهر/أشهر متبقية.
+                    </div>`;
+                } else {
+                    input.style.borderColor = '#343a40';
+                    input.title = '';
+                }
+            }
+
+            // --- عرض التنبيه إذا كان فيه أخطاء ---
+            if (htmlMessage !== "") {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'تنبيهات مهمة',
+                    html: htmlMessage,
+                    confirmButtonText: 'موافق'
+                });
+            }
+
+            // --- التحقق عند تغيير التاريخ ---
+            input.addEventListener("change", function() {
+                // إعادة تحميل الصفحة لتكرار التحقق من جديد أو يمكنك استدعاء نفس الكود أعلاه كـ function
+                location.reload();
+            });
+        });
+
+        // إضافة خطوة جديدة في المخطط الزمني
         document.getElementById('addStep').addEventListener('click', function() {
             const timeline = document.getElementById('timeline');
             const stepNumber = timeline.children.length + 1;
@@ -1607,7 +1666,7 @@
                 <h4> تم اصدار تأشيرة السفر</h4>
                 <p>${texts[stepNumber % 4]}</p>
             </div>
-        `;
+            `;
             timeline.appendChild(newStep);
         });
 

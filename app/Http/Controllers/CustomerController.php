@@ -151,6 +151,14 @@ class CustomerController extends Controller
             $filePath = $request->file('image')->store('uploads', 'public');
             $data['image'] = $filePath;
         }
+        // عند تحديث رقم الهاتف
+        if ($request->filled('phone')) {
+            if ($customer->LeadCustomer) {
+                # code...
+                $customer->LeadCustomer->phone = $request->phone;
+                $customer->LeadCustomer->save();
+            }
+        }
 
         // تحديث البيانات كلها
         $customer->update($data);
@@ -237,7 +245,7 @@ class CustomerController extends Controller
         } else {
             // إرسال إشعار بعد التحديث
             $title = "مستند اجبارى!";
-            $body = " تم ارفاق مستند جديد لك , يرجى التحقق من التطبيق.";
+            $body = "يرجى العلم بأنه تم إرفاق مستند إجباري من نوع: {$request->document_type}. نرجو مراجعة التطبيق في أقرب وقت.";
             $icon = null; // أو رابط أيقونة
             app(ApiAppController::class)->sendFcmMessage("customer", $customer->id, $title, $body, $icon);
         }
@@ -247,7 +255,6 @@ class CustomerController extends Controller
         $document->note = $request->note;
         $document->customer_id = $customer->id;
         $document->required = $request->required;
-
         $document->save();
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'attach');

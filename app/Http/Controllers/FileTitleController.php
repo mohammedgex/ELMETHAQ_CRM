@@ -45,7 +45,7 @@ class FileTitleController extends Controller
         $document->save();
         // إرسال إشعار بعد التحديث
         $title = "تهانينا!";
-        $body = "تم قبول المستند بنجاح.";
+        $body = "تمت مراجعة المستند والموافقة عليه بنجاح. نشكرك على التعاون.";
         $icon = null; // أو رابط أيقونة
         app(ApiAppController::class)->sendFcmMessage("customer", $document->customer_id, $title, $body, $icon);
         return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');
@@ -65,7 +65,7 @@ class FileTitleController extends Controller
         $document->save();
         // إرسال إشعار بعد التحديث
         $title = "مستند مرفوض!";
-        $body = "تم رفض المستند, يرجى إعادة إرساله.";
+        $body = "تم رفض المستند المرسل. يُرجى مراجعته وإعادة إرساله بشكل صحيح.";
         $icon = null; // أو رابط أيقونة
         app(ApiAppController::class)->sendFcmMessage("customer", $document->customer_id, $title, $body, $icon);
         return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');

@@ -250,7 +250,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <form action="{{ route('visa-type.delete', $visa_type->id) }}" method="POST"
+                                        {{-- <form action="{{ route('visa-type.delete', $visa_type->id) }}" method="POST"
                                             class="d-inline mx-1">
                                             @csrf
                                             @method('DELETE')
@@ -258,7 +258,7 @@
                                                 title="حذف">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
@@ -281,17 +281,17 @@
                                                         <i class="fas fa-list"></i> المهن
                                                     </a>
                                                 </li>
-                                                <li>
+                                                {{-- <li>
                                                     <a class="dropdown-item text-warning" data-bs-toggle="modal"
                                                         data-bs-target="#exampleModal">
                                                         <i class="fas fa-print"></i> طباعة تقرير
                                                     </a>
-                                                </li>
-                                                <li>
+                                                </li> --}}
+                                                {{-- <li>
                                                     <button class="dropdown-item text-danger">
                                                         <i class="fas fa-users"></i> بلاك ليست
                                                     </button>
-                                                </li>
+                                                </li> --}}
                                             </ul>
                                         </div>
                                     </td>

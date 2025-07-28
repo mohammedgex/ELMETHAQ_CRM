@@ -80,11 +80,6 @@
                                                 رسالة نصية</button>
                                         </li>
                                         <li>
-                                            <button class="dropdown-item text-success" id="visa">
-                                                جلب التاشيرة او طلب الدخول
-                                            </button>
-                                        </li>
-                                        <li>
                                             <button class="dropdown-item text-info" data-bs-toggle="modal"
                                                 data-bs-target="#groupModal">
                                                 تعيين مجموعة
@@ -101,13 +96,6 @@
                                                 data-bs-target="#bagModal">
                                                 تعيين حقيبة
                                             </button>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item text-danger">بلاك
-                                                ليست</button>
-                                        </li>
-                                        <li>
-                                            <button class="dropdown-item text-secondary" onclick="">أرشفة</button>
                                         </li>
                                     </ul>
                                 </div>
@@ -516,7 +504,7 @@
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="blank">
                                                     <img src="{{ asset('storage/' . $customer->image) }}" width="40"
-                                                        height="40" class="img-circle" alt="صورة">
+                                                        height="40" class="img-circle" alt="صورة" loading="lazy">
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
@@ -863,8 +851,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
 
         .dt-button {
             padding: 8px 15px;

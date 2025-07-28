@@ -65,9 +65,6 @@
                                                 تعيين حقيبة
                                             </button>
                                         </li>
-                                        <li>
-                                            <button class="dropdown-item text-secondary">أرشفة</button>
-                                        </li>
                                     </ul>
                                 </div>
 

@@ -639,4 +639,61 @@ class ApiAppController extends Controller
 
         return response()->json(['message' => 'تم التحديث بنجاح']);
     }
+
+    public function forgetPasswordPhone(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|exists:leads_customers,phone',
+        ]);
+
+        $this->sendOtp($request->phone);
+
+        return response()->json(['message' => 'تم إرسال كود إعادة تعيين كلمة المرور إلى هاتفك']);
+    }
+
+    public function verifyPasswordOtp(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required',
+            'code' => 'required'
+        ]);
+
+        $otp = Otp::where('phone', $request->phone)
+            ->where('code', $request->code)
+            ->where('expires_at', '>', now())
+            ->latest()
+            ->first();
+
+        if (!$otp) {
+            return response()->json(['message' => 'كود التاكيد خطأ'], 422);
+        }
+
+        // حذف الكود بعد التحقق (اختياري)
+        $otp->delete();
+        $user = LeadsCustomers::where('phone', $request->phone)->first();
+        $token = $user->createToken($user->name ?: 'lead-customer')->plainTextToken;
+
+        return response()->json([
+            'message' => 'OTP verified successfully',
+            'token' => $token
+        ]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|exists:leads_customers,phone',
+            'password' => 'required|confirmed|min:8',
+        ]);
+
+        $user = LeadsCustomers::where('phone', $request->phone)->first();
+        if (!$user) {
+            return response()->json(['message' => 'User not found'], 404);
+        }
+
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return response()->json(['message' => 'Password reset successfully']);
+    }
 }

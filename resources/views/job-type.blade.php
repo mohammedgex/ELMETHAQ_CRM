@@ -141,7 +141,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <form action="{{ route('job-type.delete', $job->id) }}" method="POST"
+                                        {{-- <form action="{{ route('job-type.delete', $job->id) }}" method="POST"
                                             class="mx-1">
                                             @csrf
                                             @method('DELETE')
@@ -149,7 +149,7 @@
                                                 title="حذف" onsubmit="confirmDelete(event)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                     </td>
                                 </tr>

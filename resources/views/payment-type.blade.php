@@ -117,7 +117,7 @@
                                             class="btn btn-sm btn-outline-success shadow-sm" title="تعديل">
                                             <i class="fas fa-edit"></i>
                                         </a>
-
+                                        {{-- 
                                         <form action="{{ route('payment-type.delete', $payment->id) }}" method="POST"
                                             class="mx-1">
                                             @csrf
@@ -126,7 +126,7 @@
                                                 title="حذف" onsubmit="confirmDelete(event)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"

@@ -149,7 +149,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <form action="{{ route('customer-groups.delete', $group->id) }}" method="POST"
+                                        {{-- <form action="{{ route('customer-groups.delete', $group->id) }}" method="POST"
                                             class="mx-1">
                                             @csrf
                                             @method('DELETE')
@@ -157,7 +157,7 @@
                                                 title="حذف" onsubmit="confirmDelete(event)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                         <form action="{{ route('customers.filter') }}" method="POST">
                                             @csrf

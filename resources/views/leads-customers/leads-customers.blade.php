@@ -387,7 +387,7 @@
                                 <td>
                                     <a href="{{ asset('storage/' . $lead->image) }}" target="blank">
                                         <img src="{{ asset('storage/' . $lead->image) }}" width="40" height="40"
-                                            class="img-circle" alt="صورة">
+                                            class="img-circle" alt="صورة" loading="lazy">
                                     </a>
                                 </td>
                                 <td>{{ $lead->age }}</td>
@@ -395,8 +395,8 @@
                                 <td>{{ $lead->governorate }}</td>
                                 <td data-status="{{ $lead->status }}" class="lead-status">
                                     <span
-                                        class="badge 
-                                        @if ($lead->status == 'عميل محتمل') bg-secondary 
+                                        class="badge
+                                        @if ($lead->status == 'عميل محتمل') bg-secondary
                                         @elseif ($lead->status == 'عميل اساسي') bg-success @endif">
                                         {{ $lead->status }}
                                     </span>
@@ -696,7 +696,7 @@
 
                     full_name_english
 
-                    full_name_arabic (ensure 'ماهر' is one word, e.g., 'ماهر محمد عبد العزيز مرسي')
+                    full_name_arabic (ensure 'ماهر' is one word, e.g., 'ماهر محمد عبدالعزيز مرسي')
 
                     date_of_birth
 

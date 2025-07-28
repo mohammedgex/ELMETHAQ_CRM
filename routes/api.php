@@ -19,7 +19,7 @@ Route::post('/register', [ApiAppController::class, 'register']);
 Route::post('/confirm-code', [ApiAppController::class, 'verifyOtp']);
 Route::post('/complete-data', action: [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
 Route::post('/login', [ApiAppController::class, 'login']);
-Route::post('/visa/{id}', [ApiAppController::class, 'visa']); // به مشكلة
+Route::post('/visa/{id}', [ApiAppController::class, 'visa']);
 Route::middleware('auth:sanctum')->get('/user-data', action: [ApiAppController::class, 'getUserData']);
 Route::middleware('auth:sanctum')->post('/send-file/{id}', action: [ApiAppController::class, 'send_file']);
 Route::get('/jobs', [JobController::class, 'apiIndex']);
@@ -37,3 +37,7 @@ Route::post('/professions', [VisaProfessionsController::class, 'professionFromAt
 Route::post('/check-medical-status', [ApiAppController::class, 'checkMedicalStatus']);
 Route::post('/token/check-medical', [ApiAppController::class, 'TokenCheckMedical']);
 Route::post('/store-medical-result', [ApiAppController::class, 'store']);
+
+Route::post('/forgot-password', [ApiAppController::class, 'forgetPasswordPhone']);
+Route::post('/reset-[assword-code', [ApiAppController::class, 'verifyPasswordOtp']);
+Route::middleware('auth:sanctum')->post('/reset-password', [ApiAppController::class, 'resetPassword']);

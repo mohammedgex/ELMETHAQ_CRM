@@ -828,15 +828,14 @@
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </a>
-                                        <form action="{{ route('visa-profession.delete', $visa->id) }}" method="POST"
+                                        {{-- <form action="{{ route('visa-profession.delete', $visa->id) }}" method="POST"
                                             class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
-
+                                        </form> --}}
 
                                     </td>
                                 </tr>

@@ -133,7 +133,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <form action="{{ route('embassy.delete', $embassy->id) }}" method="POST"
+                                        {{-- <form action="{{ route('embassy.delete', $embassy->id) }}" method="POST"
                                             class="mx-1" onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
@@ -141,7 +141,7 @@
                                                 title="حذف">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                         <button class="btn btn-sm btn-outline-primary shadow-sm" title="عرض العملاء">
                                             <i class="fas fa-users"></i>

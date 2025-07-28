@@ -108,7 +108,7 @@ class VisaProfessionsController extends Controller
         $count = $visa_type->count ?? 0;
         foreach ($request->data as $item) {
             $groupTitle = $item['job'] . " (" . $visa_type->name . ")";
-            $groupOld = CustomerGroup::where("title", $groupTitle)->first();
+            $groupOld = CustomerGroup::where(["title" => $groupTitle, "visa_type_id" => $visa_type->id])->first();
 
             if (!$groupOld) {
                 # code...
@@ -124,14 +124,20 @@ class VisaProfessionsController extends Controller
                 $profession->customer_group_id = $group->id;
                 $profession->visa_type_id = $visa_type->id;
                 $profession->save();
+            } elseif ($groupOld) {
+                # code...
+                $profession = $groupOld->visaProfession;
+                if ($profession->profession_count < intval($item['remaining'])) {
+                    $profession->profession_count = intval($item['remaining']);
+                    $count += $profession->profession_count;
+                }
+                $profession->save();
             }
         }
         $visa_type->count = $count;
         $visa_type->save();
-        return response()->json(
-            [
-                "succes" => true
-            ]
-        );
+        return response()->json([
+            "succes" => true
+        ]);
     }
 }
