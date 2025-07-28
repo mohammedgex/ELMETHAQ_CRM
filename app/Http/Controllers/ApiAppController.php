@@ -14,6 +14,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use DevKandil\NotiFire\Facades\Fcm;
 use DevKandil\NotiFire\Enums\MessagePriority;
+use Illuminate\Support\Facades\Validator;
 use GPBMetadata\Google\Api\Log;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -126,7 +127,7 @@ class ApiAppController extends Controller
             'image' => 'required',
             'phone' => 'required|unique:leads_customers,phone',
             'job_title_id' => 'required',
-            'password' => 'required|digits:8',
+            'password' => 'required',
             'fcm_token' => 'nullable|string',
         ], [
             'image.required' => 'صورة المستخدم مطلوبة.',
@@ -695,5 +696,26 @@ class ApiAppController extends Controller
         $user->save();
 
         return response()->json(['message' => 'Password reset successfully']);
+    }
+    public function changePassword(Request $request)
+    {
+        $validator = $request->validate([
+            "phone" => 'required|exists:leads_customers,phone',
+            'current_password' => 'required',
+            'new_password' => 'required|min:8',
+        ]);
+
+        $user = LeadsCustomers::where('phone', $request->phone)->first();
+
+        // التحقق من الباسورد القديمة
+        if (!Hash::check($request->current_password, $user->password)) {
+            return response()->json(['message' => 'كلمة المرور الحالية غير صحيحة.'], 403);
+        }
+
+        // تغيير الباسورد
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح.']);
     }
 }
