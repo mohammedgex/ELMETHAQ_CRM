@@ -684,7 +684,7 @@ class ApiAppController extends Controller
     {
         $request->validate([
             'phone' => 'required|exists:leads_customers,phone',
-            'password' => 'required|confirmed|min:8',
+            'password' => 'required|min:8',
         ]);
 
         $user = LeadsCustomers::where('phone', $request->phone)->first();
@@ -699,7 +699,7 @@ class ApiAppController extends Controller
     }
     public function changePassword(Request $request)
     {
-        $validator = $request->validate([
+        $request->validate([
             "phone" => 'required|exists:leads_customers,phone',
             'current_password' => 'required',
             'new_password' => 'required|min:8',

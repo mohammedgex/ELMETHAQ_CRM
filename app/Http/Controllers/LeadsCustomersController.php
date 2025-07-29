@@ -247,7 +247,7 @@ class LeadsCustomersController extends Controller
             $customer->mrz_image = $lead->passport_photo;
             $customer->job_title_id = $lead->job_title_id;
             $customer->delegate_id = $lead->delegate_id;
-            $customer->status = "جديد";
+            $customer->status = "تجهيز اوراق";
             $customer->customer_group_id = $request->group_id;
             $customer->fcm_token = $lead->fcm_token;
             $customer->save();

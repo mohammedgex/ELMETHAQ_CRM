@@ -169,14 +169,20 @@
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
-                                            <td>{{ $customer->medical_examination ?? '-' }}</td>
-                                            <td>
+                                            <td
+                                                class="{{ $customer->medical_examination === 'لائق' ? 'bg-success text-white' : 'bg-danger text-white' }}">
+                                                {{ $customer->medical_examination ?? '-' }}
+                                            </td>
+                                            <td
+                                                class="{{ $customer->finger_print_examination === 'تم تصدير الاكسيل' ? 'bg-success text-white' : 'bg-danger text-white' }}">
                                                 {{ $customer->finger_print_examination ?? '-' }}
                                             </td>
-                                            <td>
+                                            <td
+                                                class="{{ $customer->virus_examination === 'موجب' ? 'bg-success text-white' : 'bg-danger text-white' }}">
                                                 {{ $customer->virus_examination ?? '-' }}
                                             </td>
-                                            <td>
+                                            <td
+                                                class="{{ is_null($customer->e_visa_number) ? 'bg-danger text-white' : 'bg-success text-white' }}">
                                                 {{ $customer->e_visa_number ?? '-' }}
                                             </td>
                                             <td>
@@ -1235,7 +1241,7 @@
                     NumberEntryDay: NumberEntryDay,
                     ResidencyInKSA: ResidencyInKSA,
                     imageUrl: `{{ asset('storage') }}/${customer.image}`,
-                    AFIRSTNAME: name_ar[0] || "",
+                    AFIRSTNAME: customer.name_ar,
                     AFATHER: name_ar[1] || "",
                     AGRAND: name_ar[2] || "",
                     AFAMILY: name_ar[name_ar.length - 1] || "",
