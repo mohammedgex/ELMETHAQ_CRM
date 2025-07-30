@@ -357,7 +357,7 @@
                     <thead class="bg-secondary text-white">
                         <tr>
                             <th>
-                                <input type="checkbox" id="select-all">
+                                <input type="checkbox" class="width-input" id="select-all">
                             </th>
                             <th>كود</th>
                             <th>الاسم</th>
@@ -376,7 +376,7 @@
                         @forelse ($leads as $lead)
                             <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
                                 <td>
-                                    <input type="checkbox" class="lead-checkbox" name="lead_ids[]"
+                                    <input type="checkbox" class="lead-checkbox width-input" name="lead_ids[]"
                                         value="{{ $lead->id }}">
                                 </td>
                                 <td>#{{ $lead->id }}</td>

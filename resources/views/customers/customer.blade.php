@@ -469,7 +469,8 @@
                             <table class="table table-hover text-center" id="example">
                                 <thead class="bg-secondary text-white">
                                     <tr>
-                                        <th><input type="checkbox" id="checkAll" class="form-check-input cccccccc"></th>
+                                        <th><input type="checkbox" id="checkAll"
+                                                class="form-check-input cccccccc width-input"></th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
@@ -493,8 +494,9 @@
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
-                                                    type="checkbox" id="myCheckbox" class="form-check-input row-checkbox"
-                                                    name="customer_id" value="{{ $customer->id }}"
+                                                    type="checkbox" id="myCheckbox"
+                                                    class="form-check-input row-checkbox width-input" name="customer_id"
+                                                    value="{{ $customer->id }}"
                                                     data-customer='@json($customer)'>
                                             </td>
                                             <td>#{{ $customer->id }}</td>
@@ -578,7 +580,7 @@
                                                                             class="fas fa-passport me-1"></i>
                                                                         طباعة طلب
                                                                         دخول</a></li>
-                                                                @if ($customer->token_medical)
+                                                                {{-- @if ($customer->token_medical)
                                                                     <li>
                                                                         <a href="{{ route('check.medical.status', $customer->token_medical) }}"
                                                                             class="dropdown-item show-loading">
@@ -587,7 +589,7 @@
                                                                             تحقق من الحالة الطبية
                                                                         </a>
                                                                     </li>
-                                                                @endif
+                                                                @endif --}}
                                                             </ul>
                                                         </li>
 
@@ -851,8 +853,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
 
         .dt-button {
             padding: 8px 15px;

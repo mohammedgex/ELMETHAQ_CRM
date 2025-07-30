@@ -398,10 +398,10 @@
                                                 <div class="evisa-header-right">
                                                     <div class="requestcode text-center">
                                                         <span class="requestcode-number">
-                                                            <label>رقم الطلب</label> E{{ $customer->e_visa_number }}
+                                                            <label>رقم الطلب</label> {{ $customer->e_visa_number }}
                                                         </span>
                                                         <img id="image" width="150" height="30"
-                                                            src="https://visa.mofa.gov.sa/Base/GenerateBarCode?key=E{{ $customer->e_visa_number }}">
+                                                            src="https://visa.mofa.gov.sa/Base/GenerateBarCode?key={{ $customer->e_visa_number }}">
                                                         <span class="requestcode-date">
 
 

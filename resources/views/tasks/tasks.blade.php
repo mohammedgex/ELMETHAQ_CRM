@@ -24,7 +24,7 @@
                     <div class="modal-body">
                         @csrf
                         <label class="font-weight-bold"> الموظف </label>
-                        <select class="form-control fw-bold" name="receiving_user_id">
+                        <select class="form-control fw-bold" name="receiving_user_id" required>
                             <option value="">اختر الموظف</option>
                             @foreach ($users as $user)
                                 <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -35,8 +35,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-edit" style="color:#7c6232;"></i></span>
                             </div>
-                            <input type="text" class="form-control" name="description" placeholder="أدخل وصف المهمة"
-                                required>
+                            <textarea type="text" class="form-control" name="description" placeholder="أدخل وصف المهمة" required></textarea>
                         </div>
                     </div>
                     <div class="modal-footer">

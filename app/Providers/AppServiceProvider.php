@@ -106,9 +106,24 @@ class AppServiceProvider extends ServiceProvider
             ];
 
             $visaDefinitions = [
-                ['permission' => 'visa-type-create', 'text' => 'تعريف التأشيرات', 'url' => 'admin/visa-type-view', 'icon' => 'fab fa-cc-visa'],
-                ['permission' => 'embassy-create', 'text' => 'تعريف القنصلية', 'url' => 'admin/embassy-view', 'icon' => 'fas fa-landmark'],
-                ['permission' => 'sponser-create', 'text' => 'تعريف الكفيل', 'url' => 'admin/sponsor-view', 'icon' => 'fas fa-user-tie'],
+                [
+                    'permission' => 'visa-type-create',
+                    'text' => 'تعريف التأشيرات',
+                    'url' => 'admin/visa-type-view',
+                    'icon' => 'fas fa-passport' // أفضل من "fab fa-cc-visa" لأنها تعبر عن تأشيرة أو جواز سفر
+                ],
+                [
+                    'permission' => 'embassy-create',
+                    'text' => 'تعريف القنصلية',
+                    'url' => 'admin/embassy-view',
+                    'icon' => 'fas fa-landmark' // مبنى رسمي بعلم (رمز دبلوماسي أكثر تعبيرًا)
+                ],
+                [
+                    'permission' => 'sponser-create',
+                    'text' => 'تعريف الكفيل',
+                    'url' => 'admin/sponsor-view',
+                    'icon' => 'fas fa-user-shield' // كفيل = جهة مسؤولة أو داعمة
+                ],
             ];
 
             foreach ($visaDefinitions as $item) {
@@ -133,14 +148,54 @@ class AppServiceProvider extends ServiceProvider
             ];
 
             $customerDefinitions = [
-                ['permission' => 'delegate-create', 'text' => 'تعريف المناديب', 'url' => 'admin/Delegates-create', 'icon' => 'fas fa-user-tag'],
-                ['permission' => 'bag-create', 'text' => 'تعريف الحقائب', 'url' => 'admin/bags-view', 'icon' => 'fas fa-user-tag'],
-                ['permission' => 'group-create', 'text' => 'تعريف المجموعات', 'url' => 'admin/customer-groups', 'icon' => 'fas fa-layer-group'],
-                ['permission' => 'file-create', 'text' => 'تعريف المستندات', 'url' => 'admin/document-type-view', 'icon' => 'fas fa-file-alt'],
-                ['permission' => 'payment-create', 'text' => 'تعريف المعاملات المالية', 'url' => 'admin/payment-type-view', 'icon' => 'fas fa-money-check-alt'],
-                ['permission' => 'message-create', 'text' => 'تعريف قوالب الرسائل', 'url' => 'admin/template', 'icon' => 'fas fa-user-tag'],
-                ['permission' => 'test-create', 'text' => 'الاختبارات', 'url' => 'admin/tests', 'icon' => 'fas fa-vials'],
-                ['permission' => 'job-create', 'text' => 'تعريف الوظائف', 'url' => 'admin/job-type-view', 'icon' => 'fas fa-briefcase'],
+                [
+                    'permission' => 'delegate-create',
+                    'text' => 'تعريف المناديب',
+                    'url' => 'admin/Delegates-create',
+                    'icon' => 'fas fa-user-tie' // مندوب = رجل أعمال
+                ],
+                [
+                    'permission' => 'bag-create',
+                    'text' => 'تعريف الحقائب',
+                    'url' => 'admin/bags-view',
+                    'icon' => 'fas fa-suitcase-rolling' // حقيبة سفر/عمل
+                ],
+                [
+                    'permission' => 'group-create',
+                    'text' => 'تعريف المجموعات',
+                    'url' => 'admin/customer-groups',
+                    'icon' => 'fas fa-users' // مجموعة أشخاص
+                ],
+                [
+                    'permission' => 'file-create',
+                    'text' => 'تعريف المستندات',
+                    'url' => 'admin/document-type-view',
+                    'icon' => 'fas fa-file-alt' // مستند نصي
+                ],
+                [
+                    'permission' => 'payment-create',
+                    'text' => 'تعريف المعاملات المالية',
+                    'url' => 'admin/payment-type-view',
+                    'icon' => 'fas fa-hand-holding-usd' // رمز مالي
+                ],
+                [
+                    'permission' => 'message-create',
+                    'text' => 'تعريف قوالب الرسائل',
+                    'url' => 'admin/template',
+                    'icon' => 'fas fa-envelope-open-text' // رسالة نصية مفتوحة
+                ],
+                [
+                    'permission' => 'test-create',
+                    'text' => 'الاختبارات',
+                    'url' => 'admin/tests',
+                    'icon' => 'fas fa-file-medical-alt' // اختبار/استبيان
+                ],
+                [
+                    'permission' => 'job-create',
+                    'text' => 'تعريف الوظائف',
+                    'url' => 'admin/job-type-view',
+                    'icon' => 'fas fa-briefcase' // حقيبة عمل
+                ],
             ];
 
             foreach ($customerDefinitions as $item) {
@@ -177,7 +232,7 @@ class AppServiceProvider extends ServiceProvider
                 $existingMenu[] = [
                     'text' => 'المستخدم',
                     'url' => 'admin/users',
-                    'icon' => 'fas fa-user-cog',
+                    'icon' => 'fas fa-users-cog',
                 ];
             }
 
@@ -186,7 +241,7 @@ class AppServiceProvider extends ServiceProvider
                 $existingMenu[] = [
                     'text' => 'اعدادات الشركة',
                     'url' => 'admin/company',
-                    'icon' => 'fas fa-user-cog',
+                    'icon' => 'fas fa-building',
                 ];
             }
             // اعدادات الشركة

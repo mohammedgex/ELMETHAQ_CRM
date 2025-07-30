@@ -131,7 +131,8 @@
                             <table class="table table-hover text-center" id="example">
                                 <thead class="bg-secondary text-white">
                                     <tr>
-                                        <th><input type="checkbox" id="checkAll" class="form-check-input cccccccc"></th>
+                                        <th><input type="checkbox" id="checkAll"
+                                                class="form-check-input cccccccc width-input"></th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
@@ -154,8 +155,9 @@
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
-                                                    type="checkbox" id="myCheckbox" class="form-check-input row-checkbox"
-                                                    name="customer_id" value="{{ $customer->id }}"
+                                                    type="checkbox" id="myCheckbox"
+                                                    class="form-check-input row-checkbox width-input" name="customer_id"
+                                                    value="{{ $customer->id }}"
                                                     data-customer='@json($customer)'>
                                             </td>
                                             <td>#{{ $customer->id }}</td>
@@ -170,21 +172,25 @@
                                             </td>
                                             <td>{{ $customer->phone }}</td>
                                             <td
-                                                class="{{ $customer->medical_examination === 'لائق' ? 'bg-success text-white' : 'bg-danger text-white' }}">
+                                                style="background-color: {{ $customer->medical_examination === 'لائق' ? '#28a745' : '#dc3545' }} !important; color: #fff !important;">
                                                 {{ $customer->medical_examination ?? '-' }}
                                             </td>
+
                                             <td
-                                                class="{{ $customer->finger_print_examination === 'تم تصدير الاكسيل' ? 'bg-success text-white' : 'bg-danger text-white' }}">
+                                                style="background-color: {{ $customer->finger_print_examination === 'تم تصدير الاكسيل' ? '#28a745' : '#dc3545' }} !important; color: #fff !important;">
                                                 {{ $customer->finger_print_examination ?? '-' }}
                                             </td>
+
                                             <td
-                                                class="{{ $customer->virus_examination === 'موجب' ? 'bg-success text-white' : 'bg-danger text-white' }}">
+                                                style="background-color: {{ $customer->virus_examination === 'موجب' ? '#28a745' : '#dc3545' }} !important; color: #fff !important;">
                                                 {{ $customer->virus_examination ?? '-' }}
                                             </td>
+
                                             <td
-                                                class="{{ is_null($customer->e_visa_number) ? 'bg-danger text-white' : 'bg-success text-white' }}">
+                                                style="background-color: {{ is_null($customer->e_visa_number) ? '#dc3545' : '#28a745' }} !important; color: #fff !important;">
                                                 {{ $customer->e_visa_number ?? '-' }}
                                             </td>
+
                                             <td>
                                                 <div class="btn-group">
                                                     <button class="btn btn-sm btn-outline-secondary dropdown-toggle"
@@ -716,6 +722,12 @@
             top: 50%;
             transform: translateY(-50%);
         }
+
+        /* .dark-mode .table,
+                                .dark-mode .table th,
+                                .dark-mode .table td {
+                                    background-color: #fff !important;
+                                } */
     </style>
 
 

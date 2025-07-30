@@ -175,6 +175,11 @@
         .dark-mode .bg-white>a {
             color: #f1f1f1 !important;
         }
+
+        .width-input {
+            width: 20px !important;
+            height: 20px !important;
+        }
     </style>
 </head>
 
