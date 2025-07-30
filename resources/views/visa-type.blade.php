@@ -271,7 +271,8 @@
                                                         data-outgoing_number="{{ $visa_type->outgoing_number }}"
                                                         data-registration_number="{{ $visa_type->registration_number }}"
                                                         data-visa="{{ $visa_type->id }}"
-                                                        class="dropdown-item text-success" id="profession">
+                                                        class="dropdown-item text-success profession-outomation"
+                                                        id="profession">
                                                         <i class="fas fa-edit"></i> جلب المهن
                                                     </a>
                                                 </li>
@@ -425,63 +426,123 @@
             }
         }
 
+        document.querySelectorAll('.profession-outomation').forEach(function(element) {
+            element.addEventListener('click', function(e) {
+                const element = e.currentTarget;
 
-        document.getElementById('profession').addEventListener('click', function(e) {
-            const element = e.currentTarget;
-
-            const visaType = {
-                VisaNumber: element.dataset.outgoing_number,
-                Embassy: element.dataset.embassy,
-                SponserID: element.dataset.registration_number
-            };
+                const visaType = {
+                    VisaNumber: element.dataset.outgoing_number,
+                    Embassy: element.dataset.embassy,
+                    SponserID: element.dataset.registration_number
+                };
 
 
-            // إذا كنت تريد إرسال الطلب لجلب المهن مثلاً:
-            fetch('http://localhost:3000/getVisaInfo', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(visaType)
-                })
-                .then(response => response.json())
-                .then(data => {
-                    data.visa_id = element.dataset.visa;
+                // إذا كنت تريد إرسال الطلب لجلب المهن مثلاً:
+                fetch('http://localhost:3000/getVisaInfo', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(visaType)
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        data.visa_id = element.dataset.visa;
 
-                    fetch("{{ route('profession') }}", {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "Accept": "application/json",
-                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
-                                    .getAttribute('content')
-                            },
-                            body: JSON.stringify(data)
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('خطأ في الاستجابة من السيرفر');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            Swal.fire({
-                                title: "نجحت العملية!",
-                                icon: "success"
+                        fetch("{{ route('profession') }}", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json",
+                                    "X-CSRF-TOKEN": document.querySelector(
+                                            'meta[name="csrf-token"]')
+                                        .getAttribute('content')
+                                },
+                                body: JSON.stringify(data)
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('خطأ في الاستجابة من السيرفر');
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                Swal.fire({
+                                    title: "نجحت العملية!",
+                                    icon: "success"
+                                });
+
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 3000);
+                            })
+                            .catch(error => {
+                                console.error("حدث خطأ أثناء جلب المهن:", error);
                             });
 
-                            setTimeout(() => {
-                                location.reload();
-                            }, 3000);
-                        })
-                        .catch(error => {
-                            console.error("حدث خطأ أثناء جلب المهن:", error);
-                        });
+                    })
+                    .catch(error => {
+                        console.error('حدث خطأ أثناء جلب المهن:', error);
+                    });
+            });
+        })
 
-                })
-                .catch(error => {
-                    console.error('حدث خطأ أثناء جلب المهن:', error);
-                });
-        });
+        // document.getElementById('profession').addEventListener('click', function(e) {
+        //     const element = e.currentTarget;
+
+        //     const visaType = {
+        //         VisaNumber: element.dataset.outgoing_number,
+        //         Embassy: element.dataset.embassy,
+        //         SponserID: element.dataset.registration_number
+        //     };
+
+
+        //     // إذا كنت تريد إرسال الطلب لجلب المهن مثلاً:
+        //     fetch('http://localhost:3000/getVisaInfo', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify(visaType)
+        //         })
+        //         .then(response => response.json())
+        //         .then(data => {
+        //             data.visa_id = element.dataset.visa;
+
+        //             fetch("{{ route('profession') }}", {
+        //                     method: "POST",
+        //                     headers: {
+        //                         "Content-Type": "application/json",
+        //                         "Accept": "application/json",
+        //                         "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]')
+        //                             .getAttribute('content')
+        //                     },
+        //                     body: JSON.stringify(data)
+        //                 })
+        //                 .then(response => {
+        //                     if (!response.ok) {
+        //                         throw new Error('خطأ في الاستجابة من السيرفر');
+        //                     }
+        //                     return response.json();
+        //                 })
+        //                 .then(data => {
+        //                     Swal.fire({
+        //                         title: "نجحت العملية!",
+        //                         icon: "success"
+        //                     });
+
+        //                     setTimeout(() => {
+        //                         location.reload();
+        //                     }, 3000);
+        //                 })
+        //                 .catch(error => {
+        //                     console.error("حدث خطأ أثناء جلب المهن:", error);
+        //                 });
+
+        //         })
+        //         .catch(error => {
+        //             console.error('حدث خطأ أثناء جلب المهن:', error);
+        //         });
+        // });
     </script>
 @stop

@@ -559,9 +559,9 @@
                                                         <!-- بلوك / إزالة بلوك -->
                                                         <li>
                                                             <a class="dropdown-item text-danger"
-                                                                href="{{ $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
+                                                                href="{{ $customer->blackList && $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
                                                                 <i class="fas fa-users me-1"></i>
-                                                                {{ $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
+                                                                {{ $customer->blackList && $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
                                                             </a>
                                                         </li>
 
@@ -851,8 +851,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .dt-button {
             padding: 8px 15px;
