@@ -21,6 +21,7 @@
 @endphp
 
 @section('auth_header', __('adminlte::adminlte.login_message'))
+{{-- @section('classes_body', 'dark-mode') --}}
 
 @section('auth_body')
     <form action="{{ $loginUrl }}" method="post">
@@ -75,7 +76,8 @@
             </div>
 
             <div class="col-5">
-                <button type=submit class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
+                <button type=submit
+                    class="btn btn-block {{ config('adminlte.classes_auth_btn', 'btn-flat btn-primary') }}">
                     <span class="fas fa-sign-in-alt"></span>
                     {{ __('adminlte::adminlte.sign_in') }}
                 </button>
@@ -86,7 +88,7 @@
 
 @section('auth_footer')
     {{-- Password reset link --}}
-    @if($passResetUrl)
+    @if ($passResetUrl)
         <p class="my-0">
             <a href="{{ $passResetUrl }}">
                 {{ __('adminlte::adminlte.i_forgot_my_password') }}
@@ -95,7 +97,7 @@
     @endif
 
     {{-- Register link --}}
-    @if($registerUrl)
+    @if ($registerUrl)
         <p class="my-0">
             <a href="{{ $registerUrl }}">
                 {{ __('adminlte::adminlte.register_a_new_membership') }}

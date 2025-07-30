@@ -37,6 +37,11 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
+        // منع الوصول لصفحة التسجيل إذا كان هناك مستخدم واحد أو أكثر
+        if (User::count() > 0) {
+            abort(403, 'التسجيل غير مسموح');
+        }
+
         $this->middleware('guest');
     }
 
@@ -63,6 +68,9 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        if (User::count() > 0) {
+            abort(403, 'التسجيل غير مسموح');
+        }
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],

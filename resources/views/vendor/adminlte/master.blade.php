@@ -94,9 +94,96 @@
         <meta name="msapplication-TileImage" content="{{ asset('favicon/ms-icon-144x144.png') }}">
     @endif
 
+
+    <style>
+        .dark-mode {
+            background-color: #121212 !important;
+            color: #f1f1f1 !important;
+        }
+
+        /* لتعديل خلفيات الأقسام */
+        .dark-mode .section-container {
+            background-color: #2c2c2c !important;
+            color: #f1f1f1 !important;
+        }
+
+        /* بطاقات */
+        .dark-mode .card {
+            background-color: #343a40 !important;
+            color: #fff !important;
+        }
+
+        /* ترويسة */
+        .dark-mode .main-header,
+        .dark-mode .main-footer,
+        .dark-mode .main-sidebar {
+            background-color: #1e1e1e !important;
+            color: #fff !important;
+        }
+
+        /* المحتوى */
+        .dark-mode .content-wrapper {
+            background-color: #1f1f1f !important;
+            color: #fff !important;
+        }
+
+        /* نماذج */
+        .dark-mode .form-control,
+        .dark-mode input,
+        .dark-mode select,
+        .dark-mode textarea {
+            background-color: #2e2e2e !important;
+            color: #fff !important;
+            border-color: #555 !important;
+        }
+
+        /* الروابط */
+        .dark-mode a {
+            color: #90caf9 !important;
+        }
+
+        /* جداول */
+        .dark-mode .table,
+        .dark-mode .table th,
+        .dark-mode .table td {
+            background-color: #2c2c2c !important;
+            color: #fff !important;
+            border-color: #444 !important;
+        }
+
+        /* قوائم جانبية */
+        .dark-mode .nav-sidebar>.nav-item>.nav-link {
+            background-color: transparent !important;
+            color: #ccc !important;
+        }
+
+        .dark-mode .nav-sidebar>.nav-item>.nav-link.active {
+            background-color: #3a3a3a !important;
+            color: #fff !important;
+        }
+
+        .dark-mode label:not(.form-check-label):not(.custom-file-label),
+        .dark-mode label.fw-bold {
+            color: #f1f1f1 !important;
+        }
+
+        .dark-mode .bg-white {
+            background-color: #1e1e1e !important;
+            color: #f1f1f1 !important;
+        }
+
+        .dark-mode .bg-white>a {
+            color: #f1f1f1 !important;
+        }
+    </style>
 </head>
 
 <body class="@yield('classes_body')" @yield('body_data') style="font-family: 'Cairo';">
+    <button id="toggle-dark-mode" class="btn btn-dark"
+        style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
+        🌙
+    </button>
+
 
     {{-- Body Content --}}
     @yield('body')
@@ -156,7 +243,7 @@
             <span style="margin-right: 50px;">نسخة تجريبية</س>
         </p>
     </footer>
-    {{-- <script>
+    <script>
         // منع اختصارات DevTools مثل F12 و Ctrl+Shift+I/J و Ctrl+U
         document.addEventListener('keydown', function(e) {
             // F12
@@ -203,7 +290,27 @@
             });
             console.log(element);
         })();
-    </script> --}}
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const body = document.body;
+            const toggleBtn = document.getElementById('toggle-dark-mode');
+
+            // عند التحميل: فحص الوضع من localStorage
+            const isDarkMode = localStorage.getItem('darkMode') === 'true';
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+                toggleBtn.textContent = '☀️';
+            }
+
+            // عند الضغط على الزر
+            toggleBtn.addEventListener('click', function() {
+                const dark = body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', dark);
+                toggleBtn.textContent = dark ? '☀️' : '🌙';
+            });
+        });
+    </script>
 
 </body>
 

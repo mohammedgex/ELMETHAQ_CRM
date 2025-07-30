@@ -249,7 +249,7 @@
                             </div>
 
                             <div class="row my-2">
-                                <div class="col-md-6">
+                                <div class="col-md-6 my-2">
                                     <label class="fw-bold" style="color: #997a44;">عدد سنوات الخبرة</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #997a44;" placeholder="أدخل عدد سنين الخبرة "
@@ -708,7 +708,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6 my-2">
                                     <label class="fw-bold" style="color: #343a40;">عدد سنوات الخبرة</label>
                                     <input type="text" class="form-control fw-bold"
                                         style="height: 60px; border-color: #343a40;"
