@@ -724,10 +724,10 @@
         }
 
         /* .dark-mode .table,
-                                .dark-mode .table th,
-                                .dark-mode .table td {
-                                    background-color: #fff !important;
-                                } */
+                                            .dark-mode .table th,
+                                            .dark-mode .table td {
+                                                background-color: #fff !important;
+                                            } */
     </style>
 
 
@@ -1285,7 +1285,7 @@
                     car_number: "SV123",
                     RELIGION: "1",
                     SOCIAL_STATUS: "2",
-                    Sex: "1",
+                    Sex: customer.gender,
                     JOB_OR_RELATION_Id: customer.customer_group?.visa_profession?.job
                 };
                 const requiredFields = {
