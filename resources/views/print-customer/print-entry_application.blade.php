@@ -398,7 +398,7 @@
                                                 <div class="evisa-header-right">
                                                     <div class="requestcode text-center">
                                                         <span class="requestcode-number">
-                                                            <label>رقم الطلب</label> {{ $customer->e_visa_number }}
+                                                            <label>رقم الطلب: </label>{{ $customer->e_visa_number }}
                                                         </span>
                                                         <img id="image" width="150" height="30"
                                                             src="https://visa.mofa.gov.sa/Base/GenerateBarCode?key={{ $customer->e_visa_number }}">
@@ -406,7 +406,9 @@
 
 
                                                             <label>تاريخ الطلب
-                                                                :</label>{{ \Carbon\Carbon::parse($customer->histories->firstWhere('description', 'تم حجز انجاز')?->created_at)->format('Y/m/d') }}
+                                                                :</label>{{ \Carbon\Carbon::parse(
+                                                                    $customer->histories->where('description', 'تم حجز انجاز')->sortByDesc('created_at')->first()?->created_at,
+                                                                )->format('Y/m/d') }}
                                                         </span>
                                                     </div>
                                                 </div>
@@ -456,15 +458,14 @@
                                                         <div class="col-2">
                                                             <div class="col-2-1">الجنس</div>
                                                             <div class="col-2-2">
-                                                                ذكر
+                                                                {{ $customer->gender }}
                                                             </div>
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="col-2-1">تاريخ الانتهاء</div>
                                                             <div class="col-2-2">
                                                                 @if ($customer->passport_expire_date)
-                                                                    {{ \Carbon\Carbon::parse($customer->passport_expire_date)->format('Y/m/d') }}
-                                                                    {{-- 2032/04/25 --}}
+                                                                    {{ \Carbon\Carbon::parse($customer->passport_expire_date)->format('d/m/Y') }}
                                                                 @else
                                                                     -
                                                                 @endif
@@ -490,8 +491,11 @@
                                                         <div class="col-2">
                                                             <div class="col-2-1">عدد مرات الدخول</div>
                                                             <div class="col-2-2">
-                                                                سفرة واحدة - 90 يوم
-
+                                                                @if ($customer->customerGroup->visaType->visa_peroid == 'عمل مؤقت')
+                                                                    سفرة واحدة - 365 يوم
+                                                                @else
+                                                                    سفرة واحدة - 90 يوم
+                                                                @endif
                                                             </div>
                                                         </div>
                                                         <div class="col-2">
@@ -502,20 +506,47 @@
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="col-2-1"> الاسم</div>
-                                                            <div class="col-2-2">{{ $customer->name_ar }}</div>
+                                                            @php
+                                                                $nameParts = explode(' ', $customer->name_ar);
+                                                                $first = $nameParts[0] ?? '';
+                                                                $second = $nameParts[1] ?? '';
+                                                                $third = $nameParts[2] ?? '';
+                                                                $last = $nameParts[count($nameParts) - 1] ?? '';
+                                                            @endphp
+                                                            <div class="col-2-2">
+                                                                {{ $first . ' ' . $second . ' ' . $third . ' ' . $last }}
+                                                            </div>
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="col-2-1"> Name</div>
-                                                            <div class="col-2-2">{{ $customer->name_en_mrz }}</div>
+                                                            @php
+                                                                $nameParts_en = explode(' ', $customer->name_en_mrz);
+                                                                $first_en = $nameParts_en[0] ?? '';
+                                                                $second_en = $nameParts_en[1] ?? '';
+                                                                $third_en = $nameParts_en[2] ?? '';
+                                                                $last_en =
+                                                                    $nameParts_en[count($nameParts_en) - 1] ?? '';
+                                                            @endphp
+                                                            <div class="col-2-2">
+                                                                {{ $first_en . ' ' . $second_en . ' ' . $third_en . ' ' . $last_en }}
+                                                            </div>
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="col-2-1">المهنة</div>
-                                                            <div class="col-2-2">سمكري مركبات - Auto plumber</div>
+                                                            <div class="col-2-2">
+                                                                {{ $customer->customerGroup->visaProfession->job }}
+                                                            </div>
 
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="col-2-1">تاريخ الميلاد</div>
-                                                            <div class="col-2-2">{{ $customer->date_birth }}</div>
+                                                            <div class="col-2-2">
+                                                                @if ($customer->passport_expire_date)
+                                                                    {{ \Carbon\Carbon::parse($customer->date_birth)->format('d/m/Y') }}
+                                                                @else
+                                                                    -
+                                                                @endif
+                                                            </div>
                                                         </div>
                                                         <div class="col-2">
                                                             <div class="col-2-1"> مكان الميلاد</div>
@@ -531,7 +562,7 @@
                                                         <div class="col-2">
                                                             <div class="col-2-1">الغرض</div>
                                                             <div class="col-2-2">
-                                                                {{ $customer->visaType->porpose ?? '' }}
+                                                                {{ $customer->customerGroup->visaType->porpose ?? '' }}
                                                             </div>
                                                         </div>
                                                     </div>
