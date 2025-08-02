@@ -21,6 +21,7 @@
                         <th>هاتف الكفيل</th>
                         <th>القنصلية</th>
                         <th>الغرض</th>
+                        <th>نوعه</th>
                         <th>الحالة</th>
                         <th>الإجراءات</th>
                     </tr>
@@ -46,6 +47,7 @@
                             <td>{{ $taakeb->sponsor_phone }}</td>
                             <td>{{ $taakeb->consulate }}</td>
                             <td>{{ $taakeb->purpose }}</td>
+                            <td>{{ $taakeb->company->status == 'company' ? 'شركة' : 'فرد' }}</td>
                             <td>
                                 @if ($taakeb->status === 'approved')
                                     <span class="badge bg-success">موافق عليه</span>

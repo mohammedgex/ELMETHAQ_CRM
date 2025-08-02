@@ -140,4 +140,29 @@ class CompanyController extends Controller
 
         return redirect()->route('taakebs.index')->with('error', 'تم رفض الطلب.');
     }
+    public function getTaakebs()
+    {
+        # code...
+        $company = auth()->user();
+        $taakebs = Taakeb::where('company_id', $company->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            "company" => $company,
+            "taakebs" => $taakebs
+        ]);
+    }
+    public function getTaakeb($id)
+    {
+        # code...
+        $taakeb = Taakeb::findOrFail($id);
+        if ($taakeb->company_id !== auth()->user()->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        return response()->json([
+            'taakeb' => $taakeb
+        ]);
+    }
 }

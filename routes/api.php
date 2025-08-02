@@ -48,3 +48,5 @@ Route::post('/company/register', [CompanyController::class, 'register']);
 Route::post('/company/login', [CompanyController::class, 'login']);
 Route::middleware('auth:sanctum')->get('/company/data', [CompanyController::class, 'getCompanyData']);
 Route::post('/taakebs', [CompanyController::class, 'addTaakeb'])->middleware('auth:sanctum');
+Route::get('/taakebs', [CompanyController::class, 'getTaakebs'])->middleware('auth:sanctum');
+Route::get('/taakeb/{id}', [CompanyController::class, 'getTaakeb'])->middleware('auth:sanctum');
