@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BagController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
@@ -42,3 +43,6 @@ Route::post('/forgot-password', [ApiAppController::class, 'forgetPasswordPhone']
 Route::post('/reset-password-code', [ApiAppController::class, 'verifyPasswordOtp']);
 Route::middleware('auth:sanctum')->post('/reset-password', [ApiAppController::class, 'resetPassword']);
 Route::middleware('auth:sanctum')->post('/change-password', [ApiAppController::class, 'changePassword']);
+
+Route::post('/company/register', [CompanyController::class, 'register']);
+Route::post('/company/login', [CompanyController::class, 'login']);

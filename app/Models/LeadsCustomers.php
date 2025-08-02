@@ -89,4 +89,8 @@ class LeadsCustomers extends Model
     {
         return $this->hasMany(Evaluation::class, 'lead_id');
     }
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
 }

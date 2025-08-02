@@ -724,10 +724,10 @@
         }
 
         /* .dark-mode .table,
-                                                                        .dark-mode .table th,
-                                                                        .dark-mode .table td {
-                                                                            background-color: #fff !important;
-                                                                        } */
+                                                                                    .dark-mode .table th,
+                                                                                    .dark-mode .table td {
+                                                                                        background-color: #fff !important;
+                                                                                    } */
     </style>
 
 
@@ -1272,7 +1272,7 @@
                     DEGREE: "-",
                     DEGREE_SOURCE: "-",
                     ADDRESS_HOME: "بحره",
-                    Personal_Email: "moha@gmail.com",
+                    Personal_Email: companyData.medical_email,
                     SPONSER_NAME: customer.customer_group?.visa_type?.sponser?.name,
                     SPONSER_NUMBER: customer.customer_group?.visa_type?.sponser?.id_number,
                     SPONSER_ADDRESS: customer.customer_group?.visa_type?.sponser.address,
