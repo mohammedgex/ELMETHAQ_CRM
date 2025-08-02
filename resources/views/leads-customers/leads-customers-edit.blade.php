@@ -97,7 +97,7 @@
                                 <div class="form-group col-md-4">
                                     <label>تاريخ الميلاد</label>
                                     <input type="date" class="form-control" name="date_of_birth"
-                                        value="{{ $lead->date_of_birth ? \Carbon\Carbon::parse($lead->date_of_birth)->format('Y-m-d') : '' }}">
+                                        value="{{ \Carbon\Carbon::hasFormat($lead->date_of_birth, 'Y-m-d') ? $lead->date_of_birth : \Carbon\Carbon::createFromFormat('d/m/Y', $lead->date_of_birth)->format('Y-m-d') }}">
                                     @if ($errors->has('date_of_birth'))
                                         <div class="text-danger">
                                             {{ $errors->first('date_of_birth') }}
