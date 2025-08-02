@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('image');
             $table->string('governorate')->nullable();
             $table->string('phone')->unique()->nullable(); //عدلها يدوي
-            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            // $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('phone_two')->unique()->nullable();
             $table->foreignId('job_title_id')->nullable()->constrained('job_titles')->onDelete('cascade');
             $table->string('have_you_ever_traveled_before?')->nullable();

@@ -724,10 +724,10 @@
         }
 
         /* .dark-mode .table,
-                                                                                    .dark-mode .table th,
-                                                                                    .dark-mode .table td {
-                                                                                        background-color: #fff !important;
-                                                                                    } */
+                                                                                                                        .dark-mode .table th,
+                                                                                                                        .dark-mode .table td {
+                                                                                                                            background-color: #fff !important;
+                                                                                                                        } */
     </style>
 
 
@@ -1568,20 +1568,19 @@
                     const [year, month, day] = parts;
                     return `${day}-${month}-${year}`;
                 }
-                console.log();
 
                 const payload = {
                     firstName: extractFirstName(customer.name_en_mrz),
                     lastName: extractLastName(customer.name_en_mrz),
-                    passportNumber: customer.passport_id,
+                    passportNumber: customer.passport_id || null,
                     dateOfBirth: reverseDateFormat(customer.date_birth),
-                    maritalStatus: customer.marital_status,
+                    maritalStatus: customer.marital_status || null,
                     passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
-                    passportIssuePlace: customer.issue_place,
+                    passportIssuePlace: customer.issue_place || null,
                     passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
-                    phone: "+" + customer.phone,
-                    nationalId: customer.card_id,
-                    position: customer.customer_group.visa_profession.job,
+                    phone: "+" + customer.phone || null,
+                    nationalId: customer.card_id || null,
+                    position: customer?.customer_group?.visa_profession?.job || null,
                 };
 
                 const fieldLabels = {
@@ -1608,14 +1607,19 @@
                 }
 
                 if (missingFields.length > 0) {
-                    Swal.close(); // إغلاق الانتظار
+                    // Swal.close(); // إغلاق الانتظار
 
                     Swal.fire({
                         icon: 'warning',
                         title: 'بيانات ناقصة',
-                        html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields
-                            .join(
-                                '<br>') + '</b>',
+                        html: `
+                                    <p>يرجى استكمال الحقول التالية قبل المتابعة:</p>
+                                    <ul style="text-align: right; direction: rtl;">
+                                        ${missingFields.map(field => `<li>${field}</li>`).join('')}
+                                    </ul>
+                                `,
+                        confirmButtonText: 'تم',
+                        confirmButtonColor: '#3085d6',
                     });
                     return;
                 }

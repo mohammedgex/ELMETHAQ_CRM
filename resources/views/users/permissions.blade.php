@@ -53,6 +53,7 @@
                                     'users-manage' => 'المستخدم',
                                     'company-settings' => 'اعدادات الشركة',
                                     'archived-customers' => 'ارشيف العملاء',
+                                    'taakeb-show' => 'طلبات التعقيب',
                                 ];
                             @endphp
 

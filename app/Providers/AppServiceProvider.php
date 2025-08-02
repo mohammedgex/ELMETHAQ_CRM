@@ -124,6 +124,12 @@ class AppServiceProvider extends ServiceProvider
                     'url' => 'admin/sponsor-view',
                     'icon' => 'fas fa-user-shield' // كفيل = جهة مسؤولة أو داعمة
                 ],
+                [
+                    'permission' => 'taakeb-show',
+                    'text' => 'طلبات التعقيب',
+                    'url' => 'admin/taakebs',
+                    'icon' => 'fas fa-file' // كفيل = جهة مسؤولة أو داعمة
+                ],
             ];
 
             foreach ($visaDefinitions as $item) {

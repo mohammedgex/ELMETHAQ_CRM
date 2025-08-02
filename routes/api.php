@@ -46,3 +46,5 @@ Route::middleware('auth:sanctum')->post('/change-password', [ApiAppController::c
 
 Route::post('/company/register', [CompanyController::class, 'register']);
 Route::post('/company/login', [CompanyController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/company/data', [CompanyController::class, 'getCompanyData']);
+Route::post('/taakebs', [CompanyController::class, 'addTaakeb'])->middleware('auth:sanctum');

@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BagController;
 use PhpOffice\PhpWord\TemplateProcessor;
 use App\Http\Controllers\BlackListController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanySettingController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
@@ -231,6 +232,10 @@ Route::group([
     Route::post('/evaluations/create', [TestController::class, 'createEvaluation'])->name('evaluations.create');
     Route::post('/evaluations/{id}', [TestController::class, 'storeEvaluation'])->name('evaluations.store');
     Route::get('/groups-visa/{visaid}', [HomeController::class, 'groupVisa'])->name('groups.visa');
+
+    Route::get('/taakebs', [CompanyController::class, 'index'])->name('taakebs.index');
+    Route::put('/taakebs/{id}/approve', [CompanyController::class, 'approve'])->name('taakebs.approve');
+    Route::put('/taakebs/{id}/reject', [CompanyController::class, 'reject'])->name('taakebs.reject');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

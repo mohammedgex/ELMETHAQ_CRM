@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone')->unique();
             $table->string('password');
+            $table->string('status')->default('company'); // الحالة الافتراضية للشركة
             $table->string('logo')->nullable(); // مسار الصورة
             $table->timestamps();
         });

@@ -57,7 +57,19 @@ class LeadsCustomersController extends Controller
             'الاقصر',
             'قنا',
             'ش سيناء',
-            'سوهاج'
+            'سوهاج',
+            'السعودية',
+            'القدس',
+            'الأردن',
+            'العراق',
+            'لبنان',
+            'فلسطين',
+            'اليمن',
+            'عمان',
+            'الإمارات العربية المتحدة',
+            'الكويت',
+            'قطر',
+            'البحرين'
         ];
         return view('leads-customers.leads-customers', [
             'leads' => $leads,
