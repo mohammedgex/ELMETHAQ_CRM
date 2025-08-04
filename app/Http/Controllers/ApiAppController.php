@@ -125,17 +125,14 @@ class ApiAppController extends Controller
         # code...
         $request->validate([
             'image' => 'required',
-            'phone' => 'required|unique:leads_customers,phone',
+            'phone' => 'nullable|unique:leads_customers,phone',
             'job_title_id' => 'required',
-            'password' => 'required',
+            'password' => 'nullable',
             'fcm_token' => 'nullable|string',
         ], [
             'image.required' => 'صورة المستخدم مطلوبة.',
-            'phone.required' => 'رقم الهاتف مطلوب.',
             'phone.unique' => 'رقم الهاتف مستخدم بالفعل.',
             'job_title_id.required' => 'يرجى اختيار الوظيفة.',
-            'password.required' => 'كلمة المرور مطلوبة.',
-            'password.digits' => 'كلمة المرور يجب أن تتكون من 8 أرقام.',
             'fcm_token.string' => 'رمز الإشعارات يجب أن يكون نصًا.',
         ]);
         // حفظ الصورة
@@ -145,12 +142,15 @@ class ApiAppController extends Controller
             'phone' => $request->phone,
             'image' => $filePath,
             'job_title_id' => $request->job_title_id,
-            'password' => Hash::make($request->password),
+            'password' => $request->password ? Hash::make($request->password) : null,
             'status' => 'عميل محتمل',
             'fcm_token' => $request->fcm_token,
             "registration_date" => Carbon::now(),
         ]);
-        $this->sendOtp($request->phone);
+        if ($user->phone) {
+            # code...
+            $this->sendOtp($request->phone);
+        }
 
         // لا ترسل OTP هنا لأن الهاتف لم يُسجل بعد
         return response()->json([
