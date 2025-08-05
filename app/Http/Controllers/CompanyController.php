@@ -162,11 +162,6 @@ class CompanyController extends Controller
             return response()->json(['message' => 'Taakeb not found.'], 404);
         }
 
-        // تحقق صلاحية الوصول (الـ company هو صاحب السجل)
-        if ($taakeb->company_id !== auth()->id()) {
-            return response()->json(['message' => 'Unauthorized'], 403);
-        }
-
         // lead و customer قد يكونان null لذا نستخدم optional
         $lead = $taakeb->lead; // قد يكون null
         $customer = optional($lead)->customer; // قد يكون null

@@ -7,7 +7,6 @@ use App\Models\DocumentType as ModelsDocumentType;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Str;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -27,7 +26,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Composer 1: إعداد الشعارات (appLogoImg, appLogoText)
         View::composer('*', function ($view) {
             $setting = CompanySetting::first();
 
@@ -44,8 +42,6 @@ class AppServiceProvider extends ServiceProvider
                 'appLogoText' => $logoText,
             ]);
         });
-
-        // Composer 2: appLogo (يمكن دمجه لكن احتفظت به منفصلاً كما في كودك)
         View::composer('*', function ($view) {
             $setting = CompanySetting::first();
 
@@ -56,38 +52,16 @@ class AppServiceProvider extends ServiceProvider
             $view->with('appLogo', $logo);
         });
 
-        // Composer 3: بناء قائمة AdminLTE بناءً على الصلاحيات (محسّن وآمن)
         View::composer('*', function ($view) {
             static $menuUpdated = false;
             if ($menuUpdated) return;
 
             $user = auth()->user();
-            if (! $user) return;
+            if (!$user) return;
 
-            // --- أمان قبل التحميل: تحقق من وجود علاقة permissions في الموديل الحالي ---
-            if (method_exists($user, 'permissions') && is_callable([$user, 'permissions'])) {
-                if (! $user->relationLoaded('permissions')) {
-                    $user->load('permissions');
-                }
+            if (!$user->relationLoaded('permissions')) {
+                $user->load('permissions');
             }
-
-            // تحويل أي قيمة null إلى مجموعة فارغة لتجنب استدعاء contains() على null
-            $permissions = $user->permissions ?? collect();
-
-            // دالة مساعدة مركزيّة للتحقق من الصلاحيات
-            $hasPermission = function ($perm) use ($user, $permissions) {
-                // اذا الموديل يملك خاصية role و قيمتها admin => نعطيه كل الصلاحيات
-                if (isset($user->role) && Str::lower($user->role) === 'admin') {
-                    return true;
-                }
-
-                // لو ليست هناك مجموعة صلاحيات أو فارغة => false
-                if (! $permissions || $permissions->isEmpty()) {
-                    return false;
-                }
-
-                return $permissions->contains('permission', $perm);
-            };
 
             $existingMenu = [];
 
@@ -98,7 +72,7 @@ class AppServiceProvider extends ServiceProvider
             ];
 
             // لوحة التحكم
-            if ($hasPermission('dashboard-access')) {
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'dashboard-access')) {
                 $existingMenu[] = [
                     'text' => 'لوحة التحكم',
                     'icon' => 'fas fa-tachometer-alt',
@@ -107,29 +81,28 @@ class AppServiceProvider extends ServiceProvider
             }
 
             // العملاء المحتملون
-            if ($hasPermission('leads-customers-show')) {
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'leads-customers-show')) {
                 $existingMenu[] = [
                     'text' => 'العملاء المحتملون',
                     'url' => 'admin/leads-customers',
                     'icon' => 'fas fa-hourglass-half',
                 ];
             }
-
             $pendingCount = ModelsDocumentType::where('order_status', 'panding')->count();
 
-            // طلبات الملفات
-            if ($hasPermission('requests-show')) {
+            // العملاء المحتملون
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'requests-show')) {
                 $existingMenu[] = [
                     'text'  => 'طلبات الملفات',
-                    'url'   => 'admin/document-requests',
+                    'url'   => 'admin/document-requests', // غيره حسب مسار صفحة الطلبات
                     'icon'  => 'fas fa-file-alt',
                     'label' => $pendingCount,
-                    'label_color' => 'warning',
+                    'label_color' => 'warning', // success, danger, info, primary...
                 ];
             }
 
             // العملاء
-            if ($hasPermission('customers-show')) {
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'customers-show')) {
                 $existingMenu[] = [
                     'text' => 'العملاء',
                     'url' => 'admin/customers',
@@ -149,30 +122,30 @@ class AppServiceProvider extends ServiceProvider
                     'permission' => 'visa-type-create',
                     'text' => 'تعريف التأشيرات',
                     'url' => 'admin/visa-type-view',
-                    'icon' => 'fas fa-passport'
+                    'icon' => 'fas fa-passport' // أفضل من "fab fa-cc-visa" لأنها تعبر عن تأشيرة أو جواز سفر
                 ],
                 [
                     'permission' => 'embassy-create',
                     'text' => 'تعريف القنصلية',
                     'url' => 'admin/embassy-view',
-                    'icon' => 'fas fa-landmark'
+                    'icon' => 'fas fa-landmark' // مبنى رسمي بعلم (رمز دبلوماسي أكثر تعبيرًا)
                 ],
                 [
                     'permission' => 'sponser-create',
                     'text' => 'تعريف الكفيل',
                     'url' => 'admin/sponsor-view',
-                    'icon' => 'fas fa-user-shield'
+                    'icon' => 'fas fa-user-shield' // كفيل = جهة مسؤولة أو داعمة
                 ],
                 [
                     'permission' => 'taakeb-show',
                     'text' => 'طلبات التعقيب',
                     'url' => 'admin/taakebs',
-                    'icon' => 'fas fa-file'
+                    'icon' => 'fas fa-file' // كفيل = جهة مسؤولة أو داعمة
                 ],
             ];
 
             foreach ($visaDefinitions as $item) {
-                if ($hasPermission($item['permission'])) {
+                if ($user->role === 'admin' || $user->permissions->contains('permission', $item['permission'])) {
                     $visaMenu['submenu'][] = [
                         'text' => $item['text'],
                         'url' => $item['url'],
@@ -197,54 +170,54 @@ class AppServiceProvider extends ServiceProvider
                     'permission' => 'delegate-create',
                     'text' => 'تعريف المناديب',
                     'url' => 'admin/Delegates-create',
-                    'icon' => 'fas fa-user-tie'
+                    'icon' => 'fas fa-user-tie' // مندوب = رجل أعمال
                 ],
                 [
                     'permission' => 'bag-create',
                     'text' => 'تعريف الحقائب',
                     'url' => 'admin/bags-view',
-                    'icon' => 'fas fa-suitcase-rolling'
+                    'icon' => 'fas fa-suitcase-rolling' // حقيبة سفر/عمل
                 ],
                 [
                     'permission' => 'group-create',
                     'text' => 'تعريف المجموعات',
                     'url' => 'admin/customer-groups',
-                    'icon' => 'fas fa-users'
+                    'icon' => 'fas fa-users' // مجموعة أشخاص
                 ],
                 [
                     'permission' => 'file-create',
                     'text' => 'تعريف المستندات',
                     'url' => 'admin/document-type-view',
-                    'icon' => 'fas fa-file-alt'
+                    'icon' => 'fas fa-file-alt' // مستند نصي
                 ],
                 [
                     'permission' => 'payment-create',
                     'text' => 'تعريف المعاملات المالية',
                     'url' => 'admin/payment-type-view',
-                    'icon' => 'fas fa-hand-holding-usd'
+                    'icon' => 'fas fa-hand-holding-usd' // رمز مالي
                 ],
                 [
                     'permission' => 'message-create',
                     'text' => 'تعريف قوالب الرسائل',
                     'url' => 'admin/template',
-                    'icon' => 'fas fa-envelope-open-text'
+                    'icon' => 'fas fa-envelope-open-text' // رسالة نصية مفتوحة
                 ],
                 [
                     'permission' => 'test-create',
                     'text' => 'الاختبارات',
                     'url' => 'admin/tests',
-                    'icon' => 'fas fa-file-medical-alt'
+                    'icon' => 'fas fa-file-medical-alt' // اختبار/استبيان
                 ],
                 [
                     'permission' => 'job-create',
                     'text' => 'تعريف الوظائف',
                     'url' => 'admin/job-type-view',
-                    'icon' => 'fas fa-briefcase'
+                    'icon' => 'fas fa-briefcase' // حقيبة عمل
                 ],
             ];
 
             foreach ($customerDefinitions as $item) {
-                if ($hasPermission($item['permission'])) {
+                if ($user->role === 'admin' || $user->permissions->contains('permission', $item['permission'])) {
                     $customerMenu['submenu'][] = [
                         'text' => $item['text'],
                         'url' => $item['url'],
@@ -261,7 +234,7 @@ class AppServiceProvider extends ServiceProvider
             $existingMenu[] = ['header' => 'اضافي'];
 
             // المهام
-            if ($hasPermission('tasks-access')) {
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'tasks-access')) {
                 $existingMenu[] = [
                     'text' => 'المهام',
                     'url' => 'admin/user-tasks',
@@ -272,7 +245,8 @@ class AppServiceProvider extends ServiceProvider
             // قسم الإعدادات
             $existingMenu[] = ['header' => 'الاعدادات'];
 
-            if ($hasPermission('users-manage')) {
+            // المستخدم
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'users-manage')) {
                 $existingMenu[] = [
                     'text' => 'المستخدم',
                     'url' => 'admin/users',
@@ -280,15 +254,16 @@ class AppServiceProvider extends ServiceProvider
                 ];
             }
 
-            if ($hasPermission('company-settings')) {
+            // اعدادات الشركة
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'company-settings')) {
                 $existingMenu[] = [
                     'text' => 'اعدادات الشركة',
                     'url' => 'admin/company',
                     'icon' => 'fas fa-building',
                 ];
             }
-
-            if ($hasPermission('archived-customers')) {
+            // اعدادات الشركة
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'archived-customers')) {
                 $existingMenu[] = [
                     'text' => 'ارشيف العملاء',
                     'url' => 'admin/customers/archived',
