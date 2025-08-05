@@ -148,9 +148,9 @@ class ApiAppController extends Controller
             'fcm_token' => $request->fcm_token,
             "registration_date" => Carbon::now(),
         ]);
-        if ($user->phone) {
+        if (!$user->phone) {
             # code...
-            $token = $user->createToken($user->name ?: 'lead-customer')->plainTextToken;
+            $token = $user->createToken($user->image ?: 'lead-customer')->plainTextToken;
             return response()->json([
                 'status' => 'success',
                 'data' => $user->id,
