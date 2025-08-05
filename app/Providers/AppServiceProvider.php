@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Models\CompanySetting;
-use Illuminate\Support\Facades\URL;
+use App\Models\DocumentType as ModelsDocumentType;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Config;
@@ -86,6 +86,18 @@ class AppServiceProvider extends ServiceProvider
                     'text' => 'العملاء المحتملون',
                     'url' => 'admin/leads-customers',
                     'icon' => 'fas fa-hourglass-half',
+                ];
+            }
+            $pendingCount = ModelsDocumentType::where('order_status', 'panding')->count();
+
+            // العملاء المحتملون
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'leads-customers-show')) {
+                $existingMenu[] = [
+                    'text'  => 'طلبات الملفات',
+                    'url'   => 'admin/document-requests', // غيره حسب مسار صفحة الطلبات
+                    'icon'  => 'fas fa-file-alt',
+                    'label' => $pendingCount,
+                    'label_color' => 'warning', // success, danger, info, primary...
                 ];
             }
 

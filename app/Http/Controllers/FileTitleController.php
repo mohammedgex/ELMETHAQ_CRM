@@ -48,7 +48,7 @@ class FileTitleController extends Controller
         $body = "تمت مراجعة المستند والموافقة عليه بنجاح. نشكرك على التعاون.";
         $icon = null; // أو رابط أيقونة
         app(ApiAppController::class)->sendFcmMessage("customer", $document->customer_id, $title, $body, $icon);
-        return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');
+        return redirect()->back()->with('tap', 'attach');
     }
     public function reject($id)
     {
@@ -68,7 +68,7 @@ class FileTitleController extends Controller
         $body = "تم رفض المستند المرسل. يُرجى مراجعته وإعادة إرساله بشكل صحيح.";
         $icon = null; // أو رابط أيقونة
         app(ApiAppController::class)->sendFcmMessage("customer", $document->customer_id, $title, $body, $icon);
-        return redirect()->route("customer.add", $document->customer_id)->with('tap', 'attach');
+        return redirect()->back()->with('tap', 'attach');
     }
     public function showedit($id)
     {
@@ -149,5 +149,16 @@ class FileTitleController extends Controller
         $customer = $file->customer;
         $file->delete();
         return redirect()->route("customer.add", $customer->id)->with('tap', 'attach');
+    }
+
+    public function index()
+    {
+        // جلب الملفات المعلقة فقط
+        $files = DocumentType::with(['customer']) // لو عندك علاقة بالعميل
+            ->where('order_status', 'panding')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view("request.file-request", compact('files'));
     }
 }

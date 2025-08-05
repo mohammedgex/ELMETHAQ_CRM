@@ -120,6 +120,7 @@ class ApiAppController extends Controller
             'customer' => $user->customer ? $user->customer->load('documentTypes') : null
         ], 200);
     }
+
     public function register(Request $request)
     {
         # code...
@@ -224,6 +225,7 @@ class ApiAppController extends Controller
             'token' => $token
         ]);
     }
+
     public function completeData(Request $request)
     {
         # code...
@@ -567,6 +569,7 @@ class ApiAppController extends Controller
             'document' => $document,
         ]);
     }
+
     public function store(Request $request)
     {
         $customer = Customer::where("token_medical", $request->token)->first();

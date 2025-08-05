@@ -236,6 +236,7 @@ Route::group([
     Route::get('/taakebs', [CompanyController::class, 'index'])->name('taakebs.index');
     Route::put('/taakebs/{id}/approve', [CompanyController::class, 'approve'])->name('taakebs.approve');
     Route::put('/taakebs/{id}/reject', [CompanyController::class, 'reject'])->name('taakebs.reject');
+    Route::get('/document-requests', [FileTitleController::class, 'index'])->name('document-requests.index');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

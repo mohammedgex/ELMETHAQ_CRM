@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 class CompanyController extends Controller
 {
-    //
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -155,14 +154,27 @@ class CompanyController extends Controller
     }
     public function getTaakeb($id)
     {
-        # code...
-        $taakeb = Taakeb::findOrFail($id);
-        if ($taakeb->company_id !== auth()->user()->id) {
+        // جلب taakeb مع العلاقات لتقليل الاستعلامات
+        $taakeb = Taakeb::with('lead.customer')->find($id);
+
+        if (!$taakeb) {
+            return response()->json(['message' => 'Taakeb not found.'], 404);
+        }
+
+        // تحقق صلاحية الوصول (الـ company هو صاحب السجل)
+        if ($taakeb->company_id !== auth()->id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
+        // lead و customer قد يكونان null لذا نستخدم optional
+        $lead = $taakeb->lead; // قد يكون null
+        $customer = optional($lead)->customer; // قد يكون null
+
         return response()->json([
-            'taakeb' => $taakeb
-        ]);
+            'status'   => true,
+            'taakeb'   => $taakeb,
+            'lead'     => $lead,
+            'customer' => $customer,
+        ], 200);
     }
 }
