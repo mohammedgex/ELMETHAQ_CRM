@@ -150,8 +150,14 @@ class ApiAppController extends Controller
         ]);
         if ($user->phone) {
             # code...
-            $this->sendOtp($request->phone);
+            $token = $user->createToken($user->name ?: 'lead-customer')->plainTextToken;
+            return response()->json([
+                'status' => 'success',
+                'data' => $user->id,
+                "token" => $token,
+            ], 201);
         }
+        $this->sendOtp($request->phone);
 
         // لا ترسل OTP هنا لأن الهاتف لم يُسجل بعد
         return response()->json([
