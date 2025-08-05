@@ -91,7 +91,7 @@ class AppServiceProvider extends ServiceProvider
             $pendingCount = ModelsDocumentType::where('order_status', 'panding')->count();
 
             // العملاء المحتملون
-            if ($user->role === 'admin' || $user->permissions->contains('permission', 'leads-customers-show')) {
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'requests-show')) {
                 $existingMenu[] = [
                     'text'  => 'طلبات الملفات',
                     'url'   => 'admin/document-requests', // غيره حسب مسار صفحة الطلبات

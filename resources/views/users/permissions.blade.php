@@ -54,6 +54,7 @@
                                     'company-settings' => 'اعدادات الشركة',
                                     'archived-customers' => 'ارشيف العملاء',
                                     'taakeb-show' => 'طلبات التعقيب',
+                                    'requests-show' => 'طلبات الملفات',
                                 ];
                             @endphp
 
