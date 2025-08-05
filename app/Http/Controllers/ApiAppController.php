@@ -546,6 +546,7 @@ class ApiAppController extends Controller
         } elseif ($request->type == "visa") {
             # code...
             $customer->visa_number = $request->visa_number;
+            $customer->visa_issuance_date = $request->validFrom;
             $customer->save();
             $customer->documentTypes()->where('document_type', 'التاشيرة')->delete();
             $document = new DocumentType();

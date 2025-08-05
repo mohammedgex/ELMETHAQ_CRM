@@ -143,7 +143,8 @@ class CompanyController extends Controller
     {
         # code...
         $company = auth()->user();
-        $taakebs = Taakeb::where('company_id', $company->id)
+        $taakebs = Taakeb::with('lead') // جلب علاقة lead مع كل Taakeb
+            ->where('company_id', $company->id)
             ->orderBy('created_at', 'desc')
             ->get();
 

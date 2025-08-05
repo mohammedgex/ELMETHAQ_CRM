@@ -59,8 +59,10 @@ class AppServiceProvider extends ServiceProvider
             $user = auth()->user();
             if (!$user) return;
 
-            if (!$user->relationLoaded('permissions')) {
-                $user->load('permissions');
+            if (method_exists($user, 'permissions') && is_callable([$user, 'permissions'])) {
+                if (!$user->relationLoaded('permissions')) {
+                    $user->load('permissions');
+                }
             }
 
             $existingMenu = [];
