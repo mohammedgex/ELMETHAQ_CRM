@@ -11,14 +11,34 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
+    <div class="container-fluid customers-page">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="card shadow border-0">
+                <div class="card shadow border-0 customers-card">
                     <div class="card-body">
+
+                        {{-- مجموعة الأزرار العلوية --}}
+                        <div class="btn-group mb-3">
+                            <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                عمليات
+                            </button>
+                            <ul class="dropdown-menu shadow">
+                                <li>
+                                    <a href="{{ route('reports.transaction_statement', $bag->id) }}" target="_blank">
+                                        <button class="dropdown-item text-primary">
+                                            <i class="fas fa-sms me-2"></i>
+                                            طباعة كشف المعاملات
+                                        </button>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        {{-- الجدول --}}
                         <div class="table-responsive">
-                            <table class="table table-hover text-center" id="dataTable">
-                                <thead class="text-white" style="background: linear-gradient(45deg, #2c3e50, #3498db);">
+                            <table class="table table-hover text-center customers-table" id="dataTable">
+                                <thead>
                                     <tr>
                                         <th width="40px">
                                             <input type="checkbox" id="checkAll" class="form-check-input">
@@ -27,7 +47,6 @@
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
-                                        <th>الحالة</th>
                                         <th>الكشف الطبي</th>
                                         <th>البصمة</th>
                                         <th>كشف المعامل</th>
@@ -39,30 +58,26 @@
                                     @foreach ($customers as $customer)
                                         <tr
                                             class="{{ $customer->blackList && $customer->blackList->block ? 'bg-light-danger' : 'bg-light' }}">
-                                            <th width="40px" class="checkbox-header">
-                                                <input type="checkbox" id="checkAll"
+                                            <td style="position: relative !important;">
+                                                <input
+                                                    style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
+                                                    class="form-check-input row-checkbox width-input" type="checkbox"
                                                     class="form-check-input centered-checkbox">
-                                            </th>
+                                            </td>
                                             <td>#{{ $customer->id }}</td>
                                             <td>
                                                 <a href="{{ route('customer.add', $customer->id) }}"
-                                                    class="text-primary text-decoration-none">
+                                                    class="text-primary fw-bold">
                                                     {{ $customer->name_ar }}
                                                 </a>
                                             </td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="_blank">
                                                     <img src="{{ asset('storage/' . $customer->image) }}" width="40"
-                                                        height="40" class="img-circle" alt="صورة">
+                                                        height="40" class="img-circle border" alt="صورة">
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
-                                            <td>
-                                                <span
-                                                    class="badge bg-{{ $customer->status == 'نشط' ? 'primary' : 'secondary' }}">
-                                                    {{ $customer->status }}
-                                                </span>
-                                            </td>
                                             <td>
                                                 {!! $customer->medical_examination == 'تم الحجز'
                                                     ? '<i class="fas fa-check-circle text-success"></i>'
@@ -92,25 +107,10 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end shadow">
                                                         <li><a class="dropdown-item"
-                                                                href="{{ route('customer.add', $customer->id) }}"><i
-                                                                    class="fas fa-edit text-primary me-2"></i> تعديل</a>
+                                                                href="{{ route('reports.show', $customer->id) }}"><i
+                                                                    class="fas fa-file-alt text-primary me-2"></i> عرض
+                                                                التقارير</a>
                                                         </li>
-                                                        <li><a class="dropdown-item"
-                                                                href="{{ route('customer.show', $customer->id) }}"><i
-                                                                    class="fas fa-eye text-info me-2"></i> عرض</a></li>
-                                                        @if ($customer->blackList)
-                                                            @if ($customer->blackList->block)
-                                                                <li><a class="dropdown-item"
-                                                                        href="{{ route('customers.unblock', $customer->id) }}"><i
-                                                                            class="fas fa-user-check text-success me-2"></i>
-                                                                        إزالة البلوك</a></li>
-                                                            @else
-                                                                <li><a class="dropdown-item"
-                                                                        href="{{ route('customers.block', $customer->id) }}"><i
-                                                                            class="fas fa-user-slash text-danger me-2"></i>
-                                                                        بلوك</a></li>
-                                                            @endif
-                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>
@@ -124,6 +124,42 @@
             </div>
         </div>
     </div>
+
+    <style>
+        /* ألوان وتنسيقات خاصة بالصفحة فقط */
+        .customers-page .customers-card {
+            border-radius: 12px;
+        }
+
+        .customers-page .customers-table thead {
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            color: #fff;
+        }
+
+        .customers-page .customers-table thead th {
+            vertical-align: middle;
+            font-weight: 600;
+        }
+
+        .customers-page .customers-table tbody tr:hover {
+            background-color: #f1f5f9 !important;
+            transition: background-color 0.2s ease;
+        }
+
+        .customers-page .img-circle {
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .customers-page .fw-bold {
+            font-weight: 600 !important;
+        }
+
+        .customers-page .dropdown-menu {
+            font-size: 14px;
+        }
+    </style>
+
 @stop
 
 @section('css')

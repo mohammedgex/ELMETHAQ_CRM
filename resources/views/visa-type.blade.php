@@ -79,6 +79,11 @@
                                     value="{{ old('porpose', $visaTypeEdit->porpose ?? '') }}" placeholder="أدخل الغرض"
                                     required>
                             </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold" style="color: #343a40;">تاريخ اصدار التاشيرة</label>
+                                <input type="date" class="form-control" name="issuing_visa"
+                                    value="{{ old('issuing_visa') }}" required>
+                            </div>
                         </div>
 
                         <button type="submit" class="btn mt-3 px-4 shadow-sm w-100 fw-bold"
@@ -169,6 +174,13 @@
                                 <label class="font-weight-bold" style="color: #343a40;">الغرض</label>
                                 <input type="text" class="form-control" style="border-color: #343a40;" name="porpose"
                                     value="{{ old('porpose', isset($visaTypeEdit->porpose) ? $visaTypeEdit->porpose : '') }}"
+                                    placeholder="أدخل الغرض" required>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label class="font-weight-bold" style="color: #343a40;">تاريخ اصدار التاشيرة</label>
+                                <input type="date" class="form-control" style="border-color: #343a40;"
+                                    name="issuing_visa"
+                                    value="{{ old('issuing_visa', isset($visaTypeEdit->issuing_visa) ? $visaTypeEdit->issuing_visa : '') }}"
                                     placeholder="أدخل الغرض" required>
                             </div>
 

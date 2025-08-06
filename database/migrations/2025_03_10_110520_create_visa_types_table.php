@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('registration_number');
             $table->text('porpose')->nullable();
             $table->string('visa_peroid');
+            $table->date('issuing_visa')->nullable();
             $table->foreignId('sponser_id')->constrained('sponsers')->onDelete('cascade');
             $table->foreignId('embassy_id')->constrained('embassies')->onDelete('cascade');
             $table->timestamps();

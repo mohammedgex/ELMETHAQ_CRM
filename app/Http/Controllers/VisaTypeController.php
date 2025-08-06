@@ -49,7 +49,9 @@ class VisaTypeController extends Controller
             'visa_peroid' => 'required',
             'sponser_id' => 'required',
             'embassy_id' => 'required',
-            'name' => "required"
+            'name' => "required",
+            "porpose" => "nullable|string",
+            "issuing_visa" => "required",
         ]);
 
         $visa_type = new VisaType($request->all());
@@ -68,7 +70,8 @@ class VisaTypeController extends Controller
             'sponser_id' => 'required',
             'embassy_id' => 'required',
             'name' => "required",
-            "porpose" => "nullable|string"
+            "porpose" => "nullable|string",
+            "issuing_visa" => "required",
         ]);
 
         $visa_type = VisaType::find($id);
@@ -78,6 +81,7 @@ class VisaTypeController extends Controller
         $visa_type->name = $request->name;
         $visa_type->sponser_id = $request->sponser_id;
         $visa_type->embassy_id = $request->embassy_id;
+        $visa_type->issuing_visa = $request->issuing_visa;
         if ($request->porpose) {
             # code...
             $visa_type->porpose = $request->porpose;
