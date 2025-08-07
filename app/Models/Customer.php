@@ -56,6 +56,7 @@ class Customer extends Model
         'passport_issuance_date',
         'archived_at',
         'fcm_token',
+        "hospital_address"
     ];
 
     public function delegate()

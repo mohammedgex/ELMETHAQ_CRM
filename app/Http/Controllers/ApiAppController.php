@@ -586,6 +586,7 @@ class ApiAppController extends Controller
         $user = User::where('email', $request->email)->first();
 
         $customer->hospital_address =  $request->address . "|---|" . $request->hospital_name;
+        $customer->medical_examination = "تم الحجز";
         $customer->save();
         $history = new History();
         $history->description = "تم جلب عنوان المستشفي وتخزينه";
@@ -645,8 +646,6 @@ class ApiAppController extends Controller
             $document->required = "اجباري";
             $document->save();
         }
-
-        // أضف هنا إنشاء History وDocumentType إن أردت
 
         return response()->json(['message' => 'تم التحديث بنجاح']);
     }
