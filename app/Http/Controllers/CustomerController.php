@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
 use App\Models\DocumentType;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Evaluation;
 use App\Models\FileTitle;
 use App\Models\History;

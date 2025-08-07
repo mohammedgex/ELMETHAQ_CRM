@@ -243,6 +243,7 @@ Route::group([
     Route::get('/e_number_barcode/{id}', [ReportsController::class, 'E_number_barcode'])->name('reports.e_number_barcode');
     Route::get('/visa-number-barcode/{id}', [ReportsController::class, 'visaNumberBarcode'])->name('reports.visaNumberBarcode');
     Route::get('/transaction_statement/{id}', [ReportsController::class, 'transaction_statement'])->name('reports.transaction_statement');
+    Route::get('/reset-password-lead/{id}', [LeadsCustomersController::class, 'resetPassword'])->name('reset.password.lead');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

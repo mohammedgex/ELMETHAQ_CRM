@@ -57,7 +57,15 @@
 
                                 <div class="form-group col-md-4">
                                     <label>رقم الهاتف</label>
-                                    <input type="text" class="form-control" name="phone" value="{{ $lead->phone }}">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" name="phone"
+                                            value="{{ $lead->phone }}">
+                                        <div class="input-group-append">
+                                            <a href="{{ route('reset.password.lead', $lead->id) }}" class="btn btn-warning">
+                                                إعادة تعيين الباسورد
+                                            </a>
+                                        </div>
+                                    </div>
                                     @if ($errors->has('phone'))
                                         <div class="text-danger">
                                             {{ $errors->first('phone') }}
@@ -238,6 +246,17 @@
             </div>
         </div>
     </div>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'نجاح',
+                text: '{{ session('success') }}',
+                confirmButtonText: 'حسناً'
+            });
+        </script>
+    @endif
+
     <script>
         function previewImage(input, previewId) {
             const file = input.files[0];

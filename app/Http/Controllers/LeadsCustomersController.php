@@ -229,10 +229,13 @@ class LeadsCustomersController extends Controller
 
         // التحديث النهائي
         $lead->update($data);
+        if ($request->phone && $request->phone !== $lead->phone) {
+            $lead->password = Hash::make($request->phone);
+            $lead->save();
+        }
 
         return redirect()->back()->with('success', 'تم تحديث البيانات بنجاح');
     }
-
 
     public function leadToCustomer(Request $request)
     {
@@ -387,5 +390,17 @@ class LeadsCustomersController extends Controller
         $lead = LeadsCustomers::find($id);
         $lead->delete();
         return redirect()->back()->with('success', 'تم حذف العميل بنجاح');
+    }
+
+    public function resetPassword($id)
+    {
+        # code...
+        $lead = LeadsCustomers::find($id);
+        if ($lead->phone) {
+            # code...
+            $lead->password =  Hash::make($lead->phone);
+            $lead->save();
+        }
+        return redirect()->back()->with("success", "تم تغيير الباسورد ليكون رقم الهاتف");
     }
 }
