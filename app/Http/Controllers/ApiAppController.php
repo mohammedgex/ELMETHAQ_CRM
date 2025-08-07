@@ -504,7 +504,7 @@ class ApiAppController extends Controller
             return response()->json(['success' => false, 'message' => 'العميل غير موجود'], 404);
         }
         $customer->token_medical = $request->token_medical;
-        $customer->marital_status = "تم الحجز";
+        $customer->medical_examination = "تم الحجز";
         $customer->save();
 
         $user = User::where('email', $request->email)->first();
