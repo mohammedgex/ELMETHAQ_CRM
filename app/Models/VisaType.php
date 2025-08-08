@@ -29,4 +29,14 @@ class VisaType extends Model
     {
         return $this->hasMany(CustomerGroup::class);
     }
+    public function getOutgoingCustomersCountAttribute()
+    {
+        return $this->customerGroups->sum(function ($group) {
+            return $group->customers->count();
+        });
+    }
+    public function outgoingCustomers()
+    {
+        return $this->hasMany(Customer::class)->where('status', 'تم السفر');
+    }
 }

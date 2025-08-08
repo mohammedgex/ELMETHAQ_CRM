@@ -3,17 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
-use TCPDF;
-use Illuminate\Support\Facades\Auth;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Delegate;
-use Spatie\SimpleExcel\SimpleExcelWriter;
-use Illuminate\Support\Facades\Response;
-use OpenSpout\Common\Entity\Style\Color;
-use OpenSpout\Common\Entity\Style\Style;
-use OpenSpout\Common\Entity\Style\Border;
-use OpenSpout\Common\Entity\Style\BorderPart;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class DelegateController extends Controller

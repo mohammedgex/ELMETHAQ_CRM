@@ -605,8 +605,9 @@
                                         <option value="جديد"
                                             {{ old('status', $edit->status ?? '') == 'جديد' ? 'selected' : '' }}>جديد
                                         </option>
-                                        <option value="ناجح"
-                                            {{ old('status', $edit->status ?? '') == 'ناجح' ? 'selected' : '' }}>ناجح
+                                        <option value="تم السفر"
+                                            {{ old('status', $edit->status ?? '') == 'تم السفر' ? 'selected' : '' }}>تم
+                                            السفر
                                         </option>
                                         <option value="تجهيز الاوراق"
                                             {{ old('status', $edit->status ?? '') == 'تجهيز الاوراق' ? 'selected' : '' }}>

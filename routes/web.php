@@ -244,6 +244,10 @@ Route::group([
     Route::get('/visa-number-barcode/{id}', [ReportsController::class, 'visaNumberBarcode'])->name('reports.visaNumberBarcode');
     Route::get('/transaction_statement/{id}', [ReportsController::class, 'transaction_statement'])->name('reports.transaction_statement');
     Route::get('/reset-password-lead/{id}', [LeadsCustomersController::class, 'resetPassword'])->name('reset.password.lead');
+    Route::get('/chart/potential', [HomeController::class, 'potentialChartData'])
+        ->name('chart.potential');
+    Route::get('/chart/visa-customers', [HomeController::class, 'visaCustomersChartData']);
+    Route::get('/chart/test-evaluations/{testId}', [HomeController::class, 'testEvaluationStats'])->name("test-evaluations");
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

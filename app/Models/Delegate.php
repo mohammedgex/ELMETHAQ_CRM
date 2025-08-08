@@ -17,4 +17,9 @@ class Delegate extends Model
     {
         return $this->hasMany(LeadsCustomers::class);
     }
+    // دالة تحسب عدد العملاء الذين تم السفر لهم فقط
+    public function traveledCustomers()
+    {
+        return $this->hasMany(Customer::class)->where('status', 'تم السفر');
+    }
 }
