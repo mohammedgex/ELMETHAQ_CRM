@@ -745,10 +745,10 @@
         }
 
         /* .dark-mode .table,
-                                                                                                                                            .dark-mode .table th,
-                                                                                                                                            .dark-mode .table td {
-                                                                                                                                                background-color: #fff !important;
-                                                                                                                                            } */
+                                                                                                                                                                                        .dark-mode .table th,
+                                                                                                                                                                                        .dark-mode .table td {
+                                                                                                                                                                                            background-color: #fff !important;
+                                                                                                                                                                                        } */
     </style>
 
 
@@ -1263,6 +1263,8 @@
                 }
 
                 const data = {
+                    email: "{{ auth()->user()->email }}",
+                    customer_id: customer.id,
                     UserName: companyData.engaz_email,
                     Password: companyData.engaz_password,
                     VisaKind: customer.customer_group.visa_type.visa_peroid,
@@ -1346,7 +1348,6 @@
                     }
                 }
 
-                console.log(missingFields);
                 // لو في نواقص، أوقف العملية وأظهرها
                 if (missingFields.length > 0) {
                     Swal.fire({
@@ -1371,20 +1372,11 @@
                     });
 
                     const response = await res.json();
+                    if (!res.ok) {
+                        throw new Error(`HTTP error! status: ${res.status}`);
+                    }
 
-                    if (response.appNo) {
-                        await fetch('{{ route('engaz_request') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                customer_id: customer.id,
-                                e_number: response.appNo,
-                                email: "{{ auth()->user()->email }}"
-                            })
-                        });
-
+                    if (res.ok) {
                         await new Promise((resolve) => {
                             Swal.fire({
                                 title: "نجحت العملية!",
