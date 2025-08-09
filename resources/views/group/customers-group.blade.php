@@ -212,6 +212,26 @@
                                                                 ازالة من المجموعة
                                                             </a>
                                                         </li>
+                                                        @if ($customer->phone != null)
+                                                            <li>
+                                                                <a class="dropdown-item text-success"
+                                                                    href="https://wa.me/{{ '20' . ltrim($customer->phone, '0') }}"
+                                                                    target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fab fa-whatsapp"></i>
+                                                                    تواصل عبر واتساب
+                                                                </a>
+                                                            </li>
+                                                        @endif
+                                                        @if ($customer->token_medical != null)
+                                                            <li>
+                                                                <a class="dropdown-item text-success"
+                                                                    href="https://wafid.com/appointment/{{ ltrim($customer->token_medical) }}/pay/"
+                                                                    target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fas fa-plus-circle"></i>
+                                                                    دفع الكشف الطبي
+                                                                </a>
+                                                            </li>
+                                                        @endif
 
                                                         <!-- عرض -->
                                                         @if (auth()->user()?->permissions->contains('permission', 'show-customer') || auth()->user()?->role == 'admin')
@@ -241,7 +261,8 @@
 
                                                                 <li><a class="dropdown-item"
                                                                         href="{{ route('print_visaEntriy', $customer->id) }}"
-                                                                        target="_blank"><i class="fas fa-passport me-1"></i>
+                                                                        target="_blank"><i
+                                                                            class="fas fa-passport me-1"></i>
                                                                         طباعة طلب
                                                                         دخول</a></li>
                                                                 @if ($customer->token_medical)
@@ -724,10 +745,10 @@
         }
 
         /* .dark-mode .table,
-                                                                                                                        .dark-mode .table th,
-                                                                                                                        .dark-mode .table td {
-                                                                                                                            background-color: #fff !important;
-                                                                                                                        } */
+                                                                                                                                            .dark-mode .table th,
+                                                                                                                                            .dark-mode .table td {
+                                                                                                                                                background-color: #fff !important;
+                                                                                                                                            } */
     </style>
 
 

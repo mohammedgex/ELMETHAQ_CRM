@@ -111,6 +111,16 @@
                                                                     class="fas fa-file-alt text-primary me-2"></i> عرض
                                                                 التقارير</a>
                                                         </li>
+                                                        @if ($customer->phone != null)
+                                                            <li>
+                                                                <a class="dropdown-item text-success"
+                                                                    href="https://wa.me/{{ '20' . ltrim($customer->phone, '0') }}"
+                                                                    target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fab fa-whatsapp"></i>
+                                                                    تواصل عبر واتساب
+                                                                </a>
+                                                            </li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                             </td>
