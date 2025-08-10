@@ -84,7 +84,7 @@
                                     <td>#{{ $test->id }}</td>
                                     <td>{{ $test->title }}</td>
                                     <td class="d-flex justify-content-center align-items-center gap-1">
-                                        <form action="{{ route('test.delete', $test->id) }}" method="POST"
+                                        {{-- <form action="{{ route('test.delete', $test->id) }}" method="POST"
                                             onsubmit="confirmDelete(event)">
                                             @csrf
                                             @method('DELETE')
@@ -92,7 +92,7 @@
                                                 title="حذف">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

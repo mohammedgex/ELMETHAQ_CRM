@@ -118,7 +118,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <form action="{{ route('document-type.delete', $document->id) }}" method="POST"
+                                        {{-- <form action="{{ route('document-type.delete', $document->id) }}" method="POST"
                                             class="mx-1">
                                             @csrf
                                             @method('DELETE')
@@ -126,7 +126,7 @@
                                                 title="حذف" onsubmit="confirmDelete(event)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                         <div class="btn-group">
                                             <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"

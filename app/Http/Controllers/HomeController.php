@@ -42,15 +42,15 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $delegates = Delegate::all();
-        $groups = CustomerGroup::all();
-        $jobs = JobTitle::all();
-        $sponsers = Sponser::all();
-        $visas = VisaType::withCount('outgoingCustomers')->get();
-        $customers = Customer::all();
-        $bags = bag::all();
-        $users = User::all();
-        $tests = Test::all();
+        $delegates = Delegate::latest()->get();
+        $groups = CustomerGroup::latest()->get();
+        $jobs = JobTitle::latest()->get();
+        $sponsers = Sponser::latest()->get();
+        $visas = VisaType::withCount('outgoingCustomers')->latest()->get();
+        $customers = Customer::latest()->get();
+        $bags = Bag::latest()->get();
+        $users = User::latest()->get();
+        $tests = Test::latest()->get();
         $histories = History::latest()->take(10)->get();
 
         $mainCustomers = Customer::selectRaw('MONTH(created_at) as month, COUNT(*) as count')

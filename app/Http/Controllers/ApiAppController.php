@@ -585,7 +585,7 @@ class ApiAppController extends Controller
         }
         $user = User::where('email', $request->email)->first();
 
-        $customer->hospital_address =  $request->address . "|---|" . $request->cleanedAddress;
+        $customer->hospital_address =  $request->hospital_name . "|---|" . $request->cleanedAddress;
         $customer->medical_examination = "تم الحجز";
         $customer->save();
         $history = new History();

@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'الكفلاء')
+@section('title', 'الحقائب')
 
 @section('content_header')
     <h1 style="font-weight:bold; text-align:right;">الحقائب</h1>
@@ -158,44 +158,19 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        <form action="{{ route('bags.delete', $bag->id) }}" method="POST" class="mx-1">
+                                        {{-- <form action="{{ route('bags.delete', $bag->id) }}" method="POST" class="mx-1">
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit"
                                                 title="حذف" onsubmit="confirmDelete(event)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
 
                                         <a href="{{ route('bags.customers', $bag->id) }}"
                                             class="btn btn-sm btn-outline-primary shadow-sm" title="عرض العملاء">
                                             <i class="fas fa-users"></i>
                                         </a>
-
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a class="dropdown-item text-info"
-                                                        href="{{ route('bags.customers', $bag->id) }}">
-                                                        <i class="fas fa-list"></i> قائمة العملاء
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-warning" href="#">
-                                                        <i class="fas fa-print"></i> طباعة التقرير
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-success" href="#">
-                                                        <i class="fas fa-file-excel"></i> تصدير إكسل
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
                                     </td>
                                 </tr>
                             @endforeach

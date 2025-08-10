@@ -180,10 +180,55 @@
             width: 20px !important;
             height: 20px !important;
         }
+
+        /* تحسين الجدول في الوضع الداكن */
+        .dark-mode .table th,
+        .dark-mode .table td {
+            border-top-color: #6c757d !important;
+            color: #f1f1f1 !important;
+            /* نص فاتح */
+        }
+
+        .dark-mode .table-light th,
+        .dark-mode .table-light td,
+        .dark-mode .table-light thead th,
+        .dark-mode .table-light tbody+tbody {
+            border-color: #3a4b5c !important;
+        }
+
+        .dark-mode .table-light,
+        .dark-mode .table-light>th,
+        .dark-mode .table-light>td {
+            background-color: #2c3b4c !important;
+            /* لون الصفوف في الداكن */
+            color: #fff !important;
+        }
+
+        /* لون الهيدر */
+        .dark-mode #delegatesTable thead {
+            background-color: #1f2d3d !important;
+            color: #ffffff !important;
+        }
+
+        /* لون الهوفر على الصف */
+        .dark-mode #delegatesTable tbody tr:hover {
+            background-color: #3a4b5c !important;
+        }
+
+        /* البادجات في الوضع الداكن */
+        .dark-mode .badge.bg-success {
+            background-color: #28a745 !important;
+            color: #fff !important;
+        }
+
+        .dark-mode .badge.bg-info {
+            background-color: #17a2b8 !important;
+            color: #fff !important;
+        }
     </style>
 </head>
 
-<body class="@yield('classes_body')" @yield('body_data') style="font-family: 'Cairo';">
+<body class="@yield('classes_body')" @yield('body_data') style="font-family: 'Cairo'; padding-bottom: 20px ">
     <button id="toggle-dark-mode" class="btn btn-dark"
         style="position: fixed; bottom: 20px; right: 20px; z-index: 10000; border-radius: 50%; width: 45px; height: 45px; display: flex; align-items: center; justify-content: center; font-size: 20px;">
         🌙

@@ -28,13 +28,13 @@ class CustomerController extends Controller
     //
     public function add($id = null)
     {
-        $delegates = Delegate::all();
-        $evalutions = Evaluation::all();
-        $groups = CustomerGroup::all();
-        $jobs = JobTitle::all();
-        $sponsers = Sponser::all();
-        $paymentTitles = PaymentTitle::all();
-        $visas = VisaType::all();
+        $delegates = Delegate::latest()->get();
+        $evalutions = Evaluation::latest()->get();
+        $groups = CustomerGroup::latest()->get();
+        $jobs = JobTitle::latest()->get();
+        $sponsers = Sponser::latest()->get();
+        $paymentTitles = PaymentTitle::latest()->get();
+        $visas = VisaType::latest()->get();
 
         // foreach ($visas as $visa) {
         //     $visasCount = $visa->visa_professions()->sum('profession_count');
@@ -80,23 +80,24 @@ class CustomerController extends Controller
 
     public function index()
     {
-        $delegates = Delegate::all();
-        $evalutions = Evaluation::all();
-        $groups = CustomerGroup::all();
-        $jobs = JobTitle::all();
-        $sponsers = Sponser::all();
-        $visas = VisaType::all();
+        $delegates = Delegate::latest()->get();
+        $evalutions = Evaluation::latest()->get();
+        $groups = CustomerGroup::latest()->get();
+        $jobs = JobTitle::latest()->get();
+        $sponsers = Sponser::latest()->get();
+        $visas = VisaType::latest()->get();
         $company = CompanySetting::first();
         $customers = Customer::with([
             'sponser',
-            'visaType.embassy',              // مثال علاقة فرعية داخل visaType
+            'visaType.embassy',
             'customerGroup.visaProfession',
-            'customerGroup.visaType.embassy',        // لو موجودة في CustomerGroup
-            'customerGroup.visaType.sponser',        // لو موجودة في CustomerGroup
+            'customerGroup.visaType.embassy',
+            'customerGroup.visaType.sponser',
             'delegate',
             'evaluation',
             'jobTitle',
-        ])->get();
+        ])->latest()->get();
+
         return view("customers.customer", [
             'customers' => $customers,
             'delegates' => $delegates,

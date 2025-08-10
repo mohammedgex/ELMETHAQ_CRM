@@ -53,7 +53,7 @@
                                     </td>
                                     <td class="d-flex justify-content-center align-items-center gap-1">
 
-                                        <form action="{{ route('template.delete', $template->id) }}" method="POST"
+                                        {{-- <form action="{{ route('template.delete', $template->id) }}" method="POST"
                                             class="mx-1">
                                             @csrf
                                             @method('DELETE')
@@ -61,7 +61,7 @@
                                                 title="حذف">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form>
+                                        </form> --}}
                                     </td>
                                 </tr>
                             @endforeach

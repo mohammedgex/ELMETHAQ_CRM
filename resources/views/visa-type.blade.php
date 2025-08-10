@@ -220,7 +220,7 @@
 
                 <div class="table-responsive">
                     <table class="table table-hover text-center animate__animated animate__fadeInUp" id="delegatesTable">
-                        <thead style="background-color: #343a40; color: white;">
+                        <thead style="background-color: #343a40;">
                             <tr>
                                 <th>كود التأشيرة</th>
                                 <th>الاسم</th>
@@ -405,6 +405,46 @@
         .loading-text {
             font-size: 16px;
             text-align: center;
+        }
+
+        /* الوضع الفاتح - الألوان الحالية */
+        #delegatesTable thead {
+            background-color: #343a40 !important;
+            color: white !important;
+        }
+
+        #delegatesTable tbody tr.table-light {
+            background-color: #f8f9fa !important;
+            color: #212529 !important;
+        }
+
+        /* الوضع الداكن */
+        body.dark-mode #delegatesTable thead {
+            background-color: #1f2d3d !important;
+            /* هيدر داكن */
+            color: #ffffff !important;
+        }
+
+        body.dark-mode #delegatesTable tbody tr.table-light {
+            background-color: #2c3b4c !important;
+            /* صفوف داكنة */
+            color: #ffffff !important;
+        }
+
+        body.dark-mode #delegatesTable tbody tr:hover {
+            background-color: #3a4b5c !important;
+            /* لون الهوفر */
+        }
+
+        /* البادجات في الوضع الداكن */
+        body.dark-mode .badge.bg-success {
+            background-color: #28a745 !important;
+            color: #fff !important;
+        }
+
+        body.dark-mode .badge.bg-info {
+            background-color: #17a2b8 !important;
+            color: #fff !important;
         }
     </style>
 @stop

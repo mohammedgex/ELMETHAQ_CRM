@@ -9,7 +9,7 @@
     <div class="container-fluid">
         <!-- بطاقات الإحصائيات -->
         <div class="row">
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>{{ $customers->count() }}</h3>
@@ -23,7 +23,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{{ $delegates->count() }}</h3>
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
                 <div class="small-box bg-warning">
                     <div class="inner">
                         <h3>{{ $groups->count() }}</h3>
@@ -51,7 +51,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-3 col-6">
+            <div class="col-lg-2 col-6">
                 <div class="small-box bg-danger">
                     <div class="inner">
                         <h3>{{ $users->count() }}</h3>
@@ -64,6 +64,35 @@
                             class="fas fa-arrow-circle-left"></i></a>
                 </div>
             </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box" style="background: linear-gradient(135deg, #6f42c1, #8e63d4); color: white;">
+                    <div class="inner">
+                        <h3>{{ $visas->count() }}</h3>
+                        <p>إجمالي التأشيرات</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <a href="{{ route('visa-type.index') }}" class="small-box-footer" style="color: white;">
+                        المزيد <i class="fas fa-arrow-circle-left"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-2 col-6">
+                <div class="small-box" style="background: linear-gradient(135deg, #ff7f50, #ff9966); color: white;">
+                    <div class="inner">
+                        <h3>{{ $bags->count() }}</h3>
+                        <p>إجمالي الحقائب</p>
+                    </div>
+                    <div class="icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <a href="{{ route('bags.index') }}" class="small-box-footer" style="color: white;">
+                        المزيد <i class="fas fa-arrow-circle-left"></i>
+                    </a>
+                </div>
+            </div>
+
         </div>
 
         <!-- قسم الاختبارات -->
@@ -156,8 +185,8 @@
                                             </div>
                                             <div class="progress-bar bg-warning d-flex justify-content-center align-items-center"
                                                 role="progressbar" style="width: {{ $reservePercent }}%;"
-                                                aria-valuenow="{{ $reservePercent }}" aria-valuemin="0" aria-valuemax="100"
-                                                title="احتياط">
+                                                aria-valuenow="{{ $reservePercent }}" aria-valuemin="0"
+                                                aria-valuemax="100" title="احتياط">
                                                 {{ round($reservePercent, 1) }}%
                                             </div>
 
@@ -201,7 +230,8 @@
                                         <div
                                             class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded bg-white text-dark shadow-sm">
                                             <small class="fw-semibold">عدد العملاء:</small>
-                                            <small class="fw-bold badge bg-primary px-3 py-1">{{ $totalCustomers }}</small>
+                                            <small
+                                                class="fw-bold badge bg-primary px-3 py-1">{{ $totalCustomers }}</small>
                                         </div>
                                         <div
                                             class="d-flex justify-content-between align-items-center mb-3 px-3 py-1 rounded bg-white text-dark shadow-sm">

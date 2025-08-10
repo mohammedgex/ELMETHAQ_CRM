@@ -752,15 +752,8 @@
                             <div class="col-md-6 form-group">
 
                                 <label class="font-weight-bold"> المهنة </label>
-                                <select class="form-control fw-bold" style="border-color: #997a44;" name="job"
-                                    required>
-                                    <option value="">اختر المهنة بالتأشيرة</option>
-                                    @foreach ($jobs as $job)
-                                        <option value="{{ $job }}"
-                                            {{ $visaEdit->job == $job ? 'selected' : '' }}>
-                                            {{ $job }}</option>
-                                    @endforeach
-                                </select>
+                                <input type="text" class="form-control" style="border-color: #343a40;" name="job"
+                                    placeholder="اسم المهنة في انجاز" required value="{{ $visaEdit->job }}">
                             </div>
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> العدد لهذه المهنة </label>
@@ -800,49 +793,41 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-hover text-center animate__animated animate__fadeInUp" id="delegatesTable">
-                        <thead style="background-color: #343a40; color: white;">
+                    <table class="table table-hover table-bordered text-center animate__animated animate__fadeInUp"
+                        id="delegatesTable">
+                        <thead class="table-primary">
                             <tr>
-                                <th> التصنيف المهني </th>
-                                <th> المهنة </th>
-                                <th> العدد </th>
-                                <th> المجموعة</th>
+                                <th>التصنيف المهني</th>
+                                <th>المهنة</th>
+                                <th>العدد</th>
+                                <th>المجموعة</th>
                                 <th>الإجراءات</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($visas as $visa)
-                                <tr class="table-light">
+                                <tr>
                                     <td>{{ $visa->job_title }}</td>
                                     <td>{{ $visa->job }}</td>
                                     <td>
-                                        <span class="badge bg-info">
+                                        <span class="badge bg-info text-dark">
                                             {{ $visa->profession_count }}
                                         </span>
                                     </td>
                                     <td>{{ $visa->customerGroup->title }}</td>
-
                                     <td class="d-flex justify-content-center align-items-center gap-1">
                                         <a href="{{ route('visa-profession.index', [$visa_id, $visa->id]) }}">
                                             <button class="btn btn-sm btn-outline-success shadow-sm">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                         </a>
-                                        {{-- <form action="{{ route('visa-profession.delete', $visa->id) }}" method="POST"
-                                            class="mx-1" onsubmit="confirmDelete(event)">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form> --}}
-
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>
@@ -884,6 +869,33 @@
         .card {
             border-radius: 12px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* الوضع الداكن */
+        body.dark-mode #delegatesTable thead {
+            background-color: #1f2d3d !important;
+            /* لون داكن للهيدر */
+            color: #ffffff !important;
+            /* النص أبيض */
+        }
+
+        body.dark-mode #delegatesTable tbody tr {
+            background-color: #2c3b4c !important;
+            /* لون الصفوف */
+            color: #ffffff;
+            /* النص أبيض */
+        }
+
+        body.dark-mode #delegatesTable tbody tr:hover {
+            background-color: #3a4b5c !important;
+            /* لون الهوفر */
+        }
+
+        /* ضبط البادج في الوضع الداكن */
+        body.dark-mode .badge.bg-info {
+            background-color: #17a2b8 !important;
+            /* نفس الأزرق */
+            color: #ffffff !important;
         }
     </style>
 @stop
