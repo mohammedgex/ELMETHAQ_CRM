@@ -148,9 +148,8 @@
                                     @foreach ($customers as $customer)
                                         <tr
                                             class="
-                                                        @if ($customer->blackList && $customer->blackList->block) table-danger
-                                                        @elseif(is_null($customer->passport_expire_date))
-                                                            table-warning @endif
+                                                        @if ($customer->blackList && $customer->blackList->block) tr-blocked
+                                                        @elseif(is_null($customer->passport_expire_date)) tr-warning @endif
                                                     ">
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
@@ -172,17 +171,38 @@
                                             </td>
                                             <td>{{ $customer->phone }}</td>
                                             <td
-                                                style="background-color: {{ $customer->medical_examination === 'لائق' ? '#28a745' : '#dc3545' }} !important; color: #fff !important;">
+                                                style="background-color:
+                                                    {{ $customer->medical_examination === 'لائق'
+                                                        ? '#28a745'
+                                                        : ($customer->medical_examination === 'غير لائق' || is_null($customer->medical_examination)
+                                                            ? '#dc3545'
+                                                            : '#ffc107') }}
+                                                    !important;
+                                                    color: #fff !important;">
                                                 {{ $customer->medical_examination ?? '-' }}
                                             </td>
 
                                             <td
-                                                style="background-color: {{ $customer->finger_print_examination === 'تم تصدير الاكسيل' ? '#28a745' : '#dc3545' }} !important; color: #fff !important;">
+                                                style="background-color:
+                                                            {{ $customer->finger_print_examination === 'تم تصدير الاكسيل'
+                                                                ? '#28a745'
+                                                                : ($customer->finger_print_examination === 'في انتظار الحجز'
+                                                                    ? '#ffc107'
+                                                                    : '#dc3545') }}
+                                                            !important;
+                                                            color: #fff !important;">
                                                 {{ $customer->finger_print_examination ?? '-' }}
                                             </td>
 
                                             <td
-                                                style="background-color: {{ $customer->virus_examination === 'موجب' ? '#28a745' : '#dc3545' }} !important; color: #fff !important;">
+                                                style="background-color:
+                                                    {{ $customer->virus_examination === 'موجب' || is_null($customer->virus_examination)
+                                                        ? '#dc3545'
+                                                        : ($customer->virus_examination === 'سالب'
+                                                            ? '#28a745'
+                                                            : '#ffc107') }}
+                                                    !important;
+                                                    color: #fff !important;">
                                                 {{ $customer->virus_examination ?? '-' }}
                                             </td>
 
@@ -242,6 +262,15 @@
                                                                 </a>
                                                             </li>
                                                         @endif
+                                                        @if ($customer->e_visa_number)
+                                                            <li>
+                                                                <a class="dropdown-item text-info"
+                                                                    href="{{ route('reports.nomination_card', $customer->id) }}">
+                                                                    <i class="fas fa-file-alt"></i>
+                                                                    بطاقة الترشيح
+                                                                </a>
+                                                            </li>
+                                                        @endif
 
                                                         <!-- بلوك / إزالة بلوك -->
                                                         <li>
@@ -258,13 +287,14 @@
                                                                     class="fas fa-list-alt me-1"></i> الكشوفات</a>
                                                             <ul class="dropdown-menu"
                                                                 style="position: absolute; left: 100% !important; right: auto;">
-
                                                                 <li><a class="dropdown-item"
                                                                         href="{{ route('print_visaEntriy', $customer->id) }}"
                                                                         target="_blank"><i
                                                                             class="fas fa-passport me-1"></i>
                                                                         طباعة طلب
-                                                                        دخول</a></li>
+                                                                        دخول
+                                                                    </a>
+                                                                </li>
                                                                 @if ($customer->token_medical)
                                                                     <li>
                                                                         <a href="#" id="checkMedicalStatus"
@@ -276,16 +306,6 @@
                                                                         </a>
                                                                     </li>
                                                                 @endif
-                                                                {{-- @if ($customer->token_medical)
-                                                                    <li>
-                                                                        <a href="{{ route('check.medical.status', $customer->token_medical) }}"
-                                                                            class="dropdown-item show-loading">
-                                                                            <i class="fas fa-hospital me-1"></i>
-
-                                                                            تحقق من الحالة الطبية
-                                                                        </a>
-                                                                    </li>
-                                                                @endif --}}
                                                                 <li>
                                                                     <a href="#" class="dropdown-item check-medical"
                                                                         id="check-medical"
@@ -744,11 +764,31 @@
             transform: translateY(-50%);
         }
 
-        /* .dark-mode .table,
-                                                                                                                                                                                        .dark-mode .table th,
-                                                                                                                                                                                        .dark-mode .table td {
-                                                                                                                                                                                            background-color: #fff !important;
-                                                                                                                                                                                        } */
+        /* Light Mode */
+        .tr-blocked {
+            background-color: #f8d7da !important;
+            /* أحمر فاتح */
+            color: #000 !important;
+        }
+
+        .tr-warning {
+            background-color: #fff3cd !important;
+            /* أصفر فاتح */
+            color: #000 !important;
+        }
+
+        /* Dark Mode */
+        .dark-mode .tr-blocked {
+            background-color: #842029 !important;
+            /* أحمر داكن */
+            color: #fff !important;
+        }
+
+        .dark-mode .tr-warning {
+            background-color: #664d03 !important;
+            /* أصفر داكن */
+            color: #fff !important;
+        }
     </style>
 
 

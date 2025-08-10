@@ -78,7 +78,6 @@ class CustomerController extends Controller
         ]);
     }
 
-
     public function index()
     {
         $delegates = Delegate::all();
@@ -160,13 +159,26 @@ class CustomerController extends Controller
                 $customer->LeadCustomer->save();
             }
         }
+        if ($request->filled('delegate_id')) {
+            if ($customer->LeadCustomer) {
+                # code...
+                $customer->LeadCustomer->delegate_id = $request->delegate_id;
+                $customer->LeadCustomer->save();
+            }
+        }
+        if ($request->filled('job_title_id')) {
+            if ($customer->LeadCustomer) {
+                # code...
+                $customer->LeadCustomer->job_title_id = $request->job_title_id;
+                $customer->LeadCustomer->save();
+            }
+        }
 
         // تحديث البيانات كلها
         $customer->update($data);
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }
-
 
     public function mrz(Request $request, $id)
     {
@@ -227,7 +239,6 @@ class CustomerController extends Controller
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'mrz');
     }
-
 
     public function attachments(Request $request, $id)
     {
@@ -299,7 +310,6 @@ class CustomerController extends Controller
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'history');
     }
-
 
     public function show($id)
     {

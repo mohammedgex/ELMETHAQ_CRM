@@ -142,14 +142,14 @@
             color: #90caf9 !important;
         }
 
-        /* جداول */
+        /* جداول
         .dark-mode .table,
         .dark-mode .table th,
         .dark-mode .table td {
-            background-color: #2c2c2c !important;
+            background-color: #2c2c2c;
             color: #fff !important;
             border-color: #444 !important;
-        }
+        } */
 
         /* قوائم جانبية */
         .dark-mode .nav-sidebar>.nav-item>.nav-link {

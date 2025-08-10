@@ -14,9 +14,9 @@ class CompanyController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'name'     => 'required|string|max:255',
-            'phone'    => 'required|string|max:20|unique:companies,phone',
+            'phone'    => 'required|string|unique:companies,phone',
             'password' => 'required|string|min:8',
-            'logo'     => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'logo'     => 'nullable|image',
             "status"   => 'nullable|string|in:company,individual', // الحالة الافتراضية للشركة
         ]);
 
