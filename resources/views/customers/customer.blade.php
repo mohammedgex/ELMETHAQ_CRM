@@ -486,11 +486,11 @@
                                 <tbody>
                                     @foreach ($customers as $customer)
                                         <tr
-                                            class="
-                                                        @if ($customer->blackList && $customer->blackList->block) table-danger
-                                                        @elseif(is_null($customer->passport_expire_date))
-                                                            table-warning @endif
-                                                    ">
+                                            style="
+                                                    @if ($customer->blackList && $customer->blackList->block) background-color: #f8d7da; color: #721c24;
+                                                    @elseif(is_null($customer->passport_expire_date))
+                                                        background-color: #664d03; @endif
+                                                ">
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
@@ -863,8 +863,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .dt-button {
             padding: 8px 15px;

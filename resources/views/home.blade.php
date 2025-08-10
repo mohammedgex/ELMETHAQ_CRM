@@ -96,12 +96,20 @@
         </div>
 
         <!-- قسم الاختبارات -->
-        <div class="card card-primary card-outline">
-            <div class="card-header bg-primary text-white">
-                <h3 class="card-title">الاختبارات ({{ $tests->count() }})</h3>
+        <div class="card card-primary card-outline position-relative">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                <h3 class="card-title">المجموعات ({{ $groups->count() }})</h3>
+                <div>
+                    <button id="scrollRight" class="btn btn-light btn-sm"><i class="fas fa-chevron-right"></i></button>
+                    <button id="scrollLeft" class="btn btn-light btn-sm me-1"><i class="fas fa-chevron-left"></i></button>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row text-center">
+
+            <div class="card-body position-relative">
+                <!-- الحاوية اللي فيها الكروت -->
+                <div id="testsContainer" class="d-flex flex-row flex-nowrap overflow-auto"
+                    style="gap: 20px; scroll-behavior: smooth; padding: 10px 40px;">
+
                     @foreach ($tests as $test)
                         @php
                             $latestEvaluations = \App\Models\Evaluation::select(
@@ -128,17 +136,18 @@
                             $rejectedCount = $latestEvaluationsRecords->where('evaluation', 'غير مقبول')->count();
                             $reserveCount = $latestEvaluationsRecords->where('evaluation', 'احتياطي')->count();
                             $totalLeads = $latestEvaluationsRecords->count();
-
                         @endphp
 
-                        <div class="col-md-3 col-6 mb-4">
+                        <div class="col-md-3 col-6 mb-4" style="min-width: 280px;">
                             <a href="{{ route('test.leads', $test->id) }}" class="text-decoration-none">
-                                <div class="info-box bg-gradient-primary text-white shadow rounded">
-                                    <span class="info-box-icon bg-primary d-flex align-items-center justify-content-center">
+                                <div class="info-box bg-gradient-primary text-white shadow rounded p-2">
+                                    <span
+                                        class="info-box-icon bg-primary d-flex align-items-center justify-content-center rounded">
                                         <i class="fas fa-file-alt fa-lg"></i>
                                     </span>
                                     <div class="info-box-content">
-                                        <h5 class="info-box-text fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
+                                        <h5 class="fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
+
                                         <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded"
                                             style="background-color: #e2e3e5; color :#000">
                                             <span class="small">العملاء:</span>
@@ -151,63 +160,82 @@
                                             <small>مقبولين</small>
                                             <small class="fw-semibold">{{ $acceptedCount }}</small>
                                         </div>
+
                                         <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded"
                                             style="background-color: #f8d7da; color: #721c24;">
                                             <small>مرفوضين</small>
                                             <small class="fw-semibold">{{ $rejectedCount }}</small>
                                         </div>
+
                                         <div class="d-flex justify-content-between align-items-center mb-3 px-3 py-1 rounded"
                                             style="background-color: #fff3cd; color: #856404;">
                                             <small>احتياط</small>
                                             <small class="fw-semibold">{{ $reserveCount }}</small>
                                         </div>
 
+                                        @php
+                                            $acceptedPercent =
+                                                $totalLeads > 0 ? round(($acceptedCount / $totalLeads) * 100) : 0;
+                                            $rejectedPercent =
+                                                $totalLeads > 0 ? round(($rejectedCount / $totalLeads) * 100) : 0;
+                                            $reservePercent =
+                                                $totalLeads > 0 ? round(($reserveCount / $totalLeads) * 100) : 0;
+                                        @endphp
+
                                         <div class="progress" style="height: 12px; border-radius: 5px;">
-                                            @php
-                                                $acceptedPercent =
-                                                    $totalLeads > 0 ? round(($acceptedCount / $totalLeads) * 100) : 0;
-                                                $rejectedPercent =
-                                                    $totalLeads > 0 ? round(($rejectedCount / $totalLeads) * 100) : 0;
-                                                $reservePercent =
-                                                    $totalLeads > 0 ? round(($reserveCount / $totalLeads) * 100) : 0;
-                                            @endphp
                                             <div class="progress-bar bg-success d-flex justify-content-center align-items-center"
-                                                role="progressbar" style="width: {{ $acceptedPercent }}%;"
-                                                aria-valuenow="{{ $acceptedPercent }}" aria-valuemin="0"
-                                                aria-valuemax="100" title="مقبولين">
-                                                {{ round($acceptedPercent, 1) }}%
+                                                style="width: {{ $acceptedPercent }}%;">
+                                                {{ $acceptedPercent }}%
                                             </div>
                                             <div class="progress-bar bg-danger d-flex justify-content-center align-items-center"
-                                                role="progressbar" style="width: {{ $rejectedPercent }}%;"
-                                                aria-valuenow="{{ $rejectedPercent }}" aria-valuemin="0"
-                                                aria-valuemax="100" title="مرفوضين">
-                                                {{ round($rejectedPercent, 1) }}%
+                                                style="width: {{ $rejectedPercent }}%;">
+                                                {{ $rejectedPercent }}%
                                             </div>
                                             <div class="progress-bar bg-warning d-flex justify-content-center align-items-center"
-                                                role="progressbar" style="width: {{ $reservePercent }}%;"
-                                                aria-valuenow="{{ $reservePercent }}" aria-valuemin="0"
-                                                aria-valuemax="100" title="احتياط">
-                                                {{ round($reservePercent, 1) }}%
+                                                style="width: {{ $reservePercent }}%;">
+                                                {{ $reservePercent }}%
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>
                             </a>
                         </div>
                     @endforeach
-
                 </div>
             </div>
         </div>
 
+        <script>
+            const container = document.getElementById('testsContainer');
+            document.getElementById('scrollLeft').addEventListener('click', () => {
+                container.scrollBy({
+                    left: -300,
+                    behavior: 'smooth'
+                });
+            });
+            document.getElementById('scrollRight').addEventListener('click', () => {
+                container.scrollBy({
+                    left: 300,
+                    behavior: 'smooth'
+                });
+            });
+        </script>
+
         <!-- قسم المجموعات -->
         <div class="card card-info card-outline">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title">المجموعات ({{ $groups->count() }})</h3>
+                <div>
+                    <button id="scrollRight" class="btn btn-light btn-sm"><i class="fas fa-chevron-right"></i></button>
+                    <button id="scrollLeft" class="btn btn-light btn-sm me-1"><i
+                            class="fas fa-chevron-left"></i></button>
+                </div>
             </div>
+
             <div class="card-body">
-                <div class="row text-center">
+                <div id="groupsContainer" class="d-flex overflow-auto"
+                    style="scroll-behavior: smooth; gap: 15px; white-space: nowrap;">
+
                     @foreach ($groups as $group)
                         @php
                             $totalCustomers = count($group->customers);
@@ -281,17 +309,40 @@
                             </a>
                         </div>
                     @endforeach
+
                 </div>
             </div>
         </div>
 
+        <script>
+            const container = document.getElementById('groupsContainer');
+            document.getElementById('scrollLeft').addEventListener('click', () => {
+                container.scrollBy({
+                    left: -250,
+                    behavior: 'smooth'
+                });
+            });
+            document.getElementById('scrollRight').addEventListener('click', () => {
+                container.scrollBy({
+                    left: 250,
+                    behavior: 'smooth'
+                });
+            });
+        </script>
+
         <!-- قسم الحقائب -->
         <div class="card card-success card-outline">
-            <div class="card-header bg-success text-white">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title">الحقائب ({{ $bags->count() }})</h3>
+                <div>
+                    <button id="scrollRightBags" class="btn btn-light btn-sm"><i
+                            class="fas fa-chevron-right"></i></button>
+                    <button id="scrollLeftBags" class="btn btn-light btn-sm me-1"><i
+                            class="fas fa-chevron-left"></i></button>
+                </div>
             </div>
             <div class="card-body">
-                <div class="row">
+                <div class="d-flex overflow-auto" id="bagsContainer" style="gap: 1rem; white-space: nowrap;">
                     @foreach ($bags as $bag)
                         @php
                             $totalCustomers = count($bag->customers);
@@ -311,57 +362,76 @@
                                 $progressBarClass = 'bg-danger';
                             }
                         @endphp
-                        <div class="col-md-3 col-6 mb-4">
-                            <a href="{{ route('bags.customers', $bag->id) }}" class="text-decoration-none">
-                                <div class="info-box shadow rounded border border-success bg-dark"
-                                    style="background-color: #1e2a1e !important;">
-                                    <span
-                                        class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center"
-                                        style="font-size: 1.6rem; width: 55px;">
-                                        <i class="fas fa-suitcase"></i>
-                                    </span>
-                                    <div class="info-box-content py-2">
-                                        <h5 class="info-box-text fw-bold mb-2"
-                                            style="font-size: 1.15rem; color: #a8d5a8;">
-                                            {{ $bag->name }}
-                                        </h5>
-                                        <div class="d-flex justify-content-between align-items-center mb-1">
-                                            <small class="text-muted" style="color: #b5b5b5;">إجمالي العملاء</small>
-                                            <span class="fw-semibold"
-                                                style="color: #a8d5a8;">{{ $totalCustomers }}</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mb-3">
-                                            <small class="text-muted" style="color: #b5b5b5;">العملاء برقم تأشيرة</small>
-                                            <span class="fw-semibold text-success"
-                                                style="color: #7bd17b;">{{ $customersWithVisaNumber }}</span>
-                                        </div>
-                                        <div class="progress rounded" style="height: 14px; background-color: #274927;">
-                                            <div class="progress-bar {{ $progressBarClass }}" role="progressbar"
-                                                style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}"
-                                                aria-valuemin="0" aria-valuemax="100">
-                                                <span class="fw-bold" style="font-size: 0.85rem; color: #e0f2e9;">
-                                                    {{ $percentage }}%
-                                                </span>
-                                            </div>
+                        <a href="{{ route('bags.customers', $bag->id) }}" class="text-decoration-none"
+                            style="display: inline-block; flex: 0 0 auto; width: 300px;">
+                            <div class="info-box shadow rounded border border-success bg-dark"
+                                style="background-color: #1e2a1e !important; min-height: 180px;">
+                                <span
+                                    class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center"
+                                    style="font-size: 1.8rem; width: 60px; height: 60px;">
+                                    <i class="fas fa-suitcase"></i>
+                                </span>
+                                <div class="info-box-content py-2">
+                                    <h5 class="info-box-text fw-bold mb-2" style="font-size: 1.25rem; color: #a8d5a8;">
+                                        {{ $bag->name }}
+                                    </h5>
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <small class="text-muted" style="color: #b5b5b5;">إجمالي العملاء</small>
+                                        <span class="fw-semibold" style="color: #a8d5a8;">{{ $totalCustomers }}</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <small class="text-muted" style="color: #b5b5b5;">العملاء برقم تأشيرة</small>
+                                        <span class="fw-semibold text-success"
+                                            style="color: #7bd17b;">{{ $customersWithVisaNumber }}</span>
+                                    </div>
+                                    <div class="progress rounded" style="height: 14px; background-color: #274927;">
+                                        <div class="progress-bar {{ $progressBarClass }}" role="progressbar"
+                                            style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}"
+                                            aria-valuemin="0" aria-valuemax="100">
+                                            <span class="fw-bold" style="font-size: 0.85rem; color: #e0f2e9;">
+                                                {{ $percentage }}%
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
-                            </a>
-                        </div>
+                            </div>
+                        </a>
                     @endforeach
                 </div>
             </div>
         </div>
 
+        <script>
+            document.getElementById('scrollRightBags').addEventListener('click', function() {
+                document.getElementById('bagsContainer').scrollBy({
+                    left: 300,
+                    behavior: 'smooth'
+                });
+            });
+            document.getElementById('scrollLeftBags').addEventListener('click', function() {
+                document.getElementById('bagsContainer').scrollBy({
+                    left: -300,
+                    behavior: 'smooth'
+                });
+            });
+        </script>
+
+
         <!-- قسم التأشيرات -->
         <div class="card card-success card-outline">
-            <div class="card-header bg-success text-white">
+            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
                 <h3 class="card-title">التأشيرات ({{ $visas->count() }})</h3>
+                <div>
+                    <button id="visaScrollRight" class="btn btn-light btn-sm"><i
+                            class="fas fa-chevron-right"></i></button>
+                    <button id="visaScrollLeft" class="btn btn-light btn-sm me-1"><i
+                            class="fas fa-chevron-left"></i></button>
+                </div>
             </div>
             <div class="card-body">
-                <div class="row text-center">
+                <div class="d-flex overflow-auto" id="visaScrollContainer" style="gap: 15px;">
                     @foreach ($visas as $visa)
-                        <div class="col-md-3 col-6 mb-4">
+                        <div style="flex: 0 0 auto; width: 250px;">
                             <a href="{{ route('groups.visa', $visa->id) }}" class="text-decoration-none">
                                 <div class="info-box bg-gradient-success text-white shadow">
                                     <span class="info-box-icon bg-success"><i class="fas fa-passport"></i></span>
@@ -406,6 +476,23 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            const visaScrollContainer = document.getElementById('visaScrollContainer');
+            document.getElementById('visaScrollLeft').addEventListener('click', () => {
+                visaScrollContainer.scrollBy({
+                    left: -200,
+                    behavior: 'smooth'
+                });
+            });
+            document.getElementById('visaScrollRight').addEventListener('click', () => {
+                visaScrollContainer.scrollBy({
+                    left: 200,
+                    behavior: 'smooth'
+                });
+            });
+        </script>
+
 
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-body p-3 table-responsive">

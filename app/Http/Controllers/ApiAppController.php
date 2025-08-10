@@ -14,8 +14,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use DevKandil\NotiFire\Facades\Fcm;
 use DevKandil\NotiFire\Enums\MessagePriority;
-use Illuminate\Support\Facades\Validator;
-use GPBMetadata\Google\Api\Log;
 use Kreait\Laravel\Firebase\Facades\Firebase;
 use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\Notification;
@@ -552,7 +550,6 @@ class ApiAppController extends Controller
         } elseif ($request->type == "visa") {
             # code...
             $customer->visa_number = $request->visa_number;
-            $customer->visa_issuance_date = $request->validFrom;
             $customer->save();
             $customer->documentTypes()->where('document_type', 'التاشيرة')->delete();
             $document = new DocumentType();

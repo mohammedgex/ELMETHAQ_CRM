@@ -18,11 +18,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', [ApiAppController::class, 'register']);
 Route::post('/confirm-code', [ApiAppController::class, 'verifyOtp']);
-Route::post('/complete-data', action: [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
+Route::post('/complete-data', [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
 Route::post('/login', [ApiAppController::class, 'login']);
 Route::post('/visa/{id}', [ApiAppController::class, 'visa']);
-Route::middleware('auth:sanctum')->get('/user-data', action: [ApiAppController::class, 'getUserData']);
-Route::middleware('auth:sanctum')->post('/send-file/{id}', action: [ApiAppController::class, 'send_file']);
+Route::middleware('auth:sanctum')->get('/user-data',  [ApiAppController::class, 'getUserData']);
+Route::middleware('auth:sanctum')->post('/send-file/{id}',  [ApiAppController::class, 'send_file']);
 Route::get('/jobs', [JobController::class, 'apiIndex']);
 Route::post('/save-any-fcm-token', [ApiAppController::class, 'saveAnyFcmToken']);
 Route::post('/send-otp/{phone}', [ApiAppController::class, 'sendOtp']);

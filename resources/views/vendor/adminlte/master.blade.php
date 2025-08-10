@@ -225,6 +225,13 @@
             background-color: #17a2b8 !important;
             color: #fff !important;
         }
+
+        .table-warning,
+        .table-warning>th,
+        .table-warning>td {
+            /* background-color: #ffeeba; */
+            color: #121212 !important;
+        }
     </style>
 </head>
 
