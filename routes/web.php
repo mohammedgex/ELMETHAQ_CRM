@@ -248,6 +248,12 @@ Route::group([
         ->name('chart.potential');
     Route::get('/chart/visa-customers', [HomeController::class, 'visaCustomersChartData']);
     Route::get('/chart/test-evaluations/{testId}', [HomeController::class, 'testEvaluationStats'])->name("test-evaluations");
+
+    // صفحة الفلتر
+    Route::get('/customers/filter', [CustomerController::class, 'fillterdeep'])->name('customers.filter');
+    Route::get('/visas-by-filters', [CustomerController::class, 'getVisas'])->name('admin.visas.byFilters');
+    Route::get('/groups/by-visas', [CustomerController::class, 'getGroupsByVisas'])->name('admin.groups.byVisas');
+    Route::post('/customers/filter/data', [CustomerController::class, 'filterCustomers'])->name('customers.filter.data');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

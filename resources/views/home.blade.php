@@ -98,7 +98,7 @@
         <!-- قسم الاختبارات -->
         <div class="card card-primary card-outline position-relative">
             <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                <h3 class="card-title">المجموعات ({{ $groups->count() }})</h3>
+                <h3 class="card-title">الاختبارات ({{ $tests->count() }})</h3>
                 <div>
                     <button id="scrollRight" class="btn btn-light btn-sm"><i class="fas fa-chevron-right"></i></button>
                     <button id="scrollLeft" class="btn btn-light btn-sm me-1"><i class="fas fa-chevron-left"></i></button>

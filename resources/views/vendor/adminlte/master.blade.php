@@ -300,7 +300,116 @@
             <span style="margin-right: 50px;">نسخة تجريبية</س>
         </p>
     </footer>
+    <!-- القائمة المخصصة -->
+    <style>
+        #custom-menu {
+            display: none;
+            position: absolute;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+            transition: background-color 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 10000;
+            min-width: 160px;
+        }
+
+        /* الوضع الفاتح */
+        @media (prefers-color-scheme: light) {
+            #custom-menu {
+                background-color: #ffffff;
+                color: #222222;
+                border: 1px solid #ddd;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            #custom-menu:hover {
+                background-color: #f0f4ff;
+                color: #1a3dff;
+            }
+        }
+
+        /* الوضع الداكن */
+        @media (prefers-color-scheme: dark) {
+            #custom-menu {
+                background-color: #2a2a2a;
+                color: #eeeeee;
+                border: 1px solid #444444;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8);
+            }
+
+            #custom-menu:hover {
+                background-color: #3a4a7f;
+                color: #c0d1ff;
+            }
+        }
+
+        /* أيقونة */
+        #custom-menu svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+    </style>
+
+    <div id="custom-menu" role="menu" tabindex="0" aria-label="قائمة الخيارات">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path
+                d="M14 3h7v7h-2V6.41l-9.29 9.3-1.42-1.42 9.3-9.29H14V3zM5 5h5v2H7.41L17 16.59 15.59 18 6 8.41V11H4V5z" />
+        </svg>
+        فتح في تاب جديدة
+    </div>
+
+
     <script>
+        const menu = document.getElementById('custom-menu');
+        let currentLink = null;
+
+        document.addEventListener('contextmenu', function(e) {
+            const link = e.target.closest('a');
+            if (link) {
+                e.preventDefault();
+                currentLink = link.href;
+                menu.style.top = e.pageY + 'px';
+                menu.style.left = e.pageX + 'px';
+                menu.style.display = 'block';
+            } else {
+                menu.style.display = 'none';
+                currentLink = null;
+            }
+        });
+
+        menu.addEventListener('click', function() {
+            if (currentLink) {
+                window.open(currentLink, '_blank');
+                menu.style.display = 'none';
+                currentLink = null;
+            }
+        });
+
+        document.addEventListener('click', function() {
+            menu.style.display = 'none';
+            currentLink = null;
+        });
+
+        // منع كليك يمين فقط في أماكن غير روابط
+        document.addEventListener('contextmenu', function(e) {
+            if (!e.target.closest('a')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+
+
+    {{-- <script>
         // منع اختصارات DevTools مثل F12 و Ctrl+Shift+I/J و Ctrl+U
         document.addEventListener('keydown', function(e) {
             // F12
@@ -347,7 +456,7 @@
             });
             console.log(element);
         })();
-    </script>
+    </script> --}}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;

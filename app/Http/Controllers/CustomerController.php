@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
 use App\Models\DocumentType;
+use App\Models\Embassy;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Evaluation;
 use App\Models\FileTitle;
@@ -832,5 +833,228 @@ class CustomerController extends Controller
     {
         $customers = Customer::archived()->get(); // باستخدام الـ scope اللي عملناه
         return view('customers.archived', compact('customers'));
+    }
+
+
+    public function fillterdeep()
+    {
+        $delegates = Delegate::all();
+        $sponsors  = Sponser::all();
+        $consulates = Embassy::all();
+        $packages = bag::all();
+        $jobs = JobTitle::all();
+
+        return view('deepFilter.deep-filter', compact('delegates', 'sponsors', 'consulates', "packages", "jobs"));
+    }
+
+    public function getVisas(Request $request)
+    {
+        try {
+            // التحقق من وجود معاملات البحث
+            $sponsorIds = $request->sponsor_ids ?? [];
+            $consulateIds = $request->consulate_ids ?? [];
+
+            // التأكد من أن المعاملات arrays
+            if (!is_array($sponsorIds)) {
+                $sponsorIds = [$sponsorIds];
+            }
+            if (!is_array($consulateIds)) {
+                $consulateIds = [$consulateIds];
+            }
+
+            // بناء الاستعلام
+            $query = VisaType::query();
+
+            // فلترة حسب الكفلاء
+            if (!empty($sponsorIds)) {
+                $sponsorIds = array_filter($sponsorIds); // إزالة القيم الفارغة
+                if (!empty($sponsorIds)) {
+                    $query->whereIn('sponser_id', $sponsorIds); // تأكد من اسم العمود
+                }
+            }
+
+            // فلترة حسب القنصليات/السفارات
+            if (!empty($consulateIds)) {
+                $consulateIds = array_filter($consulateIds); // إزالة القيم الفارغة
+                if (!empty($consulateIds)) {
+                    $query->whereIn('embassy_id', $consulateIds);
+                }
+            }
+
+            // جلب البيانات
+            $visaTypes = $query->select('id', 'name')
+                ->orderBy('name') // ترتيب أبجدي
+                ->get();
+
+            // تسجيل للتشخيص (يمكن إزالته في الإنتاج)
+            \Log::info('Visa Types Query', [
+                'sponsor_ids' => $sponsorIds,
+                'consulate_ids' => $consulateIds,
+                'count' => $visaTypes->count(),
+                'sql' => $query->toSql(),
+                'bindings' => $query->getBindings()
+            ]);
+
+            // إرجاع الاستجابة
+            return response()->json($visaTypes, 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            // تسجيل الخطأ
+            \Log::error('Error in getVisas method', [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'request_data' => $request->all()
+            ]);
+
+            // إرجاع استجابة خطأ
+            return response()->json([
+                'error' => 'حدث خطأ في جلب التأشيرات',
+                'message' => config('app.debug') ? $e->getMessage() : 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    // إضافة دالة مساعدة للتحقق من صحة البيانات (اختيارية)
+    private function validateVisaRequest(Request $request)
+    {
+        return $request->validate([
+            'sponsor_ids' => 'nullable|array',
+            'sponsor_ids.*' => 'integer|exists:sponsors,id',
+            'consulate_ids' => 'nullable|array',
+            'consulate_ids.*' => 'integer|exists:consulates,id',
+        ], [
+            'sponsor_ids.*.exists' => 'أحد الكفلاء المحددين غير موجود',
+            'consulate_ids.*.exists' => 'إحدى القنصليات المحددة غير موجودة'
+        ]);
+    }
+    // إضافة هذه الدالة في Controller المناسب (مثل VisaController أو GroupController)
+
+    public function getGroupsByVisas(Request $request)
+    {
+        try {
+            // التحقق من وجود معاملات البحث
+            $visaIds = $request->visa_ids ?? [];
+
+            // التأكد من أن المعاملات arrays
+            if (!is_array($visaIds)) {
+                $visaIds = [$visaIds];
+            }
+
+            // فلترة القيم الفارغة
+            $visaIds = array_filter($visaIds);
+
+            if (empty($visaIds)) {
+                return response()->json([], 200);
+            }
+
+            // جلب المجموعات المرتبطة بالتأشيرات
+            // اختر إحدى الطرق التالية حسب هيكل قاعدة البيانات:
+
+            // الطريقة 1: إذا كانت المجموعات مرتبطة مباشرة بالتأشيرات
+            $groups = CustomerGroup::whereHas('visaType', function ($query) use ($visaIds) {
+                $query->whereIn('visa_types.id', $visaIds);
+            })
+                ->select('id', 'title as name') // تعديل هنا
+                ->distinct()
+                ->orderBy('title')
+                ->get();
+
+            // الطريقة 2: إذا كانت العلاقة من خلال جدول وسطي
+            /*
+        $groups = Group::join('group_visa_type', 'groups.id', '=', 'group_visa_type.group_id')
+                      ->whereIn('group_visa_type.visa_type_id', $visaIds)
+                      ->select('groups.id', 'groups.name')
+                      ->distinct()
+                      ->orderBy('groups.name')
+                      ->get();
+        */
+
+            // الطريقة 3: إذا كان group_id موجود في جدول visa_types
+            /*
+        $groupIds = VisaType::whereIn('id', $visaIds)
+                           ->whereNotNull('group_id')
+                           ->pluck('group_id')
+                           ->unique();
+                           
+        $groups = Group::whereIn('id', $groupIds)
+                      ->select('id', 'name')
+                      ->orderBy('name')
+                      ->get();
+        */
+
+            // تسجيل للتشخيص
+            \Log::info('Groups by Visas Query', [
+                'visa_ids' => $visaIds,
+                'groups_count' => $groups->count()
+            ]);
+
+            // إرجاع الاستجابة
+            return response()->json($groups, 200, [], JSON_UNESCAPED_UNICODE);
+        } catch (\Exception $e) {
+            // تسجيل الخطأ
+            \Log::error('Error in getGroupsByVisas method', [
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+                'request_data' => $request->all()
+            ]);
+
+            // إرجاع استجابة خطأ
+            return response()->json([
+                'error' => 'حدث خطأ في جلب المجموعات',
+                'message' => config('app.debug') ? $e->getMessage() : 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    public function filterCustomers(Request $request)
+    {
+        $query = Customer::query();
+        if ($request->filled('package_ids') && is_array($request->package_ids)) {
+            $query->whereIn('bag_id', $request->package_ids);
+        }
+
+        if ($request->filled('governorates') && is_array($request->governorates)) {
+            $query->whereIn('governorate', $request->governorates);
+        }
+
+        if ($request->filled('job_title_ids') && is_array($request->job_title_ids)) {
+            $query->whereIn('job_title_id', $request->job_title_ids);
+        }
+
+        if ($request->filled('sponsor_ids') && is_array($request->sponsor_ids)) {
+            $query->whereHas('customerGroup.visaType.sponser', function ($q) use ($request) {
+                $q->whereIn('id', $request->sponsor_ids);
+            });
+        }
+        if ($request->filled('consulate_ids') && is_array($request->consulate_ids)) {
+            $query->whereHas('customerGroup.visaType', function ($q) use ($request) {
+                $q->whereIn('embassy_id', $request->consulate_ids);
+            });
+        }
+
+        if ($request->filled('visa_ids') && is_array($request->visa_ids)) {
+            $query->whereHas('customerGroup', function ($q) use ($request) {
+                $q->whereIn('visa_type_id', $request->visa_ids);
+            });
+        }
+
+        if ($request->filled('group_ids') && is_array($request->group_ids)) {
+            $query->whereIn('customer_group_id', $request->group_ids);
+        }
+
+        if ($request->filled('delegates') && is_array($request->delegates)) {
+            $query->whereIn('delegate_id', $request->delegates);
+        }
+
+        $customers = $query->with(['bag', 'jobTitle', 'sponser', 'embassy', 'visaType', 'customerGroup'])->get();
+        $delegates = Delegate::all();
+        $sponsors  = Sponser::all();
+        $consulates = Embassy::all();
+        $packages = bag::all();
+        $jobs = JobTitle::all();
+
+        // dd($customers->count());
+        return view('deepFilter.deep-filter', compact('customers', "delegates", "sponsors", "consulates", "packages", "jobs"));
     }
 }
