@@ -178,7 +178,7 @@ Route::group([
     Route::get('/customer-consulate', [CustomerController::class, 'consulate'])->name('customer.consulate');
     Route::post('/customer-consulate/fillter', [CustomerController::class, 'filterConsulate'])->name('consulate.filter');
     Route::post('/bag-and-group/fillter', [CustomerController::class, 'filterGroupAndBag'])->name('filterGroupAndBag');
-    Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
+    // Route::post('/customers/filter', [CustomerController::class, 'filter'])->name('customers.filter');
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
 

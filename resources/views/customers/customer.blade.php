@@ -63,10 +63,11 @@
                             <div class="mb-3 me-2 mx-2">
 
                                 <!-- زر تصفية -->
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#filterModal">
-                                    <i class="fas fa-filter"></i> تصفية العملاء
-                                </button>
+                                <a href="{{ route('customers.filter') }}">
+                                    <button type="button" class="btn btn-primary">
+                                        <i class="fas fa-filter"></i> تصفية العملاء
+                                    </button>
+                                </a>
 
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
@@ -863,8 +864,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
 
         .dt-button {
             padding: 8px 15px;
