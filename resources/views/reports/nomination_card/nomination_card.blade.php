@@ -249,7 +249,10 @@
 
         <div class="overlay">
             <!-- عنوان الاستمارة -->
-            <h2 class="form-header">(استمارة ترشيح عمل)</h2>
+            <h2 class="form-header" style="width: 100%;
+    text-align: center;">(استمارة ترشيح
+                <span>{{ $customer->customerGroup->visaType->visa_peroid }}</span> )
+            </h2>
 
             <!-- قسم الصورة والمرفقات -->
             <div class="top-section">
@@ -260,12 +263,12 @@
 
                 <!-- النصوص والمربعات -->
                 <div class="info-group">
-                    <h2
+                    <h3
                         style="position: absolute;
             top: 0;
             left: 50%;
             transform: translateY(-50%);">
-                        مجانا</h2>
+                        مجانا</h3>
                     <div class="pair-group">
                         <h2><span class="box"></span> عدد المرفقات</h2>
                         <h2><span class="box"></span> أصول المرفقات</h2>
