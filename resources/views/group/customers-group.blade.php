@@ -14,7 +14,7 @@
                 <div class="card shadow border-0">
 
                     <div class="card-body">
-                        <div class="row d-flex justify-content-between">
+                        <div class="row d-flex justify-content-between" style="align-items: center;">
                             <div class="d-flex" style="align-items: center;">
                                 <div id="gggg" class="loader mr-2"
                                     style=" border: 4px solid #f3f3f3; border-top: 4px solid #997a44; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: none;">
@@ -24,6 +24,54 @@
                                     الرجاء الانتظار...
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>الرقم الصادر</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                value="{{ $group->visaType->outgoing_number ?? '-' }}" readonly>
+                                            <button class="btn btn-primary" onclick="copyValue(this)">نسخ</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>رقم السجل</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                value="{{ $group->visaType->registration_number ?? '-' }}" readonly>
+                                            <button class="btn btn-primary" onclick="copyValue(this)">نسخ</button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>القنصلية</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                value="{{ $group->visaType->embassy->title ?? '-' }}" readonly>
+                                            <button class="btn btn-primary" onclick="copyValue(this)">نسخ</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <script>
+                                function copyValue(button) {
+                                    let input = button.parentElement.querySelector('input');
+                                    navigator.clipboard.writeText(input.value).then(() => {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'تم النسخ',
+                                            text: 'تم نسخ القيمة: ' + input.value
+                                        });
+                                    });
+                                }
+                            </script>
+
                             <!-- أزرار الإجراءات -->
                             <div class="mb-3 me-2 mx-2">
                                 <div class="btn-group">
@@ -69,6 +117,7 @@
                                 </div>
 
                             </div>
+
                         </div>
 
                         <hr> <!-- Divider -->
@@ -265,7 +314,8 @@
                                                         @if ($customer->e_visa_number)
                                                             <li>
                                                                 <a class="dropdown-item text-info"
-                                                                    href="{{ route('reports.nomination_card', $customer->id) }}">
+                                                                    href="{{ route('reports.nomination_card', $customer->id) }}"
+                                                                    target="_blank">
                                                                     <i class="fas fa-file-alt"></i>
                                                                     بطاقة الترشيح
                                                                 </a>
@@ -287,7 +337,8 @@
                                                                     class="fas fa-list-alt me-1"></i> الكشوفات</a>
                                                             <ul class="dropdown-menu"
                                                                 style="position: absolute; left: 100% !important; right: auto;">
-                                                                <li><a class="dropdown-item"
+                                                                <li>
+                                                                    <a class="dropdown-item"
                                                                         href="{{ route('print_visaEntriy', $customer->id) }}"
                                                                         target="_blank"><i
                                                                             class="fas fa-passport me-1"></i>
@@ -519,6 +570,16 @@
                 });
             </script>
         @endif
+        @if (session('swal_errors'))
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'حدثت بعض الأخطاء',
+                    html: `{!! implode('<br>', session('swal_errors')) !!}`,
+                });
+            </script>
+        @endif
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
         <script src="{{ asset(path: 'js/entry_applocation.js') }}"></script>
     </div>

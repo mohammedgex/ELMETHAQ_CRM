@@ -289,7 +289,8 @@
                                 style="margin-right: 50px;">{{ $customer->customerGroup->visaProfession->job ?? '-' }}</span>
                         </h4>
                         <h4>بموجب التأشيرة رقم <Span
-                                style="margin-right: 50px;">{{ $customer->visa_number ?? '-' }}</Span></h4>
+                                style="margin-right: 50px;">{{ $customer->customerGroup?->visaType?->outgoing_number ?? '-' }}</Span>
+                        </h4>
                     </div>
                     <div>
                         <!-- رقم التأشيرة -->
@@ -462,7 +463,7 @@
         </div>
     </div>
     <span id="enumber_value" style="display: none;">{{ $customer->e_visa_number }}</span>
-    <span id="visa_number" style="display: none;">{{ $customer->visa_number }}</span>
+    <span id="visa_number" style="display: none;">{{ $customer->customerGroup?->visaType?->outgoing_number }}</span>
     <script>
         // استخراج الأرقام
         const visaNumber = document.getElementById('visa_number').textContent.trim();

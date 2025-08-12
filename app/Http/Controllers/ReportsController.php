@@ -41,7 +41,7 @@ class ReportsController extends Controller
             if (!$customer->e_visa_number) {
                 $errors[] =  'الـ E Number مفقود.';
             }
-            if (!$customer->visa_number) {
+            if (!$customer->customerGroup?->visaType?->outgoing_number) {
                 $errors[] = 'رقم التأشيرة مفقود.';
             }
             if (!$customer->customerGroup?->visaType?->issuing_visa) {
@@ -56,9 +56,8 @@ class ReportsController extends Controller
         }
 
         if (!empty($errors)) {
-            return redirect()->back()->withErrors($errors);
+            return redirect()->back()->with('swal_errors', $errors);
         }
-
 
         return view("reports.nomination_card.nomination_card", compact('customer'));
     }

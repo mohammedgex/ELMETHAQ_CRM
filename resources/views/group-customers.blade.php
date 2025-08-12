@@ -134,6 +134,16 @@
             </div>
         </div>
     </div>
+    @if (session('swal_errors'))
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'حدثت بعض الأخطاء',
+                html: `{!! implode('<br>', session('swal_errors')) !!}`,
+            });
+        </script>
+    @endif
+
 
     <style>
         /* ألوان وتنسيقات خاصة بالصفحة فقط */
