@@ -243,7 +243,7 @@
                                 ->filter(function ($customer) {
                                     return $customer->medical_examination === 'لائق' &&
                                         $customer->finger_print_examination === 'تم تصدير الاكسيل' &&
-                                        $customer->virus_examination === 'موجب' &&
+                                        $customer->virus_examination === 'سالب' &&
                                         is_null($customer->e_visa_number);
                                 })
                                 ->count();
