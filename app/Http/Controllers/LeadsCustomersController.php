@@ -371,7 +371,20 @@ class LeadsCustomersController extends Controller
             'الأقصر',
             'قنا',
             'شمال سيناء',
-            'سوهاج'
+            'سوهاج',
+            // مضافة
+            'السعودية',
+            'القدس',
+            'الأردن',
+            'العراق',
+            'لبنان',
+            'فلسطين',
+            'اليمن',
+            'عمان',
+            'الإمارات العربية المتحدة',
+            'الكويت',
+            'قطر',
+            'البحرين',
         ];
         $tests = Test::all();
         return view('leads-customers.leads-customers', [
