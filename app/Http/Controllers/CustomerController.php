@@ -227,16 +227,16 @@ class CustomerController extends Controller
         if ($request->filled('issue_place')) {
             $customer->issue_place = $request->issue_place;
         }
-        if ($request->filled('card_id')) {
-            $customer->card_id = $request->card_id;
-        }
+        // if ($request->filled('card_id')) {
+        //     $customer->card_id = $request->card_id;
+        // }
 
         if ($request->filled('name_en_mrz')) {
             $customer->name_en_mrz = $request->name_en_mrz;
         }
-        if ($request->filled('name_ar')) {
-            $customer->name_ar = $request->name_ar;
-        }
+        // if ($request->filled('name_ar')) {
+        //     $customer->name_ar = $request->name_ar;
+        // }
         $customer->save();
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'mrz');

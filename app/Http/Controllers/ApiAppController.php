@@ -582,7 +582,10 @@ class ApiAppController extends Controller
         }
         $user = User::where('email', $request->email)->first();
 
-        $customer->hospital_address =  $request->hospital_name . "|---|" . $request->cleanedAddress;
+        $translator = app(GoogleTranslateController::class);
+        $translated = $translator->translateText($request->hospital_name . "|---|" . $request->cleanedAddress, "en", "ar");
+
+        $customer->hospital_address =  $translated;
         $customer->medical_examination = "تم الحجز";
         $customer->save();
         $history = new History();

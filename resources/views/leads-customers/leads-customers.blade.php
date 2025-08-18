@@ -202,7 +202,7 @@
                                         <input type="file" name="{{ $img['name'] }}"
                                             class="custom-file-input preview-image-input"
                                             data-preview="#preview_{{ $img['name'] }}" id="{{ $img['id'] }}"
-                                            required>
+                                            data-input="#{{ $img['id'] }}" required>
                                         <label class="custom-file-label">اختر صورة</label>
                                     </div>
 
@@ -497,12 +497,47 @@
             </div>
         </div>
     </div>
+    {{-- تعديل الصور --}}
+    <!-- نافذة الاقتصاص -->
+    <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 70vw; height: 70vh;">
+            <div class="modal-content" style="height: 100%;">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">اقتصاص الصورة</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                </div>
+
+                <!-- جسم المودال (الصورة تاخد كل المساحة المتاحة) -->
+                <div class="modal-body bg-dark p-0" style="height: calc(100% - 120px);">
+                    <div class="w-100 h-100">
+                        <img id="cropperImage" style="width:100%; height:100%; object-fit:contain; display:block;">
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" id="zoomIn">تكبير +</button>
+                        <button type="button" class="btn btn-secondary" id="zoomOut">تصغير -</button>
+                        <button type="button" class="btn btn-secondary" id="rotateLeft">↺ تدوير</button>
+                        <button type="button" class="btn btn-secondary" id="reset">إعادة ضبط</button>
+                    </div>
+                    <button type="button" id="cropConfirm" class="btn btn-success">تأكيد الاقتصاص</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
 @stop
 
 
 @section('css')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
     <style>
         .loader {
             border: 5px solid #f3f3f3;
@@ -551,6 +586,7 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -625,8 +661,6 @@
             });
         });
     </script>
-
-
 
     <script type="module">
         function calculateAge(dateOfBirthStr) {
@@ -898,7 +932,122 @@
             statusFilter.addEventListener('change', filterTable);
             dateFilter.addEventListener('change', filterTable);
         });
+
+
+
+
+
+        // سسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسس
     </script>
 
+    <script>
+        let cropper;
+        let currentInputFile = null;
+        let currentPreviewId = null;
+        const cropperModal = document.getElementById("cropperModal");
+        const cropperImage = document.getElementById("cropperImage");
+
+        // اختيار صورة
+        document.querySelectorAll(".preview-image-input").forEach(input => {
+            input.addEventListener("change", function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                currentInputFile = e.target;
+                currentPreviewId = e.target.getAttribute("data-preview");
+
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    cropperImage.src = event.target.result;
+
+                    // افتح المودال
+                    const modal = new bootstrap.Modal(cropperModal);
+                    modal.show();
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+
+        // بعد ما المودال يظهر فعليًا
+        cropperModal.addEventListener("shown.bs.modal", function() {
+            if (cropper) cropper.destroy();
+
+            cropper = new Cropper(cropperImage, {
+                aspectRatio: NaN,
+                viewMode: 1,
+                autoCropArea: 1,
+                responsive: true,
+                background: false,
+                ready() {
+                    // نخلي الصورة تملأ المساحة من أول مرة
+                    const containerData = cropper.getContainerData();
+                    const imageData = cropper.getImageData();
+
+                    let scaleX = containerData.width / imageData.width;
+                    let scaleY = containerData.height / imageData.height;
+                    let scale = Math.min(scaleX, scaleY);
+
+                    cropper.zoomTo(scale);
+                }
+            });
+        });
+
+        // زر تأكيد الاقتصاص
+        document.getElementById("cropConfirm").addEventListener("click", function() {
+            if (cropper && currentPreviewId && currentInputFile) {
+                cropper.getCroppedCanvas({
+                    width: 400,
+                    height: 400
+                }).toBlob(function(blob) {
+                    const file = new File([blob], "cropped.jpg", {
+                        type: "image/jpeg"
+                    });
+
+                    // نغير ملف input نفسه
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    currentInputFile.files = dataTransfer.files;
+
+                    // نعرض الصورة في preview
+                    const previewDiv = document.querySelector(currentPreviewId + " img");
+                    previewDiv.src = URL.createObjectURL(file);
+                    previewDiv.style.display = "block";
+
+                    // إغلاق المودال
+                    const modal = bootstrap.Modal.getInstance(cropperModal);
+                    modal.hide();
+                }, "image/jpeg");
+            }
+        });
+
+        // أدوات التحكم
+        document.getElementById("zoomIn").addEventListener("click", function() {
+            if (cropper) cropper.zoom(0.1);
+        });
+
+        document.getElementById("zoomOut").addEventListener("click", function() {
+            if (cropper) cropper.zoom(-0.1);
+        });
+
+        document.getElementById("rotateLeft").addEventListener("click", function() {
+            if (cropper) cropper.rotate(-90);
+        });
+
+        document.getElementById("reset").addEventListener("click", function() {
+            if (cropper) {
+                cropper.reset();
+
+                // نخلي الصورة تملأ تاني
+                const containerData = cropper.getContainerData();
+                const imageData = cropper.getImageData();
+
+                let scaleX = containerData.width / imageData.width;
+                let scaleY = containerData.height / imageData.height;
+                let scale = Math.min(scaleX, scaleY);
+
+                cropper.zoomTo(scale);
+            }
+        });
+    </script>
 
 @stop
