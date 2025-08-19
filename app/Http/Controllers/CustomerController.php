@@ -55,7 +55,7 @@ class CustomerController extends Controller
             $customer = Customer::find($id);
             $files = $customer->documentTypes;
             $payments = $customer->payments;
-            $histories = $customer->histories;
+            $histories = $customer->histories()->orderBy('created_at', 'desc')->get();
 
             // 🛠 استبعاد العناوين اللي العميل استعملها
             $usedDocumentTypes = $customer->documentTypes->pluck('document_type')->toArray();

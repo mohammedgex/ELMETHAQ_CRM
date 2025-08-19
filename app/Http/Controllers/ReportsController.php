@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\bag;
 use App\Models\Customer;
+use App\Models\History;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
@@ -118,5 +120,21 @@ class ReportsController extends Controller
         }
 
         return redirect()->back()->withErrors(['نوع السفارة غير مدعوم.']);
+    }
+
+    public function print_visaEntriy($id)
+    {
+        $customer = Customer::find($id);
+
+        $history = new History();
+        $history->description = "تم طباعة طلب الدخول";
+        $history->date = Carbon::now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->id();
+        $history->save();
+
+        return view('print-customer.print-entry_application', [
+            'customers' => [$customer]
+        ]);
     }
 }

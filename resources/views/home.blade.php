@@ -280,9 +280,7 @@
                                                 @php
                                                     $percentage =
                                                         $group->visaProfession->profession_count > 0
-                                                            ? ($qualifiedCustomers /
-                                                                    $group->visaProfession->profession_count) *
-                                                                100
+                                                            ? ($qualifiedCustomers / $totalCustomers) * 100
                                                             : 0;
                                                 @endphp
                                                 <div class="progress-bar bg-white d-flex justify-content-center align-items-center"

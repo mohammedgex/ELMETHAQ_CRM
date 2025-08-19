@@ -31,6 +31,8 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
 use App\Models\Customer;
+use App\Models\History;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -58,13 +60,7 @@ Route::group([
 
     Route::get('/send-api/{id}', [JopController::class, 'net'])->name('net');
 
-    Route::get('/vissa/{id}', function ($id) {
-        $customer = Customer::find($id);
-
-        return view('print-customer.print-entry_application', [
-            'customers' => [$customer]
-        ]);
-    })->name('print_visaEntriy');
+    Route::get('/vissa/{id}', [ReportsController::class, 'print_visaEntriy'])->name('print_visaEntriy');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware("check.permission:dashboard-access");
     Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index')->middleware("check.permission:leads-customers-show");

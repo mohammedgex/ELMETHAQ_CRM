@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\History;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class CustomerGroupController extends Controller
 {
@@ -129,6 +131,13 @@ class CustomerGroupController extends Controller
 
         $customer->customer_group_id = null;  // إزالة العميل من المجموعة
         $customer->save();  // حفظ التغييرات
+
+        $history = new History();
+        $history->description = "تم إزالة العميل {$customer->name_ar} من المجموعة {$group->title}";
+        $history->date = Carbon::now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->id();
+        $history->save();
 
         return redirect()->back()->with('success', 'تم إزالة العميل من المجموعة بنجاح');
     }

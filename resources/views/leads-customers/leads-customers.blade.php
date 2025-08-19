@@ -46,6 +46,10 @@
                                 <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
                                     style="max-width: 100px; display: none;" alt="Preview">
                             </div>
+                            <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn" data-input="#dd"
+                                data-preview="#preview_image">
+                                اقتصاص
+                            </button>
 
                         </div>
                         <div class="row">
@@ -211,6 +215,10 @@
                                         <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
                                             style="max-width: 100px; display: none;" alt="Preview">
                                     </div>
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                        data-input="#{{ $img['id'] }}" data-preview="#preview_{{ $img['name'] }}">
+                                        اقتصاص
+                                    </button>
                                 </div>
                             @else
                                 {{-- باقي الصور (كل واحدة في صف مستقل) --}}
@@ -230,6 +238,10 @@
                                         <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
                                             style="max-width: 100px; display: none;" alt="Preview">
                                     </div>
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                        data-input="#{{ $img['id'] }}" data-preview="#preview_{{ $img['name'] }}">
+                                        اقتصاص
+                                    </button>
 
                                     @if ($img['name'] == 'passport_photo')
                                         <div
@@ -410,8 +422,10 @@
                                             </a>
                                             <div class="dropdown-menu">
                                                 @foreach ($lead->tests as $test)
-                                                    <a class="dropdown-item"
-                                                        href="{{ route('test.leads', $test->id) }}">{{ $test->title }}</a>
+                                                    <a class="dropdown-item" title="{{ $test->title }}"
+                                                        href="{{ route('test.leads', $test->id) }}">
+                                                        {{ $test->title }}
+                                                    </a>
                                                 @endforeach
                                             </div>
                                         </div>
@@ -444,7 +458,6 @@
                 </table>
             </div>
         </div>
-
     </div>
 
     <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
@@ -528,9 +541,6 @@
             </div>
         </div>
     </div>
-
-
-
 @stop
 
 
@@ -567,6 +577,17 @@
 
         .ccccc::after {
             display: none;
+        }
+
+        .dropdown-item {
+            max-width: 250px;
+            /* العرض الأقصى */
+            white-space: nowrap;
+            /* يمنع نزول النص لسطر جديد */
+            overflow: hidden;
+            /* يخفي الجزء الزائد */
+            text-overflow: ellipsis;
+            /* يضيف ... عند الزيادة */
         }
     </style>
 
@@ -948,25 +969,36 @@
         const cropperImage = document.getElementById("cropperImage");
 
         // اختيار صورة
-        document.querySelectorAll(".preview-image-input").forEach(input => {
-            input.addEventListener("change", function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
+        document.querySelectorAll(".crop-image-btn").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const inputSelector = this.getAttribute("data-input");
+                const previewSelector = this.getAttribute("data-preview");
 
-                currentInputFile = e.target;
-                currentPreviewId = e.target.getAttribute("data-preview");
+                currentInputFile = document.querySelector(inputSelector);
+                currentPreviewId = previewSelector;
+
+                if (!currentInputFile.files[0]) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'تنبيه',
+                        text: 'اختر صورة أولاً قبل الاقتصاص!',
+                        confirmButtonText: 'حسناً'
+                    });
+                    return;
+                }
 
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     cropperImage.src = event.target.result;
 
-                    // افتح المودال
+                    // فتح المودال
                     const modal = new bootstrap.Modal(cropperModal);
                     modal.show();
                 };
-                reader.readAsDataURL(file);
+                reader.readAsDataURL(currentInputFile.files[0]);
             });
         });
+
 
         // بعد ما المودال يظهر فعليًا
         cropperModal.addEventListener("shown.bs.modal", function() {
