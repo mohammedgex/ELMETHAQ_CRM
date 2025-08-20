@@ -23,16 +23,36 @@
                                 aria-expanded="false">
                                 عمليات
                             </button>
-                            <ul class="dropdown-menu shadow">
+                            <ul class="dropdown-menu shadow-lg rounded-3 border-0">
+                                {{-- السويس --}}
                                 <li>
-                                    <a href="{{ route('reports.transaction_statement', $bag->id) }}" target="_blank">
-                                        <button class="dropdown-item text-primary">
-                                            <i class="fas fa-sms me-2"></i>
-                                            طباعة كشف المعاملات
-                                        </button>
+                                    <a href="{{ route('reports.transaction_statement_suez', $bag->id) }}" target="_blank"
+                                        class="dropdown-item d-flex justify-content-between align-items-center text-success fw-bold">
+                                        <div>
+                                            <i class="fas fa-file-alt me-2"></i>
+                                            كشف معاملات السويس
+                                        </div>
+                                        <span class="badge bg-success rounded-pill">
+                                            {{ $bag->customers->filter(fn($c) => $c->customerGroup?->visaType?->embassy?->title === 'السويس')->count() }}
+                                        </span>
+                                    </a>
+                                </li>
+
+                                {{-- القاهرة --}}
+                                <li>
+                                    <a href="{{ route('reports.transaction_statement_cairo', $bag->id) }}" target="_blank"
+                                        class="dropdown-item d-flex justify-content-between align-items-center text-primary fw-bold">
+                                        <div>
+                                            <i class="fas fa-file-alt me-2"></i>
+                                            كشف معاملات القاهرة
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">
+                                            {{ $bag->customers->filter(fn($c) => $c->customerGroup?->visaType?->embassy?->title === 'القاهرة')->count() }}
+                                        </span>
                                     </a>
                                 </li>
                             </ul>
+
                         </div>
 
                         {{-- الجدول --}}

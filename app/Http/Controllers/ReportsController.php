@@ -121,6 +121,45 @@ class ReportsController extends Controller
 
         return redirect()->back()->withErrors(['نوع السفارة غير مدعوم.']);
     }
+    public function transaction_statement_cairo($id)
+    {
+        $bag = Bag::with('customers.customerGroup.visaType.embassy')->find($id);
+
+        if (!$bag) {
+            return redirect()->back()->withErrors(['لم يتم العثور على بيانات الحقيبة.']);
+        }
+
+        $customers = $bag->customers->filter(function ($customer) {
+            return $customer->customerGroup?->visaType?->embassy?->title === "القاهرة";
+        });
+
+        if ($customers->isEmpty()) {
+            return redirect()->back()->withErrors(['لا توجد معاملات لهذه الحقيبة تخص سفارة القاهرة.']);
+        }
+
+        return view("reports.Transaction statement.transaction_statement_cairo", compact('bag', 'customers'));
+    }
+
+
+    public function transaction_statement_suez($id)
+    {
+        $bag = Bag::with('customers.customerGroup.visaType.embassy')->find($id);
+
+        if (!$bag) {
+            return redirect()->back()->withErrors(['لم يتم العثور على بيانات الحقيبة.']);
+        }
+
+        $customers = $bag->customers->filter(function ($customer) {
+            return $customer->customerGroup?->visaType?->embassy?->title === "السويس";
+        });
+
+        if ($customers->isEmpty()) {
+            return redirect()->back()->withErrors(['لا توجد معاملات لهذه الحقيبة تخص قنصلية السويس.']);
+        }
+
+        return view("reports.Transaction statement.transaction_statement_souis", compact('bag', 'customers'));
+    }
+
 
     public function print_visaEntriy($id)
     {

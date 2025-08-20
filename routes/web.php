@@ -238,7 +238,8 @@ Route::group([
     Route::get('/reports/show/{id}', [ReportsController::class, 'showReportes'])->name('reports.show');
     Route::get('/e_number_barcode/{id}', [ReportsController::class, 'E_number_barcode'])->name('reports.e_number_barcode');
     Route::get('/visa-number-barcode/{id}', [ReportsController::class, 'visaNumberBarcode'])->name('reports.visaNumberBarcode');
-    Route::get('/transaction_statement/{id}', [ReportsController::class, 'transaction_statement'])->name('reports.transaction_statement');
+    Route::get('/transaction_statement_cairo/{id}', [ReportsController::class, 'transaction_statement_cairo'])->name('reports.transaction_statement_cairo');
+    Route::get('/transaction_statement_suez/{id}', [ReportsController::class, 'transaction_statement_suez'])->name('reports.transaction_statement_suez');
     Route::get('/reset-password-lead/{id}', [LeadsCustomersController::class, 'resetPassword'])->name('reset.password.lead');
     Route::get('/chart/potential', [HomeController::class, 'potentialChartData'])
         ->name('chart.potential');

@@ -409,7 +409,7 @@
         document.addEventListener("keydown", function(event) {
             if (event.key === "F12" ||
                 (event.ctrlKey && event.shiftKey && (event.key === "I" || event.key === "J" || event.key ===
-                "C")) ||
+                    "C")) ||
                 (event.ctrlKey && event.key === "U")) {
                 event.preventDefault();
                 return false;
@@ -418,7 +418,7 @@
     </script>
 
 
-    {{-- <script>
+    <script>
         // منع اختصارات DevTools مثل F12 و Ctrl+Shift+I/J و Ctrl+U
         document.addEventListener('keydown', function(e) {
             // F12
@@ -465,7 +465,7 @@
             });
             console.log(element);
         })();
-    </script> --}}
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;
@@ -485,6 +485,45 @@
                 toggleBtn.textContent = dark ? '☀️' : '🌙';
             });
         });
+
+        document.addEventListener("keydown", function(e) {
+            // السماح فقط بالاختصارات المسموح بها (Ctrl+P, Ctrl+C, Ctrl+S)
+            if (
+                e.ctrlKey && ["p", "c", "s", "r", "a", "z", "x", "v"].includes(e.key.toLowerCase())
+            ) {
+                return true; // السماح
+            }
+
+            // منع أي اختصار آخر
+            if (e.ctrlKey || e.metaKey || e.key === "F12") {
+                e.preventDefault();
+                e.stopImmediatePropagation(); // يوقف الاختصار تمامًا
+                return false; // يمنع أي تنفيذ إضافي
+            }
+        });
+
+
+        function detectDevTools() {
+            const start = performance.now();
+            debugger; // لو DevTools مفتوح هيتأخر هنا
+            const end = performance.now();
+
+            if (end - start > 100) { // فرق زمني كبير يعني DevTools مفتوح
+                document.body.innerHTML = `
+                    <h1 style="color:red; text-align:center; margin-top:20%; font-size:50px;">
+                        🚨 تم كشف فتح أدوات المطور 🚨
+                    </h1>
+                    <h2 style="text-align:center; font-size:30px;">
+                        لا تحاول العبث في الكود، هذا قد يؤدي إلى حظر حسابك!
+                    </h2>
+                    <h3 style="text-align:center; font-size:20px;">
+                        من فضلك يا {{ auth()->user()->name }} اغلق وضع المطور وقم بعمل ريفريش
+                    </h3>
+                    `;
+            }
+        }
+
+        setInterval(detectDevTools, 1000);
     </script>
 
 </body>
