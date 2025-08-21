@@ -486,21 +486,21 @@
             });
         });
 
-        document.addEventListener("keydown", function(e) {
-            // السماح فقط بالاختصارات المسموح بها (Ctrl+P, Ctrl+C, Ctrl+S)
-            if (
-                e.ctrlKey && ["p", "c", "s", "r", "a", "z", "x", "v"].includes(e.key.toLowerCase())
-            ) {
-                return true; // السماح
-            }
+        // document.addEventListener("keydown", function(e) {
+        //     // السماح فقط بالاختصارات المسموح بها (Ctrl+P, Ctrl+C, Ctrl+S)
+        //     if (
+        //         e.ctrlKey && ["p", "c", "s", "r", "a", "z", "x", "v"].includes(e.key.toLowerCase())
+        //     ) {
+        //         return true; // السماح
+        //     }
 
-            // منع أي اختصار آخر
-            if (e.ctrlKey || e.metaKey || e.key === "F12") {
-                e.preventDefault();
-                e.stopImmediatePropagation(); // يوقف الاختصار تمامًا
-                return false; // يمنع أي تنفيذ إضافي
-            }
-        });
+        //     // منع أي اختصار آخر
+        //     if (e.ctrlKey || e.metaKey || e.key === "F12") {
+        //         e.preventDefault();
+        //         e.stopImmediatePropagation(); // يوقف الاختصار تمامًا
+        //         return false; // يمنع أي تنفيذ إضافي
+        //     }
+        // });
 
 
         function detectDevTools() {
