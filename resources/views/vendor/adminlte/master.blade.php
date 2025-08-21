@@ -516,9 +516,11 @@
                     <h2 style="text-align:center; font-size:30px;">
                         لا تحاول العبث في الكود، هذا قد يؤدي إلى حظر حسابك!
                     </h2>
-                    <h3 style="text-align:center; font-size:20px;">
+                    @if (auth()->user())
+                        <h3 style="text-align:center; font-size:20px;">
                         من فضلك يا {{ auth()->user()->name }} اغلق وضع المطور وقم بعمل ريفريش
                     </h3>
+                    @endif
                     `;
             }
         }
