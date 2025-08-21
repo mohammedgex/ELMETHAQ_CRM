@@ -87,7 +87,7 @@ class ReportsController extends Controller
         if (!$customer) {
             return redirect()->back()->withErrors(['لم يتم العثور على بيانات العميل.']);
         }
-        if (!$customer->visa_number) {
+        if (!$customer->customerGroup?->visaType?->outgoing_number) {
             return redirect()->back()->withErrors(['رقم التأشيرة مفقود.']);
         }
 
