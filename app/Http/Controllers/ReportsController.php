@@ -92,7 +92,7 @@ class ReportsController extends Controller
         }
 
         return view("reports.E_nummber_barcode.index", [
-            "code" => $customer->visa_number,
+            "code" => $customer->customerGroup?->visaType?->outgoing_number ?? '',
         ]);
     }
 

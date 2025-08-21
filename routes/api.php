@@ -50,3 +50,4 @@ Route::middleware('auth:sanctum')->get('/company/data', [CompanyController::clas
 Route::post('/taakebs', [CompanyController::class, 'addTaakeb'])->middleware('auth:sanctum');
 Route::get('/taakebs', [CompanyController::class, 'getTaakebs'])->middleware('auth:sanctum');
 Route::get('/taakeb/{id}', [CompanyController::class, 'getTaakeb'])->middleware('auth:sanctum');
+Route::get('/customers-booking-panding', [ApiAppController::class, 'get_customers_booking_sedical_status']);

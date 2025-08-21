@@ -580,7 +580,6 @@ class ApiAppController extends Controller
         if (!$customer) {
             return response()->json(['message' => 'Customer not found'], 404);
         }
-        $user = User::where('email', $request->email)->first();
 
         $translator = app(GoogleTranslateController::class);
         $translated = $translator->translateText($request->hospital_name . "|---|" . $request->cleanedAddress, "en", "ar");
@@ -588,12 +587,17 @@ class ApiAppController extends Controller
         $customer->hospital_address =  $translated;
         $customer->medical_examination = "تم الحجز";
         $customer->save();
-        $history = new History();
-        $history->description = "تم جلب عنوان المستشفي وتخزينه";
-        $history->date = now();
-        $history->customer_id = $customer->id;
-        $history->user_id = $user->id; // يجب تعديل هذا إلى معرف المستخدم الصحيح
-        $history->save();
+        if ($request->email) {
+            # code...
+            // إنشاء سجل تاريخي
+            $user = User::where('email', $request->email)->first();
+            $history = new History();
+            $history->description = "تم جلب عنوان المستشفي وتخزينه";
+            $history->date = now();
+            $history->customer_id = $customer->id;
+            $history->user_id = $user->id; // يجب تعديل هذا إلى معرف المستخدم الصحيح
+            $history->save();
+        }
         // حذف أي مستندات سابقة من نوع "المستشفي"
         $customer->documentTypes()->where('document_type', 'المستشفي')->delete();
         // إنشاء مستند جديد
@@ -609,12 +613,17 @@ class ApiAppController extends Controller
             # code...
             $customer->medical_examination = 'لائق';
             $customer->save();
-            $history = new History();
-            $history->description = "تم جلب نتيجة الكشف الطبي وهو :لائق";
-            $history->date = now();
-            $history->customer_id = $customer->id;
-            $history->user_id = $user->id; // يجب تعديل هذا إلى معرف المستخدم الصحيح
-            $history->save();
+            if ($request->email) {
+                # code...
+                $user = User::where('email', $request->email)->first();
+                $history = new History();
+                $history->description = "تم جلب نتيجة الكشف الطبي وهو :لائق";
+                $history->date = now();
+                $history->customer_id = $customer->id;
+                $history->user_id = $user->id; // يجب تعديل هذا إلى معرف المستخدم الصحيح
+                $history->save();
+            }
+
             // حذف أي مستندات سابقة من نوع نتيجة الكشف الطبي
             $customer->documentTypes()->where('document_type', "نتيجة الكشف الطبي")->delete();
             // إنشاء مستند جديد
@@ -629,12 +638,16 @@ class ApiAppController extends Controller
             # code...
             $customer->medical_examination = "غير لائق";
             $customer->save();
-            $history = new History();
-            $history->description = "تم جلب نتيجة الكشف الطبي وهو : غير لائق";
-            $history->date = now();
-            $history->customer_id = $customer->id;
-            $history->user_id = $user->id;
-            $history->save();
+            if ($request->email) {
+                # code...
+                $user = User::where('email', $request->email)->first();
+                $history = new History();
+                $history->description = "تم جلب نتيجة الكشف الطبي وهو : غير لائق";
+                $history->date = now();
+                $history->customer_id = $customer->id;
+                $history->user_id = $user->id;
+                $history->save();
+            }
             // حذف أي مستندات سابقة من نوع نتيجة الكشف الطبي
             $customer->documentTypes()->where('document_type', "نتيجة الكشف الطبي")->delete();
             // إنشاء مستند جديد
@@ -726,5 +739,18 @@ class ApiAppController extends Controller
         $user->save();
 
         return response()->json(['message' => 'تم تغيير كلمة المرور بنجاح.']);
+    }
+
+    public function get_customers_booking_sedical_status()
+    {
+        $customers = Customer::whereNotNull('token_medical')
+            ->where('medical_examination', "تم الحجز")
+            ->select('token_medical')
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'customers' => $customers,
+        ], 200);
     }
 }
