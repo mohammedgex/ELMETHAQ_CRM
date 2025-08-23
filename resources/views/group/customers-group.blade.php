@@ -1922,7 +1922,7 @@
 
             // ✅ تنسيق العناوين (الصف الأول)
             const headerRow = worksheet.getRow(1);
-            headerRow.height = 30; // 👈 زيادة طول صف العناوين
+            headerRow.height = 30;
             headerRow.eachCell(cell => {
                 cell.alignment = {
                     vertical: "middle",
@@ -1930,10 +1930,11 @@
                 };
                 cell.font = {
                     bold: true,
+                    size: 14,
                     color: {
                         argb: "FFFFFFFF"
                     }
-                }; // خط أبيض
+                }; // 👈 بولد + حجم 14 + أبيض
                 cell.fill = {
                     type: "pattern",
                     pattern: "solid",
@@ -1946,12 +1947,16 @@
             // ✅ تنسيق باقي الصفوف
             worksheet.eachRow((row, rowNumber) => {
                 if (rowNumber !== 1) {
-                    row.height = 25; // 👈 الطول أكبر شوية للبيانات
+                    row.height = 25;
                     row.eachCell(cell => {
                         cell.alignment = {
                             vertical: "middle",
                             horizontal: "center"
                         };
+                        cell.font = {
+                            bold: true,
+                            size: 14
+                        }; // 👈 بولد + حجم 14
                     });
                 }
             });
