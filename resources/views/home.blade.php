@@ -279,7 +279,8 @@
                                                 style="height: 14px; border-radius: 8px; overflow: hidden;">
                                                 @php
                                                     $percentage =
-                                                        $group->visaProfession->profession_count > 0
+                                                        $group->visaProfession->profession_count > 0 &&
+                                                        $totalCustomers > 0
                                                             ? ($qualifiedCustomers / $totalCustomers) * 100
                                                             : 0;
                                                 @endphp

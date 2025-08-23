@@ -1037,7 +1037,7 @@
                     alert("حدث خطأ أثناء التعيين");
                 });
         });
-        // ###################################################################### تعيين حقيبة 
+        // ###################################################################### تعيين حقيبة
         document.getElementById('assignBagForm').addEventListener('submit', function(e) {
             document.getElementById("hhhh").style.display = "block"
             document.getElementById("gggg").style.display = "block"
@@ -1969,7 +1969,7 @@
 
             const link = document.createElement("a");
             link.href = URL.createObjectURL(blob);
-            link.download = "customers.xlsx";
+            link.download = "{{ $group->title }}.xlsx";
             link.click();
         }
     </script>
