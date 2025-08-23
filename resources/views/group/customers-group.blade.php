@@ -74,6 +74,9 @@
 
                             <!-- أزرار الإجراءات -->
                             <div class="mb-3 me-2 mx-2">
+                                <button class="btn btn-primary btn-lg rounded-pill shadow-sm" onclick="downloadExcel()">
+                                    <i class="bi bi-file-earmark-excel"></i> تحميل ملف Excel
+                                </button>
                                 <div class="btn-group">
                                     <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown"
                                         aria-expanded="false">
@@ -866,6 +869,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
     <script>
         $(document).on('click', '.show-loading', function(e) {
             $('#loading-overlay').fadeIn();
@@ -1802,65 +1806,7 @@
             });
         });
 
-        // ###################################################################### الكشف الطبي
-        // document.getElementById('checkMedicalStatus').addEventListener('click', async function() {
-        //     const customer = JSON.parse(this.getAttribute('data-customer'));
-
-        //     const token = customer.token_medical;
-        //     const email = "{{ auth()->user()->email }}"; // أو ضعها من `data-email` إذا لم تكن في blade
-
-        //     if (!token || !email) {
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'بيانات ناقصة',
-        //             text: 'لا يمكن فتح الرابط بدون التوكن أو الإيميل.',
-        //         });
-        //         return;
-        //     }
-
-        //     const url = `http://localhost:3000/check-medical/${token}/${email}`;
-        //     Swal.fire({
-        //         title: 'جارٍ التحقق...',
-        //         text: 'يرجى الانتظار قليلاً',
-        //         allowOutsideClick: false,
-        //         didOpen: () => Swal.showLoading(),
-        //     });
-
-        //     try {
-        //         const response = await fetch(url);
-        //         const result = await response.json();
-
-        //         Swal.close();
-        //         console.log(response);
-
-        //         if (result.success) {
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'تم التحقق',
-        //                 html: `
-    //             <b>الحالة الطبية:</b> ${result.status}<br>
-    //             <b>اسم المستشفى:</b> ${result.hospitalName}<br>
-    //             <b>العنوان:</b> ${result.address}
-    //         `
-        //             });
-        //         } else {
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'فشل التحقق',
-        //                 text: 'حدث خطأ في البيانات أو الرابط.',
-        //             });
-        //         }
-
-        //     } catch (error) {
-        //         Swal.close();
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'خطأ في الاتصال',
-        //             text: error.message || 'فشل الاتصال بالسيرفر.',
-        //         });
-        //     }
-        // });
-
+        // ###################################################################### التحقق من الحالة الطبية
         document.querySelectorAll('.checkMedicalStatus').forEach(function(button) {
             button.addEventListener('click', async function() {
                 // الكود الخاص بك هنا
@@ -1922,5 +1868,104 @@
                 }
             });
         });
+
+        // ###################################################################### تصدير اكسيل
+        async function downloadExcel() {
+            const customers = @json($customers);
+
+            const workbook = new ExcelJS.Workbook();
+            const worksheet = workbook.addWorksheet("العملاء");
+
+            worksheet.columns = [{
+                    header: "رقم",
+                    key: "num",
+                    width: 8
+                },
+                {
+                    header: "الاسم",
+                    key: "name",
+                    width: 50
+                },
+                {
+                    header: "الهاتف",
+                    key: "phone",
+                    width: 20
+                },
+                {
+                    header: "الجواز",
+                    key: "passport",
+                    width: 20
+                },
+                {
+                    header: "المحافظة",
+                    key: "gov",
+                    width: 25
+                },
+                {
+                    header: "المندوب",
+                    key: "delegate",
+                    width: 25
+                },
+            ];
+
+            // إدخال البيانات
+            customers.forEach((c, index) => {
+                worksheet.addRow({
+                    num: index + 1,
+                    name: c.name_ar,
+                    phone: c.phone,
+                    passport: c.passport_id,
+                    gov: c.governorate_live,
+                    delegate: c.delegate ? c.delegate.name : ""
+                });
+            });
+
+            // ✅ تنسيق العناوين (الصف الأول)
+            const headerRow = worksheet.getRow(1);
+            headerRow.height = 30; // 👈 زيادة طول صف العناوين
+            headerRow.eachCell(cell => {
+                cell.alignment = {
+                    vertical: "middle",
+                    horizontal: "center"
+                };
+                cell.font = {
+                    bold: true,
+                    color: {
+                        argb: "FFFFFFFF"
+                    }
+                }; // خط أبيض
+                cell.fill = {
+                    type: "pattern",
+                    pattern: "solid",
+                    fgColor: {
+                        argb: "228B22"
+                    } // أخضر
+                };
+            });
+
+            // ✅ تنسيق باقي الصفوف
+            worksheet.eachRow((row, rowNumber) => {
+                if (rowNumber !== 1) {
+                    row.height = 25; // 👈 الطول أكبر شوية للبيانات
+                    row.eachCell(cell => {
+                        cell.alignment = {
+                            vertical: "middle",
+                            horizontal: "center"
+                        };
+                    });
+                }
+            });
+
+            // تحميل الملف
+            const buffer = await workbook.xlsx.writeBuffer();
+            const blob = new Blob([buffer], {
+                type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            });
+
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "customers.xlsx";
+            link.click();
+        }
     </script>
 @stop
