@@ -366,8 +366,30 @@
         });
 
         /* عند التحميل: نملأ البيانات مرة واحدة من المصفوفة الممررة من الـ Blade */
+        // window.addEventListener('load', function() {
+        //     // 1) املأ من أي جدول موجود مسبقاً (اختياري)
+        //     loadExistingTableData();
+
+        //     // 2) إذا لا توجد بيانات محلياً، املأ من server variable
+        //     if ((!globalData || globalData.length === 0) && Array.isArray(customersFromServer) &&
+        //         customersFromServer.length > 0) {
+        //         loadDataFromServerArray(customersFromServer);
+        //     } else {
+        //         // حتى لو كانت globalData غير فارغة (تم ملؤها يدوياً)، نحدث العرض
+        //         updateAllPages();
+        //     }
+
+        //     // ضع قيم افتراضية للمندوب والتاريخ إن رغبت
+        //     const delegateNameEl = document.getElementById('ts-delegate-name');
+        //     const dayEl = document.getElementById('ts-day');
+        //     const dateEl = document.getElementById('ts-date');
+        //     if (delegateNameEl && delegateNameEl.textContent.trim() === '') delegateNameEl.textContent =
+        //         'احمد بشير';
+        //     if (dayEl && dayEl.textContent.trim() === '') dayEl.textContent = '.............';
+        //     if (dateEl && dateEl.textContent.trim() === '') dateEl.textContent = '.............';
+        // });
         window.addEventListener('load', function() {
-            // 1) املأ من أي جدول موجود مسبقاً (اختياري)
+            // 1) املأ من أي جدول موجود مسبقاً
             loadExistingTableData();
 
             // 2) إذا لا توجد بيانات محلياً، املأ من server variable
@@ -375,18 +397,31 @@
                 customersFromServer.length > 0) {
                 loadDataFromServerArray(customersFromServer);
             } else {
-                // حتى لو كانت globalData غير فارغة (تم ملؤها يدوياً)، نحدث العرض
                 updateAllPages();
             }
 
-            // ضع قيم افتراضية للمندوب والتاريخ إن رغبت
-            const delegateNameEl = document.getElementById('ts-delegate-name');
-            const dayEl = document.getElementById('ts-day');
-            const dateEl = document.getElementById('ts-date');
-            if (delegateNameEl && delegateNameEl.textContent.trim() === '') delegateNameEl.textContent =
-                'احمد بشير';
-            if (dayEl && dayEl.textContent.trim() === '') dayEl.textContent = '.............';
-            if (dateEl && dateEl.textContent.trim() === '') dateEl.textContent = '.............';
+            // --- ⬇️ هنا نسأل المستخدم ---
+            let delegateName = prompt("ادخل اسم المندوب:", "احمد بشير");
+            let day = prompt("ادخل اليوم:", new Date().toLocaleDateString("ar-EG", {
+                weekday: 'long'
+            }));
+            let date = prompt("ادخل التاريخ:", new Date().toLocaleDateString("ar-EG"));
+
+            // إذا المستخدم ضغط Cancel، نخلي القيم كما هي
+            if (delegateName) {
+                const delegateNameEls = document.querySelectorAll('#ts-delegate-name');
+                delegateNameEls.forEach(el => el.textContent = delegateName);
+            }
+
+            if (day) {
+                const dayEls = document.querySelectorAll('#ts-day');
+                dayEls.forEach(el => el.textContent = day);
+            }
+
+            if (date) {
+                const dateEls = document.querySelectorAll('#ts-date');
+                dateEls.forEach(el => el.textContent = date);
+            }
         });
     </script>
 </body>
