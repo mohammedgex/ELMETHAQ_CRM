@@ -235,12 +235,16 @@ class AppServiceProvider extends ServiceProvider
 
             // المهام
             if ($user->role === 'admin' || $user->permissions->contains('permission', 'tasks-access')) {
+                $taskCount = $user->receivedTasks()->where('status', 'new')->count();
                 $existingMenu[] = [
-                    'text' => 'المهام',
-                    'url' => 'admin/user-tasks',
-                    'icon' => 'fas fa-tasks',
+                    'text'  => 'المهام',
+                    'url'   => 'admin/user-tasks',
+                    'icon'  => 'fas fa-tasks',
+                    'label' => $taskCount > 0 ? $taskCount : '',
+                    'label_color' => 'warning', // warning = أصفر
                 ];
             }
+
 
             // قسم الإعدادات
             $existingMenu[] = ['header' => 'الاعدادات'];

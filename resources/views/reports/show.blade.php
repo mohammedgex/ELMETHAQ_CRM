@@ -150,6 +150,115 @@
             }
         }
     </style>
+    <style>
+        /* خلي الخلفية تتبع المود */
+        body {
+            background: var(--bs-body-bg) !important;
+            color: var(--bs-body-color) !important;
+        }
+
+        .reports-wrapper {
+            background: var(--bs-card-bg) !important;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(15, 23, 42, 0.06);
+            color: var(--bs-body-color) !important;
+        }
+
+        .report-card {
+            background: #858585 !important;
+            border-radius: 14px;
+            padding: 18px;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+            transition: transform .25s ease, box-shadow .25s ease;
+            height: 100%;
+            color: var(--bs-body-color) !important;
+        }
+
+        .report-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 14px 40px rgba(2, 6, 23, 0.12);
+        }
+
+        .icon-circle {
+            display: inline-flex;
+            width: 54px;
+            height: 54px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            font-size: 22px;
+            color: #fff !important;
+        }
+
+        /* ألوان أيقونات */
+        .icon-primary {
+            background: linear-gradient(135deg, #0d6efd, #0069d9) !important;
+        }
+
+        .icon-success {
+            background: linear-gradient(135deg, #28a745, #1e7e34) !important;
+        }
+
+        .icon-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333) !important;
+        }
+
+        /* عناوين */
+        .report-card h5 {
+            margin: 0 0 4px 0;
+            font-size: 1.05rem;
+            color: var(--bs-heading-color, var(--bs-body-color)) !important;
+        }
+
+        .report-card small {
+            color: var(--bs-secondary-color, #6b7280) !important;
+        }
+
+        /* أزرار */
+        .report-btn {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: transform .18s ease, box-shadow .18s ease;
+        }
+
+        .report-btn i {
+            font-size: 18px;
+        }
+
+        /* responsive */
+        @media (min-width: 992px) {
+            .report-col {
+                max-width: 33.3333%;
+            }
+        }
+
+        /* الطباعة */
+        @media print {
+
+            .navbar,
+            .main-header,
+            .main-footer,
+            .sidebar,
+            .btn {
+                display: none !important;
+            }
+
+            .reports-wrapper {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+
 
     <div class="container-fluid reports-wrapper">
         <div class="row mb-3">

@@ -99,7 +99,7 @@
                                             </td>
                                             <td>{{ $customer->phone }}</td>
                                             <td>
-                                                {!! $customer->medical_examination == 'تم الحجز'
+                                                {!! $customer->medical_examination == 'لائق'
                                                     ? '<i class="fas fa-check-circle text-success"></i>'
                                                     : '<i class="fas fa-times-circle text-danger"></i>' !!}
                                             </td>
@@ -109,12 +109,12 @@
                                                     : '<i class="fas fa-times-circle text-danger"></i>' !!}
                                             </td>
                                             <td>
-                                                {!! $customer->virus_examination == 'تم اصدار ايصال المعامل'
+                                                {!! $customer->virus_examination == 'سالب'
                                                     ? '<i class="fas fa-check-circle text-success"></i>'
                                                     : '<i class="fas fa-times-circle text-danger"></i>' !!}
                                             </td>
                                             <td>
-                                                {!! $customer->engaz_request == 'تم الحجز'
+                                                {!! $customer->e_visa_number != null
                                                     ? '<i class="fas fa-check-circle text-success"></i>'
                                                     : '<i class="fas fa-times-circle text-danger"></i>' !!}
                                             </td>

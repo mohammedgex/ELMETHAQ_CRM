@@ -17,6 +17,7 @@ use App\Models\PaymentTitle;
 use App\Models\Sponser;
 use App\Models\Test;
 use App\Models\User;
+use App\Models\User_task;
 use App\Models\VisaType;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -52,6 +53,10 @@ class HomeController extends Controller
         $users = User::latest()->get();
         $tests = Test::latest()->get();
         $histories = History::latest()->take(10)->get();
+        $tasks = User_task::with(['sender', 'receiver'])
+            ->latest() // مرتب بالأحدث
+            ->take(10) // حد أقصى 10
+            ->get();
 
         $mainCustomers = Customer::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
             ->groupBy('month')
@@ -92,6 +97,7 @@ class HomeController extends Controller
             'delegateNames' => $delegatesTravel->pluck('name'),
             'totalDCustomers' => $delegatesTravel->pluck('total_customers'),
             'traveledCustomers' => $delegatesTravel->pluck('traveled_customers'),
+            'tasks' => $tasks,
         ]);
     }
 

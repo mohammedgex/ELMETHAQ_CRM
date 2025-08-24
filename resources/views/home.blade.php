@@ -527,6 +527,48 @@
             </div>
         </div>
 
+        <div class="card shadow-sm border-0 rounded-3">
+            <div class="card-body p-3 table-responsive">
+                <table class="table  align-middle text-center mb-0" style="color: white;">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">👤 المرسل</th>
+                            <th scope="col">👥 المستلم</th>
+                            <th scope="col">📝 الوصف</th>
+                            <th scope="col">⏰ الوقت</th>
+                            <th scope="col">📌 الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($tasks as $task)
+                            <tr class="{{ $task->status == 'new' ? 'row-new' : 'row-done' }}">
+                                <td class="fw-semibold">{{ $task->sender->name ?? '-' }}</td>
+                                <td class="fw-semibold">{{ $task->receiver->name ?? '-' }}</td>
+                                <td class="text-start" title="{{ $task->description }}">
+                                    {{ \Illuminate\Support\Str::limit($task->description, 50) }}
+                                </td>
+                                <td class="text-secondary" style="color: white !important;">
+                                    {{ $task->created_at->format('Y-m-d H:i') }}</td>
+                                <td>
+                                    @if ($task->status == 'new')
+                                        <span class="badge status-new">جديدة ⏳</span>
+                                    @elseif($task->status == 'done')
+                                        <span class="badge status-done">مكتملة ✅</span>
+                                    @else
+                                        <span class="badge bg-secondary">غير معروف</span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-muted py-4">لا توجد مهام حالياً</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <div class="container py-3">
             <div class="row">
                 <!-- إحصائيات العملاء -->
@@ -737,6 +779,63 @@
                 /* لون أزرق غامق */
                 color: #ecf0f1;
                 /* لون نص فاتح */
+            }
+
+            /* صفوف المهام */
+            .row-new {
+                background-color: #fff9e6;
+                /* أصفر فاتح في Light */
+            }
+
+            .row-done {
+                background-color: #e6f7ed;
+                /* أخضر فاتح في Light */
+            }
+
+            /* شارات (Badges) */
+            .status-new {
+                background-color: #ffc107;
+                color: #222;
+                font-weight: 600;
+            }
+
+            .status-done {
+                background-color: #28a745;
+                color: #fff;
+                font-weight: 600;
+            }
+
+            /* الوضع الليلي */
+            @media (prefers-color-scheme: dark) {
+                .card {
+                    /* background-color: #1e1e1e; */
+                    /* color: #eee; */
+                }
+
+                thead.table-dark {
+                    background-color: #333;
+                    color: #f1f1f1;
+                }
+
+                .row-new {
+                    background-color: #3a3200;
+                    /* أصفر داكن */
+                }
+
+                .row-done {
+                    background-color: #0f3320;
+                    /* أخضر داكن */
+                }
+
+                .status-new {
+                    background-color: #d6a700;
+                    color: #000;
+                }
+
+                .status-done {
+                    background-color: #1e7e34;
+                    color: #fff;
+                }
             }
         </style>
     @stop
