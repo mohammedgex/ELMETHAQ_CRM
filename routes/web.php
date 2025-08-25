@@ -23,6 +23,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VisaProfessionsController;
 use App\Http\Controllers\VisaTypeController;
 use App\Http\Controllers\FileTitleController;
+use App\Http\Controllers\GmailPubSubController;
 use App\Http\Controllers\GoogleTranslateController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\JopController;
@@ -32,7 +33,7 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
 use App\Models\Customer;
 use App\Models\History;
-use Carbon\Carbon;
+use Google\Client as GoogleClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 

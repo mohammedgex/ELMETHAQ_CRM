@@ -6,6 +6,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
+use App\Http\Controllers\GmailPubSubController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JopController;
 use App\Http\Controllers\VisaProfessionsController;
@@ -51,3 +52,6 @@ Route::post('/taakebs', [CompanyController::class, 'addTaakeb'])->middleware('au
 Route::get('/taakebs', [CompanyController::class, 'getTaakebs'])->middleware('auth:sanctum');
 Route::get('/taakeb/{id}', [CompanyController::class, 'getTaakeb'])->middleware('auth:sanctum');
 Route::get('/customers-booking-panding', [ApiAppController::class, 'get_customers_booking_sedical_status']);
+
+
+Route::post('/pubsub/gmail', [GmailPubSubController::class, 'handle']);
