@@ -191,7 +191,7 @@ class GmailPubSubController extends Controller
         $token = $client->fetchAccessTokenWithAuthCode($code);
 
         // حفظ التوكن
-        file_put_contents(storage_path('app/google-token.json'), json_encode($token));
+        file_put_contents(storage_path('app/google-client.json'), json_encode($token));
 
         return response()->json([
             'status' => 'Token saved',
