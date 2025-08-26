@@ -170,4 +170,32 @@ class GmailPubSubController extends Controller
         }
         return $body;
     }
+
+    public function handleCallback(Request $request)
+    {
+        $code = $request->get('code');
+
+        if (!$code) {
+            return response()->json(['error' => 'No code returned']);
+        }
+
+        $client = new Client();
+        $client->setAuthConfig(storage_path('app/google-client.json'));
+        $client->addScope([
+            'https://www.googleapis.com/auth/gmail.readonly',
+            'https://www.googleapis.com/auth/gmail.modify',
+        ]);
+        $client->setRedirectUri(url('/google/callback'));
+
+        // تبادل الـ code مع access token
+        $token = $client->fetchAccessTokenWithAuthCode($code);
+
+        // حفظ التوكن
+        file_put_contents(storage_path('app/google-token.json'), json_encode($token));
+
+        return response()->json([
+            'status' => 'Token saved',
+            'token' => $token
+        ]);
+    }
 }

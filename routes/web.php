@@ -257,3 +257,4 @@ Route::group([
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
 Route::get('/send-test-email', [GoogleTranslateController::class, 'sendTestEmail']);
+Route::get('/google/callback', [GmailPubSubController::class, 'handleCallback']);
