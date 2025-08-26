@@ -180,12 +180,15 @@ class GmailPubSubController extends Controller
         }
 
         $client = new Client();
-        $client->setAuthConfig(storage_path('app/google-client.json')); // ده يفضل زي ما هو للـ client credentials
+        // 👇 لازم ملف الـ credentials الأصلي من Google
+        $client->setAuthConfig(storage_path('app/google-client.json'));
         $client->addScope([
             'https://www.googleapis.com/auth/gmail.readonly',
             'https://www.googleapis.com/auth/gmail.modify',
         ]);
         $client->setRedirectUri(url('/google/callback'));
+        $client->setAccessType('offline'); // عشان ناخد refresh_token
+        $client->setPrompt('consent'); // يضمن إنه يرجع refresh_token
 
         // تبادل الـ code مع access token
         $token = $client->fetchAccessTokenWithAuthCode($code);
@@ -198,14 +201,8 @@ class GmailPubSubController extends Controller
             ], 400);
         }
 
-        // ✅ حفظ التوكن في google-token.json
+        // ✅ نخزن التوكن في google-token.json
         file_put_contents(storage_path('app/google-token.json'), json_encode($token));
-
-        // ✅ تأكيد وجود refresh token
-        if (!empty($token['refresh_token'])) {
-            $client->setAccessToken($token);
-            file_put_contents(storage_path('app/google-token.json'), json_encode($client->getAccessToken()));
-        }
 
         return response()->json([
             'status' => 'Token saved',
