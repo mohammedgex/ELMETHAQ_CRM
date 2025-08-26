@@ -252,6 +252,7 @@ Route::group([
     Route::get('/visas-by-filters', [CustomerController::class, 'getVisas'])->name('admin.visas.byFilters');
     Route::get('/groups/by-visas', [CustomerController::class, 'getGroupsByVisas'])->name('admin.groups.byVisas');
     Route::post('/customers/filter/data', [CustomerController::class, 'filterCustomers'])->name('customers.filter.data');
+    Route::get('/login-fail', [LeadsCustomersController::class, 'loginFail'])->name('leads-customers.loginFail')->middleware("check.permission:loginFail-access");
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);

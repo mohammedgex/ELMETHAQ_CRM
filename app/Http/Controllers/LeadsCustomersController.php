@@ -416,4 +416,21 @@ class LeadsCustomersController extends Controller
         }
         return redirect()->back()->with("success", "تم تغيير الباسورد ليكون رقم الهاتف");
     }
+
+    // فشل في تسجيل الدخول
+    public function loginFail()
+    {
+        # code...
+        $leads = LeadsCustomers::query()
+            ->whereNull('img_national_id_card')
+            ->whereNull('img_national_id_card_back')
+            ->whereNull('passport_numder')
+            ->whereNull('card_id')
+            ->orderByDesc('created_at') // الأحدث أولاً
+            ->get();
+
+        return view("leads-customers.loginFail", [
+            'leads' => $leads
+        ]);
+    }
 }

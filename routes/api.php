@@ -53,5 +53,4 @@ Route::get('/taakebs', [CompanyController::class, 'getTaakebs'])->middleware('au
 Route::get('/taakeb/{id}', [CompanyController::class, 'getTaakeb'])->middleware('auth:sanctum');
 Route::get('/customers-booking-panding', [ApiAppController::class, 'get_customers_booking_sedical_status']);
 
-
 Route::post('/pubsub/gmail', [GmailPubSubController::class, 'handle']);

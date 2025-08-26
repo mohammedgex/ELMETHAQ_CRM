@@ -55,6 +55,7 @@
                                     'archived-customers' => 'ارشيف العملاء',
                                     'taakeb-show' => 'طلبات التعقيب',
                                     'requests-show' => 'طلبات الملفات',
+                                    'loginFail-access' => 'فشل تسجيل الدخول',
                                 ];
                             @endphp
 

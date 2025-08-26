@@ -16,9 +16,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (env(key: 'APP_ENV') === 'local') {
-            URL::forceScheme(scheme: 'https');
-        }
+        // if (env(key: 'APP_ENV') === 'local') {
+        //     URL::forceScheme(scheme: 'https');
+        // }
     }
 
     /**
@@ -86,6 +86,14 @@ class AppServiceProvider extends ServiceProvider
                     'text' => 'العملاء المحتملون',
                     'url' => 'admin/leads-customers',
                     'icon' => 'fas fa-hourglass-half',
+                ];
+            }
+            // العملاء المحتملون
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'loginFail-access')) {
+                $existingMenu[] = [
+                    'text' => 'محاولات دخول فاشلة',
+                    'url' => 'admin/login-fail',
+                    'icon' => 'fas fa-user-secret',
                 ];
             }
             $pendingCount = ModelsDocumentType::where('order_status', 'panding')->count();
