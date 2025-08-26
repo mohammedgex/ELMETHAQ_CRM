@@ -67,10 +67,8 @@
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
-                                        <th>الكشف الطبي</th>
-                                        <th>البصمة</th>
-                                        <th>كشف المعامل</th>
-                                        <th>إنجاز</th>
+                                        <th>اصدار التاشيرة</th>
+                                        <th>الرابط</th>
                                         <th>الإجراءات</th>
                                     </tr>
                                 </thead>
@@ -99,24 +97,25 @@
                                             </td>
                                             <td>{{ $customer->phone }}</td>
                                             <td>
-                                                {!! $customer->medical_examination == 'لائق'
+                                                {!! $customer->visa_number
                                                     ? '<i class="fas fa-check-circle text-success"></i>'
                                                     : '<i class="fas fa-times-circle text-danger"></i>' !!}
                                             </td>
                                             <td>
-                                                {!! $customer->finger_print_examination == 'تم تصدير الاكسيل'
-                                                    ? '<i class="fas fa-check-circle text-success"></i>'
-                                                    : '<i class="fas fa-times-circle text-danger"></i>' !!}
-                                            </td>
-                                            <td>
-                                                {!! $customer->virus_examination == 'سالب'
-                                                    ? '<i class="fas fa-check-circle text-success"></i>'
-                                                    : '<i class="fas fa-times-circle text-danger"></i>' !!}
-                                            </td>
-                                            <td>
-                                                {!! $customer->e_visa_number != null
-                                                    ? '<i class="fas fa-check-circle text-success"></i>'
-                                                    : '<i class="fas fa-times-circle text-danger"></i>' !!}
+                                                @php
+                                                    $visaDoc = $customer
+                                                        ->documentTypes()
+                                                        ->where('document_type', 'التاشيرة')
+                                                        ->first();
+                                                @endphp
+
+                                                @if ($visaDoc)
+                                                    <a href="{{ asset('storage/' . $visaDoc->file) }}" target="_blank">
+                                                        عرض التأشيرة
+                                                    </a>
+                                                @else
+                                                    <span class="text-muted">لا يوجد تأشيرة</span>
+                                                @endif
                                             </td>
                                             <td>
                                                 <div class="btn-group dropstart">
