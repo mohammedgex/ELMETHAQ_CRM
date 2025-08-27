@@ -206,6 +206,7 @@
         let globalData = [];
         const customersFromServer = @json($customers ?? [], JSON_UNESCAPED_UNICODE);
 
+        console.log(customersFromServer);
         /* دالة هروب النص للعرض الآمن (تجنّب HTML injection) */
         function escapeHtml(str) {
             return String(str || '')
