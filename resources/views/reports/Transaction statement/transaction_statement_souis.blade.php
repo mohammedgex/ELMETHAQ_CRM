@@ -192,6 +192,7 @@
         <button id="btn-print" type="button">طباعة</button>
     </div>
 
+    {{-- {{ dd($customers) }} --}}
     {{-- الصفحة الأولى (تُستخدم كقالب) --}}
 
     {{-- المكان الذي ستنشأ وتعرض فيه الصفحات --}}
@@ -201,7 +202,7 @@
 
     <script>
         /***** إعدادات محلية *****/
-        const rowsPerPage = 14; // عدد الصفوف في كل صفحة
+        const rowsPerPage = 15; // عدد الصفوف في كل صفحة
         let globalData = [];
         const customersFromServer = @json($customers ?? [], JSON_UNESCAPED_UNICODE);
 
