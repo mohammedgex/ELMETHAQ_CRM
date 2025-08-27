@@ -204,7 +204,7 @@
         /***** إعدادات محلية *****/
         const rowsPerPage = 15; // عدد الصفوف في كل صفحة
         let globalData = [];
-        const customersFromServer = @json($customers ?? [], JSON_UNESCAPED_UNICODE);
+        const customersFromServer = @json(array_values($customers ?? []), JSON_UNESCAPED_UNICODE);
 
         console.log(customersFromServer);
         /* دالة هروب النص للعرض الآمن (تجنّب HTML injection) */
