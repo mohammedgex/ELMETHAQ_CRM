@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\bag;
 use App\Models\Customer;
+use App\Models\History;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BagController extends Controller
@@ -89,6 +92,12 @@ class BagController extends Controller
         foreach ($customers as $customer) {
             $customer->bag_id = $request->bag;
             $customer->save();
+            $history = new History();
+            $history->description = "تم تعيين الحقيبة للعميل";
+            $history->date = Carbon::now();
+            $history->customer_id = $customer->id;
+            $history->user_id = User::where('email', $request->email)->first()->id;
+            $history->save();
         }
 
         return response()->json(['message' => 'تم تعيين الحقيبة بنجاح']);

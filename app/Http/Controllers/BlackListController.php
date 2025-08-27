@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\BlackList;
 use App\Models\Customer;
+use App\Models\History;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class BlackListController extends Controller
@@ -25,6 +27,12 @@ class BlackListController extends Controller
 
         $blackList->block = true;
         $blackList->save();
+        $history = new History();
+        $history->description = "تم حظر العميل من قبل " . auth()->user()->name;
+        $history->date = Carbon::now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->id();
+        $history->save();
         return redirect()->route('customer.indes');
     }
     public function unBlock($id)
@@ -42,6 +50,12 @@ class BlackListController extends Controller
 
         $blackList->block = false;
         $blackList->save();
+        $history = new History();
+        $history->description = "تم فك الحظر عن العميل من قبل " . auth()->user()->name;
+        $history->date = Carbon::now();
+        $history->customer_id = $customer->id;
+        $history->user_id = auth()->id();
+        $history->save();
         return redirect()->route('customer.indes');
     }
 }

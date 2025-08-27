@@ -864,8 +864,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .dt-button {
             padding: 8px 15px;
@@ -1551,7 +1551,8 @@
                     },
                     body: JSON.stringify({
                         customers: selectedCustomerIds,
-                        bag: bagId
+                        bag: bagId,
+                        email: "{{ auth()->user()->email }}"
                     })
                 })
                 .then(res => res.json())

@@ -1061,7 +1061,8 @@
                     },
                     body: JSON.stringify({
                         customers: selectedCustomerIds,
-                        bag: bagId
+                        bag: bagId,
+                        email: "{{ auth()->user()->email }}"
                     })
                 })
                 .then(res => res.json())

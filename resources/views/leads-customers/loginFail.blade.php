@@ -32,7 +32,7 @@ a{{-- resources/views/admin/failed-logins/index.blade.php --}}
                                         target="_blank" rel="noopener noreferrer">
                                         <img src="{{ $lead->image ? asset('storage/' . $lead->image) : asset('images/default-avatar.png') }}"
                                             alt="avatar" class="rounded-circle shadow-sm"
-                                            style="width:48px;height:48px;object-fit:cover;">
+                                            style="width:48px;height:48px;object-fit:cover;" loading="lazy">
                                     </a>
 
                                 </td>
