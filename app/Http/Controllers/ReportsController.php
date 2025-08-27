@@ -143,7 +143,6 @@ class ReportsController extends Controller
         return view("reports.Transaction statement.transaction_statement_cairo", compact('bag', 'customers'));
     }
 
-
     public function transaction_statement_suez($id)
     {
         $bag = Bag::with('customers.customerGroup.visaType.embassy')->find($id);
@@ -153,11 +152,8 @@ class ReportsController extends Controller
         }
 
         $customers = $bag->customers->filter(function ($customer) {
-            return $customer->customerGroup?->visaType?->embassy?->title === "السويس";
-        });
-
-        $customers = $customers->filter(function ($customer) {
-            return empty($customer->visa_number) || is_null($customer->visa_number);
+            return $customer->customerGroup?->visaType?->embassy?->title === "السويس"
+                && empty($customer->visa_number);
         });
 
         if ($customers->isEmpty()) {
@@ -166,7 +162,6 @@ class ReportsController extends Controller
 
         return view("reports.Transaction statement.transaction_statement_souis", compact('bag', 'customers'));
     }
-
 
     public function print_visaEntriy($id)
     {
