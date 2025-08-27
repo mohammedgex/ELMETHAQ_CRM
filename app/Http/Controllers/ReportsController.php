@@ -160,8 +160,13 @@ class ReportsController extends Controller
             return redirect()->back()->withErrors(['لا توجد معاملات لهذه الحقيبة تخص قنصلية السويس.']);
         }
 
+        // نحول الـ Collection لآراي
+        $customers = $customers->toArray();
+
         return view("reports.Transaction statement.transaction_statement_souis", compact('bag', 'customers'));
     }
+
+
 
     public function print_visaEntriy($id)
     {
