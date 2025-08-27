@@ -124,7 +124,7 @@
     <div id="pages-container"></div>
     <script>
         const rowsPerPage = 5;
-        let globalData = @json($customers ?? []);
+        let globalData = @json(array_values($customers ?? []));
 
         function escapeHtml(s) {
             return String(s || '').replace(/[&<>"']/g, m => ({

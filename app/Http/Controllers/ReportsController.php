@@ -139,6 +139,7 @@ class ReportsController extends Controller
         if ($customers->isEmpty()) {
             return redirect()->back()->withErrors(['لا توجد معاملات لهذه الحقيبة تخص سفارة القاهرة.']);
         }
+        $customers = $customers->toArray();
 
         return view("reports.Transaction statement.transaction_statement_cairo", compact('bag', 'customers'));
     }
@@ -165,8 +166,6 @@ class ReportsController extends Controller
 
         return view("reports.Transaction statement.transaction_statement_souis", compact('bag', 'customers'));
     }
-
-
 
     public function print_visaEntriy($id)
     {
