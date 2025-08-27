@@ -131,7 +131,7 @@ class ReportsController extends Controller
 
         $customers = $bag->customers->filter(function ($customer) {
             return $customer->customerGroup?->visaType?->embassy?->title === "القاهرة"
-                && (empty($customer->visa_number) || is_null($customer->visa_number));
+                && (empty($customer->visa_number));
         });
 
         if ($customers->isEmpty()) {
@@ -151,7 +151,8 @@ class ReportsController extends Controller
         }
 
         $customers = $bag->customers->filter(function ($customer) {
-            return $customer->customerGroup?->visaType?->embassy?->title === "السويس" && (empty($customer->visa_number) || is_null($customer->visa_number));
+            return $customer->customerGroup?->visaType?->embassy?->title === "السويس"
+                && empty($customer->visa_number);
         });
 
         if ($customers->isEmpty()) {
