@@ -158,7 +158,6 @@ class ReportsController extends Controller
         if ($customers->isEmpty()) {
             return redirect()->back()->withErrors(['لا توجد معاملات لهذه الحقيبة تخص قنصلية السويس.']);
         }
-        dd($customers);
 
         return view("reports.Transaction statement.transaction_statement_souis", compact('bag', 'customers'));
     }
