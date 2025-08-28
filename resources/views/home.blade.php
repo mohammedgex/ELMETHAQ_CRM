@@ -838,6 +838,523 @@
                 }
             }
         </style>
+        {{-- <style>
+            /* متغيرات الألوان للوضع الفاتح */
+            :root {
+                --primary-bg: #ffffff;
+                --secondary-bg: #f8f9fa;
+                --card-bg: #ffffff;
+                --text-primary: #212529;
+                --text-secondary: #6c757d;
+                --border-color: #dee2e6;
+                --shadow-light: rgba(0, 0, 0, 0.1);
+                --shadow-medium: rgba(0, 0, 0, 0.15);
+                --accent-primary: #007bff;
+                --accent-success: #28a745;
+                --accent-warning: #ffc107;
+                --accent-danger: #dc3545;
+                --accent-info: #17a2b8;
+                --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            }
+
+            /* متغيرات الألوان للوضع المظلم */
+            body.dark-mode {
+                --primary-bg: #1a1a1a;
+                --secondary-bg: #2d2d2d;
+                --card-bg: #343a40;
+                --text-primary: #ffffff;
+                --text-secondary: #adb5bd;
+                --border-color: #495057;
+                --shadow-light: rgba(255, 255, 255, 0.1);
+                --shadow-medium: rgba(255, 255, 255, 0.15);
+                --accent-primary: #4dabf7;
+                --accent-success: #51cf66;
+                --accent-warning: #ffd43b;
+                --accent-danger: #ff6b6b;
+                --accent-info: #22b8cf;
+                --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                --gradient-success: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+                --gradient-warning: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                --gradient-info: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            }
+
+            /* تحسينات عامة */
+            body {
+                background-color: var(--secondary-bg);
+                color: var(--text-primary);
+                transition: all 0.3s ease;
+            }
+
+            /* تحسين الكروت الرئيسية */
+            .small-box {
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 8px 25px var(--shadow-light);
+                transition: all 0.3s ease;
+                border: none;
+                position: relative;
+            }
+
+            .small-box::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: linear-gradient(90deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.7) 50%, rgba(255, 255, 255, 0.3) 100%);
+            }
+
+            .small-box:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 15px 35px var(--shadow-medium);
+            }
+
+            .small-box .inner {
+                padding: 20px;
+            }
+
+            .small-box .inner h3 {
+                font-size: 2.2rem;
+                font-weight: 700;
+                margin-bottom: 5px;
+                text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .small-box .inner p {
+                font-size: 1rem;
+                font-weight: 500;
+                opacity: 0.9;
+            }
+
+            .small-box .icon {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                opacity: 0.3;
+            }
+
+            .small-box .icon i {
+                font-size: 60px !important;
+            }
+
+            .small-box-footer {
+                background: rgba(0, 0, 0, 0.1);
+                color: rgba(255, 255, 255, 0.8) !important;
+                padding: 10px 0;
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            .small-box-footer:hover {
+                background: rgba(0, 0, 0, 0.2);
+                color: white !important;
+            }
+
+            /* ألوان مخصصة للكروت */
+            .bg-info {
+                background: var(--gradient-info) !important;
+            }
+
+            .bg-success {
+                background: var(--gradient-success) !important;
+            }
+
+            .bg-warning {
+                background: var(--gradient-warning) !important;
+            }
+
+            .bg-danger {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%) !important;
+            }
+
+            /* تحسين الكروت العادية */
+            .card {
+                background-color: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 15px;
+                box-shadow: 0 5px 15px var(--shadow-light);
+                transition: all 0.3s ease;
+                overflow: hidden;
+            }
+
+            .card:hover {
+                box-shadow: 0 10px 25px var(--shadow-medium);
+            }
+
+            .card-header {
+                background: linear-gradient(135deg, var(--accent-primary) 0%, #6c5ce7 100%);
+                color: white;
+                border-bottom: none;
+                padding: 1rem 1.5rem;
+                font-weight: 600;
+            }
+
+            .card-header.bg-info {
+                background: var(--gradient-info);
+            }
+
+            .card-header.bg-success {
+                background: var(--gradient-success);
+            }
+
+            .card-header.bg-warning {
+                background: var(--gradient-warning);
+            }
+
+            .card-title {
+                margin: 0;
+                font-size: 1.1rem;
+                font-weight: 600;
+            }
+
+            /* تحسين info-box */
+            .info-box {
+                background-color: var(--card-bg);
+                border-radius: 12px;
+                border: 1px solid var(--border-color);
+                box-shadow: 0 4px 15px var(--shadow-light);
+                transition: all 0.3s ease;
+                overflow: hidden;
+                position: relative;
+            }
+
+            .info-box::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 100%;
+                background: var(--accent-primary);
+            }
+
+            .info-box:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 25px var(--shadow-medium);
+            }
+
+            .info-box-icon {
+                border-radius: 12px;
+                width: 70px;
+                height: 70px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.5rem;
+                margin: 10px;
+            }
+
+            .info-box-content {
+                padding: 15px;
+                color: var(--text-primary);
+            }
+
+            /* تحسين الجداول */
+            .table {
+                background-color: var(--card-bg);
+                color: var(--text-primary);
+                border-radius: 10px;
+                overflow: hidden;
+                box-shadow: 0 3px 10px var(--shadow-light);
+            }
+
+            .table thead th {
+                background: linear-gradient(135deg, #2d3436 0%, #636e72 100%);
+                color: white;
+                border: none;
+                padding: 15px;
+                font-weight: 600;
+                text-align: center;
+            }
+
+            .table tbody td {
+                padding: 12px 15px;
+                border-top: 1px solid var(--border-color);
+                color: var(--text-primary);
+            }
+
+            .table tbody tr {
+                transition: all 0.2s ease;
+            }
+
+            .table tbody tr:hover {
+                background-color: var(--secondary-bg);
+                transform: scale(1.01);
+            }
+
+            /* تحسين الأزرار */
+            .btn {
+                border-radius: 8px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+                border: none;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            }
+
+            .btn-primary {
+                background: var(--gradient-primary);
+            }
+
+            .btn-success {
+                background: var(--gradient-success);
+            }
+
+            .btn-warning {
+                background: var(--gradient-warning);
+                color: white;
+            }
+
+            .btn-danger {
+                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            }
+
+            .btn-info {
+                background: var(--gradient-info);
+            }
+
+            /* تحسين الـ Progress Bars */
+            .progress {
+                height: 8px;
+                border-radius: 10px;
+                background-color: var(--secondary-bg);
+                overflow: hidden;
+                box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+            }
+
+            .progress-bar {
+                border-radius: 10px;
+                transition: width 0.6s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .progress-bar::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+                animation: shimmer 2s infinite;
+            }
+
+            @keyframes shimmer {
+                0% {
+                    left: -100%;
+                }
+
+                100% {
+                    left: 100%;
+                }
+            }
+
+            /* تحسين الـ Badges */
+            .badge {
+                border-radius: 20px;
+                padding: 6px 12px;
+                font-weight: 500;
+                font-size: 0.8rem;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            /* تحسين الصفوف الخاصة */
+            .row-new {
+                background: linear-gradient(135deg, #fff9e6 0%, #fef5d0 100%);
+                border-left: 4px solid var(--accent-warning);
+            }
+
+            .row-done {
+                background: linear-gradient(135deg, #e6f7ed 0%, #d1f2d9 100%);
+                border-left: 4px solid var(--accent-success);
+            }
+
+            body.dark-mode .row-new {
+                background: linear-gradient(135deg, #3a3200 0%, #4d4200 100%);
+            }
+
+            body.dark-mode .row-done {
+                background: linear-gradient(135deg, #0f3320 0%, #1a4d2e 100%);
+            }
+
+            /* تحسين الأيقونات */
+            .fas,
+            .fab,
+            .far {
+                transition: all 0.3s ease;
+            }
+
+            /* تحسين الـ Scrollbars */
+            ::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: var(--secondary-bg);
+                border-radius: 10px;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: linear-gradient(135deg, var(--accent-primary), #6c5ce7);
+                border-radius: 10px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: linear-gradient(135deg, #0056b3, #5a4fcf);
+            }
+
+            /* تحسين الـ Container */
+            .container-fluid {
+                padding: 20px;
+            }
+
+            /* تأثيرات التحوم للكروت الصغيرة */
+            .info-card:hover {
+                transform: translateY(-5px) rotate(1deg);
+                box-shadow: 0 10px 25px var(--shadow-medium);
+            }
+
+            /* تحسين الـ Dropdowns */
+            .dropdown-menu {
+                background-color: var(--card-bg);
+                border: 1px solid var(--border-color);
+                border-radius: 10px;
+                box-shadow: 0 10px 25px var(--shadow-medium);
+                padding: 10px;
+            }
+
+            .dropdown-item {
+                color: var(--text-primary);
+                border-radius: 6px;
+                transition: all 0.2s ease;
+                padding: 8px 12px;
+            }
+
+            .dropdown-item:hover {
+                background-color: var(--secondary-bg);
+                color: var(--accent-primary);
+                transform: translateX(5px);
+            }
+
+            /* تحسين الروابط */
+            a {
+                color: var(--accent-primary);
+                text-decoration: none;
+                transition: all 0.3s ease;
+            }
+
+            a:hover {
+                color: #0056b3;
+                transform: translateX(2px);
+            }
+
+            body.dark-mode a:hover {
+                color: #74c0fc;
+            }
+
+            /* تحسين الـ Form Controls */
+            .form-control,
+            .form-select {
+                background-color: var(--card-bg);
+                border: 2px solid var(--border-color);
+                border-radius: 8px;
+                color: var(--text-primary);
+                transition: all 0.3s ease;
+            }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--accent-primary);
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                background-color: var(--card-bg);
+                color: var(--text-primary);
+            }
+
+            /* تحسين الـ Modal (إذا كان موجود) */
+            .modal-content {
+                background-color: var(--card-bg);
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 20px 40px var(--shadow-medium);
+            }
+
+            .modal-header {
+                border-bottom: 1px solid var(--border-color);
+                border-top-left-radius: 15px;
+                border-top-right-radius: 15px;
+            }
+
+            .modal-footer {
+                border-top: 1px solid var(--border-color);
+            }
+
+            /* تأثيرات الأنيميشن */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(30px);
+                }
+
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .card,
+            .small-box,
+            .info-box {
+                animation: fadeInUp 0.6s ease-out;
+            }
+
+            /* تحسين responsive */
+            @media (max-width: 768px) {
+                .container-fluid {
+                    padding: 10px;
+                }
+
+                .small-box .inner h3 {
+                    font-size: 1.8rem;
+                }
+
+                .info-box-icon {
+                    width: 50px;
+                    height: 50px;
+                    font-size: 1.2rem;
+                }
+
+                .card-header {
+                    padding: 0.8rem 1rem;
+                }
+            }
+
+            /* إضافات خاصة للوضع المظلم */
+            body.dark-mode {
+                background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            }
+
+            body.dark-mode .card {
+                background: linear-gradient(135deg, #343a40 0%, #495057 100%);
+            }
+
+            body.dark-mode .small-box {
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+            }
+
+            body.dark-mode .table {
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            }
+        </style> --}}
     @stop
 
     @section('js')
