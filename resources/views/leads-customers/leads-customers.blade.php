@@ -440,12 +440,16 @@
                                             class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form id="delete" action="{{ route('leads-customers.delete', $lead->id) }}"
-                                            method="POST" class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                                        </form>
+                                        @if (auth()->user()->role == 'admin')
+                                            <form id="delete"
+                                                action="{{ route('leads-customers.delete', $lead->id) }}" method="POST"
+                                                class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

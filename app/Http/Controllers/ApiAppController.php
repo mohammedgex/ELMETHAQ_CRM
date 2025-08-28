@@ -291,8 +291,52 @@ class ApiAppController extends Controller
         $user->save();
 
         // إرسال رسالة SMS عادية
-        $this->sendSms($user->phone, 'تم استلام بياناتك بنجاح وهي قيد المراجعة. شكراً لتسجيلك في المنصة.');
+        // $this->sendSms($user->phone, 'تم استلام بياناتك بنجاح وهي قيد المراجعة. شكراً لتسجيلك في المنصة.');
 
+        return response()->json([
+            'status' => 'success',
+            'data' => $user
+        ], 201);
+    }
+
+    public function photo_national_card(Request $request)
+    {
+        # code...
+        $request->validate([
+            'img_national_id_card' => 'required',
+            'img_national_id_card_back' => 'required',
+        ], [
+            'img_national_id_card.required' => 'صورة البطاقة الشخصية (الوجه الأمامي) مطلوبة.',
+            'img_national_id_card_back.required' => 'صورة البطاقة الشخصية (الوجه الخلفي) مطلوبة.',
+        ]);
+        $user = auth('sanctum')->user(); // Use sanctum guard to get LeadsCustomers
+        // حفظ الصور
+        $imgNationalIdCardPath = $request->file('img_national_id_card')->store('uploads/', 'public');
+        $imgNationalIdCardBackPath = $request->file('img_national_id_card_back')->store('uploads/', 'public');
+        // تحديث باقي البيانات
+        $user->img_national_id_card = $imgNationalIdCardPath;
+        $user->img_national_id_card_back = $imgNationalIdCardBackPath;
+        $user->save();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $user
+        ], 201);
+    }
+    public function photo_license(Request $request)
+    {
+        # code...
+        $request->validate([
+            'license_photo' => 'required',
+        ], [
+            'license_photo.required' => 'صورة الرخصة مطلوبة.',
+        ]);
+        $user = auth('sanctum')->user(); // Use sanctum guard to get LeadsCustomers
+        // حفظ الصور
+        $licensePhotoPath = $request->file('license_photo')->store('uploads/', 'public');
+        // تحديث باقي البيانات
+        $user->license_photo = $licensePhotoPath;
+        $user->save();
         return response()->json([
             'status' => 'success',
             'data' => $user

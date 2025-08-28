@@ -22,6 +22,7 @@ a{{-- resources/views/admin/failed-logins/index.blade.php --}}
                             <th>رقم الهاتف</th>
                             <th>الوظيفة</th>
                             <th>تاريخ التسجيل</th>
+                            <th>الاجراءات</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,6 +40,22 @@ a{{-- resources/views/admin/failed-logins/index.blade.php --}}
                                 <td class="fw-semibold">{{ $lead->phone ?? '-' }}</td>
                                 <td class="fw-semibold">{{ $lead->jobTitle->title ?? '-' }}</td>
                                 <td>{{ optional($lead->created_at)->format('Y-m-d H:i') }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center gap-1 flex-nowrap">
+                                        <a href="{{ route('leads-customers.update', $lead->id) }}"
+                                            class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        @if (auth()->user()->role == 'admin')
+                                            <form id="delete" action="{{ route('leads-customers.delete', $lead->id) }}"
+                                                method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </td>
                             </tr>
                         @empty
                             <tr>

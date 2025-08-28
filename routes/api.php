@@ -20,6 +20,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [ApiAppController::class, 'register']);
 Route::post('/confirm-code', [ApiAppController::class, 'verifyOtp']);
 Route::post('/complete-data', [ApiAppController::class, 'completeData'])->middleware('auth:sanctum');
+Route::post('/photo-national-card', [ApiAppController::class, 'photo_national_card'])->middleware('auth:sanctum');
+Route::post('/photo-license', [ApiAppController::class, 'photo_license'])->middleware('auth:sanctum');
 Route::post('/login', [ApiAppController::class, 'login']);
 Route::post('/visa/{id}', [ApiAppController::class, 'visa']);
 Route::middleware('auth:sanctum')->get('/user-data',  [ApiAppController::class, 'getUserData']);
