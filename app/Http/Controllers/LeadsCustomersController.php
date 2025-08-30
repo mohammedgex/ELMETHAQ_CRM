@@ -251,6 +251,13 @@ class LeadsCustomersController extends Controller
             $lead->save();
         }
 
+        $history = new History();
+        $history->description = "تم تعديل بيانات عميل محتمل";
+        $history->date = Carbon::now();
+        $history->lead_id = $lead->id;
+        $history->user_id = auth()->id();
+        $history->save();
+
         return redirect()->back()->with('success', 'تم تحديث البيانات بنجاح');
     }
 
