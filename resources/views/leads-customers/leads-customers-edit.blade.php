@@ -260,7 +260,8 @@
                                             <div id="preview_passport_photo"
                                                 class="border rounded p-3 text-center bg-light"
                                                 style="min-height: 200px;">
-                                                <img src="{{ $lead->passport_photo ? asset('storage/' . $lead->passport_photo) : 'https://via.placeholder.com/150x150?text=صورة+جواز+السفر' }}"
+                                                <img id="imagePreviewpass"
+                                                    src="{{ $lead->passport_photo ? asset('storage/' . $lead->passport_photo) : 'https://via.placeholder.com/150x150?text=صورة+جواز+السفر' }}"
                                                     class="img-fluid rounded"
                                                     style="max-height: 180px; display: {{ $lead->passport_photo ? 'block' : 'none' }} !important;"
                                                     alt="Preview">
@@ -954,14 +955,41 @@
             return btoa(binary);
         }
 
+        // ✅ للـ Blob اللي جاي من fetch
+        async function blobToBase64(blob) {
+            const buffer = await blob.arrayBuffer();
+            const bytes = new Uint8Array(buffer);
+            let binary = "";
+            bytes.forEach((b) => binary += String.fromCharCode(b));
+            return btoa(binary);
+        }
+
+        async function convertImageUrlToBase64(url) {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return await blobToBase64(blob); // ✨ هنا التعديل
+        }
+
+
         document.getElementById("analyzeBtn").addEventListener("click", async () => {
             document.getElementById("passportInput_loader").style.display = "block";
             document.getElementById("passportInput_loader_text").style.display = "block";
             const fileInput = document.getElementById("passportInput");
             const file = fileInput.files[0];
-            const resultBox = document.getElementById("resultBox");
+            const imageUrl = document.getElementById('imagePreviewpass')?.src || "";
 
-            if (!file) {
+            let base64Image, mimeType;
+
+            if (file) {
+                // ✅ لو فيه ملف مرفوع
+                base64Image = await fileToBase64(file);
+                mimeType = file.type;
+            } else if (imageUrl && (imageUrl.startsWith("data:") || imageUrl.startsWith("http"))) {
+                // ✅ لو فيه صورة في الـ preview
+                base64Image = await convertImageUrlToBase64(imageUrl);
+                mimeType = imageUrl.endsWith(".png") ? "image/png" : "image/jpeg";
+            } else {
+                // ❌ لو مفيش أي صورة
                 Swal.fire({
                     title: "اختر صورة جواز السفر اولا",
                     icon: "error",
@@ -973,7 +1001,7 @@
             }
 
             try {
-                const base64Image = await fileToBase64(file);
+                // const base64Image = await fileToBase64(file);
                 const model = genAI.getGenerativeModel({
                     model: "gemini-2.0-flash"
                 });
@@ -1040,7 +1068,7 @@
                         role: "user",
                         parts: [{
                                 inlineData: {
-                                    mimeType: file.type,
+                                    mimeType: mimeType,
                                     data: base64Image,
                                 },
                             },

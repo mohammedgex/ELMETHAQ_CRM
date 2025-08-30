@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BagController;
-use PhpOffice\PhpWord\TemplateProcessor;
 use App\Http\Controllers\BlackListController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanySettingController;
@@ -31,9 +30,6 @@ use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
-use App\Models\Customer;
-use App\Models\History;
-use Google\Client as GoogleClient;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -51,7 +47,6 @@ Route::group([
     });
     Route::get('/user/create', [UserController::class, "show"])->name("user.index")->middleware("check.permission:users-manage");
     Route::post('/users/store', [UserController::class, 'store'])->name('users.store')->middleware("check.permission:users-manage");
-
 
     Route::get('/user/permissions/{id}', [PermissionsController::class, 'permissions'])->name('user.permissions')->middleware("check.permission:users-manage");
     Route::post('/user/permissions/{userId}', [PermissionsController::class, 'edit'])->name('permissions.edit')->middleware("check.permission:users-manage");
