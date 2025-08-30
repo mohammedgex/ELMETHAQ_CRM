@@ -4,14 +4,14 @@ a{{-- resources/views/admin/failed-logins/index.blade.php --}}
 @section('title', 'محاولات الدخول الفاشلة')
 
 @section('content_header')
-    <h1 class="fw-bold">📋 العملاء الذين فشلوا في تسجيل الدخول</h1>
+    <h1 class="fw-bold">📋 العملاء الذين فشلوا في تسجيل الدخول : {{ count($leads) }}</h1>
 @stop
 
 @section('content')
     <div class="card shadow-sm border-0">
         <div class="card-header d-flex justify-content-between align-items-center 
                 bg-primary text-white">
-            <span class="fw-bold">قائمة العملاء</span>
+            <span class="fw-bold"> قائمة العملاء </span>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
