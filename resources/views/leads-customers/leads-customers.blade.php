@@ -284,185 +284,189 @@
 
 
     <!-- جدول عرض العملاء المحتملين -->
-    <div class="card mt-4">
-        <div class="card-header bg-dark">
-            <h3 class="card-title text-white">العملاء المحتملين</h3>
-        </div>
-
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center ccccc" style="">
-
-                <form method="GET" id="leadForm" action="{{ route('leads-customers.search') }}" class="d-flex mb-3">
-                    @csrf
-
-                    <select class="form-select w-auto me-2" id="searchBy" name="searchBy">
-                        <option value="id" {{ request('searchBy') == 'id' ? 'selected' : '' }}>الكود</option>
-                        <option value="name" {{ request('searchBy') == 'name' ? 'selected' : '' }}>الاسم</option>
-                        <option value="card_id" {{ request('searchBy') == 'card_id' ? 'selected' : '' }}>الرقم القومي
-                        </option>
-                        <option value="age" {{ request('searchBy') == 'age' ? 'selected' : '' }}>السن</option>
-                        <option value="phone" {{ request('searchBy') == 'phone' ? 'selected' : '' }}>الهاتف</option>
-                        <option value="governorate" {{ request('searchBy') == 'governorate' ? 'selected' : '' }}>المحافظة
-                        </option>
-                        <option value="status" {{ request('searchBy') == 'status' ? 'selected' : '' }}>الحالة</option>
-                        <option value="delegate_name" {{ request('searchBy') == 'delegate_name' ? 'selected' : '' }}>
-                            المندوب</option>
-                        <option value="registration_date"
-                            {{ request('searchBy') == 'registration_date' ? 'selected' : '' }}>تاريخ التسجيل</option>
-                    </select>
-
-                    <input type="text" class="form-control me-2" id="searchInput" name="searchInput"
-                        value="{{ request('searchInput') }}" placeholder="اكتب هنا للبحث">
-
-                    <button type="submit" class="btn btn-primary">بحث</button>
-                </form>
-
-                <div class="row mb-3">
-                    <div class="col-md-2">
-                        <select id="filter-age" class="form-control">
-                            <option value="">كل الأعمار</option>
-                            @foreach ($leads->pluck('age')->unique() as $age)
-                                <option value="{{ $age }}">{{ $age }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select id="filter-governorate" class="form-control">
-                            <option value="">كل المحافظات</option>
-                            @foreach ($leads->pluck('governorate')->unique() as $gov)
-                                <option value="{{ $gov }}">{{ $gov }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <select id="filter-status" class="form-control">
-                            <option value="">كل الحالات</option>
-                            @foreach ($leads->pluck('status')->unique() as $status)
-                                <option value="{{ $status }}">{{ $status }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4">
-                        <input type="date" id="filter-date" class="form-control" placeholder="تاريخ التسجيل">
-                    </div>
-                </div>
-                <div>
-                    عدد المحددين: <span id="selected-count">0</span>
-                </div>
-
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        العمليات
-                    </button>
-
-                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="operationsDropdown">
-                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
-                            <i class="fas fa-plus text-success"></i> تعيين اختبار
-                        </button>
-                    </div>
-                </div>
+    @if (auth()->user()?->permissions->contains('permission', 'show-leads') || auth()->user()?->role == 'admin')
+        <div class="card mt-4">
+            <div class="card-header bg-dark">
+                <h3 class="card-title text-white">العملاء المحتملين</h3>
             </div>
 
-            <div class="card-body table-responsive p-0">
-                <table id="example" class="table table-hover text-center">
-                    <thead class="bg-secondary text-white">
-                        <tr>
-                            <th>
-                                <input type="checkbox" class="width-input" id="select-all">
-                            </th>
-                            <th>كود</th>
-                            <th>الاسم</th>
-                            <th>صورة</th>
-                            <th>السن</th>
-                            <th>الهاتف</th>
-                            <th>المحافظة</th>
-                            <th>الحالة</th>
-                            <th>المندوب</th>
-                            <th>الاختبارات</th>
-                            <th>تاريخ التسجيل</th>
-                            <th>الإجراءات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($leads as $lead)
-                            <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
-                                <td>
-                                    <input type="checkbox" class="lead-checkbox width-input" name="lead_ids[]"
-                                        value="{{ $lead->id }}">
-                                </td>
-                                <td>#{{ $lead->id }}</td>
-                                <td>
-                                    <a href="{{ route('leads-customers.show', $lead->id) }}" class="">
-                                        {{ $lead->name }} </a>
-                                </td>
-                                <td>
-                                    <a href="{{ asset('storage/' . $lead->image) }}" target="blank">
-                                        <img src="{{ asset('storage/' . $lead->image) }}" width="40" height="40"
-                                            class="img-circle" alt="صورة" loading="lazy">
-                                    </a>
-                                </td>
-                                <td>{{ $lead->age }}</td>
-                                <td>{{ $lead->phone }}</td>
-                                <td>{{ $lead->governorate }}</td>
-                                <td data-status="{{ $lead->status }}" class="lead-status">
-                                    <span
-                                        class="badge
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center ccccc" style="">
+
+                    <form method="GET" id="leadForm" action="{{ route('leads-customers.search') }}"
+                        class="d-flex mb-3">
+                        @csrf
+
+                        <select class="form-select w-auto me-2" id="searchBy" name="searchBy">
+                            <option value="id" {{ request('searchBy') == 'id' ? 'selected' : '' }}>الكود</option>
+                            <option value="name" {{ request('searchBy') == 'name' ? 'selected' : '' }}>الاسم</option>
+                            <option value="card_id" {{ request('searchBy') == 'card_id' ? 'selected' : '' }}>الرقم القومي
+                            </option>
+                            <option value="age" {{ request('searchBy') == 'age' ? 'selected' : '' }}>السن</option>
+                            <option value="phone" {{ request('searchBy') == 'phone' ? 'selected' : '' }}>الهاتف</option>
+                            <option value="governorate" {{ request('searchBy') == 'governorate' ? 'selected' : '' }}>
+                                المحافظة
+                            </option>
+                            <option value="status" {{ request('searchBy') == 'status' ? 'selected' : '' }}>الحالة</option>
+                            <option value="delegate_name" {{ request('searchBy') == 'delegate_name' ? 'selected' : '' }}>
+                                المندوب</option>
+                            <option value="registration_date"
+                                {{ request('searchBy') == 'registration_date' ? 'selected' : '' }}>تاريخ التسجيل</option>
+                        </select>
+
+                        <input type="text" class="form-control me-2" id="searchInput" name="searchInput"
+                            value="{{ request('searchInput') }}" placeholder="اكتب هنا للبحث">
+
+                        <button type="submit" class="btn btn-primary">بحث</button>
+                    </form>
+
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <select id="filter-age" class="form-control">
+                                <option value="">كل الأعمار</option>
+                                @foreach ($leads->pluck('age')->unique() as $age)
+                                    <option value="{{ $age }}">{{ $age }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filter-governorate" class="form-control">
+                                <option value="">كل المحافظات</option>
+                                @foreach ($leads->pluck('governorate')->unique() as $gov)
+                                    <option value="{{ $gov }}">{{ $gov }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="filter-status" class="form-control">
+                                <option value="">كل الحالات</option>
+                                @foreach ($leads->pluck('status')->unique() as $status)
+                                    <option value="{{ $status }}">{{ $status }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <input type="date" id="filter-date" class="form-control" placeholder="تاريخ التسجيل">
+                        </div>
+                    </div>
+                    <div>
+                        عدد المحددين: <span id="selected-count">0</span>
+                    </div>
+
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            العمليات
+                        </button>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="operationsDropdown">
+                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
+                                <i class="fas fa-plus text-success"></i> تعيين اختبار
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body table-responsive p-0">
+                    <table id="example" class="table table-hover text-center">
+                        <thead class="bg-secondary text-white">
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="width-input" id="select-all">
+                                </th>
+                                <th>كود</th>
+                                <th>الاسم</th>
+                                <th>صورة</th>
+                                <th>السن</th>
+                                <th>الهاتف</th>
+                                <th>المحافظة</th>
+                                <th>الحالة</th>
+                                <th>المندوب</th>
+                                <th>الاختبارات</th>
+                                <th>تاريخ التسجيل</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($leads as $lead)
+                                <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
+                                    <td>
+                                        <input type="checkbox" class="lead-checkbox width-input" name="lead_ids[]"
+                                            value="{{ $lead->id }}">
+                                    </td>
+                                    <td>#{{ $lead->id }}</td>
+                                    <td>
+                                        <a href="{{ route('leads-customers.show', $lead->id) }}" class="">
+                                            {{ $lead->name }} </a>
+                                    </td>
+                                    <td>
+                                        <a href="{{ asset('storage/' . $lead->image) }}" target="blank">
+                                            <img src="{{ asset('storage/' . $lead->image) }}" width="40"
+                                                height="40" class="img-circle" alt="صورة" loading="lazy">
+                                        </a>
+                                    </td>
+                                    <td>{{ $lead->age }}</td>
+                                    <td>{{ $lead->phone }}</td>
+                                    <td>{{ $lead->governorate }}</td>
+                                    <td data-status="{{ $lead->status }}" class="lead-status">
+                                        <span
+                                            class="badge
                                         @if ($lead->status == 'عميل محتمل') bg-secondary
                                         @elseif ($lead->status == 'عميل اساسي') bg-success @endif">
-                                        {{ $lead->status }}
-                                    </span>
-                                </td>
-                                <td>{{ $lead->delegate->name ?? '-' }}</td>
-                                <td>
-                                    @if ($lead->tests->count())
-                                        <div class="dropdown">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                {{ $lead->tests->count() }}
-                                            </a>
-                                            <div class="dropdown-menu">
-                                                @foreach ($lead->tests as $test)
-                                                    <a class="dropdown-item" title="{{ $test->title }}"
-                                                        href="{{ route('test.leads', $test->id) }}">
-                                                        {{ $test->title }}
-                                                    </a>
-                                                @endforeach
+                                            {{ $lead->status }}
+                                        </span>
+                                    </td>
+                                    <td>{{ $lead->delegate->name ?? '-' }}</td>
+                                    <td>
+                                        @if ($lead->tests->count())
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    {{ $lead->tests->count() }}
+                                                </a>
+                                                <div class="dropdown-menu">
+                                                    @foreach ($lead->tests as $test)
+                                                        <a class="dropdown-item" title="{{ $test->title }}"
+                                                            href="{{ route('test.leads', $test->id) }}">
+                                                            {{ $test->title }}
+                                                        </a>
+                                                    @endforeach
+                                                </div>
                                             </div>
-                                        </div>
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td>{{ $lead->registration_date }}</td>
-                                <td>
-                                    <div class="d-flex align-items-center gap-1 flex-nowrap">
-                                        <a href="{{ route('leads-customers.update', $lead->id) }}"
-                                            class="btn btn-sm btn-primary">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        @if (auth()->user()->role == 'admin')
-                                            <form id="delete"
-                                                action="{{ route('leads-customers.delete', $lead->id) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-danger"><i
-                                                        class="fas fa-trash"></i></button>
-                                            </form>
+                                        @else
+                                            -
                                         @endif
-                                    </div>
-                                </td>
-                            </tr>
-                        @empty
-                            {{-- <tr>
+                                    </td>
+                                    <td>{{ $lead->registration_date }}</td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1 flex-nowrap">
+                                            <a href="{{ route('leads-customers.update', $lead->id) }}"
+                                                class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            @if (auth()->user()->role == 'admin')
+                                                <form id="delete"
+                                                    action="{{ route('leads-customers.delete', $lead->id) }}"
+                                                    method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-danger"><i
+                                                            class="fas fa-trash"></i></button>
+                                                </form>
+                                            @endif
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                {{-- <tr>
                                 <td colspan="12">لا يوجد بيانات حالياً.</td>
                             </tr> --}}
-                        @endforelse
-                    </tbody>
-                </table>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 
     <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">

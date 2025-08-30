@@ -131,10 +131,10 @@ Route::group([
     Route::delete('/sponsor-view/{id}', [SponserController::class, 'delete'])->name('sponsor.delete')->middleware("check.permission:sponser-create");
 
     // عرض مجموعات
-    Route::get('/customer-groups/{id?}', [CustomerGroupController::class, 'index'])->name('customer-groups.index')->middleware("check.permission:bag-create");
-    Route::post('/customer-groups', [CustomerGroupController::class, 'create'])->name('customer-groups.create')->middleware("check.permission:bag-create");
-    Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit')->middleware("check.permission:bag-create");;
-    Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete')->middleware("check.permission:bag-create");;
+    Route::get('/customer-groups/{id?}', [CustomerGroupController::class, 'index'])->name('customer-groups.index')->middleware("check.permission:group-create");
+    Route::post('/customer-groups', [CustomerGroupController::class, 'create'])->name('customer-groups.create')->middleware("check.permission:group-create");
+    Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit')->middleware("check.permission:group-create");;
+    Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete')->middleware("check.permission:group-create");;
     Route::get('/groups/{group}/customers/{customer}/remove', [CustomerGroupController::class, 'removeFromGroup'])->name('groups.removeCustomer');
 
 
@@ -185,15 +185,15 @@ Route::group([
     Route::delete('/template/{id}', [TemplateController::class, 'delete'])->name('template.delete')->middleware("check.permission:message-create");
 
 
-    Route::get('/customers/group/{group_id}', [CustomerController::class, 'customerGroup'])->name('group.customer');
+    Route::get('/customers/group/{group_id}', [CustomerController::class, 'customerGroup'])->name('group.customer')->middleware("check.permission:show-group-customers");
     Route::post('/group/{group_id}', [CustomerController::class, 'addToGroup'])->name('group.addToGroup');
 
     // عرض الحقائب
-    Route::get('/bags-view/{id?}', [BagController::class, 'index'])->name('bags.index');
-    Route::post('/bags-view', [BagController::class, 'create'])->name('bags.create');
-    Route::post('/bags-view/edit/{id}', [BagController::class, 'edit'])->name('bags.edit');
-    Route::delete('/bags-view/{id}', [BagController::class, 'delete'])->name('bags.delete');
-    Route::get('/bags-view/customers/{bag_id}', [BagController::class, 'bagCustomers'])->name('bags.customers');
+    Route::get('/bags-view/{id?}', [BagController::class, 'index'])->name('bags.index')->middleware("check.permission:bag-create");
+    Route::post('/bags-view', [BagController::class, 'create'])->name('bags.create')->middleware("check.permission:bag-create");
+    Route::post('/bags-view/edit/{id}', [BagController::class, 'edit'])->name('bags.edit')->middleware("check.permission:bag-create");
+    Route::delete('/bags-view/{id}', [BagController::class, 'delete'])->name('bags.delete')->middleware("check.permission:bag-create");
+    Route::get('/bags-view/customers/{bag_id}', [BagController::class, 'bagCustomers'])->name('bags.customers')->middleware("check.permission:bag-create");
 
 
     Route::delete('/history-delete/{id}', [HistoryController::class, 'delete'])->name('history.delete');
@@ -220,7 +220,7 @@ Route::group([
         Route::post('/create', [TestController::class, 'store'])->name('create')->middleware("check.permission:test-create");
         // حذف اختبار
         Route::delete('/delete/{id}', [TestController::class, 'destroy'])->name('delete')->middleware("check.permission:test-create");
-        Route::get('/{test_id}/leads/', [TestController::class, 'customerTest'])->name('leads');
+        Route::get('/{test_id}/leads/', [TestController::class, 'customerTest'])->name('leads')->middleware("check.permission:test-create");
     });
 
     // تنفيذ الإضافة
@@ -229,7 +229,7 @@ Route::group([
     Route::get('/tests/{test}/show-evaluations/{lead}', [TestController::class, 'show_evaluation'])->name('tests.showEvaluation');
     Route::post('/evaluations/create', [TestController::class, 'createEvaluation'])->name('evaluations.create');
     Route::post('/evaluations/{id}', [TestController::class, 'storeEvaluation'])->name('evaluations.store');
-    Route::get('/groups-visa/{visaid}', [HomeController::class, 'groupVisa'])->name('groups.visa');
+    Route::get('/groups-visa/{visaid}', [HomeController::class, 'groupVisa'])->name('groups.visa')->middleware("check.permission:visa-type-create");
 
     Route::get('/taakebs', [CompanyController::class, 'index'])->name('taakebs.index');
     Route::put('/taakebs/{id}/approve', [CompanyController::class, 'approve'])->name('taakebs.approve');
