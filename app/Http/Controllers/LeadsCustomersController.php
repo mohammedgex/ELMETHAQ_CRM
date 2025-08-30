@@ -214,7 +214,6 @@ class LeadsCustomersController extends Controller
             'age' => $request->input('age'),
             'card_id' => $request->input('card_id'),
             'governorate' => $request->input('governorate'),
-            'evaluation' => $request->input('evaluation'),
             'phone' => $request->input('phone'),
             'licence_type' => $request->input('licence_type'),
             'test_type' => $request->input('test_type'),

@@ -157,7 +157,7 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                {{-- <div class="form-group col-md-6">
                                     <label>التقييم</label>
                                     <select class="form-control" name="evaluation">
                                         <option value="">اختر التقييم</option>
@@ -168,7 +168,7 @@
                                             </option>
                                         @endforeach
                                     </select>
-                                </div>
+                                </div> --}}
 
                                 <div class="form-group col-md-6">
                                     <label>المحافظة</label>
