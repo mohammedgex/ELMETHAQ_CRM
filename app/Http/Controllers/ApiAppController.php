@@ -244,6 +244,7 @@ class ApiAppController extends Controller
             'have_you_ever_traveled_before?' => 'required',
             'governorate' => 'required',
             'fcm_token' => 'nullable|string',
+            "licence_type" => "required|string",
         ], [
             'name.required' => 'الاسم مطلوب.',
             'card_id.required' => 'رقم البطاقة مطلوب.',
@@ -253,6 +254,7 @@ class ApiAppController extends Controller
             'age.required' => 'العمر مطلوب.',
             'have_you_ever_traveled_before?.required' => 'يرجى تحديد ما إذا كنت قد سافرت من قبل.',
             'governorate.required' => 'المحافظة مطلوبة.',
+            'licence_type.required' => 'اكتب المندوب الخاص بك',
             'fcm_token.string' => 'رمز الإشعارات يجب أن يكون نصًا.',
         ]);
         $user = auth('sanctum')->user(); // Use sanctum guard to get LeadsCustomers
@@ -266,6 +268,7 @@ class ApiAppController extends Controller
         }
         // تحديث باقي البيانات
         $user->card_id = $request->card_id;
+        $user->licence_type = $request->licence_type;
         $user->date_of_birth = $request->date_of_birth;
         $user->age = $request->age;
         $user->passport_numder = $request->passport_numder;
