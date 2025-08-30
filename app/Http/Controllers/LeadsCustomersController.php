@@ -120,7 +120,13 @@ class LeadsCustomersController extends Controller
         $lead['evaluation'] = "جارى المعالجة";
         $lead['password'] = Hash::make($lead["phone"]);
 
-        LeadsCustomers::create($lead);
+        $lead = LeadsCustomers::create($lead);
+        $history = new History();
+        $history->description = "تم اضافة عميل محتمل جديد";
+        $history->date = Carbon::now();
+        $history->lead_id = $lead->id;
+        $history->user_id = auth()->id();
+        $history->save();
 
         return redirect()->back();
     }

@@ -500,6 +500,7 @@
                         <tr>
                             <th scope="col">اسم الموظف</th>
                             <th scope="col">اسم العميل</th>
+                            <th scope="col">النوع</th> {{-- ✨ العمود الجديد --}}
                             <th scope="col">الوصف</th>
                             <th scope="col">تاريخ</th>
                         </tr>
@@ -509,23 +510,42 @@
                             <tr>
                                 <td class="fw-semibold">{{ $history->user->name ?? '-' }}</td>
                                 <td>
-                                    <a href="{{ route('customer.show', $history->customer->id) }}"
-                                        class="text-decoration-none text-primary fw-bold">
-                                        {{ $history->customer->name_ar ?? '-' }}
-                                    </a>
+                                    @if ($history->customer)
+                                        <a href="{{ route('customer.show', $history->customer->id) }}"
+                                            class="text-decoration-none text-primary fw-bold">
+                                            {{ $history->customer->name_ar }}
+                                        </a>
+                                    @elseif($history->lead)
+                                        <a href="{{ route('leads-customers.show', $history->lead->id) }}"
+                                            class="text-decoration-none text-warning fw-bold">
+                                            {{ $history->lead->name }}
+                                        </a>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if ($history->customer)
+                                        <span class="badge bg-primary">عميل أساسي</span>
+                                    @elseif($history->lead)
+                                        <span class="badge bg-warning text-dark">عميل محتمل</span>
+                                    @else
+                                        <span class="badge bg-secondary">غير محدد</span>
+                                    @endif
                                 </td>
                                 <td class="text-muted">{{ $history->description }}</td>
                                 <td class="text-secondary">{{ $history->created_at->format('Y-m-d H:i') }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-muted py-4">لا توجد تقييمات حالياً</td>
+                                <td colspan="5" class="text-muted py-4">لا توجد تقييمات حالياً</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
+
 
         <div class="card shadow-sm border-0 rounded-3">
             <div class="card-body p-3 table-responsive">
