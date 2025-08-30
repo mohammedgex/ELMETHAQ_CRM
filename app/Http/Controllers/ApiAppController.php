@@ -239,11 +239,8 @@ class ApiAppController extends Controller
             'card_id' => 'required|digits:14|unique:leads_customers,card_id',
             'date_of_birth' => 'required',
             'age' => 'required',
-            // 'img_national_id_card' => 'required',
-            // 'img_national_id_card_back' => 'required',
             'passport_numder' => 'nullable',
             'passport_photo' => 'nullable',
-            // 'license_photo' => 'required',
             'have_you_ever_traveled_before?' => 'required',
             'governorate' => 'required',
             'fcm_token' => 'nullable|string',
@@ -254,9 +251,6 @@ class ApiAppController extends Controller
             'card_id.unique' => 'رقم البطاقة مستخدم بالفعل.',
             'date_of_birth.required' => 'تاريخ الميلاد مطلوب.',
             'age.required' => 'العمر مطلوب.',
-            // 'img_national_id_card.required' => 'صورة البطاقة الشخصية (الوجه الأمامي) مطلوبة.',
-            // 'img_national_id_card_back.required' => 'صورة البطاقة الشخصية (الوجه الخلفي) مطلوبة.',
-            // 'license_photo.required' => 'صورة الرخصة مطلوبة.',
             'have_you_ever_traveled_before?.required' => 'يرجى تحديد ما إذا كنت قد سافرت من قبل.',
             'governorate.required' => 'المحافظة مطلوبة.',
             'fcm_token.string' => 'رمز الإشعارات يجب أن يكون نصًا.',
@@ -266,22 +260,16 @@ class ApiAppController extends Controller
         $user->name = $request->name;
         $user->phone_two = $request->phone_two;
         // حفظ الصور
-        // $imgNationalIdCardPath = $request->file('img_national_id_card')->store('uploads/', 'public');
-        // $imgNationalIdCardBackPath = $request->file('img_national_id_card_back')->store('uploads/', 'public');
         $passportPhotoPath = null;
         if ($request->hasFile('passport_photo')) {
             $passportPhotoPath = $request->file('passport_photo')->store('uploads/', 'public');
         }
-        // $licensePhotoPath = $request->file('license_photo')->store('uploads/', 'public');
         // تحديث باقي البيانات
         $user->card_id = $request->card_id;
         $user->date_of_birth = $request->date_of_birth;
         $user->age = $request->age;
-        // $user->img_national_id_card = $imgNationalIdCardPath;
-        // $user->img_national_id_card_back = $imgNationalIdCardBackPath;
         $user->passport_numder = $request->passport_numder;
         $user->passport_photo = $passportPhotoPath;
-        // $user->license_photo = $licensePhotoPath;
         $user->evaluation = "جارى المعالجة";
         $user['have_you_ever_traveled_before?'] = $request['have_you_ever_traveled_before?'];
         $user->governorate = $request->governorate;

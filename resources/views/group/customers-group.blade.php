@@ -189,6 +189,7 @@
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
+                                        <th>رقم الجوز</th>
                                         <th width="120px">الكشف الطبي</th>
                                         <th width="120px">البصمة</th>
                                         <th width="120px">كشف المعامل</th>
@@ -222,46 +223,189 @@
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
-                                            <td
-                                                style="background-color:
-                                                    {{ $customer->medical_examination === 'لائق'
-                                                        ? '#28a745'
-                                                        : ($customer->medical_examination === 'غير لائق' || is_null($customer->medical_examination)
-                                                            ? '#dc3545'
-                                                            : '#ffc107') }}
-                                                    !important;
-                                                    color: #fff !important;">
-                                                {{ $customer->medical_examination ?? '-' }}
+                                            <td>{{ $customer->passport_id }}</td>
+                                            <td class="text-center align-middle position-relative examination-cell medical-cell"
+                                                data-status="{{ $customer->medical_examination }}"
+                                                style="background: {{ $customer->medical_examination === 'لائق'
+                                                    ? 'linear-gradient(135deg, #00d4aa 0%, #00b894 100%)'
+                                                    : ($customer->medical_examination === 'غير لائق' || is_null($customer->medical_examination)
+                                                        ? 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'
+                                                        : 'linear-gradient(135deg, #fdcb6e 0%, #f39c12 100%)') }} !important;
+            border: 2px solid rgba(255,255,255,0.2) !important;
+            border-radius: 12px !important; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+            backdrop-filter: blur(10px) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            padding: 15px 12px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;">
+
+                                                <div class="cell-shine"
+                                                    style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+         transition: left 0.6s ease;">
+                                                </div>
+
+                                                <div class="d-flex flex-column align-items-center justify-content-center h-100"
+                                                    style="position: relative; z-index: 2;">
+                                                    <div class="icon-wrapper mb-2"
+                                                        style="width: 26px; height: 26px; border-radius: 50%; 
+             background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);">
+                                                        <i class="fas fa-user-md" style="font-size: 14px;"></i>
+                                                    </div>
+                                                    <span class="status-text"
+                                                        style="font-size: 16px; font-weight: 700; text-transform: uppercase; 
+              letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                                                        {{ $customer->medical_examination ?? 'غير محدد' }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="pulse-ring"
+                                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+         width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%;
+         animation: pulse 2s infinite; opacity: 0.6;">
+                                                </div>
                                             </td>
 
-                                            <td
-                                                style="background-color:
-                                                            {{ $customer->finger_print_examination === 'تم تصدير الاكسيل'
-                                                                ? '#28a745'
-                                                                : ($customer->finger_print_examination === 'في انتظار الحجز'
-                                                                    ? '#ffc107'
-                                                                    : '#dc3545') }}
-                                                            !important;
-                                                            color: #fff !important;">
-                                                {{ $customer->finger_print_examination ?? '-' }}
+                                            <td class="text-center align-middle position-relative examination-cell fingerprint-cell"
+                                                data-status="{{ $customer->finger_print_examination }}"
+                                                style="background: {{ $customer->finger_print_examination === 'تم تصدير الاكسيل'
+                                                    ? 'linear-gradient(135deg, #00d4aa 0%, #00b894 100%)'
+                                                    : ($customer->finger_print_examination === 'في انتظار الحجز'
+                                                        ? 'linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)'
+                                                        : 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)') }} !important;
+            border: 2px solid rgba(255,255,255,0.2) !important;
+            border-radius: 12px !important; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+            backdrop-filter: blur(10px) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            padding: 15px 12px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;">
+
+                                                <div class="cell-shine"
+                                                    style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+         transition: left 0.6s ease;">
+                                                </div>
+
+                                                <div class="d-flex flex-column align-items-center justify-content-center h-100"
+                                                    style="position: relative; z-index: 2;">
+                                                    <div class="icon-wrapper mb-2"
+                                                        style="width: 26px; height: 26px; border-radius: 50%; 
+             background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);">
+                                                        <i class="fas fa-fingerprint" style="font-size: 14px;"></i>
+                                                    </div>
+                                                    <span class="status-text"
+                                                        style="font-size: 16px; font-weight: 700; text-transform: uppercase; 
+              letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                                                        {{ $customer->finger_print_examination ?? 'غير محدد' }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="pulse-ring"
+                                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+         width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%;
+         animation: pulse 2s infinite; opacity: 0.6;">
+                                                </div>
                                             </td>
 
-                                            <td
-                                                style="background-color:
-                                                    {{ $customer->virus_examination === 'موجب' || is_null($customer->virus_examination)
-                                                        ? '#dc3545'
-                                                        : ($customer->virus_examination === 'سالب'
-                                                            ? '#28a745'
-                                                            : '#ffc107') }}
-                                                    !important;
-                                                    color: #fff !important;">
-                                                {{ $customer->virus_examination ?? '-' }}
+                                            <td class="text-center align-middle position-relative examination-cell virus-cell"
+                                                data-status="{{ $customer->virus_examination }}"
+                                                style="background: {{ $customer->virus_examination === 'موجب' || is_null($customer->virus_examination)
+                                                    ? 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'
+                                                    : ($customer->virus_examination === 'سالب'
+                                                        ? 'linear-gradient(135deg, #00d4aa 0%, #00b894 100%)'
+                                                        : 'linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)') }} !important;
+            border: 2px solid rgba(255,255,255,0.2) !important;
+            border-radius: 12px !important; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+            backdrop-filter: blur(10px) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            padding: 15px 12px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;">
+
+                                                <div class="cell-shine"
+                                                    style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+         transition: left 0.6s ease;">
+                                                </div>
+
+                                                <div class="d-flex flex-column align-items-center justify-content-center h-100"
+                                                    style="position: relative; z-index: 2;">
+                                                    <div class="icon-wrapper mb-2"
+                                                        style="width: 26px; height: 26px; border-radius: 50%; 
+             background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);">
+                                                        <i class="fas fa-virus" style="font-size: 14px;"></i>
+                                                    </div>
+                                                    <span class="status-text"
+                                                        style="font-size: 16px; font-weight: 700; text-transform: uppercase; 
+              letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                                                        {{ $customer->virus_examination ?? 'غير محدد' }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="pulse-ring"
+                                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+         width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%;
+         animation: pulse 2s infinite; opacity: 0.6;">
+                                                </div>
                                             </td>
 
-                                            <td
-                                                style="background-color: {{ is_null($customer->e_visa_number) ? '#dc3545' : '#28a745' }} !important; color: #fff !important;">
-                                                {{ $customer->e_visa_number ?? '-' }}
+                                            <td class="text-center align-middle position-relative examination-cell visa-cell"
+                                                data-status="{{ $customer->e_visa_number }}"
+                                                style="background: {{ is_null($customer->e_visa_number)
+                                                    ? 'linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%)'
+                                                    : 'linear-gradient(135deg, #00d4aa 0%, #00b894 100%)' }} !important;
+            border: 2px solid rgba(255,255,255,0.2) !important;
+            border-radius: 12px !important; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.2) !important;
+            backdrop-filter: blur(10px) !important;
+            color: white !important;
+            font-weight: 600 !important;
+            padding: 15px 12px !important;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            position: relative !important;
+            overflow: hidden !important;">
+
+                                                <div class="cell-shine"
+                                                    style="position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+         transition: left 0.6s ease;">
+                                                </div>
+
+                                                <div class="d-flex flex-column align-items-center justify-content-center h-100"
+                                                    style="position: relative; z-index: 2;">
+                                                    <div class="icon-wrapper mb-2"
+                                                        style="width: 32px; height: 32px; border-radius: 50%; 
+             background: rgba(255,255,255,0.2); display: flex; align-items: center; justify-content: center;
+             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.3);">
+                                                        <i class="fas fa-passport" style="font-size: 14px;"></i>
+                                                    </div>
+                                                    <span class="status-text"
+                                                        style="font-size: 16px; font-weight: 700; text-transform: uppercase; 
+              letter-spacing: 0.5px; text-shadow: 0 1px 3px rgba(0,0,0,0.3);">
+                                                        {{ $customer->e_visa_number ?? 'غير متوفر' }}
+                                                    </span>
+                                                </div>
+
+                                                <div class="pulse-ring"
+                                                    style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+         width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-radius: 50%;
+         animation: pulse 2s infinite; opacity: 0.6;">
+                                                </div>
                                             </td>
+
 
                                             <td>
                                                 <div class="btn-group">
@@ -271,41 +415,7 @@
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
 
-                                                        <!-- تعديل -->
-                                                        <li>
-                                                            <a class="dropdown-item text-primary"
-                                                                href="{{ route('customer.add', $customer->id) }}">
-                                                                <i class="fas fa-edit me-1"></i> تعديل
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-primary"
-                                                                href="{{ route('groups.removeCustomer', [$group->id, $customer->id]) }}">
-                                                                ازالة من المجموعة
-                                                            </a>
-                                                        </li>
-                                                        @if ($customer->phone != null)
-                                                            <li>
-                                                                <a class="dropdown-item text-success"
-                                                                    href="https://wa.me/{{ '20' . ltrim($customer->phone, '0') }}"
-                                                                    target="_blank" rel="noopener noreferrer">
-                                                                    <i class="fab fa-whatsapp"></i>
-                                                                    تواصل عبر واتساب
-                                                                </a>
-                                                            </li>
-                                                        @endif
-                                                        @if ($customer->token_medical != null)
-                                                            <li>
-                                                                <a class="dropdown-item text-success"
-                                                                    href="https://wafid.com/appointment/{{ ltrim($customer->token_medical) }}/pay/"
-                                                                    target="_blank" rel="noopener noreferrer">
-                                                                    <i class="fas fa-plus-circle"></i>
-                                                                    دفع الكشف الطبي
-                                                                </a>
-                                                            </li>
-                                                        @endif
-
-                                                        <!-- عرض -->
+                                                        {{-- عرض --}}
                                                         @if (auth()->user()?->permissions->contains('permission', 'show-customer') || auth()->user()?->role == 'admin')
                                                             <li>
                                                                 <a class="dropdown-item text-info"
@@ -314,39 +424,60 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-                                                        @if ($customer->e_visa_number)
+
+                                                        {{-- تعديل --}}
+                                                        <li>
+                                                            <a class="dropdown-item text-primary"
+                                                                href="{{ route('customer.add', $customer->id) }}">
+                                                                <i class="fas fa-edit me-1"></i> تعديل
+                                                            </a>
+                                                        </li>
+
+                                                        {{-- تواصل --}}
+                                                        @if ($customer->phone != null)
                                                             <li>
-                                                                <a class="dropdown-item text-info"
-                                                                    href="{{ route('reports.nomination_card', $customer->id) }}"
-                                                                    target="_blank">
-                                                                    <i class="fas fa-file-alt"></i>
-                                                                    بطاقة الترشيح
+                                                                <a class="dropdown-item text-success"
+                                                                    href="https://wa.me/{{ '20' . ltrim($customer->phone, '0') }}"
+                                                                    target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fab fa-whatsapp me-1"></i> واتساب
                                                                 </a>
                                                             </li>
                                                         @endif
 
-                                                        <!-- بلوك / إزالة بلوك -->
-                                                        <li>
-                                                            <a class="dropdown-item text-danger"
-                                                                href="{{ $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
-                                                                <i class="fas fa-users me-1"></i>
-                                                                {{ $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
-                                                            </a>
-                                                        </li>
+                                                        {{-- دفع الكشف الطبي --}}
+                                                        @if ($customer->token_medical != null)
+                                                            <li>
+                                                                <a class="dropdown-item text-warning"
+                                                                    href="https://wafid.com/appointment/{{ ltrim($customer->token_medical) }}/pay/"
+                                                                    target="_blank" rel="noopener noreferrer">
+                                                                    <i class="fas fa-credit-card me-1"></i> دفع الكشف الطبي
+                                                                </a>
+                                                            </li>
+                                                        @endif
 
-                                                        <!-- الكشوفات والحجوزات -->
+                                                        {{-- بطاقة الترشيح --}}
+                                                        @if ($customer->e_visa_number)
+                                                            <li>
+                                                                <a class="dropdown-item text-secondary"
+                                                                    href="{{ route('reports.nomination_card', $customer->id) }}"
+                                                                    target="_blank">
+                                                                    <i class="fas fa-id-card me-1"></i> بطاقة الترشيح
+                                                                </a>
+                                                            </li>
+                                                        @endif
+
+                                                        {{-- الكشوفات والحجوزات --}}
                                                         <li class="dropdown-submenu dropstart">
-                                                            <a class="dropdown-item dropdown-toggle" href="#"><i
-                                                                    class="fas fa-list-alt me-1"></i> الكشوفات</a>
+                                                            <a class="dropdown-item dropdown-toggle" href="#">
+                                                                <i class="fas fa-list-alt me-1"></i> الكشوفات
+                                                            </a>
                                                             <ul class="dropdown-menu"
                                                                 style="position: absolute; left: 100% !important; right: auto;">
                                                                 <li>
                                                                     <a class="dropdown-item"
                                                                         href="{{ route('print_visaEntriy', $customer->id) }}"
-                                                                        target="_blank"><i
-                                                                            class="fas fa-passport me-1"></i>
-                                                                        طباعة طلب
-                                                                        دخول
+                                                                        target="_blank">
+                                                                        <i class="fas fa-passport me-1"></i> طباعة طلب دخول
                                                                     </a>
                                                                 </li>
                                                                 @if ($customer->token_medical)
@@ -354,9 +485,8 @@
                                                                         <a href="#" id="checkMedicalStatus"
                                                                             data-customer='{{ json_encode($customer) }}'
                                                                             class="dropdown-item checkMedicalStatus">
-                                                                            <i class="fas fa-hospital me-1"></i>
-
-                                                                            تحقق من الحالة الطبية
+                                                                            <i class="fas fa-stethoscope me-1"></i> تحقق من
+                                                                            الحالة الطبية
                                                                         </a>
                                                                     </li>
                                                                 @endif
@@ -364,41 +494,61 @@
                                                                     <a href="#" class="dropdown-item check-medical"
                                                                         id="check-medical"
                                                                         data-customer='@json($customer)'>
-                                                                        <i class="fas fa-hospital me-1"></i>
-                                                                        حجز الكشف الطبي
+                                                                        <i class="fas fa-hospital me-1"></i> حجز الكشف
+                                                                        الطبي
                                                                     </a>
                                                                 </li>
                                                             </ul>
                                                         </li>
 
+                                                        {{-- إدارة المجموعات --}}
+                                                        <li>
+                                                            <a class="dropdown-item text-danger"
+                                                                href="{{ route('groups.removeCustomer', [$group->id, $customer->id]) }}">
+                                                                <i class="fas fa-user-minus me-1"></i> إزالة من المجموعة
+                                                            </a>
+                                                        </li>
+
+                                                        {{-- البلوك --}}
+                                                        <li>
+                                                            <a class="dropdown-item text-danger"
+                                                                href="{{ $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
+                                                                <i class="fas fa-user-slash me-1"></i>
+                                                                {{ $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
+                                                            </a>
+                                                        </li>
+
+                                                        {{-- أرشفة / استرجاع --}}
                                                         @if (is_null($customer->archived_at))
-                                                            {{-- العميل غير مؤرشف => أظهر زر الأرشفة --}}
                                                             <li>
                                                                 <form
                                                                     action="{{ route('customers.archive', $customer->id) }}"
                                                                     method="POST" style="display:inline;">
                                                                     @csrf
-                                                                    <button type="submit" class="dropdown-item">
-                                                                        أرشفة
+                                                                    <button type="submit"
+                                                                        class="dropdown-item text-muted">
+                                                                        <i class="fas fa-archive me-1"></i> أرشفة
                                                                     </button>
                                                                 </form>
                                                             </li>
                                                         @else
-                                                            {{-- العميل مؤرشف => أظهر زر الاسترجاع --}}
                                                             <li>
                                                                 <form
                                                                     action="{{ route('customers.unarchive', $customer->id) }}"
                                                                     method="POST" style="display:inline;">
                                                                     @csrf
-                                                                    <button type="submit" class="dropdown-item">
-                                                                        استرجاع
+                                                                    <button type="submit"
+                                                                        class="dropdown-item text-success">
+                                                                        <i class="fas fa-box-open me-1"></i> استرجاع
                                                                     </button>
                                                                 </form>
                                                             </li>
                                                         @endif
+
                                                     </ul>
                                                 </div>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -853,9 +1003,109 @@
             /* أصفر داكن */
             color: #fff !important;
         }
+
+        .dark-mode .table th,
+        .dark-mode .table td {
+            align-content: center !important;
+        }
     </style>
 
+    <style>
+        @keyframes pulse {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
 
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.3;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.6;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+
+            100% {
+                left: 100%;
+            }
+        }
+
+        .examination-cell:hover {
+            transform: translateY(-2px) scale(1.02) !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        }
+
+        .examination-cell:hover .cell-shine {
+            left: 100%;
+        }
+
+        .examination-cell:hover .pulse-ring {
+            animation: pulse 1s infinite;
+        }
+
+        .examination-cell:hover .icon-wrapper {
+            transform: scale(1.1);
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .examination-cell:active {
+            transform: translateY(0px) scale(0.98) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        /* Dark Mode Compatibility */
+        .dark-mode .examination-cell {
+            border: 2px solid rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dark-mode .examination-cell .icon-wrapper {
+            background: rgba(0, 0, 0, 0.2) !important;
+            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .dark-mode .examination-cell:hover {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+        }
+
+        /* Light Mode Specific */
+        .light-mode .examination-cell {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .examination-cell {
+                padding: 10px 8px !important;
+            }
+
+            .icon-wrapper {
+                width: 28px !important;
+                height: 28px !important;
+            }
+
+            .status-text {
+                font-size: 10px !important;
+            }
+        }
+
+        /* RTL Support */
+        [dir="rtl"] .examination-cell .cell-shine {
+            background: linear-gradient(-90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        }
+
+        [dir="rtl"] .examination-cell:hover .cell-shine {
+            left: -100%;
+        }
+    </style>
 @stop
 
 @section('js')
