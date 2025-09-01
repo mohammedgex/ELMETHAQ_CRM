@@ -130,6 +130,11 @@
                                                                     class="fas fa-file-alt text-primary me-2"></i> عرض
                                                                 التقارير</a>
                                                         </li>
+                                                        <li><a class="dropdown-item"
+                                                                href="{{ route('bag.customers.remove', $customer->id) }}"><i
+                                                                    class="fas fa-times text-danger me-2"></i> ازالة من
+                                                                الحقيبة</a>
+                                                        </li>
                                                         @if ($customer->phone != null)
                                                             <li>
                                                                 <a class="dropdown-item text-success"

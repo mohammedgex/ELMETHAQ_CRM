@@ -102,4 +102,19 @@ class BagController extends Controller
 
         return response()->json(['message' => 'تم تعيين الحقيبة بنجاح']);
     }
+
+    public function removeBag($id)
+    {
+        # code...
+        $customer = Customer::find($id);
+        if (!$customer) {
+            # code...
+            return response()->json([
+                'error' => 'the customer is not find.'
+            ]);
+        }
+        $customer->bag_id = null;
+        $customer->save();
+        return redirect()->back()->with('success', 'تم ازالة العميل من الحقيبة بنجاح');
+    }
 }
