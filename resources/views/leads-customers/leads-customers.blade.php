@@ -631,6 +631,14 @@
             background: linear-gradient(135deg, #4e342e 0%, #5d4037 100%) !important;
             box-shadow: 0 4px 8px rgba(255, 152, 0, 0.25);
         }
+
+        /* تأثير عند السحب */
+        #preview_passport_photo.border-primary,
+        [id^="preview_"].border-primary {
+            border: 2px dashed #007bff !important;
+            background: #f0f8ff;
+            transition: 0.2s;
+        }
     </style>
 
 
@@ -1123,5 +1131,67 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // كل input فيه data-preview
+            const fileInputs = document.querySelectorAll(".preview-image-input");
+
+            fileInputs.forEach(fileInput => {
+                const previewSelector = fileInput.getAttribute("data-preview");
+                const dropArea = document.querySelector(previewSelector);
+                const imgPreview = dropArea.querySelector("img");
+
+                if (!dropArea) return;
+
+                // منع السلوك الافتراضي (فتح الصورة في المتصفح)
+                ["dragenter", "dragover", "dragleave", "drop"].forEach(eventName => {
+                    dropArea.addEventListener(eventName, e => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    });
+                });
+
+                // إضافة ستايل عند السحب فوق المنطقة
+                ["dragenter", "dragover"].forEach(eventName => {
+                    dropArea.addEventListener(eventName, () => {
+                        dropArea.classList.add("border-primary");
+                    });
+                });
+
+                ["dragleave", "drop"].forEach(eventName => {
+                    dropArea.addEventListener(eventName, () => {
+                        dropArea.classList.remove("border-primary");
+                    });
+                });
+
+                // عند الإفلات
+                dropArea.addEventListener("drop", e => {
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0 && files[0].type.startsWith("image/")) {
+                        fileInput.files = files; // تحديث input file
+                        previewFile(files[0], imgPreview, dropArea);
+                    }
+                });
+
+                // عند اختيار الصورة من الزر
+                fileInput.addEventListener("change", e => {
+                    if (e.target.files.length > 0) {
+                        previewFile(e.target.files[0], imgPreview, dropArea);
+                    }
+                });
+            });
+
+            function previewFile(file, imgPreview, dropArea) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    imgPreview.src = e.target.result;
+                    imgPreview.style.display = "block";
+                    dropArea.querySelector(".placeholder-text")?.remove(); // إزالة النصوص الافتراضية لو موجودة
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
 
 @stop
