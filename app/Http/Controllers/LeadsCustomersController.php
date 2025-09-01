@@ -206,7 +206,7 @@ class LeadsCustomersController extends Controller
 
         if ($existingLead) {
             // استدعاء فنكشن اخرى او تعمل redirect
-            return $this->update($existingLead);
+            return $this->update($existingLead->id);
         }
 
         $request->validate([
