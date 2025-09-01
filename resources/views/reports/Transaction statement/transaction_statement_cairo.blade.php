@@ -162,7 +162,7 @@
                     <td colspan="2">صندوق رقم (<span>${escapeHtml(headerData.boxNumber)}</span>) ترخيص رقم ( <span>768</span> )</td>
                   </tr>
                   <tr>
-                    <td colspan="2">نوع التاشيرة ( <span>عمل مؤقت</span> )</td>
+                    <td colspan="2">نوع التاشيرة ( <span>${escapeHtml(headerData.visa)}</span> )</td>
                   </tr>
                   <tr>
                     <td colspan="2">اليوم : <span>${escapeHtml(headerData.day)}</span> &nbsp;&nbsp; التاريخ : <span>${escapeHtml(headerData.date)}</span></td>
@@ -224,10 +224,12 @@
 
         window.onload = function() {
             const boxNumber = prompt("أدخل صندوق رقم:", "");
+            const visa = prompt("ادخل نوع التاشيرة", "");
             const day = prompt("أدخل اليوم:", "");
             const date = prompt("أدخل التاريخ:", new Date().toLocaleDateString('ar-EG'));
             renderPages({
                 boxNumber: boxNumber || '........',
+                visa: visa || '........',
                 day: day || '.............',
                 date: date || '.............'
             });
