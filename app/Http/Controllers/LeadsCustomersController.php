@@ -207,7 +207,7 @@ class LeadsCustomersController extends Controller
 
         if ($existingLead) {
             // استدعاء فنكشن اخرى او تعمل redirect
-            return $this->update($existingLead->id, "الرقم القومي موجود من قبل");
+            return $this->update($existingLead->id, "الرقم القومي موجود من قبل وسيتم تحويلك علي العميل صاحب الرقم القومي");
         }
 
         $request->validate([
