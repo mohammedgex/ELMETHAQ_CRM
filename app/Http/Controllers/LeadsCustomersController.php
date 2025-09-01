@@ -199,6 +199,15 @@ class LeadsCustomersController extends Controller
     public function edit(Request $request, $id)
     {
         $lead = LeadsCustomers::findOrFail($id);
+        // تحقق يدوي من الرقم القومي قبل الفاليديشن
+        $existingLead = LeadsCustomers::where('card_id', $request->card_id)
+            ->where('id', '!=', $lead->id)
+            ->first();
+
+        if ($existingLead) {
+            // استدعاء فنكشن اخرى او تعمل redirect
+            return $this->update($existingLead);
+        }
 
         $request->validate([
             "card_id" => 'required|unique:leads_customers,card_id,' . $lead->id,
