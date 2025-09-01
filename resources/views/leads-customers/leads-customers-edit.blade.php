@@ -133,6 +133,9 @@
                             <div class="card-body row">
                                 <div class="form-group col-md-6">
                                     <label>المندوب</label>
+                                    @if ($lead->delegate_id == null)
+                                        <span>({{ $lead->licence_type }})</span>
+                                    @endif
                                     <select class="form-control" name="delegate_id">
                                         <option value="">اختر المندوب</option>
                                         @foreach ($delegates as $delegate)

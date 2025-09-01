@@ -145,6 +145,7 @@ class ApiAppController extends Controller
             'status' => 'عميل محتمل',
             'fcm_token' => $request->fcm_token,
             "registration_date" => Carbon::now(),
+            "evaluation" => "جارى المعالجة",
         ]);
         if (!$user->phone) {
             # code...
