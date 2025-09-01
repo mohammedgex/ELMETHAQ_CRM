@@ -138,10 +138,13 @@
 
         function createFooter() {
             return `
+            <div class="footer-line">عدد الجوازات المدخلة : <span>${globalData.length}</span></div>
             <div style="display:flex;justify-content:space-between;margin-top:50px;">
-              <div>ختم الشركة /</div>
-              <div>المدير المسؤول /</div>
-              <div>التوقيع /</div>
+                <div>ختم الشركة </div>
+                <div style="display:flex;flex-direction:column;gap:20px;">
+                    <div>المدير المسؤول</div>
+                    <div>التوقيع /</div>
+                </div>
             </div>
         `;
         }

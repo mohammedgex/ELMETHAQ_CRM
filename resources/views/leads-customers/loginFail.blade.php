@@ -18,6 +18,7 @@ a{{-- resources/views/admin/failed-logins/index.blade.php --}}
                 <table class="table table-striped table-hover align-middle mb-0" id="failedLoginsTable">
                     <thead class="table-dark">
                         <tr>
+                            <th>الرقم</th>
                             <th>الصورة</th>
                             <th>رقم الهاتف</th>
                             <th>الوظيفة</th>
@@ -28,6 +29,7 @@ a{{-- resources/views/admin/failed-logins/index.blade.php --}}
                     <tbody>
                         @forelse($leads as $lead)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>
                                     <a href="{{ $lead->image ? asset('storage/' . $lead->image) : asset('images/default-avatar.png') }}"
                                         target="_blank" rel="noopener noreferrer">
