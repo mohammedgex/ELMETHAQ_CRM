@@ -140,7 +140,7 @@ class LeadsCustomersController extends Controller
         ]);
     }
 
-    public function update($id)
+    public function update($id, $error = null)
     {
         # code...
         $lead = LeadsCustomers::find($id);
@@ -193,6 +193,7 @@ class LeadsCustomersController extends Controller
             'delegates' => $delegates,
             'jobs' => $jobs,
             "governorates" => $governorates,
+            'error' => $error, // مررها للواجهة
         ]);
     }
 
@@ -206,7 +207,7 @@ class LeadsCustomersController extends Controller
 
         if ($existingLead) {
             // استدعاء فنكشن اخرى او تعمل redirect
-            return $this->update($existingLead->id);
+            return $this->update($existingLead->id, "الرقم القومي موجود من قبل");
         }
 
         $request->validate([

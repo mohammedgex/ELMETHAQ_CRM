@@ -496,6 +496,16 @@
     </div>
 
 
+    @if ($error)
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'فشلت',
+                text: '{{ $error }}',
+                confirmButtonText: 'حسناً'
+            });
+        </script>
+    @endif
     @if (session('success'))
         <script>
             Swal.fire({
