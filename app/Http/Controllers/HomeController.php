@@ -48,7 +48,9 @@ class HomeController extends Controller
         $jobs = JobTitle::latest()->get();
         $sponsers = Sponser::latest()->get();
         $visas = VisaType::withCount('outgoingCustomers')->latest()->get();
-        $customers = Customer::latest()->get();
+        $customers = LeadsCustomers::whereDate('created_at', Carbon::today())
+            ->latest()
+            ->get();
         $bags = Bag::latest()->get();
         $users = User::latest()->get();
         $tests = Test::latest()->get();

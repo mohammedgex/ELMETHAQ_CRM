@@ -13,7 +13,7 @@
                 <div class="small-box bg-info">
                     <div class="inner">
                         <h3>{{ $customers->count() }}</h3>
-                        <p>إجمالي العملاء</p>
+                        <p>عملاء اليوم</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-user-friends"></i>
