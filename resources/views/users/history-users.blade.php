@@ -16,6 +16,7 @@
             <table class="table table-hover align-middle text-center mb-0">
                 <thead class="table-dark">
                     <tr>
+                        <th scope="col">الرقم</th>
                         <th scope="col">اسم الموظف</th>
                         <th scope="col">اسم العميل</th>
                         <th scope="col">النوع</th>
@@ -26,6 +27,7 @@
                 <tbody>
                     @forelse($histories as $history)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             {{-- اسم الموظف --}}
                             <td class="fw-semibold">{{ $history->user->name ?? '-' }}</td>
 
