@@ -123,62 +123,8 @@
 
                         </div>
 
-                        <hr> <!-- Divider -->
-                        {{--
-                        <div class="d-flex flex-wrap gap-2 mb-4">
-                            <div>
-                                <a href="{{ route('customer.indes') }}">
-                                    <button class="btn btn-outline-primary active">الكل</button>
-                                </a>
-                            </div>
-
-                            <form method="POST" action="{{ route('customers.filter') }}">
-                                @csrf
-                                <input type="hidden" name="status" value="جديد">
-                                <button type="submit" class="btn btn-outline-success">جديد</button>
-                            </form>
-
-                            <form method="POST" action="{{ route('customers.filter') }}">
-                                @csrf
-                                <input type="hidden" name="medical_examination" value="تم الحجز">
-                                <button class="btn btn-outline-info">تم حجز الكشف الطبي</button>
-                            </form>
-
-                            <form method="POST" action="{{ route('customers.filter') }}">
-                                @csrf
-                                <input type="hidden" name="finger_print_examination" value="تم تصدير الاكسيل">
-                                <button class="btn btn-outline-info">تم عمل البصمة</button>
-                            </form>
-
-                            <form method="POST" action="{{ route('customers.filter') }}">
-                                @csrf
-                                <input type="hidden" name="virus_examination" value="تم اصدار ايصال المعامل">
-                                <button class="btn btn-outline-info">تم أصدر كشف المعامل</button>
-                            </form>
-
-                            <form method="POST" action="{{ route('customers.filter') }}">
-                                @csrf
-                                <input type="hidden" name="engaz_request" value="تم الحجز">
-                                <button class="btn btn-outline-info">تم أصدر طلب انجاز</button>
-                            </form>
-
-                            <div>
-                                <button class="btn btn-outline-success">المؤهلون للقنصلية</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-outline-primary">تم أصدار التأشيرة</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-outline-success">تم السفر</button>
-                            </div>
-
-                            <div>
-                                <button class="btn btn-outline-dark">أرشيف</button>
-                            </div>
-                        </div> --}}
-
+                        <hr>
+                        {{-- جدول العملاء --}}
                         <div class="table-responsive">
                             <table class="table table-hover text-center" id="example">
                                 <thead class="bg-secondary text-white">
@@ -443,36 +389,24 @@
                                                                 </a>
                                                             </li>
                                                         @endif
-
-                                                        {{-- دفع الكشف الطبي --}}
-                                                        @if ($customer->token_medical != null)
-                                                            <li>
-                                                                <a class="dropdown-item text-warning"
-                                                                    href="https://wafid.com/appointment/{{ ltrim($customer->token_medical) }}/pay/"
-                                                                    target="_blank" rel="noopener noreferrer">
-                                                                    <i class="fas fa-credit-card me-1"></i> دفع الكشف الطبي
-                                                                </a>
-                                                            </li>
-                                                        @endif
-
-                                                        {{-- بطاقة الترشيح --}}
-                                                        @if ($customer->e_visa_number)
-                                                            <li>
-                                                                <a class="dropdown-item text-secondary"
-                                                                    href="{{ route('reports.nomination_card', $customer->id) }}"
-                                                                    target="_blank">
-                                                                    <i class="fas fa-id-card me-1"></i> بطاقة الترشيح
-                                                                </a>
-                                                            </li>
-                                                        @endif
-
-                                                        {{-- الكشوفات والحجوزات --}}
+                                                        {{-- التقارير --}}
                                                         <li class="dropdown-submenu dropstart">
                                                             <a class="dropdown-item dropdown-toggle" href="#">
-                                                                <i class="fas fa-list-alt me-1"></i> الكشوفات
+                                                                <i class="fas fa-list-alt me-1"></i>تقارير
                                                             </a>
                                                             <ul class="dropdown-menu"
                                                                 style="position: absolute; left: 100% !important; right: auto;">
+                                                                {{-- بطاقة الترشيح --}}
+                                                                @if ($customer->e_visa_number)
+                                                                    <li>
+                                                                        <a class="dropdown-item text-secondary"
+                                                                            href="{{ route('reports.nomination_card', $customer->id) }}"
+                                                                            target="_blank">
+                                                                            <i class="fas fa-id-card me-1"></i> بطاقة
+                                                                            الترشيح
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
                                                                 <li>
                                                                     <a class="dropdown-item"
                                                                         href="{{ route('print_visaEntriy', $customer->id) }}"
@@ -480,6 +414,15 @@
                                                                         <i class="fas fa-passport me-1"></i> طباعة طلب دخول
                                                                     </a>
                                                                 </li>
+                                                            </ul>
+                                                        </li>
+                                                        {{-- الكشف الطبي --}}
+                                                        <li class="dropdown-submenu dropstart">
+                                                            <a class="dropdown-item dropdown-toggle" href="#">
+                                                                <i class="fas fa-list-alt me-1"></i>الكشف الطبي
+                                                            </a>
+                                                            <ul class="dropdown-menu"
+                                                                style="position: absolute; left: 100% !important; right: auto;">
                                                                 @if ($customer->token_medical)
                                                                     <li>
                                                                         <a href="#" id="checkMedicalStatus"
@@ -487,6 +430,17 @@
                                                                             class="dropdown-item checkMedicalStatus">
                                                                             <i class="fas fa-stethoscope me-1"></i> تحقق من
                                                                             الحالة الطبية
+                                                                        </a>
+                                                                    </li>
+                                                                @endif
+                                                                {{-- دفع الكشف الطبي --}}
+                                                                @if ($customer->token_medical != null)
+                                                                    <li>
+                                                                        <a class="dropdown-item text-warning"
+                                                                            href="https://wafid.com/appointment/{{ ltrim($customer->token_medical) }}/pay/"
+                                                                            target="_blank" rel="noopener noreferrer">
+                                                                            <i class="fas fa-credit-card me-1"></i> دفع
+                                                                            الكشف الطبي
                                                                         </a>
                                                                     </li>
                                                                 @endif
@@ -498,53 +452,81 @@
                                                                         الطبي
                                                                     </a>
                                                                 </li>
+
                                                             </ul>
                                                         </li>
-
-                                                        {{-- إدارة المجموعات --}}
-                                                        <li>
-                                                            <a class="dropdown-item text-danger"
-                                                                href="{{ route('groups.removeCustomer', [$group->id, $customer->id]) }}">
-                                                                <i class="fas fa-user-minus me-1"></i> إزالة من المجموعة
+                                                        {{-- المعامل --}}
+                                                        <li class="dropdown-submenu dropstart">
+                                                            <a class="dropdown-item dropdown-toggle" href="#">
+                                                                <i class="fas fa-list-alt me-1"></i>المعامل
                                                             </a>
+                                                            <ul class="dropdown-menu"
+                                                                style="position: absolute; left: 100% !important; right: auto;">
+                                                                <li>
+                                                                    <a class="dropdown-item text-success" href="#"
+                                                                        id="bookLab"
+                                                                        data-phone="{{ $customer->phone }}"
+                                                                        data-name="{{ $customer->name_ar }}"
+                                                                        data-card_id="{{ $customer->card_id }}"
+                                                                        data-email="{{ auth()->user()->email }}"
+                                                                        data-e_number="{{ $customer->e_visa_number ?? '' }}"
+                                                                        data-passport="{{ $customer->passport_id ?? '' }}">
+                                                                        <i class="fas fa-vials me-1"></i> حجز المعامل
+                                                                    </a>
+                                                                </li>
+                                                            </ul>
                                                         </li>
-
-                                                        {{-- البلوك --}}
-                                                        <li>
-                                                            <a class="dropdown-item text-danger"
-                                                                href="{{ $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
-                                                                <i class="fas fa-user-slash me-1"></i>
-                                                                {{ $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
+                                                        {{-- الاجرائات --}}
+                                                        <li class="dropdown-submenu dropstart">
+                                                            <a class="dropdown-item dropdown-toggle" href="#">
+                                                                <i class="fas fa-list-alt me-1"></i>الاجرائات
                                                             </a>
+                                                            <ul class="dropdown-menu"
+                                                                style="position: absolute; left: 100% !important; right: auto;">
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="{{ route('groups.removeCustomer', [$group->id, $customer->id]) }}">
+                                                                        <i class="fas fa-user-minus me-1"></i> إزالة من
+                                                                        المجموعة
+                                                                    </a>
+                                                                </li>
+                                                                {{-- البلوك --}}
+                                                                <li>
+                                                                    <a class="dropdown-item text-danger"
+                                                                        href="{{ $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
+                                                                        <i class="fas fa-user-slash me-1"></i>
+                                                                        {{ $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
+                                                                    </a>
+                                                                </li>
+                                                                {{-- أرشفة / استرجاع --}}
+                                                                @if (is_null($customer->archived_at))
+                                                                    <li>
+                                                                        <form
+                                                                            action="{{ route('customers.archive', $customer->id) }}"
+                                                                            method="POST" style="display:inline;">
+                                                                            @csrf
+                                                                            <button type="submit"
+                                                                                class="dropdown-item text-muted">
+                                                                                <i class="fas fa-archive me-1"></i> أرشفة
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                @else
+                                                                    <li>
+                                                                        <form
+                                                                            action="{{ route('customers.unarchive', $customer->id) }}"
+                                                                            method="POST" style="display:inline;">
+                                                                            @csrf
+                                                                            <button type="submit"
+                                                                                class="dropdown-item text-success">
+                                                                                <i class="fas fa-box-open me-1"></i>
+                                                                                استرجاع
+                                                                            </button>
+                                                                        </form>
+                                                                    </li>
+                                                                @endif
+                                                            </ul>
                                                         </li>
-
-                                                        {{-- أرشفة / استرجاع --}}
-                                                        @if (is_null($customer->archived_at))
-                                                            <li>
-                                                                <form
-                                                                    action="{{ route('customers.archive', $customer->id) }}"
-                                                                    method="POST" style="display:inline;">
-                                                                    @csrf
-                                                                    <button type="submit"
-                                                                        class="dropdown-item text-muted">
-                                                                        <i class="fas fa-archive me-1"></i> أرشفة
-                                                                    </button>
-                                                                </form>
-                                                            </li>
-                                                        @else
-                                                            <li>
-                                                                <form
-                                                                    action="{{ route('customers.unarchive', $customer->id) }}"
-                                                                    method="POST" style="display:inline;">
-                                                                    @csrf
-                                                                    <button type="submit"
-                                                                        class="dropdown-item text-success">
-                                                                        <i class="fas fa-box-open me-1"></i> استرجاع
-                                                                    </button>
-                                                                </form>
-                                                            </li>
-                                                        @endif
-
                                                     </ul>
                                                 </div>
                                             </td>
@@ -2223,5 +2205,63 @@
             link.download = "{{ $group->title }}.xlsx";
             link.click();
         }
+    </script>
+    <script>
+        // حجز المعامل
+        document.addEventListener("DOMContentLoaded", () => {
+            document.querySelectorAll("#bookLab").forEach(item => {
+                item.addEventListener("click", async function(e) {
+                    e.preventDefault();
+
+                    const payload = {
+                        phone: this.dataset.phone,
+                        fullName: this.dataset.name,
+                        nationalId: this.dataset.card_id, // ✅ بدل cardId
+                        email: this.dataset.email,
+                        netNumber: this.dataset.e_number,
+                        passportNumber: this.dataset.passport
+                    };
+                    // التحقق من الحقول الناقصة
+                    let missing = [];
+                    for (let key in payload) {
+                        if (!payload[key] || payload[key].toString().trim() === "") {
+                            missing.push(key);
+                        }
+                    }
+
+                    if (missing.length > 0) {
+                        Swal.fire({
+                            icon: "warning",
+                            title: "بيانات ناقصة",
+                            text: "من فضلك أكمل الحقول: " + missing.join(", "),
+                            confirmButtonText: "تمام"
+                        });
+                        return; // وقف العملية
+                    }
+
+                    console.log("Sending:", payload);
+
+                    try {
+                        const res = await fetch("http://localhost:3000/submit-form", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!res.ok) throw new Error(`HTTP ${res.status} ${res.statusText}`);
+
+                        const data = await res.json();
+                        console.log("Server response:", data);
+
+                        alert("تم إرسال البيانات بنجاح ✅");
+                    } catch (err) {
+                        console.error("Request failed:", err);
+                        alert("فشل إرسال البيانات ❌");
+                    }
+                });
+            });
+        });
     </script>
 @stop
