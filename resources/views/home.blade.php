@@ -146,8 +146,13 @@
                                         <i class="fas fa-file-alt fa-lg"></i>
                                     </span>
                                     <div class="info-box-content">
-                                        <h5 class="fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
-
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
+                                            <button type="button" class="btn btn-sm btn-pin" data-id="{{ $test->id }}"
+                                                data-type="test">
+                                                <i class="fas fa-thumbtack"></i>
+                                            </button>
+                                        </div>
                                         <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded"
                                             style="background-color: #e2e3e5; color :#000">
                                             <span class="small">العملاء:</span>
@@ -253,8 +258,14 @@
                                 <div class="info-box bg-gradient-info text-white shadow rounded">
                                     <span class="info-box-icon bg-primary"><i class="fas fa-kaaba"></i></span>
                                     <div class="info-box-content">
-                                        <span class="info-box-text fw-bold fs-5 mb-3 d-block">{{ $group->title }}</span>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h5 class="fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
+                                            <button type="button" class="btn btn-sm btn-pin"
+                                                data-id="{{ $group->id }}" data-type="group">
+                                                <i class="fas fa-thumbtack"></i>
+                                            </button>
 
+                                        </div>
                                         <div
                                             class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded bg-white text-dark shadow-sm">
                                             <small class="fw-semibold">عدد العملاء:</small>
@@ -371,9 +382,17 @@
                                     <i class="fas fa-suitcase"></i>
                                 </span>
                                 <div class="info-box-content py-2">
-                                    <h5 class="info-box-text fw-bold mb-2" style="font-size: 1.25rem; color: #a8d5a8;">
-                                        {{ $bag->name }}
-                                    </h5>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="info-box-text fw-bold mb-2"
+                                            style="font-size: 1.25rem; color: #a8d5a8;">
+                                            {{ $bag->name }}
+                                        </h5>
+                                        <button style="color: white" type="button" class="btn btn-sm btn-pin"
+                                            data-id="{{ $bag->id }}" data-type="bag">
+                                            <i class="fas fa-thumbtack"></i>
+                                        </button>
+                                    </div>
+
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <small class="text-muted" style="color: #b5b5b5;">إجمالي العملاء</small>
                                         <span class="fw-semibold" style="color: #a8d5a8;">{{ $totalCustomers }}</span>
@@ -435,7 +454,13 @@
                                 <div class="info-box bg-gradient-success text-white shadow">
                                     <span class="info-box-icon bg-success"><i class="fas fa-passport"></i></span>
                                     <div class="info-box-content">
-                                        <span class="info-box-text fw-bold">{{ $visa->name }}</span>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="info-box-text fw-bold">{{ $visa->name }}</span>
+                                            <button type="button" class="btn btn-sm btn-pin"
+                                                data-id="{{ $visa->id }}" data-type="visa">
+                                                <i class="fas fa-thumbtack"></i>
+                                            </button>
+                                        </div>
                                         <span class="info-box-number">عدد العملاء:
                                             {{ $visa->customerGroups->sum(function ($group) {
                                                 return $group->customers->count();
@@ -1595,4 +1620,55 @@
                     });
                 });
         </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const pinButtons = document.querySelectorAll(".btn-pin");
+
+                // استرجاع البيانات من LocalStorage
+                let pinned = JSON.parse(localStorage.getItem("pinnedItems") || "{}");
+
+                function reorderCards() {
+                    for (let type in pinned) {
+                        let ids = pinned[type];
+                        ids.forEach(id => {
+                            let btn = document.querySelector(`.btn-pin[data-type="${type}"][data-id="${id}"]`);
+                            let card = btn?.closest(".col-md-3, [style*='flex: 0 0']"); // عشان يمسك أي كارت
+                            let container = card?.parentElement;
+                            if (card && container) {
+                                container.prepend(card); // يجيب المثبت الأول
+                                btn.classList.add("btn-warning"); // لون الدبوس لو مثبت
+                            }
+                        });
+                    }
+                }
+
+                pinButtons.forEach(btn => {
+                    btn.addEventListener("click", function(e) {
+                        e.preventDefault(); // يمنع فتح الرابط
+                        e.stopPropagation(); // يمنع Bubbling للـ <a>
+
+                        let id = this.dataset.id;
+                        let type = this.dataset.type;
+
+                        if (!pinned[type]) pinned[type] = [];
+
+                        if (pinned[type].includes(id)) {
+                            pinned[type] = pinned[type].filter(x => x !== id);
+                            this.classList.remove("btn-warning");
+                        } else {
+                            pinned[type].push(id);
+                            this.classList.add("btn-warning");
+                        }
+
+                        localStorage.setItem("pinnedItems", JSON.stringify(pinned));
+                        reorderCards();
+                    });
+
+                });
+
+                // تنفيذ أول مرة
+                reorderCards();
+            });
+        </script>
+
     @stop

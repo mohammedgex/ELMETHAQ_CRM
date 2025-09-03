@@ -7,6 +7,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CustomerGroupController;
 use App\Http\Controllers\DelegateController;
 use App\Http\Controllers\GmailPubSubController;
+use App\Http\Controllers\JobAnswerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JopController;
 use App\Http\Controllers\VisaProfessionsController;
@@ -56,3 +57,5 @@ Route::get('/taakeb/{id}', [CompanyController::class, 'getTaakeb'])->middleware(
 Route::get('/customers-booking-panding', [ApiAppController::class, 'get_customers_booking_sedical_status']);
 
 Route::post('/pubsub/gmail', [GmailPubSubController::class, 'handle']);
+Route::post('/job-answers', [JobAnswerController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/job/questions/{id}', [JobAnswerController::class, 'getQuestionsWithAnswers']);

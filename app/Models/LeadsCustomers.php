@@ -93,4 +93,9 @@ class LeadsCustomers extends Model
     {
         return $this->hasMany(Taakeb::class);
     }
+
+    public function answers()
+    {
+        return $this->hasMany(JobAnswer::class);
+    }
 }

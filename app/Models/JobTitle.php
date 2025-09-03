@@ -18,4 +18,8 @@ class JobTitle extends Model
     {
         return $this->hasMany(LeadsCustomers::class, 'job_title_id');
     }
+    public function questions()
+    {
+        return $this->hasMany(JobQuestion::class);
+    }
 }

@@ -25,6 +25,7 @@ use App\Http\Controllers\FileTitleController;
 use App\Http\Controllers\GmailPubSubController;
 use App\Http\Controllers\GoogleTranslateController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\JobQuestionController;
 use App\Http\Controllers\JopController;
 use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ReportsController;
@@ -32,7 +33,6 @@ use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-
 
 Auth::routes();
 
@@ -249,6 +249,11 @@ Route::group([
     Route::post('/customers/filter/data', [CustomerController::class, 'filterCustomers'])->name('customers.filter.data');
     Route::get('/login-fail', [LeadsCustomersController::class, 'loginFail'])->name('leads-customers.loginFail')->middleware("check.permission:loginFail-access");
     Route::get('/customer/remove/{id}', [BagController::class, 'removeBag'])->name('bag.customers.remove');
+
+
+    Route::get('/job-questions/store', [JobQuestionController::class, 'index'])->name('job_questions.index');
+    Route::post('/job-questions/store', [JobQuestionController::class, 'store'])->name('questions.store');
+    Route::delete('/job-questions/destroy/{id}', [JobQuestionController::class, 'destroy'])->name('questions.destroy');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
