@@ -34,7 +34,11 @@
                             @foreach ($users as $user)
                                 <tr class="table-light">
                                     <td>#{{ $user->id }}</td>
-                                    <td>{{ $user->name }}</td>
+                                    <td>
+                                        <a href="{{ route('users.history', $user->id) }}"
+                                            class="text-decoration-none text-dark">
+                                            {{ $user->name ?? '-' }}</a>
+                                    </td>
                                     <td>{{ $user->email }}</td>
                                     <td><span class="badge bg-info text-white">{{ $user->role }}</span></td>
                                     <td class="d-flex justify-content-center">

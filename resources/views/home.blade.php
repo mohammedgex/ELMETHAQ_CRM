@@ -533,7 +533,11 @@
                     <tbody>
                         @forelse($histories as $history)
                             <tr>
-                                <td class="fw-semibold">{{ $history->user->name ?? '-' }}</td>
+                                <td class="fw-semibold">
+                                    <a href="{{ route('users.history', $history->user->id) }}"
+                                        class="text-decoration-none text-dark">
+                                        {{ $history->user->name ?? '-' }}</a>
+                                </td>
                                 <td>
                                     @if ($history->customer)
                                         <a href="{{ route('customer.show', $history->customer->id) }}"

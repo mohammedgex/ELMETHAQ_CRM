@@ -42,4 +42,14 @@ class UserController extends Controller
 
         return redirect()->route("users");
     }
+    public function historyUser($id)
+    {
+        # code...
+        $user = User::findOrFail($id);
+        $histories = $user->histories()->latest()->get();
+        return view("users.history-users", [
+            'histories' => $histories,
+            'user'      => $user
+        ]);
+    }
 }

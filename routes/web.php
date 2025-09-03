@@ -254,6 +254,7 @@ Route::group([
     Route::get('/job-questions/store', [JobQuestionController::class, 'index'])->name('job_questions.index');
     Route::post('/job-questions/store', [JobQuestionController::class, 'store'])->name('questions.store');
     Route::delete('/job-questions/destroy/{id}', [JobQuestionController::class, 'destroy'])->name('questions.destroy');
+    Route::get('/users/history/{id}', [UserController::class, 'historyUser'])->name('users.history');
 });
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
