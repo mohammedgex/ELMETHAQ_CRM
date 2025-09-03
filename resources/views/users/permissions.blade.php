@@ -58,6 +58,7 @@
                                     'loginFail-access' => 'فشل تسجيل الدخول',
                                     'show-group-customers' => ' عرض عملاء المجموعات',
                                     'show-leads' => 'عرض العملاء المحتملين',
+                                    'job-question-create' => 'تعريف اسئلة الوظائف',
                                 ];
                             @endphp
 

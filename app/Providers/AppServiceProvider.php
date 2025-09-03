@@ -222,6 +222,12 @@ class AppServiceProvider extends ServiceProvider
                     'url' => 'admin/job-type-view',
                     'icon' => 'fas fa-briefcase' // حقيبة عمل
                 ],
+                [
+                    'permission' => 'job-question-create',
+                    'text' => 'تعريف اسئلة الوظائف',
+                    'url' => 'admin/job-questions/store',
+                    'icon' => 'fas fa-question-circle' // حقيبة عمل
+                ],
             ];
 
             foreach ($customerDefinitions as $item) {
