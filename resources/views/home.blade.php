@@ -259,7 +259,7 @@
                                     <span class="info-box-icon bg-primary"><i class="fas fa-kaaba"></i></span>
                                     <div class="info-box-content">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h5 class="fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
+                                            <h5 class="fw-bold mb-2 text-truncate">{{ $group->title }}</h5>
                                             <button type="button" class="btn btn-sm btn-pin"
                                                 data-id="{{ $group->id }}" data-type="group">
                                                 <i class="fas fa-thumbtack"></i>
