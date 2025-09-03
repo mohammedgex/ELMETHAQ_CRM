@@ -147,7 +147,8 @@
                                     </span>
                                     <div class="info-box-content">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h5 class="fw-bold mb-2 text-truncate">{{ $test->title }}</h5>
+                                            <h5 title="{{ $test->title }}" class="fw-bold mb-2 text-truncate">
+                                                {{ $test->title }}</h5>
                                             <button type="button" class="btn btn-sm btn-pin" data-id="{{ $test->id }}"
                                                 data-type="test">
                                                 <i class="fas fa-thumbtack"></i>
@@ -259,7 +260,8 @@
                                     <span class="info-box-icon bg-primary"><i class="fas fa-kaaba"></i></span>
                                     <div class="info-box-content">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <h5 class="fw-bold mb-2 text-truncate">{{ $group->title }}</h5>
+                                            <h5 class="fw-bold mb-2 text-truncate" title="{{ $group->title }}">
+                                                {{ $group->title }}</h5>
                                             <button type="button" class="btn btn-sm btn-pin"
                                                 data-id="{{ $group->id }}" data-type="group">
                                                 <i class="fas fa-thumbtack"></i>
@@ -383,8 +385,8 @@
                                 </span>
                                 <div class="info-box-content py-2">
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="info-box-text fw-bold mb-2"
-                                            style="font-size: 1.25rem; color: #a8d5a8;">
+                                        <h5 class="info-box-text fw-bold mb-2" style="font-size: 1.25rem; color: #a8d5a8;"
+                                            title="{{ $bag->name }}">
                                             {{ $bag->name }}
                                         </h5>
                                         <button style="color: white" type="button" class="btn btn-sm btn-pin"
@@ -455,7 +457,8 @@
                                     <span class="info-box-icon bg-success"><i class="fas fa-passport"></i></span>
                                     <div class="info-box-content">
                                         <div class="d-flex justify-content-between align-items-center">
-                                            <span class="info-box-text fw-bold">{{ $visa->name }}</span>
+                                            <span title="{{ $visa->name }}"
+                                                class="info-box-text fw-bold">{{ $visa->name }}</span>
                                             <button type="button" class="btn btn-sm btn-pin"
                                                 data-id="{{ $visa->id }}" data-type="visa">
                                                 <i class="fas fa-thumbtack"></i>
