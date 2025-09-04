@@ -1193,5 +1193,41 @@
         });
     </script>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // أي div للمعاينة عندك
+            document.querySelectorAll("[id^='preview_']").forEach(previewDiv => {
+                previewDiv.addEventListener("paste", function(e) {
+                    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                    for (let i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf("image") === 0) {
+                            const file = items[i].getAsFile();
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                // عرض الصورة في الـ preview
+                                let img = previewDiv.querySelector("img");
+                                img.src = event.target.result;
+                                img.style.display = "block";
+                            };
+                            reader.readAsDataURL(file);
+
+                            // لو عايز تبعتها مع الفورم
+                            let input = document.querySelector(
+                                "input[data-preview='#" + previewDiv.id + "']"
+                            );
+
+                            // نحول الصورة لملف داخل الـ input[type=file]
+                            let dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(file);
+                            input.files = dataTransfer.files;
+
+                            e.preventDefault();
+                            break;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 
 @stop

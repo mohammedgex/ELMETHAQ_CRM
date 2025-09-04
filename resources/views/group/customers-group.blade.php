@@ -94,6 +94,10 @@
                                                 انجاز</button>
                                         </li>
                                         <li>
+                                            <button id="fingerPrintCustomer" class="dropdown-item text-primary"
+                                                id="collectSelected">حجز البصمة</button>
+                                        </li>
+                                        <li>
                                             <button class="dropdown-item text-success" id="visa">
                                                 جلب التاشيرة او طلب الدخول
                                             </button>
@@ -1102,6 +1106,8 @@
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script>
         $(document).on('click', '.show-loading', function(e) {
             $('#loading-overlay').fadeIn();
@@ -1757,144 +1763,6 @@
             }
         });
 
-        // ###################################################################### الكشف الطبي
-        // document.getElementById('check-medical').addEventListener('click', async function() {
-        //     const btn = document.getElementById('collectSelected');
-        //     const companyData = JSON.parse(btn.getAttribute('data-company'));
-
-        //     const customer = JSON.parse(this.getAttribute('data-customer'));
-        //     Swal.fire({
-        //         title: 'جاري فتح المتصفح لك...',
-        //         text: 'في انتظار',
-        //         allowOutsideClick: false,
-        //         didOpen: () => {
-        //             Swal.showLoading();
-        //         }
-        //     });
-
-        //     function reverseDateFormat(dateStr) {
-        //         if (!dateStr) return null;
-
-        //         const parts = dateStr.split("-");
-        //         if (parts.length !== 3) return null;
-
-        //         const [year, month, day] = parts;
-        //         return `${day}-${month}-${year}`;
-        //     }
-        //     console.log();
-
-        //     const payload = {
-        //         firstName: extractFirstName(customer.name_en_mrz),
-        //         lastName: extractLastName(customer.name_en_mrz),
-        //         passportNumber: customer.passport_id,
-        //         dateOfBirth: reverseDateFormat(customer.date_birth),
-        //         maritalStatus: customer.marital_status,
-        //         passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
-        //         passportIssuePlace: customer.issue_place,
-        //         passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
-        //         phone: "+" + customer.phone,
-        //         nationalId: customer.card_id,
-        //         position: customer.customer_group.visa_profession.job,
-        //     };
-
-        //     const fieldLabels = {
-        //         firstName: "الاسم الأول",
-        //         lastName: "اسم العائلة",
-        //         passportNumber: "رقم الجواز",
-        //         dateOfBirth: "تاريخ الميلاد",
-        //         maritalStatus: "الحالة الاجتماعية",
-        //         passportIssueDate: "تاريخ إصدار الجواز",
-        //         passportIssuePlace: "مكان إصدار الجواز",
-        //         passportExpiryDate: "تاريخ انتهاء الجواز",
-        //         phone: "رقم الهاتف",
-        //         nationalId: "الرقم القومي",
-        //         position: "المهنة الخاصة بمجموعته"
-        //     };
-
-        //     // التحقق من القيم الناقصة فقط لهذه الحقول
-        //     const missingFields = [];
-
-        //     for (const [key, value] of Object.entries(payload)) {
-        //         if (!value || value === "N/A" || value === "unknown") {
-        //             missingFields.push(fieldLabels[key] || key);
-        //         }
-        //     }
-
-        //     if (missingFields.length > 0) {
-        //         Swal.close(); // إغلاق الانتظار
-
-        //         Swal.fire({
-        //             icon: 'warning',
-        //             title: 'بيانات ناقصة',
-        //             html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields.join(
-        //                 '<br>') + '</b>',
-        //         });
-        //         return;
-        //     }
-
-        //     // باقي البيانات ثابتة أو افتراضية
-        //     payload.country = "EGY";
-        //     payload.city = "87";
-        //     payload.destinationCountry = "SA";
-        //     payload.nationality = "55";
-        //     payload.visaType = "wv";
-        //     payload.gender = "male";
-        //     payload.email = companyData.medical_email;
-        //     payload.userEmail = "{{ auth()->user()->email }}";
-
-        //     try {
-        //         const response = await fetch('http://localhost:3000/api/wafid', {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //             },
-        //             body: JSON.stringify(payload),
-        //         });
-
-        //         const result = await response.json();
-        //         console.log('Result:', result);
-        //         Swal.close(); // إغلاق الانتظار
-        //         $('#loading-overlay').fadeOut();
-        //         if (result.success) {
-        //             $('#loading-overlay').fadeOut();
-        //             Swal.fire({
-        //                 icon: 'success',
-        //                 title: 'تم الحجز',
-        //                 text: 'تم إرسال البيانات بنجاح.',
-        //             });
-        //         } else {
-        //             $('#loading-overlay').fadeOut();
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'خطأ',
-        //                 text: 'حدث خطأ أثناء الاتصال بالخادم.',
-        //             });
-        //         }
-
-        //     } catch (error) {
-        //         console.error('Fetch error:', error);
-        //         $('#loading-overlay').fadeOut();
-
-        //         Swal.close(); // إغلاق الانتظار
-        //         Swal.fire({
-        //             icon: 'error',
-        //             title: 'خطأ',
-        //             text: 'حدث خطأ أثناء الاتصال بالخادم.',
-        //         });
-        //     }
-
-        //     // مساعدات لتقسيم الاسم
-        //     function extractFirstName(fullName) {
-        //         return fullName?.split(" ")[0] ?? "Unknown";
-        //     }
-
-        //     function extractLastName(fullName) {
-        //         if (!fullName) return '';
-        //         const parts = fullName.trim().split(/\s+/); // يفصل على أساس المسافات
-        //         return parts[parts.length - 1]; // يأخذ آخر كلمة
-        //     }
-        // });
-
         document.querySelectorAll('.check-medical').forEach(function(button) {
             button.addEventListener('click', async function() {
                 const btn = document.getElementById('collectSelected');
@@ -2263,5 +2131,188 @@
                 });
             });
         });
+    </script>
+    <script>
+        function addCustomer() {
+            const fullName = document.getElementById("fullName").value;
+            const nationalId = document.getElementById("nationalId").value;
+            const passport = document.getElementById("passport").value;
+
+            if (!fullName || !nationalId || !passport) {
+                alert("⚠️ رجاءً املأ جميع الحقول");
+                return;
+            }
+
+            customers.push({
+                fullName,
+                nationalId,
+                passport
+            });
+
+            // عرض في القائمة
+            const li = document.createElement("li");
+            li.textContent = `${fullName} - ${nationalId} - ${passport}`;
+            document.getElementById("customerList").appendChild(li);
+
+            // إفراغ الحقول
+            document.getElementById("fullName").value = "";
+            document.getElementById("nationalId").value = "";
+            document.getElementById("passport").value = "";
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return "";
+
+            let year, month, day;
+
+            if (dateStr.includes("-")) {
+                // صيغة YYYY-MM-DD
+                [year, month, day] = dateStr.split("-");
+            } else if (dateStr.includes("/")) {
+                // صيغة DD/MM/YYYY
+                [day, month, year] = dateStr.split("/");
+            } else {
+                return dateStr;
+            }
+
+            // إضافة صفر بادئ لليوم والشهر
+            month = String(parseInt(month, 10)).padStart(2, "0");
+            day = String(parseInt(day, 10)).padStart(2, "0");
+
+            return `${month}/${day}/${year}`;
+        }
+
+        document.getElementById("fingerPrintCustomer").addEventListener("click", async (e) => {
+            const btn = document.getElementById("collectSelected");
+            const company = JSON.parse(btn.dataset.company);
+
+            let customers = Array.from(document.querySelectorAll('.row-checkbox:checked'))
+                .map(checkbox => {
+                    // قراءة الـ customer object من data-customer
+                    let cust = JSON.parse(checkbox.dataset.customer);
+                    return cust; // هنا بيرجع الكائن كامل بدل الـ id بس
+                });
+
+            e.preventDefault();
+
+            if (customers.length === 0) {
+                alert("⚠️ أضف عميل واحد على الأقل");
+                return;
+            }
+
+            // 🟢 حمّل الملف الأصلي من public
+            const response = await fetch("/template.xlsx");
+            const data = await response.arrayBuffer();
+            const workbook = XLSX.read(data, {
+                type: "array"
+            });
+
+            const governoratesMap = {
+                "القاهرة": "Cairo",
+                "الجيزة": "Giza",
+                "الأسكندرية": "Alexandria",
+                "الدقهلية": "Dakahlia",
+                "البحر الأحمر": "Red Sea",
+                "البحيرة": "Beheira",
+                "الفيوم": "Faiyum",
+                "الغربية": "Gharbia",
+                "الإسماعيلية": "Ismailia",
+                "المنوفية": "Monufia",
+                "المنيا": "Minya",
+                "القليوبية": "Qalyubia",
+                "الوادي الجديد": "New Valley",
+                "السويس": "Suez",
+                "أسوان": "Aswan",
+                "أسيوط": "Asyut",
+                "بني سويف": "Beni Suef",
+                "بورسعيد": "Port Said",
+                "دمياط": "Damietta",
+                "الشرقية": "Sharqia",
+                "جنوب سيناء": "South Sinai",
+                "كفر الشيخ": "Kafr El-Sheikh",
+                "مطروح": "Matrouh",
+                "الأقصر": "Luxor",
+                "قنا": "Qena",
+                "شمال سيناء": "North Sinai",
+                "سوهاج": "Sohag",
+
+                // مضافة (الدول)
+                "السعودية": "Saudi Arabia",
+                "القدس": "Jerusalem",
+                "الأردن": "Jordan",
+                "العراق": "Iraq",
+                "لبنان": "Lebanon",
+                "فلسطين": "Palestine",
+                "اليمن": "Yemen",
+                "عمان": "Oman",
+                "الإمارات العربية المتحدة": "United Arab Emirates",
+                "الكويت": "Kuwait",
+                "قطر": "Qatar",
+                "البحرين": "Bahrain"
+            };
+
+            // return console.log(response);
+
+            // 🟢 اختار الشيت الأول
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+
+            // 🟢 لو عايز تبدأ من الصف 2 (عشان الصف 1 فيه العناوين)
+            let startRow = 2; // نبدأ من الصف الثاني
+
+            customers.forEach((cust, i) => {
+                let row = startRow + i;
+
+                sheet[`A${row}`] = {
+                    v: cust.e_visa_number || ""
+                };
+                sheet[`B${row}`] = {
+                    v: cust.name_en_mrz.split(" ")[0] || ""
+                }; // الاسم الأول من الاسم الكامل
+                sheet[`C${row}`] = {
+                    v: ""
+                }; // عمود فاضي
+                sheet[`D${row}`] = {
+                    v: cust.name_en_mrz.split(" ").pop() || ""
+                }; // الاسم الأخير
+                sheet[`E${row}`] = {
+                    v: cust.passport_id
+                };
+                sheet[`F${row}`] = {
+                    v: formatDate(cust.date_birth)
+                };
+                sheet[`G${row}`] = {
+                    v: "EGYPT"
+                };
+                sheet[`H${row}`] = {
+                    v: formatDate(cust.passport_expire_date)
+                };
+                sheet[`I${row}`] = {
+                    v: cust.gender === "ذكر" ? "Male" : cust.gender === "أنثى" ? "Female" : ""
+                };
+                sheet[`J${row}`] = {
+                    v: governoratesMap[cust.governorate_live] || cust.governorate_live
+                };
+                sheet[`K${row}`] = {
+                    v: formatDate(cust.passport_expire_date)
+                };
+                sheet[`L${row}`] = {
+                    v: cust.phone ? cust.phone.replace(/^0+/, "") : ""
+                };
+                sheet[`M${row}`] = {
+                    v: company.medical_email || ""
+                };
+            });
+
+            // 🟢 نزّل الملف الجديد
+            const wbout = XLSX.write(workbook, {
+                bookType: "xlsx",
+                type: "array"
+            });
+            saveAs(new Blob([wbout], {
+                type: "application/octet-stream"
+            }), "customers.xlsx");
+        });
+    </script>
     </script>
 @stop
