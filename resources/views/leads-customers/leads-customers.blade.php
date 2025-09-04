@@ -371,10 +371,10 @@
                     <table id="example" class="table table-hover text-center">
                         <thead class="bg-secondary text-white">
                             <tr>
+                                <th>رقم</th>
                                 <th>
                                     <input type="checkbox" class="width-input" id="select-all">
                                 </th>
-                                <th>رقم</th>
                                 <th>كود</th>
                                 <th>الاسم</th>
                                 <th>صورة</th>
