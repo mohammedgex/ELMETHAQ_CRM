@@ -657,6 +657,12 @@
             background: #f0f8ff;
             transition: 0.2s;
         }
+
+        /* ستايل للمربعات القابلة للصق */
+        .paste-zone:focus {
+            outline: 2px dashed #007bff;
+            outline-offset: 4px;
+        }
     </style>
 @stop
 
@@ -1228,5 +1234,51 @@
             }
         });
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // كل عناصر الـ preview
+            document.querySelectorAll("[id^='preview_']").forEach(previewDiv => {
+                previewDiv.setAttribute("tabindex", "0"); // يخلي div قابل للفوكس
+                previewDiv.classList.add("paste-zone"); // لو عايز تضيف ستايل
 
+                previewDiv.addEventListener("paste", function(e) {
+                    const items = (e.clipboardData || e.originalEvent.clipboardData).items;
+                    for (let i = 0; i < items.length; i++) {
+                        if (items[i].type.indexOf("image") === 0) {
+                            const file = items[i].getAsFile();
+
+                            // قراءة الصورة
+                            const reader = new FileReader();
+                            reader.onload = function(event) {
+                                // عرض الصورة داخل الـ img
+                                let img = previewDiv.querySelector("img");
+                                if (img) {
+                                    img.src = event.target.result;
+                                    img.style.display = "block";
+                                }
+
+                                // اخفاء نص الـ placeholder إن وجد
+                                let placeholder = previewDiv.querySelector(".placeholder-text");
+                                if (placeholder) placeholder.style.display = "none";
+                            };
+                            reader.readAsDataURL(file);
+
+                            // ربطها بالـ input[type=file]
+                            let input = document.querySelector(
+                                "input[data-preview='#" + previewDiv.id + "']"
+                            );
+                            if (input) {
+                                let dataTransfer = new DataTransfer();
+                                dataTransfer.items.add(file);
+                                input.files = dataTransfer.files;
+                            }
+
+                            e.preventDefault();
+                            break;
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @stop
