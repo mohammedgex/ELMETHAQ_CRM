@@ -374,6 +374,7 @@
                                 <th>
                                     <input type="checkbox" class="width-input" id="select-all">
                                 </th>
+                                <th>رقم</th>
                                 <th>كود</th>
                                 <th>الاسم</th>
                                 <th>صورة</th>
@@ -390,6 +391,7 @@
                         <tbody>
                             @forelse ($leads as $lead)
                                 <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <input type="checkbox" class="lead-checkbox width-input" name="lead_ids[]"
                                             value="{{ $lead->id }}">
