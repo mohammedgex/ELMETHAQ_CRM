@@ -1875,6 +1875,8 @@
                         });
                     } else {
                         $('#loading-overlay').fadeOut();
+                        Swal.close(); // إغلاق الانتظار
+
                         Swal.fire({
                             icon: 'error',
                             title: 'خطأ',
@@ -2123,10 +2125,19 @@
                         const data = await res.json();
                         console.log("Server response:", data);
 
-                        alert("تم إرسال البيانات بنجاح ✅");
+                        Swal.fire({
+                            title: "تم الحجز بنجاح✅",
+                            icon: "success",
+                            confirmButtonText: "موافق"
+                        });
                     } catch (err) {
                         console.error("Request failed:", err);
-                        alert("فشل إرسال البيانات ❌");
+                        Swal.fire({
+                            title: "فشل الحجز ❌",
+                            text: "حاول مرة أخرى.",
+                            icon: "error",
+                            confirmButtonText: "موافق"
+                        });
                     }
                 });
             });
