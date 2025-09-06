@@ -472,7 +472,7 @@
                                                                         data-phone="{{ $customer->phone }}"
                                                                         data-name="{{ $customer->name_ar }}"
                                                                         data-card_id="{{ $customer->card_id }}"
-                                                                        data-email="{{ auth()->user()->email }}"
+                                                                        data-email="{{ $company->email }}"
                                                                         data-e_number="{{ $customer->e_visa_number ?? '' }}"
                                                                         data-passport="{{ $customer->passport_id ?? '' }}">
                                                                         <i class="fas fa-vials me-1"></i> حجز المعامل
