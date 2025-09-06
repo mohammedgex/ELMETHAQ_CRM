@@ -384,6 +384,7 @@
                                 <th>الحالة</th>
                                 <th>المندوب</th>
                                 <th>الاختبارات</th>
+                                <th>الوظيفة</th>
                                 <th>تاريخ التسجيل</th>
                                 <th>الإجراءات</th>
                             </tr>
@@ -438,6 +439,7 @@
                                             -
                                         @endif
                                     </td>
+                                    <td>{{ $lead->jobTitle->title }}</td>
                                     <td>{{ $lead->registration_date }}</td>
                                     <td>
                                         <div class="d-flex align-items-center gap-1 flex-nowrap">

@@ -435,6 +435,10 @@ class LeadsCustomersController extends Controller
     {
         # code...
         $lead = LeadsCustomers::find($id);
+        if ($lead->customer_id) {
+            # code...
+            return redirect()->back()->with('error', 'لا يمكن حذف هذا العميل لأنه مرتبط بعميل أساسي');
+        }
         $lead->delete();
         return redirect()->back()->with('success', 'تم حذف العميل بنجاح');
     }
