@@ -1,4 +1,4 @@
-a{{-- resources/views/admin/failed-logins/index.blade.php --}}
+{{-- resources/views/admin/failed-logins/index.blade.php --}}
 @extends('adminlte::page')
 
 @section('title', 'محاولات الدخول الفاشلة')
