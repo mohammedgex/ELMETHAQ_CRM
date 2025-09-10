@@ -471,4 +471,16 @@ class LeadsCustomersController extends Controller
             'leads' => $leads
         ]);
     }
+
+    public function checkPhone(Request $request)
+    {
+        $exists = LeadsCustomers::where('phone', $request->phone)->exists();
+        return response()->json(['exists' => $exists]);
+    }
+
+    public function checkCard(Request $request)
+    {
+        $exists = LeadsCustomers::where('card_id', $request->card_id)->exists();
+        return response()->json(['exists' => $exists]);
+    }
 }

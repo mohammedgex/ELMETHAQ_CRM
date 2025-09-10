@@ -250,12 +250,16 @@ Route::group([
     Route::get('/login-fail', [LeadsCustomersController::class, 'loginFail'])->name('leads-customers.loginFail')->middleware("check.permission:loginFail-access");
     Route::get('/customer/remove/{id}', [BagController::class, 'removeBag'])->name('bag.customers.remove');
 
-
     Route::get('/job-questions/store', [JobQuestionController::class, 'index'])->name('job_questions.index');
     Route::post('/job-questions/store', [JobQuestionController::class, 'store'])->name('questions.store');
     Route::delete('/job-questions/destroy/{id}', [JobQuestionController::class, 'destroy'])->name('questions.destroy');
     Route::get('/users/history/{id}', [UserController::class, 'historyUser'])->name('users.history');
+
+    // routes/web.php
+    Route::post('/check-phone', [LeadsCustomersController::class, 'checkPhone'])->name('check.phone');
+    Route::post('/check-card', [LeadsCustomersController::class, 'checkCard'])->name('check.card');
 });
+
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
 Route::get('/send-test-email', [GoogleTranslateController::class, 'sendTestEmail']);

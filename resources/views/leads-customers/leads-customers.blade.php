@@ -90,9 +90,10 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>رقم الهاتف</label>
-                                <input type="text" name="phone" class="form-control" required
+                                <input type="text" name="phone" id="phone" class="form-control" required
                                     placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}" pattern="\d{11}"
                                     title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا">
+                                <div id="phone-error" class="text-danger"></div>
                                 @if ($errors->has('phone'))
                                     <div class="text-danger">
                                         {{ $errors->first('phone') }}
@@ -116,6 +117,7 @@
                                     placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}" pattern="\d{14}"
                                     maxlength="14" title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
                                     oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <div id="card-error" class="text-danger"></div>
                                 @if ($errors->has('card_id'))
                                     <div class="text-danger">
                                         {{ $errors->first('card_id') }}
@@ -137,7 +139,8 @@
                                 <label>نوع الاختبار</label>
                                 <select name="test_type" class="form-control" required>
                                     <option value="">اختر النوع</option>
-                                    <option value="اول اختبار" {{ old('test_type') == 'اول اختبار' ? 'selected' : '' }}>اول
+                                    <option value="اول اختبار" {{ old('test_type') == 'اول اختبار' ? 'selected' : '' }}>
+                                        اول
                                         اختبار</option>
                                     <option value="اعادة اختبار"
                                         {{ old('test_type') == 'اعادة اختبار' ? 'selected' : '' }}>اعادة اختبار</option>
@@ -1231,6 +1234,39 @@
                     }
                 });
             });
+        });
+    </script>
+    <script>
+        $(document).on("blur", "#phone", function() {
+            let phone = $(this).val();
+            if (phone.length === 11) {
+                $.post("{{ route('check.phone') }}", {
+                    _token: "{{ csrf_token() }}",
+                    phone: phone
+                }, function(data) {
+                    if (data.exists) {
+                        $("#phone-error").text("⚠️ رقم الهاتف مسجل من قبل!");
+                    } else {
+                        $("#phone-error").text("");
+                    }
+                });
+            }
+        });
+
+        $(document).on("blur", "#card_id", function() {
+            let card_id = $(this).val();
+            if (card_id.length === 14) {
+                $.post("{{ route('check.card') }}", {
+                    _token: "{{ csrf_token() }}",
+                    card_id: card_id
+                }, function(data) {
+                    if (data.exists) {
+                        $("#card-error").text("⚠️ الرقم القومي مسجل من قبل!");
+                    } else {
+                        $("#card-error").text("");
+                    }
+                });
+            }
         });
     </script>
 
