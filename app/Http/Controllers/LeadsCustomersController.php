@@ -8,6 +8,8 @@ use App\Models\CustomerGroup;
 use App\Models\Delegate;
 use App\Models\DocumentType;
 use App\Models\History;
+use App\Models\JobAnswer;
+use App\Models\JobQuestion;
 use App\Models\JobTitle;
 use App\Models\LeadsCustomers;
 use App\Models\Test;
@@ -127,6 +129,21 @@ class LeadsCustomersController extends Controller
         $history->lead_id = $lead->id;
         $history->user_id = auth()->id();
         $history->save();
+        if ($request->has('questions')) {
+            foreach ($request->questions as $questionId => $answer) {
+
+                // لو checkbox ممكن يجي Array
+                if (is_array($answer)) {
+                    $answer = implode(',', $answer);
+                }
+
+                JobAnswer::create([
+                    'job_question_id' => $questionId,
+                    'lead_id' => $lead->id,
+                    'answer' => $answer,
+                ]);
+            }
+        }
 
         return redirect()->back();
     }
@@ -187,6 +204,8 @@ class LeadsCustomersController extends Controller
             'قطر',
             'البحرين'
         ];
+        $questions = JobQuestion::where('job_title_id', $lead->job_title_id)->get();
+
 
         return view('leads-customers.leads-customers-edit', [
             'lead' => $lead,
@@ -194,6 +213,7 @@ class LeadsCustomersController extends Controller
             'jobs' => $jobs,
             "governorates" => $governorates,
             'error' => $error, // مررها للواجهة
+            'questions' => $questions,
         ]);
     }
 
@@ -259,6 +279,24 @@ class LeadsCustomersController extends Controller
         if ($request->phone && $request->phone !== $lead->phone) {
             $lead->password = Hash::make($request->phone);
             $lead->save();
+        }
+        // ✅ لو اتغيرت الوظيفة -> امسح الإجابات القديمة
+        if ($lead->wasChanged('job_title_id')) {
+            $lead->answers()->delete();
+        }
+
+        // ✅ حفظ/تحديث الإجابات
+        if ($request->has('questions')) {
+            foreach ($request->questions as $questionId => $answer) {
+                if (is_array($answer)) {
+                    $answer = implode(',', $answer);
+                }
+
+                $lead->answers()->updateOrCreate(
+                    ['job_question_id' => $questionId],
+                    ['answer' => $answer]
+                );
+            }
         }
 
         $history = new History();

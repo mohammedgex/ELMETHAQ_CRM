@@ -40,7 +40,7 @@
 
                                 <div class="form-group col-md-6">
                                     <label>الوظيفة المقدم عليها</label>
-                                    <select class="form-control" name="job_title_id">
+                                    <select class="form-control" name="job_title_id" id="job_title_select">
                                         <option value="">اختر الوظيفة</option>
                                         @foreach ($jobs as $job)
                                             <option value="{{ $job->id }}"
@@ -194,6 +194,89 @@
                                             value="{{ $lead->registration_date }}">
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- أسئلة الوظيفة --}}
+                    <div class="col-md-12">
+                        <div class="card bg-light mb-4">
+                            <div class="card-header bg-secondary text-white">
+                                <strong><i class="fas fa-question-circle ml-2"></i> أسئلة الوظيفة</strong>
+                            </div>
+                            <div class="card-body" id="job-questions">
+                                @foreach ($questions as $q)
+                                    @php
+                                        $answer = $lead->answers->where('job_question_id', $q->id)->first();
+                                        $oldValue = $answer ? $answer->answer : '';
+                                        $options = $q->options ? json_decode($q->options, true) : [];
+                                    @endphp
+
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">{{ $q->question }}</label>
+
+                                        @switch($q->type)
+                                            @case('text')
+                                                <input type="text" name="questions[{{ $q->id }}]" class="form-control"
+                                                    value="{{ $oldValue }}">
+                                            @break
+
+                                            @case('textarea')
+                                                <textarea name="questions[{{ $q->id }}]" class="form-control">{{ $oldValue }}</textarea>
+                                            @break
+
+                                            @case('number')
+                                                <input type="number" name="questions[{{ $q->id }}]" class="form-control"
+                                                    value="{{ $oldValue }}">
+                                            @break
+
+                                            @case('date')
+                                                <input type="date" name="questions[{{ $q->id }}]" class="form-control"
+                                                    value="{{ $oldValue }}">
+                                            @break
+
+                                            @case('select')
+                                                <select name="questions[{{ $q->id }}]" class="form-control">
+                                                    <option value="">-- اختر --</option>
+                                                    @foreach ($options as $opt)
+                                                        <option value="{{ $opt }}"
+                                                            {{ $oldValue == $opt ? 'selected' : '' }}>
+                                                            {{ $opt }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            @break
+
+                                            @case('radio')
+                                                <div class="d-flex flex-wrap gap-3">
+                                                    @foreach ($options as $opt)
+                                                        <div class="form-check form-check-inline">
+                                                            <input type="radio" class="form-check-input"
+                                                                name="questions[{{ $q->id }}]"
+                                                                value="{{ $opt }}"
+                                                                {{ $oldValue == $opt ? 'checked' : '' }}>
+                                                            <label class="form-check-label">{{ $opt }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @break
+
+                                            @case('checkbox')
+                                                @php $oldValues = explode(',', $oldValue); @endphp
+                                                <div class="d-flex flex-wrap gap-3">
+                                                    @foreach ($options as $opt)
+                                                        <div class="form-check form-check-inline">
+                                                            <input type="checkbox" class="form-check-input"
+                                                                name="questions[{{ $q->id }}][]"
+                                                                value="{{ $opt }}"
+                                                                {{ in_array($opt, $oldValues) ? 'checked' : '' }}>
+                                                            <label class="form-check-label">{{ $opt }}</label>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            @break
+                                        @endswitch
+                                    </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -1278,6 +1361,97 @@
                         }
                     }
                 });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const jobSelect = document.querySelector("select[name='job_title_id']");
+            const questionsContainer = document.getElementById("job-questions");
+
+            jobSelect.addEventListener("change", function() {
+                const jobId = this.value;
+
+                if (!jobId) {
+                    questionsContainer.innerHTML = "<p class='text-muted'>اختر وظيفة لعرض أسئلتها</p>";
+                    return;
+                }
+
+                // مسح الأسئلة القديمة
+                questionsContainer.innerHTML = "<p class='text-info'>جاري تحميل الأسئلة...</p>";
+                let url = "{{ route('job.questions', ':id') }}";
+                url = url.replace(':id', jobId);
+                fetch(url)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (!data.status || !data.questions.length) {
+                            questionsContainer.innerHTML =
+                                "<p class='text-muted'>لا توجد أسئلة لهذه الوظيفة</p>";
+                            return;
+                        }
+
+                        let html = "";
+                        data.questions.forEach(q => {
+                            html +=
+                                `<div class="mb-3"><label class="form-label fw-bold">${q.question}</label>`;
+                            switch (q.type) {
+                                case "text":
+                                    html +=
+                                        `<input type="text" name="questions[${q.id}]" class="form-control" />`;
+                                    break;
+                                case "textarea":
+                                    html +=
+                                        `<textarea name="questions[${q.id}]" class="form-control"></textarea>`;
+                                    break;
+                                case "number":
+                                    html +=
+                                        `<input type="number" name="questions[${q.id}]" class="form-control" />`;
+                                    break;
+                                case "date":
+                                    html +=
+                                        `<input type="date" name="questions[${q.id}]" class="form-control" />`;
+                                    break;
+                                case "select":
+                                    if (q.options) {
+                                        let opts = JSON.parse(q.options).map(opt =>
+                                            `<option value="${opt}">${opt}</option>`).join(
+                                            "");
+                                        html +=
+                                            `<select name="questions[${q.id}]" class="form-control"><option value="">-- اختر --</option>${opts}</select>`;
+                                    }
+                                    break;
+                                case "radio":
+                                    if (q.options) {
+                                        let radios = JSON.parse(q.options).map(opt => `
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="questions[${q.id}]" value="${opt}">
+                                <label class="form-check-label">${opt}</label>
+                            </div>`).join("");
+                                        html +=
+                                            `<div class="d-flex flex-wrap gap-3">${radios}</div>`;
+                                    }
+                                    break;
+                                case "checkbox":
+                                    if (q.options) {
+                                        let checks = JSON.parse(q.options).map(opt => `
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" name="questions[${q.id}][]" value="${opt}">
+                                <label class="form-check-label">${opt}</label>
+                            </div>`).join("");
+                                        html +=
+                                            `<div class="d-flex flex-wrap gap-3">${checks}</div>`;
+                                    }
+                                    break;
+                            }
+                            html += `</div>`;
+                        });
+
+                        questionsContainer.innerHTML = html;
+                    })
+                    .catch(err => {
+                        console.error("خطأ في جلب الأسئلة:", err);
+                        questionsContainer.innerHTML = "<p class='text-danger'>تعذر تحميل الأسئلة</p>";
+                    });
             });
         });
     </script>

@@ -58,4 +58,5 @@ Route::get('/customers-booking-panding', [ApiAppController::class, 'get_customer
 
 Route::post('/pubsub/gmail', [GmailPubSubController::class, 'handle']);
 Route::post('/job-answers', [JobAnswerController::class, 'store'])->middleware('auth:sanctum');
-Route::get('/job/questions/{id}', [JobAnswerController::class, 'getQuestionsWithAnswers']);
+Route::get('/job/questions/{id}', [JobAnswerController::class, 'getQuestions'])->name('job.questions');
+Route::get('/job/questions-answers/{id}', [JobAnswerController::class, 'getQuestionsWithoutAnswers'])->middleware('auth:sanctum');

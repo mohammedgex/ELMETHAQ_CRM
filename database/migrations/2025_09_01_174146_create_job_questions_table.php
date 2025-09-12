@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('job_title_id')->constrained()->onDelete('cascade');
             $table->string('question');
+            $table->string('show_in_report')->default('no'); // yes or no
             $table->enum('type', [
                 'text',
                 'textarea',

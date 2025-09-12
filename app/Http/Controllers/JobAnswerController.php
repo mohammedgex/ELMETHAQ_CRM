@@ -31,7 +31,7 @@ class JobAnswerController extends Controller
         ]);
     }
 
-    public function getQuestionsWithAnswers($job_title_id)
+    public function getQuestions($job_title_id)
     {
         // كل الأسئلة الخاصة بالوظيفة
         $questions = JobQuestion::where('job_title_id', $job_title_id)->get();
@@ -39,6 +39,25 @@ class JobAnswerController extends Controller
         return response()->json([
             'status' => true,
             'questions' => $questions
+        ]);
+    }
+    public function getQuestionsWithoutAnswers($job_title_id)
+    {
+        // 🟢 جيب العميل الحالي من الـ auth
+        $lead = auth()->user();
+
+        // 🟢 هات الأسئلة الخاصة بالوظيفة
+        $questions = JobQuestion::where('job_title_id', $job_title_id)->get();
+
+        // 🟢 هات IDs الأسئلة اللي العميل جاوب عليها
+        $answeredIds = $lead->answers()->pluck('job_question_id')->toArray();
+
+        // 🟢 رجع الأسئلة اللي لسه مجابش عليها
+        $unanswered = $questions->whereNotIn('id', $answeredIds)->values();
+
+        return response()->json([
+            'status' => true,
+            'questions' => $unanswered
         ]);
     }
 }

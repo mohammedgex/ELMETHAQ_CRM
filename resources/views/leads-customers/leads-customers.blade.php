@@ -172,6 +172,9 @@
                                     required>
                             </div>
                         </div>
+                        <div class="form-group col-md-12 mt-3" id="job-questions-container">
+                            <!-- هنا هتظهر الأسئلة -->
+                        </div>
                     </div>
 
                     <!-- صور -->
@@ -1270,4 +1273,119 @@
         });
     </script>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const jobSelect = document.querySelector('select[name="job_title_id"]');
+            const questionsContainer = document.getElementById('job-questions-container');
+
+            jobSelect.addEventListener('change', function() {
+                const jobId = this.value;
+                questionsContainer.innerHTML = ''; // تنظيف الحقول
+
+                if (jobId) {
+                    let url = "{{ route('job.questions', ':id') }}";
+                    url = url.replace(':id', jobId);
+                    fetch(url)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status && data.questions.length > 0) {
+                                data.questions.forEach(q => {
+                                    let field = '';
+
+                                    switch (q.type) {
+                                        case 'text':
+                                            field = `
+            <input type="text" 
+                   name="questions[${q.id}]" 
+                   class="form-control" 
+                   placeholder="أدخل الإجابة" />`;
+                                            break;
+
+                                        case 'textarea':
+                                            field = `
+            <textarea name="questions[${q.id}]" 
+                      class="form-control" 
+                      rows="3" 
+                      placeholder="أدخل الإجابة"></textarea>`;
+                                            break;
+
+                                        case 'number':
+                                            field = `
+            <input type="number" 
+                   name="questions[${q.id}]" 
+                   class="form-control" 
+                   placeholder="أدخل رقم" />`;
+                                            break;
+
+                                        case 'date':
+                                            field = `
+            <input type="date" 
+                   name="questions[${q.id}]" 
+                   class="form-control" />`;
+                                            break;
+
+                                        case 'select':
+                                            if (q.options) {
+                                                let opts = JSON.parse(q.options)
+                                                    .map(opt =>
+                                                        `<option value="${opt}">${opt}</option>`
+                                                    )
+                                                    .join('');
+                                                field = `
+                <select name="questions[${q.id}]" class="form-control">
+                    <option value="">-- اختر --</option>
+                    ${opts}
+                </select>`;
+                                            }
+                                            break;
+
+                                        case 'radio':
+                                            if (q.options) {
+                                                let radios = JSON.parse(q.options)
+                                                    .map(opt => `
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" 
+                           name="questions[${q.id}]" 
+                           value="${opt}">
+                    <label class="form-check-label">${opt}</label>
+                </div>
+            `).join('');
+                                                field =
+                                                    `<div class="d-flex flex-wrap gap-3">${radios}</div>`;
+                                            }
+                                            break;
+
+                                        case 'checkbox':
+                                            if (q.options) {
+                                                let checks = JSON.parse(q.options)
+                                                    .map(opt => `
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" 
+                           name="questions[${q.id}][]" 
+                           value="${opt}">
+                    <label class="form-check-label">${opt}</label>
+                </div>
+            `).join('');
+                                                field =
+                                                    `<div class="d-flex flex-wrap gap-3">${checks}</div>`;
+                                            }
+                                            break;
+
+                                    }
+
+
+                                    questionsContainer.innerHTML += `
+                                <div class="form-group mt-2">
+                                    <label>${q.question}</label>
+                                    ${field}
+                                </div>
+                            `;
+                                });
+                            }
+                        })
+                        .catch(err => console.error(err));
+                }
+            });
+        });
+    </script>
 @stop

@@ -26,11 +26,18 @@
                             </select>
                         </div>
 
-                        <!-- نص السؤال -->
                         <div class="col-md-4 form-group">
                             <label class="font-weight-bold">نص السؤال</label>
                             <input type="text" class="form-control" name="question" placeholder="أدخل نص السؤال"
                                 required>
+                        </div>
+                        <!-- نص السؤال -->
+                        <div class="col-md-4 form-group">
+                            <label class="font-weight-bold">اظهاره في كارت الاختبار</label>
+                            <select class="form-control" name="show_in_report" required>
+                                <option value="no">عدم إظهار</option>
+                                <option value="yes">إظهار</option>
+                            </select>
                         </div>
 
                         <!-- نوع السؤال -->

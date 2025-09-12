@@ -96,6 +96,6 @@ class LeadsCustomers extends Model
 
     public function answers()
     {
-        return $this->hasMany(JobAnswer::class);
+        return $this->hasMany(JobAnswer::class, 'lead_id');
     }
 }

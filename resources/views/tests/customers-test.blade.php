@@ -147,6 +147,10 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-1 flex-nowrap">
+                                            <a href="{{ route('reports.test_card', [$lead->id, $test->id]) }}"
+                                                target="_blank" class="btn btn-sm btn-info ">
+                                                <i class="fas fa-file-alt"></i>
+                                            </a>
                                             <a href="{{ route('leads-customers.show', $lead->id) }}"
                                                 class="btn btn-sm btn-primary">
                                                 <i class="fas fa-eye"></i>
@@ -160,7 +164,7 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="fas fa-trash"></i> إزالة
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>

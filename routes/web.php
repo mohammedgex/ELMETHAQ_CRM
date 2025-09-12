@@ -118,7 +118,6 @@ Route::group([
     Route::get('/send-file/accept/{id}', [FileTitleController::class, 'accept'])->name('document-type.accept');
     Route::get('/send-file/reject/{id}', [FileTitleController::class, 'reject'])->name('document-type.reject');
 
-
     // عرض الكفلاء
     Route::get('/sponsor-view/{id?}', [SponserController::class, 'index'])->name('sponsor.index')->middleware("check.permission:sponser-create");
     Route::post('/sponsor-view', [SponserController::class, 'create'])->name('sponsor.create')->middleware("check.permission:sponser-create");
@@ -131,7 +130,6 @@ Route::group([
     Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit')->middleware("check.permission:group-create");;
     Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete')->middleware("check.permission:group-create");;
     Route::get('/groups/{group}/customers/{customer}/remove', [CustomerGroupController::class, 'removeFromGroup'])->name('groups.removeCustomer');
-
 
     // المناديب
     Route::get('/Delegates-create/{id?}', [DelegateController::class, 'index'])->name('Delegates.create')->middleware("check.permission:delegate-create");
@@ -151,7 +149,6 @@ Route::group([
         Route::post('{id}/unarchive', [CustomerController::class, 'unarchive'])->name('customers.unarchive');
     });
     Route::get('customers/archived', [CustomerController::class, 'archived'])->name('customers.archived')->middleware("check.permission:archived-customers");
-
 
     Route::get('/check-medical-status/{token}', [ApiAppController::class, 'checkMedicalStatus'])->name('check.medical.status');
 
@@ -174,11 +171,9 @@ Route::group([
     Route::get('/customers/block/{id}', [BlackListController::class, 'block'])->name('customers.block');
     Route::get('/customers/unblock/{id}', [BlackListController::class, 'unBlock'])->name('customers.unblock');
 
-
     Route::get('/template', [TemplateController::class, 'index'])->name('template.index')->middleware("check.permission:message-create");
     Route::post('/template', [TemplateController::class, 'create'])->name('template.create')->middleware("check.permission:message-create");
     Route::delete('/template/{id}', [TemplateController::class, 'delete'])->name('template.delete')->middleware("check.permission:message-create");
-
 
     Route::get('/customers/group/{group_id}', [CustomerController::class, 'customerGroup'])->name('group.customer')->middleware("check.permission:show-group-customers");
     Route::post('/group/{group_id}', [CustomerController::class, 'addToGroup'])->name('group.addToGroup');
@@ -189,7 +184,6 @@ Route::group([
     Route::post('/bags-view/edit/{id}', [BagController::class, 'edit'])->name('bags.edit')->middleware("check.permission:bag-create");
     Route::delete('/bags-view/{id}', [BagController::class, 'delete'])->name('bags.delete')->middleware("check.permission:bag-create");
     Route::get('/bags-view/customers/{bag_id}', [BagController::class, 'bagCustomers'])->name('bags.customers')->middleware("check.permission:bag-create");
-
 
     Route::delete('/history-delete/{id}', [HistoryController::class, 'delete'])->name('history.delete');
 
@@ -203,7 +197,6 @@ Route::group([
 
     Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
     Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
-
 
     Route::get('/clients/{client}/attachments/print', [CustomerController::class, 'printAttachments'])->name('clients.print.attachments');
     Route::get('/clients/{client}/payments/print', [CustomerController::class, 'printPayments'])->name('clients.print.payments');
@@ -255,9 +248,10 @@ Route::group([
     Route::delete('/job-questions/destroy/{id}', [JobQuestionController::class, 'destroy'])->name('questions.destroy');
     Route::get('/users/history/{id}', [UserController::class, 'historyUser'])->name('users.history');
 
-    // routes/web.php
     Route::post('/check-phone', [LeadsCustomersController::class, 'checkPhone'])->name('check.phone');
     Route::post('/check-card', [LeadsCustomersController::class, 'checkCard'])->name('check.card');
+
+    Route::get('/test-card/{lead}/{test}', [ReportsController::class, 'test_card'])->name('reports.test_card');
 });
 
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);

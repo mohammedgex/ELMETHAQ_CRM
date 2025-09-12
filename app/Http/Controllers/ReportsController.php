@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\bag;
+use App\Models\CompanySetting;
 use App\Models\Customer;
 use App\Models\History;
+use App\Models\LeadsCustomers;
+use App\Models\Test;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -181,5 +184,14 @@ class ReportsController extends Controller
         return view('print-customer.print-entry_application', [
             'customers' => [$customer]
         ]);
+    }
+    public function test_card($test, $lead)
+    {
+        # code...
+        $lead = LeadsCustomers::find($lead);
+        $test = Test::find($test);
+        $company = CompanySetting::first();
+
+        return view("reports.test_card.test_card", compact('lead', 'company', 'test'));
     }
 }

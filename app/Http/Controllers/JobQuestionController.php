@@ -17,6 +17,7 @@ class JobQuestionController extends Controller
             'job_title_id' => 'required|exists:job_titles,id',
             'question' => 'required|string|max:255',
             'type' => 'required|in:text,textarea,select,radio,checkbox,date,number',
+            "show_in_report" => "nullable"
         ]);
 
         $options = null;
@@ -29,6 +30,7 @@ class JobQuestionController extends Controller
             'question' => $request->question,
             'type' => $request->type,
             'options' => $options,
+            'show_in_report' => $request->show_in_report,
         ]);
 
         return redirect()->back()->with('success', 'تمت إضافة السؤال بنجاح');
