@@ -185,7 +185,7 @@ class ReportsController extends Controller
             'customers' => [$customer]
         ]);
     }
-    public function test_card($test, $lead)
+    public function test_card($lead, $test)
     {
         # code...
         $lead = LeadsCustomers::find($lead);
