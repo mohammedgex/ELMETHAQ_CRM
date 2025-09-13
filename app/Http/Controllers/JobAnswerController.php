@@ -21,7 +21,7 @@ class JobAnswerController extends Controller
         // حفظ الإجابة
         JobAnswer::create([
             'job_question_id' => $request->job_question_id,
-            'lead_id' =>  auth()->id(),
+            'lead_id' =>  auth()->user()->id,
             'answer' => $request->answer,
         ]);
 

@@ -144,6 +144,10 @@
             margin-top: 15px;
         }
 
+        .extra-questions {
+            grid-template-columns: 1fr 1fr;
+        }
+
         .info div,
         .extra-questions div {
             border: 1px solid #ccc;
@@ -301,7 +305,20 @@
             </div>
         </div>
 
-        <div class="form-title">استمارة اختبار ({{ $lead->jobTitle->title ?? '' }})</div>
+        <div class="form-title d-flex align-items-center" style="position: relative;">
+            @php
+                $lastEvaluation = $lead->evaluations->where('test_id', $test->id)->last();
+            @endphp
+
+            @if ($lastEvaluation && $lastEvaluation->evaluation === 'غير مقبول')
+                <span
+                    style="position: absolute; left: 0; background: green; color: #fff; border-radius: 4px; padding: 4px 6px;">
+                    اعادة اختبار
+                </span>
+            @endif
+
+            <span class="mx-auto">استمارة اختبار ({{ $lead->jobTitle->title ?? '' }})</span>
+        </div>
 
         <div class="content">
             <!-- الكارد -->
@@ -333,16 +350,34 @@
             </div>
         </div>
 
-        <!-- قسم الأسئلة الإضافية -->
         <div class="extra-title">البيانات الإضافية</div>
         <div class="extra-questions">
-            <div>نوع الرخصة:</div>
-            <div>رخصة أولى</div>
-            <div>نوع العقد:</div>
-            <div>6 شهور (مؤقت)</div>
-            <div>الخبرات:</div>
-            <div>قديم شركات 5 سنين</div>
+            @foreach ($lead->jobTitle->questions()->where('show_in_report', 'yes')->get() as $question)
+                @php
+                    $answer = $lead->answers->firstWhere('job_question_id', $question->id);
+                @endphp
+
+                <div>{{ $question->question }}:</div>
+                <div>
+                    @if ($answer)
+                        @if (is_array($answer->answer))
+                            <ul style="margin: 0; padding-left: 18px; text-align: right;">
+                                @foreach ($answer->answer as $ans)
+                                    <li>{{ $ans }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            {{ $answer->answer }}
+                        @endif
+                    @else
+                        {{-- لو مفيش إجابة نخليها فاضية --}}
+                        &nbsp;
+                    @endif
+                </div>
+            @endforeach
         </div>
+
+
 
         <!-- قرار اللجنة -->
         <div class="committee">

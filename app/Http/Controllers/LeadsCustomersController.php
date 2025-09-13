@@ -292,6 +292,11 @@ class LeadsCustomersController extends Controller
                     $answer = implode(',', $answer);
                 }
 
+                // ⛔ لو الإجابة فاضية سيبها
+                if ($answer === null || $answer === '' || trim($answer) === '') {
+                    continue;
+                }
+
                 $lead->answers()->updateOrCreate(
                     ['job_question_id' => $questionId],
                     ['answer' => $answer]

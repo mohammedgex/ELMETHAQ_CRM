@@ -1298,7 +1298,7 @@
             <input type="text" 
                    name="questions[${q.id}]" 
                    class="form-control" 
-                   placeholder="أدخل الإجابة" />`;
+                   placeholder="أدخل الإجابة"  />`;
                                             break;
 
                                         case 'textarea':
@@ -1306,7 +1306,7 @@
             <textarea name="questions[${q.id}]" 
                       class="form-control" 
                       rows="3" 
-                      placeholder="أدخل الإجابة"></textarea>`;
+                      placeholder="أدخل الإجابة" ></textarea>`;
                                             break;
 
                                         case 'number':
