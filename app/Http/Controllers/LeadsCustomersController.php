@@ -206,6 +206,7 @@ class LeadsCustomersController extends Controller
         ];
         $questions = JobQuestion::where('job_title_id', $lead->job_title_id)->get();
 
+        $history = History::where(['lead_id' => $lead->id, "description" => "تم اضافة عميل محتمل جديد"])->first();
 
         return view('leads-customers.leads-customers-edit', [
             'lead' => $lead,
@@ -214,6 +215,7 @@ class LeadsCustomersController extends Controller
             "governorates" => $governorates,
             'error' => $error, // مررها للواجهة
             'questions' => $questions,
+            "history" => $history
         ]);
     }
 

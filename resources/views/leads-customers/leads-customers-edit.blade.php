@@ -30,6 +30,9 @@
                         <div class="card bg-light mb-4">
                             <div class="card-header bg-primary text-white">
                                 <strong><i class="fas fa-id-card-alt ml-2"></i> بيانات العميل</strong>
+                                @if ($history)
+                                    <span>انشائه : {{ $history?->user?->name ?? '' }}</span>
+                                @endif
                             </div>
                             <div class="card-body row">
                                 <div class="form-group col-md-6">
@@ -63,7 +66,8 @@
                                         <input type="text" class="form-control" name="phone"
                                             value="{{ $lead->phone }}">
                                         <div class="input-group-append">
-                                            <a href="{{ route('reset.password.lead', $lead->id) }}" class="btn btn-warning">
+                                            <a href="{{ route('reset.password.lead', $lead->id) }}"
+                                                class="btn btn-warning">
                                                 إعادة تعيين الباسورد
                                             </a>
                                         </div>
