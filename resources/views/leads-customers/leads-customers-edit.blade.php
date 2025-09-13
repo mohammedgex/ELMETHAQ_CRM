@@ -28,10 +28,16 @@
                     {{-- معلومات أساسية --}}
                     <div class="col-md-12">
                         <div class="card bg-light mb-4">
-                            <div class="card-header bg-primary text-white">
-                                <strong><i class="fas fa-id-card-alt ml-2"></i> بيانات العميل</strong>
-                                @if ($history)
-                                    <span>انشائه : {{ $history?->user?->name ?? '' }}</span>
+                            <div
+                                class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <strong><i class="fas fa-id-card-alt ml-2"></i> بيانات العميل</strong>
+                                </div>
+
+                                @if ($history && $history->first())
+                                    <div class="text-left font-bold">
+                                        <span>انشائه : {{ $history->first()->user?->name ?? '' }}</span>
+                                    </div>
                                 @endif
                             </div>
                             <div class="card-body row">

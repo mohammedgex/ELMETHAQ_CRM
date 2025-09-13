@@ -98,4 +98,9 @@ class LeadsCustomers extends Model
     {
         return $this->hasMany(JobAnswer::class, 'lead_id');
     }
+    public function historis()
+    {
+        # code...
+        return $this->hasMany(History::class, 'lead_id');
+    }
 }
