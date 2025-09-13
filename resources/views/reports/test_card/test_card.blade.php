@@ -313,7 +313,6 @@
                     @php
                         date_default_timezone_set('Africa/Cairo');
                         $time = new DateTime();
-                        $time->modify('+1 hour');
                     @endphp
 
                     <div>📅 التاريخ: {{ $time->format('d/m/Y') }}</div>
