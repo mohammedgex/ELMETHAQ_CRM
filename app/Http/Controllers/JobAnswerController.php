@@ -19,11 +19,15 @@ class JobAnswerController extends Controller
         ]);
 
         // حفظ الإجابة
-        JobAnswer::create([
-            'job_question_id' => $request->job_question_id,
-            'lead_id' =>  auth()->user()->id,
-            'answer' => $request->answer,
-        ]);
+        JobAnswer::updateOrCreate(
+            [
+                'job_question_id' => $request->job_question_id,
+                'lead_id' => auth()->user()->id,
+            ],
+            [
+                'answer' => $request->answer,
+            ]
+        );
 
         return response()->json([
             'status' => true,
