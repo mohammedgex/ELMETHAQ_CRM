@@ -50,14 +50,12 @@ class JobAnswerController extends Controller
         // 🟢 جيب العميل الحالي من الـ auth
         $lead = auth()->user();
 
-        // 🟢 هات الأسئلة الخاصة بالوظيفة
-        $questions = JobQuestion::where('job_title_id', $job_title_id)->get();
-
-        // 🟢 هات IDs الأسئلة اللي العميل جاوب عليها
         $answeredIds = $lead->answers()->pluck('job_question_id')->toArray();
 
-        // 🟢 رجع الأسئلة اللي لسه مجابش عليها
-        $unanswered = $questions->whereNotIn('id', $answeredIds)->values();
+        // جلب الأسئلة اللي لم يتم الرد عليها مباشرة من قاعدة البيانات
+        $unanswered = JobQuestion::where('job_title_id', $job_title_id)
+            ->whereNotIn('id', $answeredIds)
+            ->get();
 
         return response()->json([
             'status' => true,
