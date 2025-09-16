@@ -48,7 +48,7 @@
                                             class="btn btn-sm btn-primary">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        @if (auth()->user()->role == 'admin')
+                                        @if (auth()->user()->role == 'admin' || auth()->user()?->permissions->contains('permission', 'show-leads'))
                                             <form id="delete" action="{{ route('leads-customers.delete', $lead->id) }}"
                                                 method="POST" class="d-inline">
                                                 @csrf
