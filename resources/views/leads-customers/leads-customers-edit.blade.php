@@ -21,156 +21,158 @@
 @section('content')
     <div class="card card-primary card-outline shadow">
         <div class="card-body">
-            <form id="myForm" action="{{ route('leads-customers.edit', $lead->id) }}" method="POST"
-                enctype="multipart/form-data">
-                @csrf
-                <div class="row">
-                    {{-- معلومات أساسية --}}
-                    <div class="col-md-12">
-                        <div class="card bg-light mb-4">
-                            <div
-                                class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                                <div class="d-flex align-items-center">
-                                    <strong><i class="fas fa-id-card-alt ml-2"></i> بيانات العميل</strong>
-                                </div>
-
-                                @if ($history && $history->first())
-                                    <div class="text-left font-bold">
-                                        <span>انشائه : {{ $history->first()->user?->name ?? '' }}</span>
+            <div>
+                <form id="myForm" action="{{ route('leads-customers.edit', $lead->id) }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        {{-- معلومات أساسية --}}
+                        <div class="col-md-12">
+                            <div class="card bg-light mb-4">
+                                <div
+                                    class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <strong><i class="fas fa-id-card-alt ml-2"></i> بيانات العميل</strong>
                                     </div>
-                                @endif
-                            </div>
-                            <div class="card-body row">
-                                <div class="form-group col-md-6">
-                                    <label>الاسم الكامل</label>
-                                    <input type="text" id="name" class="form-control" name="name"
-                                        value="{{ $lead->name }}">
-                                </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>الوظيفة المقدم عليها</label>
-                                    <select class="form-control" name="job_title_id" id="job_title_select">
-                                        <option value="">اختر الوظيفة</option>
-                                        @foreach ($jobs as $job)
-                                            <option value="{{ $job->id }}"
-                                                {{ $lead->job_title_id == $job->id ? 'selected' : '' }}>
-                                                {{ $job->title }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-4">
-                                    <label>السن</label>
-                                    <input type="number" id="age" class="form-control" name="age"
-                                        value="{{ $lead->age }}">
-                                </div>
-
-                                <div class="form-group col-md-4">
-                                    <label>رقم الهاتف</label>
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" name="phone"
-                                            value="{{ $lead->phone }}">
-                                        <div class="input-group-append">
-                                            <a href="{{ route('reset.password.lead', $lead->id) }}"
-                                                class="btn btn-warning">
-                                                إعادة تعيين الباسورد
-                                            </a>
+                                    @if ($history && $history->first())
+                                        <div class="text-left font-bold">
+                                            <span>انشائه : {{ $history->first()->user?->name ?? '' }}</span>
                                         </div>
+                                    @endif
+                                </div>
+                                <div class="card-body row">
+                                    <div class="form-group col-md-6">
+                                        <label>الاسم الكامل</label>
+                                        <input type="text" id="name" class="form-control" name="name"
+                                            value="{{ $lead->name }}">
                                     </div>
-                                    @if ($errors->has('phone'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('phone') }}
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>رقم هاتف اخر</label>
-                                    <input type="text" class="form-control" name="phone_two"
-                                        value="{{ $lead->phone_two }}">
-                                    @if ($errors->has('phone_two'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('phone_two') }}
-                                        </div>
-                                    @endif
-                                </div>
 
-                                <div class="form-group col-md-4">
-                                    <label>الرقم القومي</label>
-                                    <input type="text" class="form-control" id="card_id" name="card_id"
-                                        value="{{ $lead->card_id }}">
-                                    @if ($errors->has('card_id'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('card_id') }}
+                                    <div class="form-group col-md-6">
+                                        <label>الوظيفة المقدم عليها</label>
+                                        <select class="form-control" name="job_title_id" id="job_title_select">
+                                            <option value="">اختر الوظيفة</option>
+                                            @foreach ($jobs as $job)
+                                                <option value="{{ $job->id }}"
+                                                    {{ $lead->job_title_id == $job->id ? 'selected' : '' }}>
+                                                    {{ $job->title }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>السن</label>
+                                        <input type="number" id="age" class="form-control" name="age"
+                                            value="{{ $lead->age }}">
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>رقم الهاتف</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="phone"
+                                                value="{{ $lead->phone }}">
+                                            <div class="input-group-append">
+                                                <a href="{{ route('reset.password.lead', $lead->id) }}"
+                                                    class="btn btn-warning">
+                                                    إعادة تعيين الباسورد
+                                                </a>
+                                            </div>
                                         </div>
-                                    @endif
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>رقم جواز السفر</label>
-                                    <input type="text" class="form-control" id="passport_numder" name="passport_numder"
-                                        value="{{ $lead->passport_numder }}">
-                                    @if ($errors->has('passport_numder'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('passport_numder') }}
-                                        </div>
-                                    @endif
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label>تاريخ الميلاد</label>
-                                    @if ($lead->date_of_birth)
-                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
-                                            value="{{ \Carbon\Carbon::hasFormat($lead->date_of_birth, 'Y-m-d') ? $lead->date_of_birth : \Carbon\Carbon::createFromFormat('d/m/Y', $lead->date_of_birth)->format('Y-m-d') }}">
-                                    @else
-                                        <input type="date" id="date_of_birth" class="form-control" name="date_of_birth"
-                                            value="">
-                                    @endif
-                                    @if ($errors->has('date_of_birth'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('date_of_birth') }}
-                                        </div>
-                                    @endif
+                                        @if ($errors->has('phone'))
+                                            <div class="text-danger">
+                                                {{ $errors->first('phone') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>رقم هاتف اخر</label>
+                                        <input type="text" class="form-control" name="phone_two"
+                                            value="{{ $lead->phone_two }}">
+                                        @if ($errors->has('phone_two'))
+                                            <div class="text-danger">
+                                                {{ $errors->first('phone_two') }}
+                                            </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="form-group col-md-4">
+                                        <label>الرقم القومي</label>
+                                        <input type="text" class="form-control" id="card_id" name="card_id"
+                                            value="{{ $lead->card_id }}">
+                                        @if ($errors->has('card_id'))
+                                            <div class="text-danger">
+                                                {{ $errors->first('card_id') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>رقم جواز السفر</label>
+                                        <input type="text" class="form-control" id="passport_numder"
+                                            name="passport_numder" value="{{ $lead->passport_numder }}">
+                                        @if ($errors->has('passport_numder'))
+                                            <div class="text-danger">
+                                                {{ $errors->first('passport_numder') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label>تاريخ الميلاد</label>
+                                        @if ($lead->date_of_birth)
+                                            <input type="date" class="form-control" id="date_of_birth"
+                                                name="date_of_birth"
+                                                value="{{ \Carbon\Carbon::hasFormat($lead->date_of_birth, 'Y-m-d') ? $lead->date_of_birth : \Carbon\Carbon::createFromFormat('d/m/Y', $lead->date_of_birth)->format('Y-m-d') }}">
+                                        @else
+                                            <input type="date" id="date_of_birth" class="form-control"
+                                                name="date_of_birth" value="">
+                                        @endif
+                                        @if ($errors->has('date_of_birth'))
+                                            <div class="text-danger">
+                                                {{ $errors->first('date_of_birth') }}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    {{-- معلومات إضافية --}}
-                    <div class="col-md-12">
-                        <div class="card bg-light mb-4">
-                            <div class="card-header bg-info text-white">
-                                <strong><i class="fas fa-info-circle ml-2"></i> تفاصيل إضافية</strong>
-                            </div>
-                            <div class="card-body row">
-                                <div class="form-group col-md-6">
-                                    <label>المندوب</label>
-                                    @if ($lead->delegate_id == null)
-                                        <span>({{ $lead->licence_type }})</span>
-                                    @endif
-                                    <select class="form-control" name="delegate_id">
-                                        <option value="">اختر المندوب</option>
-                                        @foreach ($delegates as $delegate)
-                                            <option value="{{ $delegate->id }}"
-                                                {{ $lead->delegate_id == $delegate->id ? 'selected' : '' }}>
-                                                {{ $delegate->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
+                        {{-- معلومات إضافية --}}
+                        <div class="col-md-12">
+                            <div class="card bg-light mb-4">
+                                <div class="card-header bg-info text-white">
+                                    <strong><i class="fas fa-info-circle ml-2"></i> تفاصيل إضافية</strong>
                                 </div>
+                                <div class="card-body row">
+                                    <div class="form-group col-md-6">
+                                        <label>المندوب</label>
+                                        @if ($lead->delegate_id == null)
+                                            <span>({{ $lead->licence_type }})</span>
+                                        @endif
+                                        <select class="form-control" name="delegate_id">
+                                            <option value="">اختر المندوب</option>
+                                            @foreach ($delegates as $delegate)
+                                                <option value="{{ $delegate->id }}"
+                                                    {{ $lead->delegate_id == $delegate->id ? 'selected' : '' }}>
+                                                    {{ $delegate->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                <div class="form-group col-md-6">
-                                    <label>نوع الاختبار</label>
-                                    <select class="form-control" name="test_type">
-                                        <option value="">اختر النوع</option>
-                                        @foreach (['اول اختبار', 'اعادة اختبار', 'قيادة امنة'] as $type)
-                                            <option value="{{ $type }}"
-                                                {{ $lead->test_type == $type ? 'selected' : '' }}>
-                                                {{ $type }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                                    <div class="form-group col-md-6">
+                                        <label>نوع الاختبار</label>
+                                        <select class="form-control" name="test_type">
+                                            <option value="">اختر النوع</option>
+                                            @foreach (['اول اختبار', 'اعادة اختبار', 'قيادة امنة'] as $type)
+                                                <option value="{{ $type }}"
+                                                    {{ $lead->test_type == $type ? 'selected' : '' }}>
+                                                    {{ $type }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
-                                {{-- <div class="form-group col-md-6">
+                                    {{-- <div class="form-group col-md-6">
                                     <label>التقييم</label>
                                     <select class="form-control" name="evaluation">
                                         <option value="">اختر التقييم</option>
@@ -183,351 +185,416 @@
                                     </select>
                                 </div> --}}
 
-                                <div class="form-group col-md-6">
-                                    <label>المحافظة</label>
-                                    <select class="form-control" id="governorate" name="governorate">
-                                        <option value="">اختر المحافظة</option>
-                                        @foreach ($governorates as $gov)
-                                            <option value="{{ $gov }}"
-                                                {{ $lead->governorate == $gov ? 'selected' : '' }}>
-                                                {{ $gov }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label>موعد التسجيل</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
-                                        <input type="date" class="form-control" name="registration_date"
-                                            value="{{ $lead->registration_date }}">
+                                    <div class="form-group col-md-6">
+                                        <label>المحافظة</label>
+                                        <select class="form-control" id="governorate" name="governorate">
+                                            <option value="">اختر المحافظة</option>
+                                            @foreach ($governorates as $gov)
+                                                <option value="{{ $gov }}"
+                                                    {{ $lead->governorate == $gov ? 'selected' : '' }}>
+                                                    {{ $gov }}
+                                                </option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- أسئلة الوظيفة --}}
-                    <div class="col-md-12">
-                        <div class="card bg-light mb-4">
-                            <div class="card-header bg-secondary text-white">
-                                <strong><i class="fas fa-question-circle ml-2"></i> أسئلة الوظيفة</strong>
-                            </div>
-                            <div class="card-body" id="job-questions">
-                                @foreach ($questions as $q)
-                                    @php
-                                        $answer = $lead->answers->where('job_question_id', $q->id)->first();
-                                        $oldValue = $answer ? $answer->answer : '';
-                                        $options = $q->options ? json_decode($q->options, true) : [];
-                                    @endphp
 
-                                    <div class="mb-3">
-                                        <label class="form-label fw-bold">{{ $q->question }}</label>
-
-                                        @switch($q->type)
-                                            @case('text')
-                                                <input type="text" name="questions[{{ $q->id }}]" class="form-control"
-                                                    value="{{ $oldValue }}">
-                                            @break
-
-                                            @case('textarea')
-                                                <textarea name="questions[{{ $q->id }}]" class="form-control">{{ $oldValue }}</textarea>
-                                            @break
-
-                                            @case('number')
-                                                <input type="number" name="questions[{{ $q->id }}]" class="form-control"
-                                                    value="{{ $oldValue }}">
-                                            @break
-
-                                            @case('date')
-                                                <input type="date" name="questions[{{ $q->id }}]" class="form-control"
-                                                    value="{{ $oldValue }}">
-                                            @break
-
-                                            @case('select')
-                                                <select name="questions[{{ $q->id }}]" class="form-control">
-                                                    <option value="">-- اختر --</option>
-                                                    @foreach ($options as $opt)
-                                                        <option value="{{ $opt }}"
-                                                            {{ $oldValue == $opt ? 'selected' : '' }}>
-                                                            {{ $opt }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            @break
-
-                                            @case('radio')
-                                                <div class="d-flex flex-wrap gap-3">
-                                                    @foreach ($options as $opt)
-                                                        <div class="form-check form-check-inline">
-                                                            <input type="radio" class="form-check-input"
-                                                                name="questions[{{ $q->id }}]"
-                                                                value="{{ $opt }}"
-                                                                {{ $oldValue == $opt ? 'checked' : '' }}>
-                                                            <label class="form-check-label">{{ $opt }}</label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @break
-
-                                            @case('checkbox')
-                                                @php $oldValues = explode(',', $oldValue); @endphp
-                                                <div class="d-flex flex-wrap gap-3">
-                                                    @foreach ($options as $opt)
-                                                        <div class="form-check form-check-inline">
-                                                            <input type="checkbox" class="form-check-input"
-                                                                name="questions[{{ $q->id }}][]"
-                                                                value="{{ $opt }}"
-                                                                {{ in_array($opt, $oldValues) ? 'checked' : '' }}>
-                                                            <label class="form-check-label">{{ $opt }}</label>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            @break
-                                        @endswitch
-                                    </div>
-                                @endforeach
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- تحسين تخطيط قسم الصور -->
-                    <!-- تحسين تخطيط قسم الصور -->
-                    <div class="col-md-12">
-                        <div class="card bg-light mb-4">
-                            <div class="card-header bg-warning text-dark">
-                                <strong><i class="fas fa-images ml-2"></i> المستندات والصور</strong>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-
-                                    <!-- الصورة الشخصية -->
-                                    <div class="col-md-4 mb-4">
-                                        <div class="form-group p-3 bg-white rounded border shadow-sm h-100">
-                                            <label for="dd" class="font-weight-bold text-dark">
-                                                <i class="fas fa-user-circle mr-2"></i>الصورة الشخصية
-                                            </label>
-
-                                            <div class="custom-file mb-3">
-                                                <input type="file" name="image"
-                                                    class="custom-file-input preview-image-input"
-                                                    data-preview="#preview_image" id="dd" accept="image/*">
-                                                <label class="custom-file-label" for="dd">اختر الصورة
-                                                    الشخصية</label>
-                                            </div>
-
-                                            <div id="preview_image" class="border rounded p-3 text-center bg-light"
-                                                style="min-height: 200px;">
-                                                <img src="{{ $lead->image ? asset('storage/' . $lead->image) : 'https://via.placeholder.com/150x150?text=الصورة+الشخصية' }}"
-                                                    class="img-fluid rounded-circle"
-                                                    style="max-height: 180px; display: {{ $lead->image ? 'block' : 'none' }} !important;"
-                                                    alt="Preview">
-                                                @if (!$lead->image)
-                                                    <div class="text-muted placeholder-text mt-3">
-                                                        <i class="fas fa-user-circle fa-2x"></i>
-                                                        <p class="mt-2">لم يتم اختيار صورة</p>
-                                                    </div>
-                                                @endif
-                                            </div>
-
-                                            <button type="button" class="btn btn-primary btn-sm mt-3 crop-image-btn"
-                                                data-input="#dd" data-preview="#preview_image">
-                                                <i class="fas fa-crop-alt mr-1"></i> اقتصاص
-                                            </button>
+                                    <div class="form-group col-md-6">
+                                        <label>موعد التسجيل</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                            <input type="date" class="form-control" name="registration_date"
+                                                value="{{ $lead->registration_date }}">
                                         </div>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- أسئلة الوظيفة --}}
+                        <div class="col-md-12">
+                            <div class="card bg-light mb-4">
+                                <div class="card-header bg-secondary text-white">
+                                    <strong><i class="fas fa-question-circle ml-2"></i> أسئلة الوظيفة</strong>
+                                </div>
+                                <div class="card-body" id="job-questions">
+                                    @foreach ($questions as $q)
+                                        @php
+                                            $answer = $lead->answers->where('job_question_id', $q->id)->first();
+                                            $oldValue = $answer ? $answer->answer : '';
+                                            $options = $q->options ? json_decode($q->options, true) : [];
+                                        @endphp
 
-                                    <!-- صورة جواز السفر -->
-                                    <div class="col-md-4 mb-4">
-                                        <div class="form-group p-3 bg-white rounded border shadow-sm h-100">
-                                            <label for="passportInput" class="font-weight-bold text-primary">
-                                                <i class="fas fa-passport mr-2"></i>صورة جواز السفر
-                                            </label>
+                                        <div class="mb-3">
+                                            <label class="form-label fw-bold">{{ $q->question }}</label>
 
-                                            <div class="custom-file mb-3">
-                                                <input type="file" name="passport_photo"
-                                                    class="custom-file-input preview-image-input"
-                                                    data-preview="#preview_passport_photo" id="passportInput"
-                                                    accept="image/*">
-                                                <label class="custom-file-label" for="passportInput">اختر صورة جواز
-                                                    السفر</label>
-                                            </div>
+                                            @switch($q->type)
+                                                @case('text')
+                                                    <input type="text" name="questions[{{ $q->id }}]"
+                                                        class="form-control" value="{{ $oldValue }}">
+                                                @break
 
-                                            <div id="preview_passport_photo"
-                                                class="border rounded p-3 text-center bg-light"
-                                                style="min-height: 200px;">
-                                                <img id="imagePreviewpass"
-                                                    src="{{ $lead->passport_photo ? asset('storage/' . $lead->passport_photo) : 'https://via.placeholder.com/150x150?text=صورة+جواز+السفر' }}"
-                                                    class="img-fluid rounded"
-                                                    style="max-height: 180px; display: {{ $lead->passport_photo ? 'block' : 'none' }} !important;"
-                                                    alt="Preview">
+                                                @case('textarea')
+                                                    <textarea name="questions[{{ $q->id }}]" class="form-control">{{ $oldValue }}</textarea>
+                                                @break
 
-                                                @if (!$lead->passport_photo)
-                                                    <div class="text-muted placeholder-text mt-3">
-                                                        <i class="fas fa-image fa-2x"></i>
-                                                        <p class="mt-2">لم يتم اختيار صورة</p>
+                                                @case('number')
+                                                    <input type="number" name="questions[{{ $q->id }}]"
+                                                        class="form-control" value="{{ $oldValue }}">
+                                                @break
+
+                                                @case('date')
+                                                    <input type="date" name="questions[{{ $q->id }}]"
+                                                        class="form-control" value="{{ $oldValue }}">
+                                                @break
+
+                                                @case('select')
+                                                    <select name="questions[{{ $q->id }}]" class="form-control">
+                                                        <option value="">-- اختر --</option>
+                                                        @foreach ($options as $opt)
+                                                            <option value="{{ $opt }}"
+                                                                {{ $oldValue == $opt ? 'selected' : '' }}>
+                                                                {{ $opt }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                @break
+
+                                                @case('radio')
+                                                    <div class="d-flex flex-wrap gap-3">
+                                                        @foreach ($options as $opt)
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" class="form-check-input"
+                                                                    name="questions[{{ $q->id }}]"
+                                                                    value="{{ $opt }}"
+                                                                    {{ $oldValue == $opt ? 'checked' : '' }}>
+                                                                <label class="form-check-label">{{ $opt }}</label>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                @endif
-                                            </div>
+                                                @break
 
-                                            <div class="mt-3 d-flex justify-content-between align-items-center">
-                                                <button type="button" class="btn btn-primary btn-sm crop-image-btn"
-                                                    data-input="#passportInput" data-preview="#preview_passport_photo">
+                                                @case('checkbox')
+                                                    @php $oldValues = explode(',', $oldValue); @endphp
+                                                    <div class="d-flex flex-wrap gap-3">
+                                                        @foreach ($options as $opt)
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="checkbox" class="form-check-input"
+                                                                    name="questions[{{ $q->id }}][]"
+                                                                    value="{{ $opt }}"
+                                                                    {{ in_array($opt, $oldValues) ? 'checked' : '' }}>
+                                                                <label class="form-check-label">{{ $opt }}</label>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @break
+                                            @endswitch
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- تحسين تخطيط قسم الصور -->
+                        <!-- تحسين تخطيط قسم الصور -->
+                        <div class="col-md-12">
+                            <div class="card bg-light mb-4">
+                                <div class="card-header bg-warning text-dark">
+                                    <strong><i class="fas fa-images ml-2"></i> المستندات والصور</strong>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+
+                                        <!-- الصورة الشخصية -->
+                                        <div class="col-md-4 mb-4">
+                                            <div class="form-group p-3 bg-white rounded border shadow-sm h-100">
+                                                <label for="dd" class="font-weight-bold text-dark">
+                                                    <i class="fas fa-user-circle mr-2"></i>الصورة الشخصية
+                                                </label>
+
+                                                <div class="custom-file mb-3">
+                                                    <input type="file" name="image"
+                                                        class="custom-file-input preview-image-input"
+                                                        data-preview="#preview_image" id="dd" accept="image/*">
+                                                    <label class="custom-file-label" for="dd">اختر الصورة
+                                                        الشخصية</label>
+                                                </div>
+
+                                                <div id="preview_image" class="border rounded p-3 text-center bg-light"
+                                                    style="min-height: 200px;">
+                                                    <img src="{{ $lead->image ? asset('storage/' . $lead->image) : 'https://via.placeholder.com/150x150?text=الصورة+الشخصية' }}"
+                                                        class="img-fluid rounded-circle"
+                                                        style="max-height: 180px; display: {{ $lead->image ? 'block' : 'none' }} !important;"
+                                                        alt="Preview">
+                                                    @if (!$lead->image)
+                                                        <div class="text-muted placeholder-text mt-3">
+                                                            <i class="fas fa-user-circle fa-2x"></i>
+                                                            <p class="mt-2">لم يتم اختيار صورة</p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary btn-sm mt-3 crop-image-btn"
+                                                    data-input="#dd" data-preview="#preview_image">
                                                     <i class="fas fa-crop-alt mr-1"></i> اقتصاص
                                                 </button>
+                                            </div>
+                                        </div>
 
-                                                <button type="button" id="analyzeBtn" class="btn btn-success btn-sm">
-                                                    <i class="fas fa-magic mr-1"></i> فك البيانات
+                                        <!-- صورة جواز السفر -->
+                                        <div class="col-md-4 mb-4">
+                                            <div class="form-group p-3 bg-white rounded border shadow-sm h-100">
+                                                <label for="passportInput" class="font-weight-bold text-primary">
+                                                    <i class="fas fa-passport mr-2"></i>صورة جواز السفر
+                                                </label>
+
+                                                <div class="custom-file mb-3">
+                                                    <input type="file" name="passport_photo"
+                                                        class="custom-file-input preview-image-input"
+                                                        data-preview="#preview_passport_photo" id="passportInput"
+                                                        accept="image/*">
+                                                    <label class="custom-file-label" for="passportInput">اختر صورة جواز
+                                                        السفر</label>
+                                                </div>
+
+                                                <div id="preview_passport_photo"
+                                                    class="border rounded p-3 text-center bg-light"
+                                                    style="min-height: 200px;">
+                                                    <img id="imagePreviewpass"
+                                                        src="{{ $lead->passport_photo ? asset('storage/' . $lead->passport_photo) : 'https://via.placeholder.com/150x150?text=صورة+جواز+السفر' }}"
+                                                        class="img-fluid rounded"
+                                                        style="max-height: 180px; display: {{ $lead->passport_photo ? 'block' : 'none' }} !important;"
+                                                        alt="Preview">
+
+                                                    @if (!$lead->passport_photo)
+                                                        <div class="text-muted placeholder-text mt-3">
+                                                            <i class="fas fa-image fa-2x"></i>
+                                                            <p class="mt-2">لم يتم اختيار صورة</p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+
+                                                <div class="mt-3 d-flex justify-content-between align-items-center">
+                                                    <button type="button" class="btn btn-primary btn-sm crop-image-btn"
+                                                        data-input="#passportInput"
+                                                        data-preview="#preview_passport_photo">
+                                                        <i class="fas fa-crop-alt mr-1"></i> اقتصاص
+                                                    </button>
+
+                                                    <button type="button" id="analyzeBtn"
+                                                        class="btn btn-success btn-sm">
+                                                        <i class="fas fa-magic mr-1"></i> فك البيانات
+                                                    </button>
+                                                </div>
+
+                                                <!-- محمل التحليل -->
+                                                <div id="passportInput_loader" class="text-center mt-3"
+                                                    style="display: none;">
+                                                    <div class="spinner-border text-primary" role="status">
+                                                        <span class="sr-only">جاري التحليل...</span>
+                                                    </div>
+                                                    <p class="text-primary mt-2" id="passportInput_loader_text">الرجاء
+                                                        الانتظار...</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- صورة إثبات المهنة -->
+                                        <div class="col-md-4 mb-4">
+                                            <div class="form-group p-3 bg-white rounded border shadow-sm h-100">
+                                                <label for="ff" class="font-weight-bold text-success">
+                                                    <i class="fas fa-certificate mr-2"></i>اثبات مهنة (رخصة أو شهادة)
+                                                </label>
+
+                                                <div class="custom-file mb-3">
+                                                    <input type="file" name="license_photo"
+                                                        class="custom-file-input preview-image-input"
+                                                        data-preview="#preview_license_photo" id="ff"
+                                                        accept="image/*">
+                                                    <label class="custom-file-label" for="ff">اختر صورة إثبات
+                                                        المهنة</label>
+                                                </div>
+
+                                                <div id="preview_license_photo"
+                                                    class="border rounded p-3 text-center bg-light"
+                                                    style="min-height: 200px;">
+                                                    <img src="{{ $lead->license_photo ? asset('storage/' . $lead->license_photo) : 'https://via.placeholder.com/150x150?text=إثبات+المهنة' }}"
+                                                        class="img-fluid rounded"
+                                                        style="max-height: 180px; display: {{ $lead->license_photo ? 'block' : 'none' }} !important;"
+                                                        alt="Preview">
+
+                                                    @if (!$lead->license_photo)
+                                                        <div class="text-muted placeholder-text mt-3">
+                                                            <i class="fas fa-image fa-2x"></i>
+                                                            <p class="mt-2">لم يتم اختيار صورة</p>
+                                                        </div>
+                                                    @endif
+
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary btn-sm mt-3 crop-image-btn"
+                                                    data-input="#ff" data-preview="#preview_license_photo">
+                                                    <i class="fas fa-crop-alt mr-1"></i> اقتصاص
                                                 </button>
                                             </div>
+                                        </div>
 
-                                            <!-- محمل التحليل -->
-                                            <div id="passportInput_loader" class="text-center mt-3"
-                                                style="display: none;">
-                                                <div class="spinner-border text-primary" role="status">
-                                                    <span class="sr-only">جاري التحليل...</span>
+                                    </div>
+
+                                    <!-- صور البطاقة الشخصية -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-group p-3 bg-white rounded border shadow-sm">
+                                                <label for="ss" class="font-weight-bold text-info">
+                                                    <i class="fas fa-id-card mr-2"></i>بطاقة الرقم القومي (الأمام)
+                                                </label>
+
+                                                <div class="custom-file mb-3">
+                                                    <input type="file" name="img_national_id_card"
+                                                        class="custom-file-input preview-image-input"
+                                                        data-preview="#preview_img_national_id_card" id="ss"
+                                                        accept="image/*">
+                                                    <label class="custom-file-label" for="ss">اختر صورة البطاقة من
+                                                        الأمام</label>
                                                 </div>
-                                                <p class="text-primary mt-2" id="passportInput_loader_text">الرجاء
-                                                    الانتظار...</p>
+
+                                                <div id="preview_img_national_id_card"
+                                                    class="border rounded p-3 text-center bg-light"
+                                                    style="min-height: 160px;">
+                                                    <img src="{{ $lead->img_national_id_card ? asset('storage/' . $lead->img_national_id_card) : 'https://via.placeholder.com/200x120?text=البطاقة+من+الأمام' }}"
+                                                        class="img-fluid rounded"
+                                                        style="max-height: 140px; display: {{ $lead->img_national_id_card ? 'block' : 'none' }} !important;"
+                                                        alt="Preview">
+
+                                                    @if (!$lead->img_national_id_card)
+                                                        <div class="text-muted placeholder-text mt-3">
+                                                            <i class="fas fa-image fa-2x"></i>
+                                                            <p class="mt-2">لم يتم اختيار صورة</p>
+                                                        </div>
+                                                    @endif
+
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                                    data-input="#ss" data-preview="#preview_img_national_id_card">
+                                                    <i class="fas fa-crop-alt mr-1"></i> اقتصاص
+                                                </button>
                                             </div>
                                         </div>
-                                    </div>
 
-                                    <!-- صورة إثبات المهنة -->
-                                    <div class="col-md-4 mb-4">
-                                        <div class="form-group p-3 bg-white rounded border shadow-sm h-100">
-                                            <label for="ff" class="font-weight-bold text-success">
-                                                <i class="fas fa-certificate mr-2"></i>اثبات مهنة (رخصة أو شهادة)
-                                            </label>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-group p-3 bg-white rounded border shadow-sm">
+                                                <label for="aa" class="font-weight-bold text-info">
+                                                    <i class="fas fa-id-card mr-2"></i>بطاقة الرقم القومي (الخلف)
+                                                </label>
 
-                                            <div class="custom-file mb-3">
-                                                <input type="file" name="license_photo"
-                                                    class="custom-file-input preview-image-input"
-                                                    data-preview="#preview_license_photo" id="ff"
-                                                    accept="image/*">
-                                                <label class="custom-file-label" for="ff">اختر صورة إثبات
-                                                    المهنة</label>
+                                                <div class="custom-file mb-3">
+                                                    <input type="file" name="img_national_id_card_back"
+                                                        class="custom-file-input preview-image-input"
+                                                        data-preview="#preview_img_national_id_card_back" id="aa"
+                                                        accept="image/*">
+                                                    <label class="custom-file-label" for="aa">اختر صورة البطاقة من
+                                                        الخلف</label>
+                                                </div>
+
+                                                <div id="preview_img_national_id_card_back"
+                                                    class="border rounded p-3 text-center bg-light"
+                                                    style="min-height: 160px;">
+                                                    <img src="{{ $lead->img_national_id_card_back ? asset('storage/' . $lead->img_national_id_card_back) : 'https://via.placeholder.com/200x120?text=البطاقة+من+الخلف' }}"
+                                                        class="img-fluid rounded"
+                                                        style="max-height: 140px; display: {{ $lead->img_national_id_card_back ? 'block' : 'none' }} !important;"
+                                                        alt="Preview">
+
+                                                    @if (!$lead->img_national_id_card_back)
+                                                        <div class="text-muted placeholder-text mt-3">
+                                                            <i class="fas fa-image fa-2x"></i>
+                                                            <p class="mt-2">لم يتم اختيار صورة</p>
+                                                        </div>
+                                                    @endif
+
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                                    data-input="#aa" data-preview="#preview_img_national_id_card_back">
+                                                    <i class="fas fa-crop-alt mr-1"></i> اقتصاص
+                                                </button>
                                             </div>
-
-                                            <div id="preview_license_photo"
-                                                class="border rounded p-3 text-center bg-light"
-                                                style="min-height: 200px;">
-                                                <img src="{{ $lead->license_photo ? asset('storage/' . $lead->license_photo) : 'https://via.placeholder.com/150x150?text=إثبات+المهنة' }}"
-                                                    class="img-fluid rounded"
-                                                    style="max-height: 180px; display: {{ $lead->license_photo ? 'block' : 'none' }} !important;"
-                                                    alt="Preview">
-
-                                                @if (!$lead->license_photo)
-                                                    <div class="text-muted placeholder-text mt-3">
-                                                        <i class="fas fa-image fa-2x"></i>
-                                                        <p class="mt-2">لم يتم اختيار صورة</p>
-                                                    </div>
-                                                @endif
-
-                                            </div>
-
-                                            <button type="button" class="btn btn-primary btn-sm mt-3 crop-image-btn"
-                                                data-input="#ff" data-preview="#preview_license_photo">
-                                                <i class="fas fa-crop-alt mr-1"></i> اقتصاص
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                                <!-- صور البطاقة الشخصية -->
-                                <div class="row">
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group p-3 bg-white rounded border shadow-sm">
-                                            <label for="ss" class="font-weight-bold text-info">
-                                                <i class="fas fa-id-card mr-2"></i>بطاقة الرقم القومي (الأمام)
-                                            </label>
-
-                                            <div class="custom-file mb-3">
-                                                <input type="file" name="img_national_id_card"
-                                                    class="custom-file-input preview-image-input"
-                                                    data-preview="#preview_img_national_id_card" id="ss"
-                                                    accept="image/*">
-                                                <label class="custom-file-label" for="ss">اختر صورة البطاقة من
-                                                    الأمام</label>
-                                            </div>
-
-                                            <div id="preview_img_national_id_card"
-                                                class="border rounded p-3 text-center bg-light"
-                                                style="min-height: 160px;">
-                                                <img src="{{ $lead->img_national_id_card ? asset('storage/' . $lead->img_national_id_card) : 'https://via.placeholder.com/200x120?text=البطاقة+من+الأمام' }}"
-                                                    class="img-fluid rounded"
-                                                    style="max-height: 140px; display: {{ $lead->img_national_id_card ? 'block' : 'none' }} !important;"
-                                                    alt="Preview">
-
-                                                @if (!$lead->img_national_id_card)
-                                                    <div class="text-muted placeholder-text mt-3">
-                                                        <i class="fas fa-image fa-2x"></i>
-                                                        <p class="mt-2">لم يتم اختيار صورة</p>
-                                                    </div>
-                                                @endif
-
-                                            </div>
-
-                                            <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                                data-input="#ss" data-preview="#preview_img_national_id_card">
-                                                <i class="fas fa-crop-alt mr-1"></i> اقتصاص
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-md-6 mb-4">
-                                        <div class="form-group p-3 bg-white rounded border shadow-sm">
-                                            <label for="aa" class="font-weight-bold text-info">
-                                                <i class="fas fa-id-card mr-2"></i>بطاقة الرقم القومي (الخلف)
-                                            </label>
-
-                                            <div class="custom-file mb-3">
-                                                <input type="file" name="img_national_id_card_back"
-                                                    class="custom-file-input preview-image-input"
-                                                    data-preview="#preview_img_national_id_card_back" id="aa"
-                                                    accept="image/*">
-                                                <label class="custom-file-label" for="aa">اختر صورة البطاقة من
-                                                    الخلف</label>
-                                            </div>
-
-                                            <div id="preview_img_national_id_card_back"
-                                                class="border rounded p-3 text-center bg-light"
-                                                style="min-height: 160px;">
-                                                <img src="{{ $lead->img_national_id_card_back ? asset('storage/' . $lead->img_national_id_card_back) : 'https://via.placeholder.com/200x120?text=البطاقة+من+الخلف' }}"
-                                                    class="img-fluid rounded"
-                                                    style="max-height: 140px; display: {{ $lead->img_national_id_card_back ? 'block' : 'none' }} !important;"
-                                                    alt="Preview">
-
-                                                @if (!$lead->img_national_id_card_back)
-                                                    <div class="text-muted placeholder-text mt-3">
-                                                        <i class="fas fa-image fa-2x"></i>
-                                                        <p class="mt-2">لم يتم اختيار صورة</p>
-                                                    </div>
-                                                @endif
-
-                                            </div>
-
-                                            <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                                data-input="#aa" data-preview="#preview_img_national_id_card_back">
-                                                <i class="fas fa-crop-alt mr-1"></i> اقتصاص
-                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
+                        {{-- زر الحفظ --}}
+                        <div class="col-md-12">
+                            <button type="submit" id="save-button" class="btn btn-success btn-block font-weight-bold">
+                                <i class="fas fa-save ml-2"></i> حفظ التعديلات
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="history mt-4">
+                <div class="card card-primary card-outline">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-history mr-2"></i> تاريخ العميل المحتمل
+                        </h5>
                     </div>
 
-
-                    {{-- زر الحفظ --}}
-                    <div class="col-md-12">
-                        <button type="submit" id="save-button" class="btn btn-success btn-block font-weight-bold">
-                            <i class="fas fa-save ml-2"></i> حفظ التعديلات
-                        </button>
+                    <div class="card-body p-0">
+                        @if ($lead->historis && $lead->historis->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover mb-0">
+                                    <thead class="custom-thead">
+                                        <tr>
+                                            <th style="width: 5%">#</th>
+                                            <th style="width: 25%">المستخدم</th>
+                                            <th style="width: 45%">الوصف</th>
+                                            <th style="width: 25%">التاريخ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($lead->historis as $index => $item)
+                                            <tr>
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>
+                                                    @if ($item->user)
+                                                        <span class="badge bg-primary">
+                                                            <i class="fas fa-user mr-1"></i> {{ $item->user->name }}
+                                                        </span>
+                                                    @else
+                                                        <span class="badge bg-secondary">
+                                                            <i class="fas fa-user-slash mr-1"></i> مستخدم غير محدد
+                                                        </span>
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-check-circle text-primary mr-1"></i>
+                                                    {{ $item->description }}
+                                                </td>
+                                                <td>
+                                                    <i class="fas fa-clock mr-1 text-muted"></i>
+                                                    {{ $item->created_at
+                                                        ? $item->created_at->format('d M Y، g:i A')
+                                                        : ($item->date
+                                                            ? \Carbon\Carbon::parse($item->date)->format('d M Y، g:i A')
+                                                            : 'غير محدد') }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        @else
+                            <div class="text-center py-5">
+                                <i class="fas fa-history text-muted" style="font-size: 3rem; opacity: 0.6;"></i>
+                                <h5 class="text-muted mt-3">لا يوجد تاريخ متاح</h5>
+                                <p class="text-muted">لم يتم تسجيل أي عمليات لهذا العميل المحتمل بعد</p>
+                            </div>
+                        @endif
                     </div>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     <div id="loading-overlay"
@@ -755,6 +822,17 @@
         .paste-zone:focus {
             outline: 2px dashed #007bff;
             outline-offset: 4px;
+        }
+
+        /* رأس الجدول - يتماشى مع الثيم */
+        .custom-thead {
+            background-color: var(#f8f9fa);
+            color: var(#212529);
+        }
+
+        .custom-thead th {
+            border-color: var(#dee2e6);
+            font-weight: 600;
         }
     </style>
 @stop
