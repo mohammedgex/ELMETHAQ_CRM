@@ -400,7 +400,7 @@
                         <tbody>
                             @forelse ($leads as $lead)
                                 <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
-                                    <td>{{ $leads->firstItem() + $loop->index }}</td>
+                                    <td>{{ $loop->iteration }}</td>
                                     <td>
                                         <input type="checkbox" class="lead-checkbox width-input" name="lead_ids[]"
                                             value="{{ $lead->id }}">
