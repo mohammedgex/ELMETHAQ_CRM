@@ -477,7 +477,7 @@
                     </table>
                     <div class="d-flex justify-content-center p-2">
                         <div class="pagination-sm">
-                            {{ $leads->links() }}
+                            {{-- {{ $leads->links() }} --}}
                         </div>
                     </div>
                 </div>
