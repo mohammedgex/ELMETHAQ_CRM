@@ -326,7 +326,7 @@
                         <button type="submit" class="btn btn-primary">بحث</button>
                     </form>
 
-                    {{-- <div class="row mb-3">
+                    <div class="row mb-3">
                         <div class="col-md-2">
                             <select id="filter-age" class="form-control">
                                 <option value="">كل الأعمار</option>
@@ -357,7 +357,7 @@
                                 <i class="fas fa-filter"></i> فلتر العملاء
                             </a>
                         </div>
-                    </div> --}}
+                    </div>
                     <div>
                         عدد المحددين: <span id="selected-count">0</span>
                     </div>
@@ -477,7 +477,7 @@
                     </table>
                     <div class="d-flex justify-content-center p-2">
                         <div class="pagination-sm">
-                            {{-- {{ $leads->links() }} --}}
+                            {{ $leads->links() }}
                         </div>
                     </div>
                 </div>
