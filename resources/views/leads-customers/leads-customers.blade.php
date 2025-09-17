@@ -411,9 +411,9 @@
                                             {{ $lead->name }} </a>
                                     </td>
                                     <td>
-                                        <a href="{{ asset('storage/' . $lead->image) }}" target="blank">
+                                        <a href="{{ asset('storage/' . $lead->image) }}" target="_blank">
                                             <img src="{{ asset('storage/' . $lead->image) }}" width="40"
-                                                height="40" class="img-circle" alt="صورة" loading="lazy">
+                                                height="40" class="img-circle" alt="صورة العميل" loading="lazy">
                                         </a>
                                     </td>
                                     <td>{{ $lead->age }}</td>
