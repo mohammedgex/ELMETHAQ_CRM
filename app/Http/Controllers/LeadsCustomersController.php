@@ -24,9 +24,9 @@ class LeadsCustomersController extends Controller
     {
         # code...
         $leads = LeadsCustomers::whereIn('status', ['عميل محتمل', 'عميل اساسي'])
-            ->whereNotNull('name')
-            ->orderByRaw("FIELD(status, 'عميل محتمل', 'عميل اساسي')")
-            ->orderByDesc('created_at')
+            // ->whereNotNull('name')
+            // ->orderByRaw("FIELD(status, 'عميل محتمل', 'عميل اساسي')")
+            // ->orderByDesc('created_at')
             ->paginate(20);
         $delegates = Delegate::select('id', 'name')->get();
         $jobs = JobTitle::select('id', 'title')->get();
