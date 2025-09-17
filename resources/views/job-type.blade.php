@@ -135,22 +135,19 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td class="d-flex justify-content-center align-items-center gap-1">
+                                    <td class="d-flex justify-content-around align-items-center gap-1">
                                         <a href="{{ route('job-type.index', $job->id) }}"
                                             class="btn btn-sm btn-outline-success shadow-sm" title="تعديل">
                                             <i class="fas fa-edit"></i>
                                         </a>
-
-                                        {{-- <form action="{{ route('job-type.delete', $job->id) }}" method="POST"
-                                            class="mx-1">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit"
-                                                title="حذف" onsubmit="confirmDelete(event)">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form> --}}
-
+                                        <a href="{{ route('job.show_in_app', $job->id) }}"
+                                            class="btn btn-sm btn-outline-danger shadow-sm">
+                                            @if ($job->show_in_app === 'no')
+                                                اظهار
+                                            @else
+                                                اخفاء
+                                            @endif
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach

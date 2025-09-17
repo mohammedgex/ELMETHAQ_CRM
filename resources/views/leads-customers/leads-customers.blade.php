@@ -352,13 +352,15 @@
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <input type="date" id="filter-date" class="form-control" placeholder="تاريخ التسجيل">
+                            <a href="#" class="btn btn-success btn-White"
+                                style="font-size: 16px; padding: 10px 20px;">
+                                <i class="fas fa-filter"></i> فلتر العملاء
+                            </a>
                         </div>
                     </div>
                     <div>
                         عدد المحددين: <span id="selected-count">0</span>
                     </div>
-
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -398,7 +400,7 @@
                         <tbody>
                             @forelse ($leads as $lead)
                                 <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
-                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $leads->firstItem() + $loop->index }}</td>
                                     <td>
                                         <input type="checkbox" class="lead-checkbox width-input" name="lead_ids[]"
                                             value="{{ $lead->id }}">
@@ -473,6 +475,11 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <div class="d-flex justify-content-center p-2">
+                        <div class="pagination-sm">
+                            {{ $leads->links() }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -708,17 +715,14 @@
             cb.addEventListener('change', updateSelectedCount);
         });
         $('#example').DataTable({
-            dom: 'ltp', // l = lengthMenu (قائمة تغيير عدد الصفوف), t = الجدول, p = ترقيم الصفحات
-            pageLength: 20, // القيمة الافتراضية
-            lengthMenu: [
-                [10, 20, 50, -1],
-                [10, 25, 50, 100, 250, 500, 'الكل']
-            ],
+            paging: false, // إلغاء ترقيم الصفحات
+            searching: false, // إلغاء البحث
+            info: false, // إلغاء النص "إظهار من كذا إلى كذا"
+            ordering: false, // إلغاء الترتيب
+            lengthChange: false, // إلغاء قائمة تغيير عدد الصفوف
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
-            },
-            searching: false,
-            ordering: true
+            }
         });
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll('.preview-image-input').forEach(function(input) {
@@ -990,17 +994,17 @@
                 const selectedDate = dateFilter.value;
 
                 tableRows.forEach(row => {
-                    const age = row.cells[4]?.textContent.trim(); // السن
-                    const gov = row.cells[6]?.textContent.trim().toLowerCase(); // المحافظة
-                    const status = row.cells[7]?.textContent.trim().toLowerCase(); // الحالة
-                    const date = row.cells[9]?.textContent.trim(); // تاريخ التسجيل
+                    const age = row.cells[5]?.textContent.trim(); // السن
+                    const gov = row.cells[7]?.textContent.trim().toLowerCase(); // المحافظة
+                    const status = row.cells[8]?.textContent.trim().toLowerCase(); // الحالة
+                    // const date = row.cells[12]?.textContent.trim(); // تاريخ التسجيل
 
                     const matchesAge = !selectedAge || age === selectedAge;
                     const matchesGov = !selectedGov || gov === selectedGov;
                     const matchesStatus = !selectedStatus || status === selectedStatus;
-                    const matchesDate = !selectedDate || date === selectedDate;
+                    // const matchesDate = !selectedDate || date === selectedDate;
 
-                    if (matchesAge && matchesGov && matchesStatus && matchesDate) {
+                    if (matchesAge && matchesGov && matchesStatus) {
                         row.style.display = "";
                     } else {
                         row.style.display = "none";
@@ -1011,13 +1015,8 @@
             ageFilter.addEventListener('change', filterTable);
             govFilter.addEventListener('change', filterTable);
             statusFilter.addEventListener('change', filterTable);
-            dateFilter.addEventListener('change', filterTable);
+            // dateFilter.addEventListener('change', filterTable);
         });
-
-
-
-
-
         // سسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسسس
     </script>
 

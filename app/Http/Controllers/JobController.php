@@ -67,7 +67,27 @@ class JobController extends Controller
 
     public function apiIndex()
     {
-        $jobs = JobTitle::all();
+        $jobs = JobTitle::where("show_in_app", "yes")->get();
         return response()->json($jobs);
+    }
+
+    public function show_in_app($id)
+    {
+        # code...
+        $job = JobTitle::find($id);
+        if (!$job) {
+            # code...
+            return redirect()->back()->with('error', 'the job does not found.');
+        }
+        if ($job->show_in_app === 'yes') {
+            $job->show_in_app = 'no';
+        } elseif ($job->show_in_app === 'no') {
+            $job->show_in_app = 'yes';
+        } else { // يعني null أو أي قيمة تانية غير yes/no
+            $job->show_in_app = 'no';
+        }
+
+        $job->save();
+        return redirect()->back()->with('success', 'تم التعديل بنجاح!');
     }
 }

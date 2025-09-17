@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\CompanySetting;
 use App\Models\DocumentType as ModelsDocumentType;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Config;
@@ -26,6 +27,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Paginator::defaultView('pagination::bootstrap-4');
+        Paginator::defaultSimpleView('pagination::simple-bootstrap-4');
+
         View::composer('*', function ($view) {
             $setting = CompanySetting::first();
 

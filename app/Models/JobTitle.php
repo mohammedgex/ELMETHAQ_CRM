@@ -9,7 +9,7 @@ class JobTitle extends Model
 {
     //
     use HasFactory;
-    protected $fillable = ['title'];
+    protected $fillable = ['title', 'show_in_app'];
     public function customers()
     {
         return $this->hasMany(Customer::class);

@@ -252,6 +252,7 @@ Route::group([
     Route::post('/check-card', [LeadsCustomersController::class, 'checkCard'])->name('check.card');
 
     Route::get('/test-card/{lead}/{test}', [ReportsController::class, 'test_card'])->name('reports.test_card');
+    Route::get('/show_in_app/{id}', [JobController::class, 'show_in_app'])->name('job.show_in_app');
 });
 
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
