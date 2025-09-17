@@ -28,10 +28,10 @@ class LeadsCustomersController extends Controller
             ->orderByRaw("FIELD(status, 'عميل محتمل', 'عميل اساسي')")
             ->orderByDesc('created_at')
             ->paginate(20);
-        $delegates = Delegate::all();
-        $jobs = JobTitle::all();
-        $groups = CustomerGroup::all();
-        $tests = Test::all();
+        $delegates = Delegate::select('id', 'name')->get();
+        $jobs = JobTitle::select('id', 'name')->get();
+        $groups = CustomerGroup::select('id', 'name')->get();
+        $tests = Test::select('id', 'name')->get();
         $governorates = [
             'القاهرة',
             'الجيزة',
