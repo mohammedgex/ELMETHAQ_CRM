@@ -23,11 +23,14 @@ class LeadsCustomersController extends Controller
     public function index()
     {
         # code...
-        $leads = LeadsCustomers::whereIn('status', ['عميل محتمل', 'عميل اساسي'])
+        $leads = LeadsCustomers::select(['id', 'name', 'age', 'phone', 'governorate', 'status', 'delegate_id', 'job_title_id', 'registration_date', 'image', "evaluation"])
+            ->whereIn('status', ['عميل محتمل', 'عميل اساسي'])
             ->whereNotNull('name')
             ->orderByRaw("FIELD(status, 'عميل محتمل', 'عميل اساسي')")
             ->orderByDesc('created_at')
+            ->with(['delegate:id,name', 'jobTitle:id,title'])
             ->paginate(20);
+
         $delegates = Delegate::select('id', 'name')->get();
         $jobs = JobTitle::select('id', 'title')->get();
         $groups = CustomerGroup::select('id', 'title')->get();
