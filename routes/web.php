@@ -59,7 +59,7 @@ Route::group([
     Route::get('/vissa/{id}', [ReportsController::class, 'print_visaEntriy'])->name('print_visaEntriy');
 
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home')->middleware("check.permission:dashboard-access");
-    Route::get('/leads', [LeadsCustomersController::class, 'index'])->name('leads-customers.index')->middleware("check.permission:leads-customers-show");
+    Route::get('/leads-customers', [LeadsCustomersController::class, 'index'])->name('leads-customers.index')->middleware("check.permission:leads-customers-show");
     Route::post('/leads-customers', [LeadsCustomersController::class, 'create'])->name('leads-customers.create')->middleware("check.permission:leads-customers-show");
     Route::get('/leads-show/{id}', [LeadsCustomersController::class, 'show'])->name('leads-customers.show')->middleware("check.permission:leads-customers-show");
     Route::get('/leads-edit/{id}', [LeadsCustomersController::class, 'update'])->name('leads-customers.update')->middleware("check.permission:leads-customers-show");
