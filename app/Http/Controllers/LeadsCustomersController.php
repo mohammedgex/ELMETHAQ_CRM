@@ -35,7 +35,19 @@ class LeadsCustomersController extends Controller
             'registration_date',
             'image',
             'evaluation'
-        ])->paginate(20);
+        ])
+            ->whereIn('status', ['عميل محتمل', 'عميل اساسي'])
+            ->whereNotNull('name')
+            ->orderByRaw("CASE status 
+        WHEN 'عميل محتمل' THEN 1 
+        WHEN 'عميل اساسي' THEN 2 
+        ELSE 3 END")
+            ->orderBy('created_at', 'desc')
+            ->with([
+                'delegate:id,name',
+                'jobTitle:id,title'
+            ])
+            ->paginate(20);
 
         $delegates = Delegate::select('id', 'name')->get();
         $jobs = JobTitle::select('id', 'title')->get();
