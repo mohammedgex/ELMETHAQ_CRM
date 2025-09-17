@@ -29,9 +29,9 @@ class LeadsCustomersController extends Controller
             ->orderByDesc('created_at')
             ->paginate(20);
         $delegates = Delegate::select('id', 'name')->get();
-        $jobs = JobTitle::select('id', 'name')->get();
-        $groups = CustomerGroup::select('id', 'name')->get();
-        $tests = Test::select('id', 'name')->get();
+        $jobs = JobTitle::select('id', 'title')->get();
+        $groups = CustomerGroup::select('id', 'title')->get();
+        $tests = Test::select('id', 'title')->get();
         $governorates = [
             'القاهرة',
             'الجيزة',
