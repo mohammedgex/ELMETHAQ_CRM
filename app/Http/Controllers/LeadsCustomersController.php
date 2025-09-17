@@ -23,12 +23,30 @@ class LeadsCustomersController extends Controller
     public function index()
     {
         # code...
-        $leads = LeadsCustomers::select(['id', 'name', 'age', 'phone', 'governorate', 'status', 'delegate_id', 'job_title_id', 'registration_date', 'image', "evaluation"])
+        $leads = LeadsCustomers::select([
+            'id',
+            'name',
+            'age',
+            'phone',
+            'governorate',
+            'status',
+            'delegate_id',
+            'job_title_id',
+            'registration_date',
+            'image',
+            'evaluation'
+        ])
             ->whereIn('status', ['عميل محتمل', 'عميل اساسي'])
             ->whereNotNull('name')
-            ->orderByRaw("FIELD(status, 'عميل محتمل', 'عميل اساسي')")
-            ->orderByDesc('created_at')
-            ->with(['delegate:id,name', 'jobTitle:id,title'])
+            ->orderByRaw("CASE status 
+        WHEN 'عميل محتمل' THEN 1 
+        WHEN 'عميل اساسي' THEN 2 
+        ELSE 3 END")
+            ->orderBy('created_at', 'desc')
+            ->with([
+                'delegate:id,name',
+                'jobTitle:id,title'
+            ])
             ->paginate(20);
 
         $delegates = Delegate::select('id', 'name')->get();
