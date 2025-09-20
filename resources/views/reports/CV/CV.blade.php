@@ -1035,8 +1035,14 @@
                     </div>
                     <div class="field">
                         <label>الوظيفة المقدم عليها</label>
-                        <input type="text" inputmode="text"
-                            value="{{ $lead->jobTitle->title ?? '— لا توجد وظيفة —' }}">
+                        @php
+                            use Illuminate\Support\Str;
+
+                            $jobTitle = $lead->jobTitle->title ?? '— لا توجد وظيفة —';
+                            $cleanTitle = Str::between($jobTitle, '-', '*');
+                        @endphp
+
+                        <input type="text" value="{{ $cleanTitle }}">
                     </div>
                 </div>
             </section>
