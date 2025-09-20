@@ -352,7 +352,7 @@
                             </select>
                         </div>
                         <div class="col-md-4">
-                            <a href="#" class="btn btn-success btn-White"
+                            <a href="{{ route('jop.filter') }}" class="btn btn-success btn-White"
                                 style="font-size: 16px; padding: 10px 20px;">
                                 <i class="fas fa-filter"></i> فلتر العملاء
                             </a>
@@ -451,21 +451,40 @@
                                     <td>{{ $lead->registration_date }}</td>
                                     <td>
                                         <div class="d-flex align-items-center gap-1 flex-nowrap">
+                                            <!-- زر تعديل -->
                                             <a href="{{ route('leads-customers.update', $lead->id) }}"
                                                 class="btn btn-sm btn-primary">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+
+                                            <!-- زر CV -->
+                                            <a href="{{ route('leads-customer.cv', $lead->id) }}"
+                                                class="btn btn-sm btn-primary d-flex align-items-center justify-content-center">
+                                                <!-- SVG مصغر -->
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                                    <path d="M14 2v6h6" />
+                                                    <circle cx="9.5" cy="10.5" r="1.5" />
+                                                    <path d="M7 15c0-1.657 1.567-3 3.5-3s3.5 1.343 3.5 3" />
+                                                    <path d="M7 19h8" />
+                                                </svg>
+                                            </a>
+
+                                            <!-- زر حذف (للأدمن فقط) -->
                                             @if (auth()->user()->role == 'admin')
-                                                <form id="delete"
-                                                    action="{{ route('leads-customers.delete', $lead->id) }}"
+                                                <form action="{{ route('leads-customers.delete', $lead->id) }}"
                                                     method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn btn-sm btn-danger"><i
-                                                            class="fas fa-trash"></i></button>
+                                                    <button class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
                                                 </form>
                                             @endif
                                         </div>
+
                                     </td>
                                 </tr>
                             @empty

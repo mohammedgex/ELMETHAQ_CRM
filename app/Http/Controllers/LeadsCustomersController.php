@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BlackList;
+use App\Models\CompanySetting;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
@@ -548,5 +549,21 @@ class LeadsCustomersController extends Controller
     {
         $exists = LeadsCustomers::where('card_id', $request->card_id)->exists();
         return response()->json(['exists' => $exists]);
+    }
+
+    public function CV($id)
+    {
+        # code...
+        $lead = LeadsCustomers::find($id);
+        $company = CompanySetting::first();
+        $questions = JobQuestion::where('job_title_id', $lead->job_title_id)
+            ->with(['answers' => function ($q) use ($lead) {
+                $q->where('lead_id', $lead->id);
+            }])->get();
+        return view('reports.CV.CV', [
+            'lead' => $lead,
+            'company' => $company,
+            'questions' => $questions,
+        ]);
     }
 }

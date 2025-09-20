@@ -253,6 +253,9 @@ Route::group([
 
     Route::get('/test-card/{lead}/{test}', [ReportsController::class, 'test_card'])->name('reports.test_card');
     Route::get('/show_in_app/{id}', [JobController::class, 'show_in_app'])->name('job.show_in_app');
+    Route::get('/job-filter', [JobController::class, 'filler'])->name('jop.filter');
+    Route::get('/leads-customer/filter', [JobController::class, 'filter'])->name('leads-customer.job.filter');
+    Route::get('/leads-customer/cv/{id}', [LeadsCustomersController::class, 'cv'])->name('leads-customer.cv');
 });
 
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);

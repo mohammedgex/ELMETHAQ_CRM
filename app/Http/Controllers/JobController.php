@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\JobTitle;
+use App\Models\LeadsCustomers;
 use Illuminate\Http\Request;
 
 class JobController extends Controller
@@ -89,5 +90,55 @@ class JobController extends Controller
 
         $job->save();
         return redirect()->back()->with('success', 'تم التعديل بنجاح!');
+    }
+
+    public function filler()
+    {
+        # code...
+        $job_titles = JobTitle::all();
+        return view('deepFilter.job-fillter', [
+            'job_titles' => $job_titles
+        ]);
+    }
+
+    public function filter(Request $request)
+    {
+        $jobId   = $request->job_title_id;
+        $answers = $request->answers ?? [];
+
+        $query = LeadsCustomers::query();
+
+        // فلترة بالوظيفة
+        if ($jobId) {
+            $query->where('job_title_id', $jobId);
+        }
+
+        // فلترة بالإجابات
+        if (!empty($answers)) {
+            foreach ($answers as $questionId => $answer) {
+                $query->whereHas('answers', function ($q) use ($questionId, $answer) {
+                    $q->where('job_question_id', $questionId);
+
+                    if (is_array($answer)) {
+                        // لو السؤال Array → نجيب أي عميل عنده واحدة أو أكثر من الاختيارات
+                        $q->where(function ($sub) use ($answer) {
+                            foreach ($answer as $ans) {
+                                $sub->orWhere('answer', 'like', "%{$ans}%");
+                            }
+                        });
+                    } else {
+                        // إجابة واحدة عادية
+                        $q->where('answer', 'like', "%{$answer}%");
+                    }
+                });
+            }
+        }
+
+        $leads = $query->get();
+        // dd($customers);
+
+        // لو الطلب عادي → عرض الصفحة
+        $job_titles = JobTitle::all();
+        return view('deepFilter.job-fillter', compact('leads', 'job_titles'));
     }
 }
