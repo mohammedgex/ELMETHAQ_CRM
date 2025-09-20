@@ -108,37 +108,38 @@ class JobController extends Controller
 
         $query = LeadsCustomers::query();
 
-        // فلترة بالوظيفة
+        // 1️⃣ فلترة حسب الوظيفة فقط إذا موجودة
         if ($jobId) {
             $query->where('job_title_id', $jobId);
         }
 
-        // فلترة بالإجابات
+        // 2️⃣ فلترة حسب الإجابات إذا موجودة
+        // تنظيف الإجابات: حذف null أو قيم فارغة
+        $answers = array_filter($answers ?? [], fn($val) => !is_null($val) && $val !== '');
+
         if (!empty($answers)) {
             foreach ($answers as $questionId => $answer) {
-                $query->whereHas('answers', function ($q) use ($questionId, $answer) {
-                    $q->where('job_question_id', $questionId);
+                $query->whereHas('answers', function ($subQ) use ($questionId, $answer) {
+                    $subQ->where('job_question_id', $questionId);
 
                     if (is_array($answer)) {
-                        // لو السؤال Array → نجيب أي عميل عنده واحدة أو أكثر من الاختيارات
-                        $q->where(function ($sub) use ($answer) {
-                            foreach ($answer as $ans) {
-                                $sub->orWhere('answer', 'like', "%{$ans}%");
-                            }
-                        });
+                        // فقط القيم الصالحة
+                        $validAnswers = array_filter($answer, fn($val) => !is_null($val) && $val !== '');
+                        if (!empty($validAnswers)) {
+                            $subQ->whereIn('answer', $validAnswers);
+                        }
                     } else {
-                        // إجابة واحدة عادية
-                        $q->where('answer', 'like', "%{$answer}%");
+                        $subQ->where('answer', 'like', "%{$answer}%");
                     }
                 });
             }
         }
 
-        $leads = $query->get();
-        // dd($customers);
 
-        // لو الطلب عادي → عرض الصفحة
+
+        $leads = $query->get();
         $job_titles = JobTitle::all();
+
         return view('deepFilter.job-fillter', compact('leads', 'job_titles'));
     }
 }
