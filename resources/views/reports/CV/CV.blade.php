@@ -558,11 +558,16 @@
             }
 
             .photo-box {
-                width: 18mm !important;
-                height: 22mm !important;
-                /* border: 1px solid #999 !important; */
-                border-radius: 3px !important;
-                font-size: 7px !important;
+                width: 30mm !important;
+                height: 38mm !important;
+                border-radius: 4px !important;
+                font-size: 10px !important;
+            }
+
+            .logo {
+                width: 40px !important;
+                height: 40px !important;
+                font-size: 12px !important;
             }
 
             /* تحسين الأقسام */
@@ -855,6 +860,51 @@
                 animation: none !important;
                 transition: none !important;
             }
+
+            body {
+                font-size: 13px !important;
+                line-height: 1.5 !important;
+            }
+
+            .brand h1 {
+                font-size: 16px !important;
+            }
+
+            .brand .sub {
+                font-size: 10px !important;
+            }
+
+            label {
+                font-size: 11px !important;
+            }
+
+            input[type="text"],
+            input[type="date"],
+            input[type="tel"],
+            input[type="number"],
+            select,
+            textarea {
+                font-size: 11px !important;
+                height: 26px !important;
+                padding: 3px 6px !important;
+            }
+
+            .answer-box p,
+            .answer-tag {
+                font-size: 11px !important;
+            }
+
+            footer {
+                font-size: 10px !important;
+            }
+
+            .sign strong {
+                font-size: 11px !important;
+            }
+
+            .contact-info {
+                font-size: 9px !important;
+            }
         }
 
         /* للشاشات الصغيرة فقط */
@@ -876,7 +926,8 @@
             }
 
             .row {
-                grid-template-columns: 1fr !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 10px;
             }
 
             .photo-box {
@@ -890,7 +941,7 @@
             }
 
             .brand h1 {
-                font-size: 16px;
+                font-size: 20px !important;
             }
 
             .rating {
