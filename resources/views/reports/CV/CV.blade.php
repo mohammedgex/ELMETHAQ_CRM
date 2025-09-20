@@ -1038,7 +1038,7 @@
                         <div class="field">
                             <label>العمر (سنة)</label>
                             <input type="number" min="16" max="80" placeholder="30"
-                                value="{{ \Carbon\Carbon::parse($lead->date_of_birth)->age }}">
+                                value="{{ \Carbon\Carbon::createFromFormat('d/m/Y', $lead->date_of_birth)->age }}">
                         </div>
                         <div class="field">
                             <label>جهة الميلاد</label>
