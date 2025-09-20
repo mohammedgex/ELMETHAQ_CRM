@@ -256,6 +256,7 @@ Route::group([
     Route::get('/job-filter', [JobController::class, 'filler'])->name('jop.filter');
     Route::get('/leads-customer/filter', [JobController::class, 'filter'])->name('leads-customer.job.filter');
     Route::get('/leads-customer/cv/{id}', [LeadsCustomersController::class, 'cv'])->name('leads-customer.cv');
+    Route::post('/leads-customer/cv/bulk', [LeadsCustomersController::class, 'bulkCv'])->name('leads-customers.cv.bulk');
 });
 
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);

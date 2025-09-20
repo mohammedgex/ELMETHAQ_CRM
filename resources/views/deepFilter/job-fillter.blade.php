@@ -5,12 +5,35 @@
 @section('content_header')
     <div class="content-header">
         <div class="container-fluid">
-            <div class="row mb-2">
+            <div class="row mb-2 align-items-center justify-content-between">
                 <div class="col-sm-6">
                     <h1 class="m-0">
                         <i class="fas fa-filter text-primary"></i>
                         فلترة العملاء
                     </h1>
+                </div>
+                <div class="col-sm-6">
+                    <div class="dropdown d-flex justify-content-end">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            العمليات
+                        </button>
+                        <ul class="dropdown-menu">
+                            <!-- فورم مخفي مخصوص للطباعة -->
+                            <form id="printCvForm" action="{{ route('leads-customers.cv.bulk') }}" method="POST"
+                                target="_blank">
+                                @csrf
+                                <input type="hidden" name="lead_ids" id="leadIdsInput">
+                            </form>
+
+                            <!-- زر الطباعة داخل القائمة -->
+                            <li>
+                                <button type="button" class="dropdown-item" id="printCvBtn">
+                                    طباعة السيرة الذاتية
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -18,32 +41,34 @@
 @stop
 
 @section('content')
-    <div class="card shadow-lg p-4">
-        <h4 class="mb-3">اختر وظيفة للفلترة</h4>
-        <form id="filterForm" method="GET" action="{{ route('leads-customer.job.filter') }}">
-            @csrf
+    @if (!isset($leads))
+        <div class="card shadow-lg p-4">
+            <h4 class="mb-3">اختر وظيفة للفلترة</h4>
+            <form id="filterForm" method="GET" action="{{ route('leads-customer.job.filter') }}">
+                @csrf
 
-            <!-- اختيار الوظيفة -->
-            <div class="form-group">
-                <label for="job_title_id" class="form-label">
-                    <i class="fas fa-briefcase"></i> الوظيفة
-                </label>
-                <select name="job_title_id" id="job_title_id" class="form-control select2" required>
-                    <option value="">-- اختر وظيفة --</option>
-                    @foreach ($job_titles as $job)
-                        <option value="{{ $job->id }}">{{ $job->title }}</option>
-                    @endforeach
-                </select>
-            </div>
+                <!-- اختيار الوظيفة -->
+                <div class="form-group">
+                    <label for="job_title_id" class="form-label">
+                        <i class="fas fa-briefcase"></i> الوظيفة
+                    </label>
+                    <select name="job_title_id" id="job_title_id" class="form-control select2" required>
+                        <option value="">-- اختر وظيفة --</option>
+                        @foreach ($job_titles as $job)
+                            <option value="{{ $job->id }}">{{ $job->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
 
-            <!-- مكان الأسئلة -->
-            <div id="questionsContainer" class="mt-4"></div>
+                <!-- مكان الأسئلة -->
+                <div id="questionsContainer" class="mt-4"></div>
 
-            <button type="submit" class="btn btn-primary mt-3 w-100">
-                <i class="fas fa-search"></i> تنفيذ الفلترة
-            </button>
-        </form>
-    </div>
+                <button type="submit" class="btn btn-primary mt-3 w-100">
+                    <i class="fas fa-search"></i> تنفيذ الفلترة
+                </button>
+            </form>
+        </div>
+    @endif
 
     @if (isset($leads) && $leads->count() > 0)
         <div id="results-section" style="">
@@ -149,6 +174,7 @@
         </div>
     @endif
 @stop
+
 @section('css')
     <style>
         /* Warning Row Styling - Dark Mode */
@@ -171,6 +197,9 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function() {
 
@@ -242,6 +271,36 @@
                     });
                 });
             });
+        });
+        // تحديد الكل
+        document.getElementById('select-all').addEventListener('change', function() {
+            let checkboxes = document.querySelectorAll('.lead-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            updateSelectedCount(); // تحديث العداد بعد التحديد الكلي
+        });
+    </script>
+    <script>
+        document.getElementById('printCvBtn').addEventListener('click', function() {
+            // نجمع كل الـ checkboxes المتعلم عليها
+            let selected = Array.from(document.querySelectorAll('.lead-checkbox:checked'))
+                .map(cb => cb.value);
+
+            if (selected.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'تنبيه',
+                    text: 'من فضلك اختر عميل واحد على الأقل',
+                    confirmButtonText: 'حسناً',
+                    confirmButtonColor: '#3085d6'
+                });
+                return;
+            }
+
+            // نحطهم في الـ input المخفي
+            document.getElementById('leadIdsInput').value = selected.join(',');
+
+            // نرسل الفورم
+            document.getElementById('printCvForm').submit();
         });
     </script>
 @stop

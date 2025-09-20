@@ -998,154 +998,168 @@
 </head>
 
 <body>
-    <main class="sheet" style="padding-bottom: 20px">
-        <div class="content-wrapper" style="padding-bottom: 20px;">
-            <header>
-                <div class="photo-box">
-                    <img src="{{ asset('storage/' . $company->logo) }}" alt="شعار الشركة">
-                </div>
-                <div class="brand">
-                    <h1>{{ $company->name }}</h1>
-                    <div class="sub">لإلحاق العمالة المصرية بالخارج - ترخيص ({{ $company->license_number }})</div>
-                </div>
-                <div class="photo-box">
-                    <img src="{{ asset('storage/' . $lead->image) }}" alt="صورة المتقدم">
-                </div>
-            </header>
-
-            <section class="section">
-                <div class="section-title">البيانات الشخصية</div>
-                <div class="grid">
-                    <div class="field">
-                        <label>الاسم الكامل</label>
-                        <input type="text" placeholder="الاسم ثلاثي" value="{{ $lead->name }}">
+    @foreach ($leads as $lead)
+        <main class="sheet" style="padding-bottom: 20px">
+            @php
+                $questions = App\Models\JobQuestion::where('job_title_id', $lead->job_title_id)
+                    ->with([
+                        'answers' => function ($q) use ($lead) {
+                            $q->where('lead_id', $lead->id);
+                        },
+                    ])
+                    ->get();
+            @endphp
+            <div class="content-wrapper" style="padding-bottom: 20px;">
+                <header>
+                    <div class="photo-box">
+                        <img src="{{ asset('storage/' . $company->logo) }}" alt="شعار الشركة">
                     </div>
-                    <div class="field">
-                        <label>تاريخ الميلاد</label>
-                        <input type="text" value="{{ $lead->date_of_birth }}">
-                    </div>
-                    <div class="field">
-                        <label>العمر (سنة)</label>
-                        <input type="number" min="16" max="80" placeholder="30"
-                            value="{{ \Carbon\Carbon::parse($lead->date_of_birth)->age }}">
-                    </div>
-                    <div class="field">
-                        <label>جهة الميلاد</label>
-                        <input type="text" value="{{ $lead->governorate }}">
-                    </div>
-                    <div class="field">
-                        <label>الوظيفة المقدم عليها</label>
-                        @php
-                            $jobTitle = $lead->jobTitle->title ?? '— لا توجد وظيفة —';
-                            $cleanTitle = preg_replace('/.*-(.*?)\s*\*.*/u', '$1', $jobTitle);
-                        @endphp
-
-                        <input type="text" value="{{ $cleanTitle }}">
-
-                    </div>
-                </div>
-            </section>
-
-            <section class="section">
-                <div class="section-title">بيانات إضافية</div>
-                <div class="grid triple">
-                    @foreach ($questions as $q)
-                        <div class="field {{ in_array($q->type, ['textarea']) ? 'span2' : '' }}">
-                            <label>
-                                {{ $q->question }}
-                            </label>
-                            <div class="answer-box">
-                                @if ($q->answers->isNotEmpty())
-                                    @if ($q->type === 'checkbox')
-                                        @foreach ($q->answers as $ans)
-                                            <span class="answer-tag">
-                                                {{ $ans->answer }}
-                                            </span>
-                                        @endforeach
-                                    @else
-                                        <p class="answer-tag">
-                                            {{ $q->answers->first()->answer ?? '— لا توجد إجابة —' }}
-                                        </p>
-                                    @endif
-                                @else
-                                    <p style="color: var(--muted); font-style: italic;">— لا توجد إجابة —</p>
-                                @endif
-                            </div>
+                    <div class="brand">
+                        <h1>{{ $company->name }}</h1>
+                        <div class="sub">لإلحاق العمالة المصرية بالخارج - ترخيص ({{ $company->license_number }})
                         </div>
-                    @endforeach
-                </div>
-            </section>
+                    </div>
+                    <div class="photo-box">
+                        <img src="{{ asset('storage/' . $lead->image) }}" alt="صورة المتقدم">
+                    </div>
+                </header>
 
-            <section class="section">
-                <div class="section-title">بيانات السفر والخبرة</div>
-                <div class="row">
-                    <div class="inline">
-                        <label style="display:inline; margin:0; font-weight: 600;">هل سبق لك العمل بالخارج؟</label>
-                        <label class="check"><input type="radio" name="abroad"> نعم</label>
-                        <label class="check"><input type="radio" name="abroad"> لا</label>
-                    </div>
-                    <div class="inline">
-                        <label style="display:inline; margin:0; font-weight: 600;">حالة جواز السفر:</label>
-                        <label class="check"><input type="radio" name="passport"> ساري</label>
-                        <label class="check"><input type="radio" name="passport"> منتهي</label>
-                        <label class="check"><input type="radio" name="passport"> غير موجود</label>
-                    </div>
-                </div>
-            </section>
+                <section class="section">
+                    <div class="section-title">البيانات الشخصية</div>
+                    <div class="grid">
+                        <div class="field">
+                            <label>الاسم الكامل</label>
+                            <input type="text" placeholder="الاسم ثلاثي" value="{{ $lead->name }}">
+                        </div>
+                        <div class="field">
+                            <label>تاريخ الميلاد</label>
+                            <input type="text" value="{{ $lead->date_of_birth }}">
+                        </div>
+                        <div class="field">
+                            <label>العمر (سنة)</label>
+                            <input type="number" min="16" max="80" placeholder="30"
+                                value="{{ \Carbon\Carbon::parse($lead->date_of_birth)->age }}">
+                        </div>
+                        <div class="field">
+                            <label>جهة الميلاد</label>
+                            <input type="text" value="{{ $lead->governorate }}">
+                        </div>
+                        <div class="field">
+                            <label>الوظيفة المقدم عليها</label>
+                            @php
+                                $jobTitle = $lead->jobTitle->title ?? '— لا توجد وظيفة —';
+                                $cleanTitle = preg_replace('/.*-(.*?)\s*\*.*/u', '$1', $jobTitle);
+                            @endphp
 
-            <section class="section">
-                <div class="section-title">تقييم المقابلة الشخصية</div>
-                <div class="rating">
-                    <span style="font-weight: 600; color: var(--brand);">ضعيف</span>
-                    <label class="check">
-                        <span class="num">1</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">2</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">3</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">4</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">5</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">6</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">7</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">8</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">9</span>
-                    </label>
-                    <label class="check">
-                        <span class="num">10</span>
-                    </label>
-                    <span style="font-weight: 600; color: var(--brand);">ممتاز</span>
-                </div>
-            </section>
-            <footer class="cv-footer" style="">
-                <div class="sign">
-                    <strong>توقيع مسؤول المقابلة</strong>
-                    <div class="line"></div>
-                    <div>الاسم: ..................................................</div>
-                </div>
-                <div class="contact-info">
-                    <div><strong>العنوان:</strong> 38 ش صلاح سالم – ربيع حامد – بجوار محكمة شبرا – محطة مترو الخلفاوي –
-                        الدور 6 شقة 60</div>
-                    <div><strong>الهاتف:</strong> 0235706360 – <strong>المحمول:</strong> 01288800239 – 01288800245</div>
-                    <div><strong>البريد الإلكتروني:</strong> info@elmithaq.com – <strong>الموقع:</strong> elmithaq.com
+                            <input type="text" value="{{ $cleanTitle }}">
+
+                        </div>
                     </div>
-                </div>
-            </footer>
-        </div>
-    </main>
+                </section>
+
+                <section class="section">
+                    <div class="section-title">بيانات إضافية</div>
+                    <div class="grid triple">
+                        @foreach ($questions as $q)
+                            <div class="field {{ in_array($q->type, ['textarea']) ? 'span2' : '' }}">
+                                <label>
+                                    {{ $q->question }}
+                                </label>
+                                <div class="answer-box">
+                                    @if ($q->answers->isNotEmpty())
+                                        @if ($q->type === 'checkbox')
+                                            @foreach ($q->answers as $ans)
+                                                <span class="answer-tag">
+                                                    {{ $ans->answer }}
+                                                </span>
+                                            @endforeach
+                                        @else
+                                            <p class="answer-tag">
+                                                {{ $q->answers->first()->answer ?? '— لا توجد إجابة —' }}
+                                            </p>
+                                        @endif
+                                    @else
+                                        <p style="color: var(--muted); font-style: italic;">— لا توجد إجابة —</p>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-title">بيانات السفر والخبرة</div>
+                    <div class="row">
+                        <div class="inline">
+                            <label style="display:inline; margin:0; font-weight: 600;">هل سبق لك العمل بالخارج؟</label>
+                            <label class="check"><input type="radio" name="abroad"> نعم</label>
+                            <label class="check"><input type="radio" name="abroad"> لا</label>
+                        </div>
+                        <div class="inline">
+                            <label style="display:inline; margin:0; font-weight: 600;">حالة جواز السفر:</label>
+                            <label class="check"><input type="radio" name="passport"> ساري</label>
+                            <label class="check"><input type="radio" name="passport"> منتهي</label>
+                            <label class="check"><input type="radio" name="passport"> غير موجود</label>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="section">
+                    <div class="section-title">تقييم المقابلة الشخصية</div>
+                    <div class="rating">
+                        <span style="font-weight: 600; color: var(--brand);">ضعيف</span>
+                        <label class="check">
+                            <span class="num">1</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">2</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">3</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">4</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">5</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">6</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">7</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">8</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">9</span>
+                        </label>
+                        <label class="check">
+                            <span class="num">10</span>
+                        </label>
+                        <span style="font-weight: 600; color: var(--brand);">ممتاز</span>
+                    </div>
+                </section>
+                <footer class="cv-footer" style="">
+                    <div class="sign">
+                        <strong>توقيع مسؤول المقابلة</strong>
+                        <div class="line"></div>
+                        <div>الاسم: ..................................................</div>
+                    </div>
+                    <div class="contact-info" style="margin: auto 0;">
+                        <div><strong>العنوان:</strong> 38 ش صلاح سالم – ربيع حامد – بجوار محكمة شبرا – محطة مترو
+                            الخلفاوي –
+                            الدور 6 شقة 60</div>
+                        <div><strong>الهاتف:</strong> 0235681797 – <strong>المحمول:</strong> 01288000239 – 01288000245
+                        </div>
+                        <div><strong>البريد الإلكتروني:</strong> K1173@yahoo.com – <strong>الموقع:</strong> elmethaq.com
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    @endforeach
 </body>
 
 </html>

@@ -18,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 
+
 class LeadsCustomersController extends Controller
 {
     //
@@ -556,14 +557,30 @@ class LeadsCustomersController extends Controller
         # code...
         $lead = LeadsCustomers::find($id);
         $company = CompanySetting::first();
-        $questions = JobQuestion::where('job_title_id', $lead->job_title_id)
-            ->with(['answers' => function ($q) use ($lead) {
-                $q->where('lead_id', $lead->id);
-            }])->get();
+
         return view('reports.CV.CV', [
-            'lead' => $lead,
+            'leads' => [$lead],
             'company' => $company,
-            'questions' => $questions,
+        ]);
+    }
+    public function bulkCv(Request $request)
+    {
+        $leadIds = $request->input('lead_ids', []);
+
+        // إذا كانت string (مثلاً "1,2,3")، حولها لمصفوفة
+        if (is_string($leadIds)) {
+            $leadIds = explode(',', $leadIds);
+        }
+
+        if (count($leadIds) === 0) {
+            return back()->with('error', 'من فضلك اختر عميل واحد على الأقل');
+        }
+
+        $leads   = LeadsCustomers::whereIn('id', $leadIds)->get();
+        $company = CompanySetting::first();
+        return view('reports.CV.CV', [
+            'leads' => $leads,
+            'company' => $company,
         ]);
     }
 }
