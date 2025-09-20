@@ -1036,13 +1036,12 @@
                     <div class="field">
                         <label>الوظيفة المقدم عليها</label>
                         @php
-                            use Illuminate\Support\Str;
-
                             $jobTitle = $lead->jobTitle->title ?? '— لا توجد وظيفة —';
-                            $cleanTitle = Str::between($jobTitle, '-', '*');
+                            $cleanTitle = preg_replace('/.*-(.*?)\s*\*.*/u', '$1', $jobTitle);
                         @endphp
 
                         <input type="text" value="{{ $cleanTitle }}">
+
                     </div>
                 </div>
             </section>
