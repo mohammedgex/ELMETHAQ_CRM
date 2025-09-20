@@ -1034,11 +1034,6 @@
                         <input type="text" value="{{ $lead->governorate }}">
                     </div>
                     <div class="field">
-                        <label>رقم البطاقة الشخصية</label>
-                        <input type="text" inputmode="numeric" placeholder="00000000000000"
-                            value="{{ $lead->card_id }}">
-                    </div>
-                    <div class="field">
                         <label>الوظيفة المقدم عليها</label>
                         <input type="text" inputmode="text"
                             value="{{ $lead->jobTitle->title ?? '— لا توجد وظيفة —' }}">
