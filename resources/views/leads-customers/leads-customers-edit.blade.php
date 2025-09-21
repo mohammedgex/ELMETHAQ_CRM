@@ -407,8 +407,7 @@
                                                 <div class="custom-file mb-3">
                                                     <input type="file" name="license_photo"
                                                         class="custom-file-input preview-image-input"
-                                                        data-preview="#preview_license_photo" id="ff"
-                                                        accept="image/*">
+                                                        data-preview="#preview_license_photo" id="ff">
                                                     <label class="custom-file-label" for="ff">اختر صورة إثبات
                                                         المهنة</label>
                                                 </div>

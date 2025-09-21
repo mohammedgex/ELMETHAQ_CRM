@@ -31,6 +31,7 @@ use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
+use App\Models\LeadsCustomers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -259,6 +260,8 @@ Route::group([
     Route::post('/leads-customer/cv/bulk', [LeadsCustomersController::class, 'bulkCv'])->name('leads-customers.cv.bulk');
 });
 
+Route::get('/sign-in/lead', [LeadsCustomersController::class, 'showSignIn']);
+Route::post('/sign-in/lead', [LeadsCustomersController::class, 'createLead'])->name('leads-customers.sign-in');
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
 Route::get('/send-test-email', [GoogleTranslateController::class, 'sendTestEmail']);
