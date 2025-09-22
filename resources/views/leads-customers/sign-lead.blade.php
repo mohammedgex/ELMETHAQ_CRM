@@ -431,7 +431,7 @@
         }
 
         .custom-file-input~.custom-file-label::after {
-            content: "اختر";
+            content: "اضغط";
             /* color: #28a745; */
             background-color: var(--primary-color);
             color: white;
