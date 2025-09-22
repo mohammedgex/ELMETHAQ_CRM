@@ -646,6 +646,8 @@ class LeadsCustomersController extends Controller
             "card_id" => 'required|unique:leads_customers,card_id',
             "phone" => 'required|unique:leads_customers,phone',
             "phone_two" => 'nullable|unique:leads_customers,phone_two',
+            "img_national_id_card" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            "img_national_id_card_back" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'card_id.required' => 'الرقم القومي مطلوب.',
             'card_id.unique' => 'الرقم القومي موجود من قبل.',
@@ -654,6 +656,9 @@ class LeadsCustomersController extends Controller
             'phone.unique' => 'رقم الهاتف موجود من قبل.',
 
             'phone_two.unique' => 'رقم الهاتف الاخر موجود من قبل.',
+
+            'img_national_id_card.required' => 'صورة البطاقة الامامية مطلوبة.',
+            'img_national_id_card.image' => 'صورة البطاقة الامامية يجب ان تكون صورة.',
         ]);
         $lead = $request->all();
 

@@ -458,21 +458,22 @@
                 <h3 class="card-title">التقديم علي وظيفة</h3>
             </div>
 
-            <!-- عرض الأخطاء -->
-            <div id="error-display" style="display: none;">
+            @if ($errors->any())
                 <script>
-                    هنا سيتم عرض الأخطاء من PHP
-                    let errorMessages = `{!! implode('<br>', $errors->all()) !!}`;
-                    if (errorMessages) {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'حدثت أخطاء في الإدخال:',
-                            html: errorMessages,
-                            confirmButtonText: 'حسناً'
-                        });
-                    }
+                    let errorMessages = `<ul style="text-align:right;direction:rtl;"> 
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>`;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'حدثت أخطاء في الإدخال:',
+                        html: errorMessages,
+                        confirmButtonText: 'حسناً'
+                    });
                 </script>
-            </div>
+            @endif
+
 
             <form action="{{ route('leads-customers.sign-in') }}" id="add" method="POST"
                 enctype="multipart/form-data">
@@ -617,7 +618,7 @@
 
                                     <div>
                                         <button type="button" id="analyzeBtn" class="btn btn-primary">
-                                            فك البيانات
+                                            استخراج البيانات من الجواز
                                         </button>
                                     </div>
 
