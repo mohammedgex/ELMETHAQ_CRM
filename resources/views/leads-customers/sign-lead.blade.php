@@ -429,6 +429,25 @@
                 font-size: 14px;
             }
         }
+
+        .custom-file-input~.custom-file-label::after {
+            content: "اختر";
+            /* color: #28a745; */
+            background-color: var(--primary-color);
+            color: white;
+            /* أخضر Bootstrap */
+            font-weight: bold;
+            /* اختياري: عشان تبان أوضح */
+        }
+
+        .custom-file-label {
+            display: flex;
+            justify-content: center;
+            /* يوسّط أفقياً */
+            align-items: center;
+            /* يوسّط عمودياً */
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -436,7 +455,7 @@
     <div class="container-fluid">
         <div class="card card-primary">
             <div class="card-header bg-secondary">
-                <h3 class="card-title">إضافة عميل جديد</h3>
+                <h3 class="card-title">التقديم علي وظيفة</h3>
             </div>
 
             <!-- عرض الأخطاء -->
@@ -469,7 +488,7 @@
 
                                 <div class="custom-file mb-2">
                                     <input type="file" name="image" class="custom-file-input preview-image-input"
-                                        data-preview="#preview_image" id="dd" required>
+                                        data-preview="#preview_image" id="dd" required accept="image/*">
                                     <label class="custom-file-label">اختر صورة</label>
                                 </div>
 
@@ -505,26 +524,13 @@
                                     </select>
                                 </div>
 
-                                {{-- <div class="form-group col-md-6">
-                                    <label for="delegate_id">المندوب</label>
-                                    <select name="delegate_id" id="delegate_id" class="form-control" required>
-                                        <option value="">اختر المندوب</option>
-                                        @foreach ($delegates as $delegate)
-                                            <option value="{{ $delegate->id }}"
-                                                {{ old('delegate_id') == $delegate->id ? 'selected' : '' }}>
-                                                {{ $delegate->name }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div> --}}
-
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="age">السن</label>
                                     <input type="text" name="age" id="age" class="form-control" required
                                         placeholder="أدخل السن" value="">
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="phone">رقم الهاتف</label>
                                     <input type="text" name="phone" id="phone" class="form-control" required
                                         placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}" pattern="\d{11}"
@@ -537,7 +543,7 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-6">
                                     <label for="phone_two">رقم هاتف آخر(اختياري)</label>
                                     <input type="text" name="phone_two" id="phone_two" class="form-control"
                                         placeholder="أدخل رقم الهاتف الآخر" value="">
@@ -564,16 +570,6 @@
                                         class="form-control" placeholder="ادخل رقم الجواز" value="">
                                 </div>
 
-                                {{-- <div class="form-group col-md-6">
-                                    <label for="test_type">نوع الاختبار</label>
-                                    <select name="test_type" id="test_type" class="form-control" required>
-                                        <option value="">اختر النوع</option>
-                                        <option value="اول اختبار">اول اختبار</option>
-                                        <option value="اعادة اختبار">اعادة اختبار</option>
-                                        <option value="قيادة امنة">قيادة امنة</option>
-                                    </select>
-                                </div> --}}
-
                                 <div class="form-group col-md-6">
                                     <label for="governorate">المحافظة</label>
                                     <select name="governorate" id="governorate" class="form-control" required>
@@ -585,12 +581,6 @@
                                         @endforeach
                                     </select>
                                 </div>
-
-                                {{-- <div class="form-group col-md-6">
-                                    <label for="registration_date">موعد التسجيل</label>
-                                    <input type="date" name="registration_date" id="registration_date"
-                                        class="form-control" value="{{ date('Y-m-d') }}" required>
-                                </div> --}}
 
                                 <div class="form-group col-md-6">
                                     <label for="date_of_birth">تاريخ الميلاد</label>
@@ -622,7 +612,6 @@
                                     <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
                                         style="max-width: 100px; display: none;" alt="Preview">
                                 </div>
-
 
                                 <div class="mt-3 d-flex align-items-center gap-3  justify-content-between">
 
@@ -1205,7 +1194,7 @@
                                     switch (q.type) {
                                         case 'text':
                                             field = `
-            <input type="text" 
+            <input type="text" required
                    name="questions[${q.id}]" 
                    class="form-control" 
                    placeholder="أدخل الإجابة"  />`;
@@ -1213,7 +1202,7 @@
 
                                         case 'textarea':
                                             field = `
-            <textarea name="questions[${q.id}]" 
+            <textarea required name="questions[${q.id}]" 
                       class="form-control" 
                       rows="3" 
                       placeholder="أدخل الإجابة" ></textarea>`;
@@ -1221,7 +1210,7 @@
 
                                         case 'number':
                                             field = `
-            <input type="number" 
+            <input  type="number" required
                    name="questions[${q.id}]" 
                    class="form-control" 
                    placeholder="أدخل رقم" />`;
@@ -1229,7 +1218,7 @@
 
                                         case 'date':
                                             field = `
-            <input type="date" 
+            <input type="date" required
                    name="questions[${q.id}]" 
                    class="form-control" />`;
                                             break;
@@ -1242,7 +1231,7 @@
                                                     )
                                                     .join('');
                                                 field = `
-                <select name="questions[${q.id}]" class="form-control">
+                <select name="questions[${q.id}]" class="form-control" required>
                     <option value="">-- اختر --</option>
                     ${opts}
                 </select>`;
@@ -1254,7 +1243,7 @@
                                                 let radios = JSON.parse(q.options)
                                                     .map(opt => `
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="radio" 
+                    <input class="form-check-input" type="radio" required
                            name="questions[${q.id}]" 
                            value="${opt}">
                     <label class="form-check-label">${opt}</label>
@@ -1270,7 +1259,7 @@
                                                 let checks = JSON.parse(q.options)
                                                     .map(opt => `
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" 
+                    <input class="form-check-input" type="checkbox" required
                            name="questions[${q.id}][]" 
                            value="${opt}">
                     <label class="form-check-label">${opt}</label>

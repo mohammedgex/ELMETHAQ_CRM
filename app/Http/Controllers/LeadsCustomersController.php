@@ -588,7 +588,7 @@ class LeadsCustomersController extends Controller
     {
         # code...
         $delegates = Delegate::select('id', 'name')->get();
-        $jobs = JobTitle::select('id', 'title')->get();
+        $jobs = JobTitle::select('id', 'title')->where("show_in_app", "yes")->get();
         $groups = CustomerGroup::select('id', 'title')->get();
         $tests = Test::select('id', 'title')->get();
         $governorates = [
@@ -674,6 +674,8 @@ class LeadsCustomersController extends Controller
             $lead['license_photo'] = $request->file('license_photo')->store('uploads', 'public');
         }
 
+        $lead['test_type'] = "اول اختبار";
+        $lead['registration_date'] = now()->toDateString();
         $lead['status'] = 'عميل محتمل';
         $lead['customer_id'] = null;
         $lead['evaluation'] = "جارى المعالجة";
