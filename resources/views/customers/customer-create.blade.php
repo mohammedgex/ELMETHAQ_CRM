@@ -1885,7 +1885,7 @@
             GoogleGenerativeAI
         } from "https://esm.sh/@google/generative-ai";
 
-        const genAI = new GoogleGenerativeAI("AIzaSyDjk68-pr2IRQ5oJOb6AkAZe219EpJAHh4");
+        const genAI = new GoogleGenerativeAI("{{ env('GOOGLE_API_KEY') }}");
 
         async function convertImageUrlToBase64(imageUrl) {
             const response = await fetch(imageUrl);
