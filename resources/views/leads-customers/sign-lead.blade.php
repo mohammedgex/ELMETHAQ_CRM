@@ -507,7 +507,7 @@
                             <!-- باقي الحقول -->
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <label for="name">اسم العميل</label>
+                                    <label for="name">اسم العميل (باللغة العربية)</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="أدخل اسم العميل" required value="">
                                 </div>
