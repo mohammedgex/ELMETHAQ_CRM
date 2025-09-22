@@ -510,7 +510,9 @@
                                     <label for="name">اسم العميل (باللغة العربية)</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="أدخل اسم العميل" required pattern="^[\u0600-\u06FF\s]+$"
-                                        title="الرجاء إدخال أحرف عربية فقط">
+                                        title="الرجاء إدخال أحرف عربية فقط"
+                                        oninput="this.value = this.value.replace(/[^ء-ي\s]/g,'')">
+
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -537,9 +539,9 @@
 
                                 <div class="form-group col-md-6">
                                     <label for="phone">رقم الهاتف</label>
-                                    <input type="text" name="phone" id="phone" class="form-control" required
-                                        placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}" pattern="\d{11}"
-                                        title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا">
+                                    <input type="text" name="phone" id="phone" class="form-control"
+                                        required placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}"
+                                        pattern="\d{11}" title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا">
                                     <div id="phone-error" class="text-danger"></div>
                                     @if ($errors->has('phone'))
                                         <div class="text-danger">
