@@ -541,7 +541,9 @@
                                     <label for="phone">رقم الهاتف</label>
                                     <input type="text" name="phone" id="phone" class="form-control"
                                         required placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}"
-                                        pattern="\d{11}" title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا">
+                                        maxlength="11" pattern="^[0-9]{11}$"
+                                        title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     <div id="phone-error" class="text-danger"></div>
                                     @if ($errors->has('phone'))
                                         <div class="text-danger">
