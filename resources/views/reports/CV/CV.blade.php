@@ -1049,7 +1049,7 @@
                                 }
                             @endphp
                             <input type="number" min="16" max="80" placeholder="30"
-                                value="{{ $age }}">
+                                value="{{ $lead->age ?? ($age ?? '') }}">
                         </div>
                         <div class="field">
                             <label>جهة الميلاد</label>
