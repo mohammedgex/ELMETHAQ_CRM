@@ -509,7 +509,8 @@
                                 <div class="form-group col-md-12">
                                     <label for="name">اسم العميل (باللغة العربية)</label>
                                     <input type="text" name="name" id="name" class="form-control"
-                                        placeholder="أدخل اسم العميل" required value="">
+                                        placeholder="أدخل اسم العميل" required pattern="^[\u0600-\u06FF\s]+$"
+                                        title="الرجاء إدخال أحرف عربية فقط">
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -528,7 +529,10 @@
                                 <div class="form-group col-md-6">
                                     <label for="age">السن</label>
                                     <input type="text" name="age" id="age" class="form-control" required
-                                        placeholder="أدخل السن" value="">
+                                        placeholder="أدخل السن" value=""
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="^[0-9]{1,3}$"
+                                        title="الرجاء إدخال أرقام إنجليزية فقط">
+
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -554,9 +558,10 @@
                                     <label for="card_id">الرقم القومي</label>
                                     <input type="text" name="card_id" id="card_id" class="form-control"
                                         required placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
-                                        pattern="\d{14}" maxlength="14"
+                                        pattern="^[0-9]{14}$" maxlength="14"
                                         title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
                                     <div id="card-error" class="text-danger"></div>
                                     @if ($errors->has('card_id'))
                                         <div class="text-danger">
