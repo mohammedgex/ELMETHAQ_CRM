@@ -475,7 +475,7 @@
             @endif
 
 
-            <form action="{{ route('leads-customers.sign-in') }}" id="add" method="POST"
+            <form action="{{ route('leads-customers.sign-in') }}" id="myForm" method="POST"
                 enctype="multipart/form-data">
                 @csrf
 
@@ -534,7 +534,6 @@
                                         placeholder="أدخل السن" value=""
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="^[0-9]{1,3}$"
                                         title="الرجاء إدخال أرقام إنجليزية فقط">
-
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -785,22 +784,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery & DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> --}}
     <!-- DataTables Buttons -->
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> --}}
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script> --}}
+    {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
-        // هنا يمكن إضافة أي JavaScript مطلوب للصفحة
-        // مثل معاينة الصور، التحقق من صحة البيانات، إلخ
-
         // مثال لمعاينة الصور
         $(document).on('change', '.preview-image-input', function() {
             var input = this;
@@ -1295,6 +1291,40 @@
                         .catch(err => console.error(err));
                 }
             });
+        });
+
+        const phoneInput = document.getElementById('phone');
+        const phoneError = document.getElementById('phone-error');
+
+        phoneInput.addEventListener('input', function() {
+            const phone = phoneInput.value.trim();
+
+            if (phone.length === 0) {
+                phoneError.textContent = ''; // مفيش رسالة لو الحقل فاضي
+            } else if (phone.length < 11) {
+                phoneError.textContent = '⚠️ الرقم أقل من 11 رقم';
+            } else if (phone.length > 11) {
+                phoneError.textContent = '⚠️ الرقم أكثر من 11 رقم';
+            } else {
+                phoneError.textContent = ''; // تمام ✅
+            }
+        });
+
+        const cardInput = document.getElementById('card_id');
+        const cardError = document.getElementById('card-error');
+
+        cardInput.addEventListener('input', function() {
+            const card = cardInput.value.trim();
+
+            if (card.length === 0) {
+                cardError.textContent = ''; // مفيش رسالة لو الحقل فاضي
+            } else if (card.length < 14) {
+                cardError.textContent = '⚠️ الرقم القومي أقل من 14 رقم';
+            } else if (card.length > 14) {
+                cardError.textContent = '⚠️ الرقم القومي أكثر من 14 رقم';
+            } else {
+                cardError.textContent = ''; // تمام ✅
+            }
         });
     </script>
 </body>
