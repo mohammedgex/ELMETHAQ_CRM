@@ -646,8 +646,8 @@ class LeadsCustomersController extends Controller
             "card_id" => 'required|unique:leads_customers,card_id',
             "phone" => 'required|unique:leads_customers,phone',
             "phone_two" => 'nullable|unique:leads_customers,phone_two',
-            "img_national_id_card" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
-            "img_national_id_card_back" => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            "img_national_id_card" => 'required|image|mimes:jpeg,png,jpg,gif',
+            "img_national_id_card_back" => 'required|image|mimes:jpeg,png,jpg,gif',
         ], [
             'card_id.required' => 'الرقم القومي مطلوب.',
             'card_id.unique' => 'الرقم القومي موجود من قبل.',
@@ -703,6 +703,6 @@ class LeadsCustomersController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'تم انشاء العميل المحتمل بنجاح');
+        return redirect()->back()->with('success', "تم تسجيل بياناتك بنجاح وسيتم التواصل معك قريبا");
     }
 }

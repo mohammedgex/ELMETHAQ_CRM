@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إضافة عميل جديد</title>
+    <title>التقديم علي وظيفة</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
@@ -730,7 +730,7 @@
 
                 <div class="card-footer text-center">
                     <button type="submit" id="submitBtn" class="btn btn-success" style="width: 250px">
-                        <i class="fas fa-plus-circle"></i> إضافة (f2)
+                        <i class="fas fa-plus-circle"></i> تقديم
                     </button>
                 </div>
             </form>
