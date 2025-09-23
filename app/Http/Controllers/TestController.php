@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerGroup;
 use App\Models\Evaluation;
+use App\Models\LeadsCustomers;
 use App\Models\Test;
 use Illuminate\Http\Request;
 
@@ -193,5 +194,30 @@ class TestController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'تم اضافة التقييم بنجاح.');
+    }
+
+    public function callingClient($test_id, $lead_id)
+    {
+        # code...
+        $test = Test::findOrFail($test_id);
+        $lead = LeadsCustomers::findOrFail($lead_id);
+        $test->leads()->syncWithoutDetaching($lead);
+
+        // تحقق من وجود تقييم سابق لنفس العميل والاختبار
+        $alreadyExists = Evaluation::where('lead_id', $lead)
+            ->where('test_id', $test->id)
+            ->exists();
+
+        if (! $alreadyExists) {
+            $lastCode = Evaluation::where('test_id', $test->id)->max('code');
+            $nextCode = $lastCode ? $lastCode + 1 : 1;
+
+            Evaluation::create([
+                'lead_id' => $lead->id,
+                'test_id' => $test->id,
+                'code'    => $nextCode,
+            ]);
+        }
+        return redirect()->back()->with('success', "تمت إضافة العميل للاختبار بنجاح");
     }
 }

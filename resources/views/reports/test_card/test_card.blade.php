@@ -279,6 +279,58 @@
 </head>
 
 <body>
+    <div style="text-align: center; margin: 10px 0;">
+        <button onclick="window.print()" class="btn btn-print no-print">
+            <i class="fas fa-print me-1"></i> طباعة
+        </button>
+    </div>
+
+    <style>
+        /* شكل الزر */
+        .btn-print {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            width: 100px;
+            height: 60px;
+            font-size: 20px !important;
+            font-weight: bold !important;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 14px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-print i {
+            font-size: 15px;
+        }
+
+        .btn-print:hover {
+            background: linear-gradient(135deg, #495057, #343a40);
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* الوضع الليلي */
+        body.dark-mode .btn-print {
+            background: linear-gradient(135deg, #adb5bd, #6c757d);
+            color: #212529;
+        }
+
+        body.dark-mode .btn-print:hover {
+            background: linear-gradient(135deg, #dee2e6, #adb5bd);
+        }
+
+        /* إخفاء زر الطباعة عند الطباعة */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+
     <div class="a4">
         <!-- الهيدر -->
         <div class="header">

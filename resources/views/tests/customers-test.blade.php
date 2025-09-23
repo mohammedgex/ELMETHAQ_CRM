@@ -12,8 +12,15 @@
     <div class="card card-primary ">
         <!-- جدول عرض العملاء المحتملين -->
         <div class="card mt-4">
-            <div class="card-header bg-dark">
-                <h3 class="card-title text-white">العملاء المحتملين</h3>
+            <div
+                class="card-header d-flex justify-content-between align-items-center 
+                        bg-dark text-white dark:bg-dark dark:text-white bg-light text-dark">
+                <h3 class="card-title mb-0">
+                    العملاء المحتملين
+                </h3>
+                <a href="{{ route('sign.lead.in.test', $test->id) }}" class="btn btn-outline-primary btn-sm">
+                    <i class="fas fa-user-plus"></i> إضافة مختبر
+                </a>
             </div>
 
             <div class="card">

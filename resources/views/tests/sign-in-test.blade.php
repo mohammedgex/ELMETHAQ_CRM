@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>التقديم علي وظيفة</title>
+    <title>تسجيل عميل داخل اختبار</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
@@ -455,16 +455,16 @@
     <div class="container-fluid">
         <div class="card card-primary">
             <div class="card-header bg-secondary">
-                <h3 class="card-title">التقديم علي وظيفة</h3>
+                <h3 class="card-title">تسجيل عميل داخل اختبار</h3>
             </div>
 
             @if ($errors->any())
                 <script>
                     let errorMessages = `<ul style="text-align:right;direction:rtl;"> 
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>`;
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>`;
                     Swal.fire({
                         icon: 'error',
                         title: 'حدثت أخطاء في الإدخال:',
@@ -474,10 +474,11 @@
                 </script>
             @endif
 
-
-            <form action="{{ route('leads-customers.sign-in') }}" id="myForm" method="POST"
+            </script>
+            <form action="{{ route('create.lead.in.test') }}" id="myForm" method="POST"
                 enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="test_id" value="{{ $test_id }}">
 
                 <div class="card-body">
                     <div class="row">
@@ -506,13 +507,24 @@
 
                             <!-- باقي الحقول -->
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-md-6">
                                     <label for="name">اسم العميل (باللغة العربية)</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="أدخل اسم العميل" required pattern="^[\u0600-\u06FF\s]+$"
                                         title="الرجاء إدخال أحرف عربية فقط"
                                         oninput="this.value = this.value.replace(/[^ء-ي\s]/g,'')">
-
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>المندوب</label>
+                                    <select name="delegate_id" class="form-control" required>
+                                        <option value="">اختر المندوب</option>
+                                        @foreach ($delegates as $delegate)
+                                            <option value="{{ $delegate->id }}"
+                                                {{ old('delegate_id') == $delegate->id ? 'selected' : '' }}>
+                                                {{ $delegate->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -532,8 +544,8 @@
                                     <label for="age">السن</label>
                                     <input type="text" name="age" id="age" class="form-control" required
                                         placeholder="أدخل السن" value=""
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="^[0-9]{1,3}$"
-                                        title="الرجاء إدخال أرقام إنجليزية فقط">
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        pattern="^[0-9]{1,3}$" title="الرجاء إدخال أرقام إنجليزية فقط">
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -549,12 +561,6 @@
                                             {{ $errors->first('phone') }}
                                         </div>
                                     @endif
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="phone_two">رقم هاتف آخر(اختياري)</label>
-                                    <input type="text" name="phone_two" id="phone_two" class="form-control"
-                                        placeholder="أدخل رقم الهاتف الآخر" value="">
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -574,18 +580,13 @@
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    <label for="passport_numder">رقم الجواز (اختياري)</label>
-                                    <input type="text" name="passport_numder" id="passport_numder"
-                                        class="form-control" placeholder="ادخل رقم الجواز" value="">
-                                </div>
-
-                                <div class="form-group col-md-6">
                                     <label for="governorate">المحافظة</label>
                                     <select name="governorate" id="governorate" class="form-control" required>
                                         <option value="">اختر المحافظة</option>
                                         @foreach ($governorates as $gov)
                                             <option value="{{ $gov }}"
-                                                {{ old('governorate') == $gov ? 'selected' : '' }}>{{ $gov }}
+                                                {{ old('governorate') == $gov ? 'selected' : '' }}>
+                                                {{ $gov }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -605,52 +606,6 @@
 
                         <!-- صور -->
                         <div class="col-md-4">
-                            <!-- صورة جواز السفر -->
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
-                                <label for="passport_photo">صورة جواز السفر (اختياري)</label>
-
-                                <div class="custom-file mb-2">
-                                    <input type="file" name="passport_photo"
-                                        class="custom-file-input preview-image-input"
-                                        data-preview="#preview_passport_photo" id="passportInput">
-                                    <label class="custom-file-label">اختر صورة</label>
-                                </div>
-
-                                <div id="preview_passport_photo" class="border rounded p-2 text-center bg-light"
-                                    style="min-height: 130px;">
-                                    <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
-                                        style="max-width: 100px; display: none;" alt="Preview">
-                                </div>
-
-                                <div class="mt-3 d-flex align-items-center gap-3  justify-content-between">
-
-                                    <div>
-                                        <button type="button" id="analyzeBtn" class="btn btn-primary">
-                                            استخراج البيانات من الجواز
-                                        </button>
-                                    </div>
-
-                                    <!-- Loader -->
-                                    <div id="loader_container" class="d-flex align-items-center gap-2"
-                                        style="display: none;">
-                                        <div id="passportInput_loader" class="spinner-border text-primary"
-                                            role="status"
-                                            style="width: 24px; height: 24px;margin-left: 14px; display: none;">
-                                        </div>
-                                        <div id="passportInput_loader_text" class="loading-text text-primary"
-                                            style="font-size: 14px; display: none;">
-                                            الرجاء الانتظار...
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                            data-input="#passportInput" data-preview="#preview_passport_photo">
-                                            اقتصاص
-                                        </button>
-                                    </div>
-                                </div>
-
-                            </div>
 
                             <!-- صور البطاقة الشخصية (جنباً إلى جنب) -->
                             <div class="d-flex flex-wrap gap-3">
@@ -672,10 +627,33 @@
                                             class="img-thumbnail" style="max-width: 100px; display: none;"
                                             alt="Preview">
                                     </div>
-                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                        data-input="#ss" data-preview="#preview_img_national_id_card">
-                                        اقتصاص
-                                    </button>
+                                    <div class="mt-3 d-flex align-items-center gap-3  justify-content-between">
+
+                                        <div>
+                                            <button type="button" id="analyzeBtn" class="btn btn-primary">
+                                                استخراج البيانات من الجواز
+                                            </button>
+                                        </div>
+
+                                        <!-- Loader -->
+                                        <div id="loader_container" class="d-flex align-items-center gap-2"
+                                            style="display: none;">
+                                            <div id="passportInput_loader" class="spinner-border text-primary"
+                                                role="status"
+                                                style="width: 24px; height: 24px;margin-left: 14px; display: none;">
+                                            </div>
+                                            <div id="passportInput_loader_text" class="loading-text text-primary"
+                                                style="font-size: 14px; display: none;">
+                                                الرجاء الانتظار...
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                                data-input="#ss" data-preview="#preview_img_national_id_card">
+                                                اقتصاص
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <!-- بطاقة الرقم القومي من الخلف -->
@@ -730,7 +708,7 @@
 
                 <div class="card-footer text-center">
                     <button type="submit" id="submitBtn" class="btn btn-success" style="width: 250px">
-                        <i class="fas fa-plus-circle"></i> تقديم
+                        <i class="fas fa-plus-circle"></i> حفظ
                     </button>
                 </div>
             </form>
@@ -782,16 +760,7 @@
 
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- jQuery & DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    {{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> --}}
-    <!-- DataTables Buttons -->
-    {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script> --}}
-    {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -935,20 +904,16 @@
         });
     </script>
     <script type="module">
-        function calculateAge(dateOfBirthStr) {
-            // تحويل التاريخ إلى أجزاء
-            const [day, month, year] = dateOfBirthStr.split('/').map(Number);
-            const birthDate = new Date(year, month - 1, day);
+        function calculateAge(dateOfBirth) {
             const today = new Date();
+            const birthDate = new Date(dateOfBirth);
 
             let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            const dayDiff = today.getDate() - birthDate.getDate();
 
-            // لو لسه ما جاش تاريخ الميلاد في السنة الحالية
-            const hasBirthdayPassedThisYear =
-                today.getMonth() > birthDate.getMonth() ||
-                (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
-
-            if (!hasBirthdayPassedThisYear) {
+            // لو لسه ماعداش عيد ميلاده في السنة الحالية ننقص سنة
+            if (monthDiff < 0 || (monthDiff === 0 && dayDiff < 0)) {
                 age--;
             }
 
@@ -972,13 +937,13 @@
         document.getElementById("analyzeBtn").addEventListener("click", async () => {
             document.getElementById("passportInput_loader").style.display = "block";
             document.getElementById("passportInput_loader_text").style.display = "block";
-            const fileInput = document.getElementById("passportInput");
+            const fileInput = document.getElementById("ss");
             const file = fileInput.files[0];
             const resultBox = document.getElementById("resultBox");
 
             if (!file) {
                 Swal.fire({
-                    title: "اختر صورة جواز السفر اولا",
+                    title: "اختر صورة البطاقة اولا",
                     icon: "error",
                     draggable: true
                 });
@@ -992,63 +957,32 @@
                 const model = genAI.getGenerativeModel({
                     model: "gemini-2.0-flash"
                 });
-                const prompt = `"Extract all information from the passport image with high accuracy, ensuring no errors, and present the output as a JSON object. The JSON should include the following keys:
+                const prompt = `Please analyze the attached national ID card image and extract the following data, then return the result strictly in JSON format.
 
-                    passport_no
+Step 1 (must): Extract the national_id first and ensure it is exactly 14 digits using English digits 0-9 only.
+Step 2 (must): Derive the date_of_birth **exclusively from the national_id** (do NOT rely on the visual printed date on the card). Use the following decoding rule:
+  - The national_id is 14 digits. Let firstDigit = the 1st digit (index 0).
+  - The encoded birth date is taken from digits 2-7 (indexes 1..6) as YYMMDD.
+  - Compose date_of_birth as YYYY-MM-DD using English digits only. Validate the date (month 01-12, day valid for that month); if invalid, set date_of_birth to an empty string and still return national_id.
+  - Calculate "age" (in years, integer) strictly from the derived date_of_birth using the current date.
 
-                    type
+Required fields:
+- name: Full name (Combine all lines even if written on multiple lines, return full name in Arabic in a single field)
+- national_id: (14 digits, English digits 0-9 only)
+- date_of_birth: (Format YYYY-MM-DD, strictly derived from national_id as specified above)
+- age: (integer, derived from date_of_birth)
+- governorate: (Extracted from national_id and returned strictly in Arabic, chosen only from the allowed list below)
 
-                    country_code
+Important note: The value of the "governorate" key must be exactly one of the following Arabic values only:
+"القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", "السويس", "أسوان", "أسيوط", "بني سويف", "بورسعيد", "دمياط", "الشرقية", "جنوب سيناء", "كفر الشيخ", "مطروح", "الأقصر", "قنا", "شمال سيناء", "سوهاج", "السعودية", "القدس", "الأردن", "العراق", "لبنان", "فلسطين", "اليمن", "عمان", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين"
 
-                    full_name_english
-
-                    full_name_arabic (ensure 'ماهر' is one word, e.g., 'ماهر محمد عبدالعزيز مرسي')
-
-                    date_of_birth
-
-                    place_of_birth (must be one of: 'القاهرة', 'الجيزة', 'الأسكندرية', 'الدقهلية', 'البحر الأحمر', 'البحيرة', 'الفيوم', 'الغربية', 'الإسماعيلية', 'المنوفية', 'المنيا', 'القليوبية', 'الوادي الجديد', 'السويس', 'أسوان', 'أسيوط', 'بني سويف', 'بورسعيد', 'دمياط', 'الشرقية', 'جنوب سيناء', 'كفر الشيخ', 'مطروح', 'الأقصر', 'قنا', 'شمال سيناء', 'سوهاج','السعودية', 'القدس', 'الأردن', 'العراق', 'لبنان', 'فلسطين', 'اليمن', 'عمان', 'الإمارات العربية المتحدة', 'الكويت', 'قطر', 'البحرين')
-
-                    nationality
-
-                    sex
-
-                    date_of_issue
-
-                    date_of_expiry
-
-                    issuing_office
-
-                    national_id (should be in Western/English numerals, e.g., '28101191800397')
-
-                    profession
-
-                    mrz_lines (an array containing each line of the Machine Readable Zone)
-
-                    Example of desired JSON structure:
-
-                    JSON
-
-                    {
-                    "passport_no": "VALUE",
-                    "type": "VALUE",
-                    "country_code": "VALUE",
-                    "full_name_english": "VALUE",
-                    "full_name_arabic": "VALUE",
-                    "date_of_birth": "VALUE",
-                    "place_of_birth": "VALUE_FROM_LIST",
-                    "nationality": "VALUE",
-                    "sex": "VALUE",
-                    "date_of_issue": "VALUE",
-                    "date_of_expiry": "VALUE",
-                    "issuing_office": "VALUE",
-                    "national_id": "VALUE_IN_ENGLISH_NUMERALS",
-                    "profession": "VALUE",
-                    "mrz_lines": [
-                        "VALUE_LINE_1",
-                        "VALUE_LINE_2"
-                    ]
-                    }
-                    "`;
+Return the output strictly as JSON only (without any explanation or additional text) in the following structure:
+{
+  "name": "",
+  "national_id": "",
+  "date_of_birth": "",
+  "governorate": ""
+}`;
 
                 const result = await model.generateContent({
                     contents: [{
@@ -1072,26 +1006,20 @@
                 if (text.startsWith("```json")) {
                 text = text.replace(/^```json/, '').replace(/```$/, '').trim();
 
-                try {
-                    // تحويل النص إلى كائن JSON
-                    const data = JSON.parse(text);
+                    try {
+                        // تحويل النص إلى كائن JSON
+                        const data = JSON.parse(text);
 
-                    // التحقق من وجود full_mrz في الكائن
-                    if (data.passport_type !== 'null') {
-                        document.getElementById("name").value = data.full_name_arabic;
-                        document.getElementById("card_id").value = data.national_id;
-                        document.getElementById("age").value = calculateAge(data.date_of_birth);
-                        document.getElementById("passport_numder").value = data.passport_no;
-                        if (data.date_of_birth) {
-                            let parts = data.date_of_birth.split('/');
-                            if (parts.length === 3) {
-                                let formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                                    document.getElementById("date_of_birth").value = formattedDate;
-                                }
-                            }
+                        // التحقق من وجود full_mrz في الكائن
+                        if (data.national_id !== 'null') {
+                            document.getElementById("name").value = data.name;
+                            document.getElementById("card_id").value = data.national_id;
+                            document.getElementById("age").value = calculateAge(data.date_of_birth);
+                            document.getElementById("date_of_birth").value = data.date_of_birth
+
                             const govSelect = document.getElementById('governorate');
-                            if (data.place_of_birth) {
-                                const valueToSelect = data.place_of_birth.trim();
+                            if (data.governorate) {
+                                const valueToSelect = data.governorate.trim();
                                 for (let option of govSelect.options) {
                                     if (option.value.trim() === valueToSelect) {
                                         option.selected = true;
@@ -1107,6 +1035,28 @@
                             }, function(data) {
                                 if (data.exists) {
                                     $("#card-error").text("⚠️ الرقم القومي مسجل من قبل!");
+                                    Swal.fire({
+                                        title: "العميل مسجل من قبل<br> باسم: " + data.name,
+                                        icon: "error",
+                                        showCancelButton: true,
+                                        confirmButtonText: "📂 استدعاء العميل",
+                                        cancelButtonText: "❌ إلغاء",
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            // هنا تحط اللينك اللي يوديه للعميل الآخر
+                                            let url =
+                                                "{{ route('calling.client', ['test_id' => ':test_id', 'lead_id' => ':lead_id']) }}";
+
+                                            // نستبدل placeholders بالقيم الفعلية
+                                            url = url.replace(':test_id', {{ $test_id }})
+                                                .replace(
+                                                    ':lead_id', data.id);
+
+                                            // إعادة التوجيه
+                                            window.location.href = url;
+                                        }
+                                        // لو ضغط إلغاء مش هيحصل حاجة
+                                    });
                                 } else {
                                     $("#card-error").text("");
                                 }
@@ -1154,6 +1104,27 @@
                 }, function(data) {
                     if (data.exists) {
                         $("#phone-error").text("⚠️ رقم الهاتف مسجل من قبل!");
+                        Swal.fire({
+                            title: "العميل مسجل من قبل<br> باسم: " + data.name,
+                            icon: "error",
+                            showCancelButton: true,
+                            confirmButtonText: "📂 استدعاء العميل",
+                            cancelButtonText: "❌ إلغاء",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Laravel يولّد الرابط مع قيم افتراضية (:test_id و :lead_id)
+                                let url =
+                                    "{{ route('calling.client', ['test_id' => ':test_id', 'lead_id' => ':lead_id']) }}";
+
+                                // نستبدل placeholders بالقيم الفعلية
+                                url = url.replace(':test_id', {{ $test_id }}).replace(
+                                    ':lead_id', data.id);
+
+                                // إعادة التوجيه
+                                window.location.href = url;
+                            }
+                        });
+
                     } else {
                         $("#phone-error").text("");
                     }
@@ -1171,6 +1142,27 @@
                 }, function(data) {
                     if (data.exists) {
                         $("#card-error").text("⚠️ الرقم القومي مسجل من قبل!");
+                        Swal.fire({
+                            title: "العميل مسجل من قبل<br> باسم: " + data.name,
+                            icon: "error",
+                            showCancelButton: true,
+                            confirmButtonText: "📂 استدعاء العميل",
+                            cancelButtonText: "❌ إلغاء",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // هنا تحط اللينك اللي يوديه للعميل الآخر
+                                let url =
+                                    "{{ route('calling.client', ['test_id' => ':test_id', 'lead_id' => ':lead_id']) }}";
+
+                                // نستبدل placeholders بالقيم الفعلية
+                                url = url.replace(':test_id', {{ $test_id }}).replace(
+                                    ':lead_id', data.id);
+
+                                // إعادة التوجيه
+                                window.location.href = url;
+                            }
+                            // لو ضغط إلغاء مش هيحصل حاجة
+                        });
                     } else {
                         $("#card-error").text("");
                     }

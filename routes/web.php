@@ -258,6 +258,10 @@ Route::group([
     Route::get('/leads-customer/filter', [JobController::class, 'filter'])->name('leads-customer.job.filter');
     Route::get('/leads-customer/cv/{id}', [LeadsCustomersController::class, 'cv'])->name('leads-customer.cv');
     Route::post('/leads-customer/cv/bulk', [LeadsCustomersController::class, 'bulkCv'])->name('leads-customers.cv.bulk');
+
+    Route::get('/sign-lead-in-test/{id}', [LeadsCustomersController::class, 'signLeadinTest'])->name('sign.lead.in.test');
+    Route::post('/sign-lead-in-test', [LeadsCustomersController::class, 'createLeadToTest'])->name('create.lead.in.test');
+    Route::get('/calling-lead/{test_id}/{lead_id}', [TestController::class, 'callingClient'])->name('calling.client');
 });
 
 Route::get('/sign-in/lead', [LeadsCustomersController::class, 'showSignIn']);

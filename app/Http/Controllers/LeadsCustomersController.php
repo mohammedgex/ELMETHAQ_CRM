@@ -8,6 +8,7 @@ use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Delegate;
 use App\Models\DocumentType;
+use App\Models\Evaluation;
 use App\Models\History;
 use App\Models\JobAnswer;
 use App\Models\JobQuestion;
@@ -542,15 +543,26 @@ class LeadsCustomersController extends Controller
 
     public function checkPhone(Request $request)
     {
-        $exists = LeadsCustomers::where('phone', $request->phone)->exists();
-        return response()->json(['exists' => $exists]);
+        $customer = LeadsCustomers::where('phone', $request->phone)->first();
+
+        return response()->json([
+            'exists' => $customer ? true : false,
+            'id'     => $customer ? $customer->id : null,
+            'name'   => $customer ? $customer->name : null,
+        ]);
     }
 
     public function checkCard(Request $request)
     {
-        $exists = LeadsCustomers::where('card_id', $request->card_id)->exists();
-        return response()->json(['exists' => $exists]);
+        $customer = LeadsCustomers::where('card_id', $request->card_id)->first();
+
+        return response()->json([
+            'exists' => $customer ? true : false,
+            'id'     => $customer ? $customer->id : null,
+            'name'   => $customer ? $customer->name : null,
+        ]);
     }
+
 
     public function CV($id)
     {
@@ -704,5 +716,138 @@ class LeadsCustomersController extends Controller
         }
 
         return redirect()->back()->with('success', "تم تسجيل بياناتك بنجاح وسيتم التواصل معك قريبا");
+    }
+    public function signLeadinTest($id)
+    {
+        # code...
+        $delegates = Delegate::select('id', 'name')->get();
+        $jobs = JobTitle::select('id', 'title')->where("show_in_app", "yes")->get();
+        $groups = CustomerGroup::select('id', 'title')->get();
+        $governorates = [
+            'القاهرة',
+            'الجيزة',
+            'الأسكندرية',
+            'الدقهلية',
+            'البحر الأحمر',
+            'البحيرة',
+            'الفيوم',
+            'الغربية',
+            'الاسماعيلية',
+            'المنوفية',
+            'المنيا',
+            'القليوبية',
+            'الوادي الجديد',
+            'السويس',
+            'أسوان',
+            'أسيوط',
+            'بني سويف',
+            'بورسعيد',
+            'دمياط',
+            'الشرقية',
+            'ج سيناء',
+            'كفر الشيخ',
+            'مطروح',
+            'الاقصر',
+            'قنا',
+            'ش سيناء',
+            'سوهاج',
+            'السعودية',
+            'القدس',
+            'الأردن',
+            'العراق',
+            'لبنان',
+            'فلسطين',
+            'اليمن',
+            'عمان',
+            'الإمارات العربية المتحدة',
+            'الكويت',
+            'قطر',
+            'البحرين'
+        ];
+        return view('tests.sign-in-test', [
+            'jobs' => $jobs,
+            'delegates' => $delegates,
+            "governorates" => $governorates,
+            "groups" => $groups,
+            "test_id" => $id
+        ]);
+    }
+    public function createLeadToTest(Request $request)
+    {
+        $request->validate([
+            "card_id" => 'required|unique:leads_customers,card_id',
+            "phone" => 'required|unique:leads_customers,phone',
+            "phone_two" => 'nullable|unique:leads_customers,phone_two',
+        ], [
+            'card_id.required' => 'الرقم القومي مطلوب.',
+            'card_id.unique' => 'الرقم القومي موجود من قبل.',
+
+            'phone.required' => 'رقم الهاتف مطلوب.',
+            'phone.unique' => 'رقم الهاتف موجود من قبل.',
+
+            'phone_two.unique' => 'رقم الهاتف الاخر موجود من قبل.',
+        ]);
+        $lead = $request->all();
+
+        // رفع الصور إذا كانت موجودة
+        if ($request->hasFile('image')) {
+            $lead['image'] = $request->file('image')->store('uploads', 'public');
+        }
+        if ($request->hasFile('img_national_id_card')) {
+            $lead['img_national_id_card'] = $request->file('img_national_id_card')->store('uploads', 'public');
+        }
+        if ($request->hasFile('img_national_id_card_back')) {
+            $lead['img_national_id_card_back'] = $request->file('img_national_id_card_back')->store('uploads', 'public');
+        }
+        if ($request->hasFile('license_photo')) {
+            $lead['license_photo'] = $request->file('license_photo')->store('uploads', 'public');
+        }
+
+        $lead['test_type'] = "اول اختبار";
+        $lead['registration_date'] = now()->toDateString();
+        $lead['status'] = 'عميل محتمل';
+        $lead['customer_id'] = null;
+        $lead['evaluation'] = "جارى المعالجة";
+        $lead['password'] = Hash::make($lead["phone"]);
+
+        $lead = LeadsCustomers::create($lead);
+        // #############################################3
+        $test = Test::find($request->test_id);
+        $test->leads()->syncWithoutDetaching($lead);
+
+        // تحقق من وجود تقييم سابق لنفس العميل والاختبار
+        $alreadyExists = Evaluation::where('lead_id', $lead)
+            ->where('test_id', $test->id)
+            ->exists();
+
+        if (! $alreadyExists) {
+            $lastCode = Evaluation::where('test_id', $test->id)->max('code');
+            $nextCode = $lastCode ? $lastCode + 1 : 1;
+
+            Evaluation::create([
+                'lead_id' => $lead->id,
+                'test_id' => $test->id,
+                'code'    => $nextCode,
+            ]);
+        }
+
+        // #############################################3
+        if ($request->has('questions')) {
+            foreach ($request->questions as $questionId => $answer) {
+
+                // لو checkbox ممكن يجي Array
+                if (is_array($answer)) {
+                    $answer = implode(',', $answer);
+                }
+
+                JobAnswer::create([
+                    'job_question_id' => $questionId,
+                    'lead_id' => $lead->id,
+                    'answer' => $answer,
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', "تم التسجيل بنجاح");
     }
 }
