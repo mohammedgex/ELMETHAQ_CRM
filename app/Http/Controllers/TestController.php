@@ -227,6 +227,7 @@ class TestController extends Controller
         return view("tests.customers-test", [
             "leads" => $test->leads,
             "test" => $test,
+            "groups" => []
         ]);
     }
 }

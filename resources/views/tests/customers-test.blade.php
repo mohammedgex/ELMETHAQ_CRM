@@ -248,6 +248,7 @@
                 </div>
             </div>
         </div>
+
         @auth
             <!-- Modal لتعيين مجموعة -->
             <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
@@ -292,6 +293,8 @@
                 </div>
             </div>
         @endauth
+
+
         <!-- Loading Overlay -->
         <div id="loading-overlay"
             style="display: none; position: fixed; z-index: 9999; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.8);">
