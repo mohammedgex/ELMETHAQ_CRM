@@ -24,42 +24,42 @@
             </div>
 
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center ccccc" style="">
-                    <div class="row mb-3">
-                        <div class="col-md-2">
-                            <select id="filter-age" class="form-control">
-                                <option value="">كل الأعمار</option>
-                                @foreach ($leads->pluck('age')->unique() as $age)
-                                    <option value="{{ $age }}">{{ $age }}</option>
-                                @endforeach
-                            </select>
+                @auth
+                    <div class="card-header d-flex justify-content-between align-items-center ccccc" style="">
+                        <div class="row mb-3">
+                            <div class="col-md-2">
+                                <select id="filter-age" class="form-control">
+                                    <option value="">كل الأعمار</option>
+                                    @foreach ($leads->pluck('age')->unique() as $age)
+                                        <option value="{{ $age }}">{{ $age }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filter-governorate" class="form-control">
+                                    <option value="">كل المحافظات</option>
+                                    @foreach ($leads->pluck('governorate')->unique() as $gov)
+                                        <option value="{{ $gov }}">{{ $gov }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <select id="filter-status" class="form-control">
+                                    <option value="">كل الحالات</option>
+                                    @foreach ($leads->pluck('status')->unique() as $status)
+                                        <option value="{{ $status }}">{{ $status }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <select id="filter-governorate" class="form-control">
-                                <option value="">كل المحافظات</option>
-                                @foreach ($leads->pluck('governorate')->unique() as $gov)
-                                    <option value="{{ $gov }}">{{ $gov }}</option>
-                                @endforeach
-                            </select>
+                        <div>
+                            عدد المحددين: <span id="selected-count">0</span>
                         </div>
-                        <div class="col-md-3">
-                            <select id="filter-status" class="form-control">
-                                <option value="">كل الحالات</option>
-                                @foreach ($leads->pluck('status')->unique() as $status)
-                                    <option value="{{ $status }}">{{ $status }}</option>
-                                @endforeach
-                            </select>
+                        <div>
+                            عدد التقييمات: <span
+                                id="selected-count">{{ $test->evaluations()->whereNotNull('evaluation')->count() }}</span>
                         </div>
-                    </div>
-                    <div>
-                        عدد المحددين: <span id="selected-count">0</span>
-                    </div>
-                    <div>
-                        عدد التقييمات: <span
-                            id="selected-count">{{ $test->evaluations()->whereNotNull('evaluation')->count() }}</span>
-                    </div>
 
-                    @auth
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -72,9 +72,9 @@
                                 </button>
                             </div>
                         </div>
-                    @endauth
 
-                </div>
+                    </div>
+                @endauth
 
                 <div class="card-body table-responsive p-0">
                     <table id="example" class="table table-hover text-center">
