@@ -566,6 +566,8 @@
                                         required placeholder="أدخل السن" value=""
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                         pattern="^[0-9]{1,3}$" title="الرجاء إدخال أرقام إنجليزية فقط">
+                                    <div id="age-error" class="text-danger"></div>
+
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -1349,6 +1351,16 @@
     </script>
 
     <script>
+        document.getElementById('age').addEventListener('input', function() {
+            const age = parseInt(this.value, 10);
+            const errorDiv = document.getElementById('age-error');
+
+            if (age > 47) {
+                errorDiv.textContent = 'العمر تخطى 47 سنة';
+            } else {
+                errorDiv.textContent = '';
+            }
+        });
         document.querySelectorAll('input[type="file"].preview-image-input').forEach(input => {
             input.addEventListener('change', function(event) {
                 const file = event.target.files[0];
