@@ -398,7 +398,7 @@
                 <div>المحافظة:</div>
                 <div>{{ $lead->governorate }}</div>
                 <div>المندوب:</div>
-                <div style="max-height: 38px">{{ $lead->delegate->name ?? '' }}</div>
+                <div style="max-height: 38px; height: 38px;">{{ $lead->delegate->name ?? '' }}</div>
             </div>
         </div>
 
