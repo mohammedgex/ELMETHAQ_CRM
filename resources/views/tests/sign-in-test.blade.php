@@ -515,6 +515,21 @@
                                         oninput="this.value = this.value.replace(/[^ء-ي\s]/g,'')">
                                 </div>
                                 <div class="form-group col-md-6">
+                                    <label for="card_id">الرقم القومي</label>
+                                    <input type="text" name="card_id" id="card_id" class="form-control" required
+                                        placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
+                                        pattern="^[0-9]{14}$" maxlength="14"
+                                        title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+
+                                    <div id="card-error" class="text-danger"></div>
+                                    @if ($errors->has('card_id'))
+                                        <div class="text-danger">
+                                            {{ $errors->first('card_id') }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="form-group col-md-6">
                                     <label>المندوب</label>
                                     <select name="delegate_id" class="form-control" required>
                                         <option value="">اختر المندوب</option>
@@ -542,8 +557,8 @@
 
                                 <div class="form-group col-md-6">
                                     <label for="age">السن</label>
-                                    <input type="text" name="age" id="age" class="form-control" required
-                                        placeholder="أدخل السن" value=""
+                                    <input type="text" name="age" id="age" class="form-control"
+                                        required placeholder="أدخل السن" value=""
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                         pattern="^[0-9]{1,3}$" title="الرجاء إدخال أرقام إنجليزية فقط">
                                 </div>
@@ -559,22 +574,6 @@
                                     @if ($errors->has('phone'))
                                         <div class="text-danger">
                                             {{ $errors->first('phone') }}
-                                        </div>
-                                    @endif
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label for="card_id">الرقم القومي</label>
-                                    <input type="text" name="card_id" id="card_id" class="form-control"
-                                        required placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
-                                        pattern="^[0-9]{14}$" maxlength="14"
-                                        title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-
-                                    <div id="card-error" class="text-danger"></div>
-                                    @if ($errors->has('card_id'))
-                                        <div class="text-danger">
-                                            {{ $errors->first('card_id') }}
                                         </div>
                                     @endif
                                 </div>
