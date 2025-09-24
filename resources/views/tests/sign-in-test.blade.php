@@ -797,20 +797,20 @@
 
     <script>
         // مثال لمعاينة الصور
-        $(document).on('change', '.preview-image-input', function() {
-            var input = this;
-            var previewId = $(this).data('preview');
+        // $(document).on('change', '.preview-image-input', function() {
+        //     var input = this;
+        //     var previewId = $(this).data('preview');
 
-            if (input.files && input.files[0]) {
-                var reader = new FileReader
-                reader.onload = function(e) {
-                    var img = $(previewId).find('img');
-                    img.attr('src', e.target.result);
-                    img.show();
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        });
+        //     if (input.files && input.files[0]) {
+        //         var reader = new FileReader
+        //         reader.onload = function(e) {
+        //             var img = $(previewId).find('img');
+        //             img.attr('src', e.target.result);
+        //             img.show();
+        //         }
+        //         reader.readAsDataURL(input.files[0]);
+        //     }
+        // });
     </script>
     {{-- قص الصورة --}}
     <script>
@@ -1349,6 +1349,75 @@
             }
         });
     </script>
+
+    <script>
+        document.querySelectorAll('input[type="file"].preview-image-input').forEach(input => {
+            input.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+
+                reader.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+
+                        // 👇 حجم الصورة الأقصى بعد الضغط
+                        const MAX_WIDTH = 800;
+                        const MAX_HEIGHT = 800;
+
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // 👇 نسبة الجودة (0.7 = 70%)
+                        canvas.toBlob(function(blob) {
+                            const compressedFile = new File([blob], file.name, {
+                                type: 'image/jpeg'
+                            });
+
+                            // استبدل الملف الأصلي بالملف المضغوط
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(compressedFile);
+                            event.target.files = dataTransfer.files;
+
+                            // تحديث المعاينة لو فيه data-preview
+                            const previewId = event.target.getAttribute('data-preview');
+                            if (previewId) {
+                                const previewImg = document.querySelector(previewId +
+                                    ' img');
+                                if (previewImg) {
+                                    previewImg.src = URL.createObjectURL(compressedFile);
+                                    previewImg.style.display = 'block';
+                                }
+                            }
+                        }, 'image/jpeg', 0.7);
+                    }
+                }
+            });
+        });
+    </script>
+
 </body>
 
 </html>
