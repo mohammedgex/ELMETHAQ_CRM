@@ -157,6 +157,20 @@
             text-align: center;
         }
 
+        .info div {
+            border: 1px solid #ccc;
+            padding: 5px;
+            background: #fafafa;
+            border-radius: 6px;
+            text-align: center;
+            min-height: 38px;
+            /* أو أي رقم يناسبك */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+
         .extra-title {
             /* margin-top: 25px; */
             margin-bottom: 10px;
@@ -398,7 +412,7 @@
                 <div>المحافظة:</div>
                 <div>{{ $lead->governorate }}</div>
                 <div>المندوب:</div>
-                <div style="max-height: 38px; height: 38px;">{{ $lead->delegate->name ?? '' }}</div>
+                <div>{{ $lead->delegate->name ?? '' }}</div>
             </div>
         </div>
 
