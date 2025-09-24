@@ -18,9 +18,11 @@
                 <h3 class="card-title mb-0">
                     العملاء المحتملين
                 </h3>
-                <a href="{{ route('sign.lead.in.test', $test->id) }}" class="btn btn-outline-primary btn-sm">
-                    <i class="fas fa-user-plus"></i> إضافة مختبر
-                </a>
+                @auth
+                    <a href="{{ route('sign.lead.in.test', $test->id) }}" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-user-plus"></i> إضافة مختبر
+                    </a>
+                @endauth
             </div>
 
             <div class="card">
