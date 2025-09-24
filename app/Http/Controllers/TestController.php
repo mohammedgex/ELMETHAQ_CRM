@@ -224,10 +224,13 @@ class TestController extends Controller
     {
         # code...
         $test = Test::where('title', $test_name)->first();
+        if (!$test) {
+            return "الاختبار غير موجود";
+        }
         return view("tests.customers-test", [
             "leads" => $test->leads,
             "test" => $test,
-            "groups" => []
+            'groups' => collect([])
         ]);
     }
 }
