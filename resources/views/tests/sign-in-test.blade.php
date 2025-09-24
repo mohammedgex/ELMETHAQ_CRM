@@ -632,7 +632,7 @@
 
                                         <div>
                                             <button type="button" id="analyzeBtn" class="btn btn-primary">
-                                                استخراج البيانات من الجواز
+                                                استخراج البيانات
                                             </button>
                                         </div>
 
