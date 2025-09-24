@@ -495,7 +495,7 @@
 
                                 <div class="custom-file mb-2">
                                     <input type="file" name="image" class="custom-file-input preview-image-input"
-                                        data-preview="#preview_image" id="dd" required accept="image/*">
+                                        data-preview="#preview_image" id="dd" required>
                                     <label class="custom-file-label">اختر صورة</label>
                                 </div>
 
@@ -631,8 +631,7 @@
                                     <div class="custom-file mb-2">
                                         <input type="file" name="img_national_id_card"
                                             class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card" accept="image/*"
-                                            id="ss" required>
+                                            data-preview="#preview_img_national_id_card" id="ss" required>
                                         <label class="custom-file-label">اختر صورة</label>
                                     </div>
 
@@ -679,8 +678,7 @@
                                     <div class="custom-file mb-2">
                                         <input type="file" name="img_national_id_card_back"
                                             class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card_back" accept="image/*"
-                                            id="aa" required>
+                                            data-preview="#preview_img_national_id_card_back" id="aa" required>
                                         <label class="custom-file-label">اختر صورة</label>
                                     </div>
 
@@ -704,7 +702,7 @@
                                 <div class="custom-file mb-2">
                                     <input type="file" name="license_photo"
                                         class="custom-file-input preview-image-input"
-                                        data-preview="#preview_license_photo" id="ff">
+                                        data-preview="#preview_license_photo" id="ff" required>
                                     <label class="custom-file-label">اختر صورة</label>
                                 </div>
 
