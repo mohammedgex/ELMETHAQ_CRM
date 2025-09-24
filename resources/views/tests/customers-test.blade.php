@@ -248,48 +248,50 @@
                 </div>
             </div>
         </div>
-        <!-- Modal لتعيين مجموعة -->
-        <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0 shadow-lg">
-                    <div class="modal-header bg-primary text-white">
-                        <h5 class="modal-title">
-                            <i class="fas fa-users mr-2"></i> تعيين مجموعة للعملاء المحددين
-                        </h5>
-                        <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="إغلاق">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+        @auth
+            <!-- Modal لتعيين مجموعة -->
+            <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">
+                                <i class="fas fa-users mr-2"></i> تعيين مجموعة للعملاء المحددين
+                            </h5>
+                            <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="إغلاق">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
 
-                    <form id="assignGroupForm" action="{{ route('customer.leadToCustomer') }}" method="POST">
-                        @csrf
-                        <div class="modal-body">
-                            <input type="hidden" name="leads" id="selectedLeadsInput">
+                        <form id="assignGroupForm" action="{{ route('customer.leadToCustomer') }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="leads" id="selectedLeadsInput">
 
-                            <div class="form-group">
-                                <label for="groupSelect">اختر المجموعة</label>
-                                <select class="form-control" id="groupSelect" name="group_id" required>
-                                    <option value="" disabled selected>-- اختر المجموعة --</option>
-                                    @foreach ($groups as $group)
-                                        <option value="{{ $group->id }}">{{ $group->id }}: {{ $group->title }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <div class="form-group">
+                                    <label for="groupSelect">اختر المجموعة</label>
+                                    <select class="form-control" id="groupSelect" name="group_id" required>
+                                        <option value="" disabled selected>-- اختر المجموعة --</option>
+                                        @foreach ($groups as $group)
+                                            <option value="{{ $group->id }}">{{ $group->id }}: {{ $group->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times-circle mr-1"></i> إلغاء
-                            </button>
-                            <button type="submit" class="btn btn-success">
-                                <i class="fas fa-save mr-1"></i> حفظ التغييرات
-                            </button>
-                        </div>
-                    </form>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times-circle mr-1"></i> إلغاء
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-save mr-1"></i> حفظ التغييرات
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        @endauth
         <!-- Loading Overlay -->
         <div id="loading-overlay"
             style="display: none; position: fixed; z-index: 9999; top:0; left:0; width:100%; height:100%; background: rgba(255,255,255,0.8);">
