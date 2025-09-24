@@ -704,8 +704,7 @@
                                 <div class="custom-file mb-2">
                                     <input type="file" name="license_photo"
                                         class="custom-file-input preview-image-input"
-                                        data-preview="#preview_license_photo" id="ff" required
-                                        accept="image/*">
+                                        data-preview="#preview_license_photo" id="ff" required>
                                     <label class="custom-file-label">اختر صورة</label>
                                 </div>
 
