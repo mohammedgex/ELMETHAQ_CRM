@@ -59,18 +59,21 @@
                             id="selected-count">{{ $test->evaluations()->whereNotNull('evaluation')->count() }}</span>
                     </div>
 
-                    <div class="dropdown">
-                        <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            العمليات
-                        </button>
-
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="operationsDropdown">
-                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
-                                <i class="fas fa-plus text-success"></i> تحويل كعميل أساسي
+                    @auth
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="operationsDropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                العمليات
                             </button>
+
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="operationsDropdown">
+                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
+                                    <i class="fas fa-plus text-success"></i> تحويل كعميل أساسي
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    @endauth
+
                 </div>
 
                 <div class="card-body table-responsive p-0">

@@ -220,4 +220,13 @@ class TestController extends Controller
         }
         return redirect()->back()->with('success', "تمت إضافة العميل للاختبار بنجاح");
     }
+    public function safeDriving($test_name)
+    {
+        # code...
+        $test = Test::where('title', $test_name)->first();
+        return view("tests.customers-test", [
+            "leads" => $test->leads,
+            "test" => $test,
+        ]);
+    }
 }

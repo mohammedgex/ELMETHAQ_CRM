@@ -263,6 +263,8 @@ Route::group([
     Route::post('/sign-lead-in-test', [LeadsCustomersController::class, 'createLeadToTest'])->name('create.lead.in.test');
     Route::get('/calling-lead/{test_id}/{lead_id}', [TestController::class, 'callingClient'])->name('calling.client');
 });
+// قيادة امنة للسائقين
+Route::get('/safe-driving/{test}', [TestController::class, 'safeDriving'])->name('safe.driving');
 
 Route::get('/sign-in/lead', [LeadsCustomersController::class, 'showSignIn']);
 Route::post('/sign-in/lead', [LeadsCustomersController::class, 'createLead'])->name('leads-customers.sign-in');
