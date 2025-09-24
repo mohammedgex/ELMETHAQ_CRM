@@ -848,6 +848,6 @@ class LeadsCustomersController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', "تم التسجيل بنجاح");
+        return app(ReportsController::class)->test_card($lead->id, $request->test_id);
     }
 }

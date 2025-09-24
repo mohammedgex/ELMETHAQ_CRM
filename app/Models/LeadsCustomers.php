@@ -41,6 +41,8 @@ class LeadsCustomers extends Model
         'delegate_id',
         'customer_id',
         'fcm_token',
+        'licence_date_end',
+        'notes',
     ];
 
     protected $dates = [

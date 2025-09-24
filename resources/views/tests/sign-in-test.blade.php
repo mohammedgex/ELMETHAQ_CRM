@@ -454,8 +454,13 @@
 <body>
     <div class="container-fluid">
         <div class="card card-primary">
-            <div class="card-header bg-secondary">
+            <div class="card-header bg-secondary d-flex justify-content-between align-items-center ">
                 <h3 class="card-title">تسجيل عميل داخل اختبار</h3>
+                <h3>
+                    <a href="{{ route('test.leads', $test_id) }}" class="btn btn-light btn-sm">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                </h3>
             </div>
 
             @if ($errors->any())
@@ -475,7 +480,7 @@
             @endif
 
             </script>
-            <form action="{{ route('create.lead.in.test') }}" id="myForm" method="POST"
+            <form action="{{ route('create.lead.in.test', $test_id) }}" id="myForm" method="POST"
                 enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="test_id" value="{{ $test_id }}">
@@ -596,6 +601,16 @@
                                     <input id="date_of_birth" type="date" name="date_of_birth"
                                         class="form-control" required>
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="licence_date_end">تاريخ انتهاء الرخصة</label>
+                                    <input id="licence_date_end" type="date" name="licence_date_end"
+                                        class="form-control">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="notes">ملاحظات</label>
+
+                                    <textarea name="notes" id="notes" class="form-control p-2" cols="30" rows="10">{{ old('notes', $lead->notes ?? '') }}</textarea>
+                                </div>
                             </div>
 
                             <div class="form-group col-md-12 mt-3" id="job-questions-container">
@@ -715,6 +730,20 @@
             </form>
         </div>
     </div>
+    @if (session('already_exists'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire({
+                icon: 'warning',
+                title: 'تنبيه',
+                text: '{{ session('already_exists') }}',
+                confirmButtonText: 'حسناً',
+                allowOutsideClick: false, // منع إغلاق النوافذ بالنقر خارجها
+                allowEscapeKey: false, // منع إغلاق بالنقر على زر Esc
+                allowEnterKey: false // منع إغلاق بالضغط على Enter
+            });
+        </script>
+    @endif
     {{-- تعديل الصور --}}
     <!-- نافذة الاقتصاص -->
     <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true">
@@ -960,30 +989,30 @@
                 });
                 const prompt = `Please analyze the attached national ID card image and extract the following data, then return the result strictly in JSON format.
 
-Step 1 (must): Extract the national_id first and ensure it is exactly 14 digits using English digits 0-9 only.
-Step 2 (must): Derive the date_of_birth **exclusively from the national_id** (do NOT rely on the visual printed date on the card). Use the following decoding rule:
-  - The national_id is 14 digits. Let firstDigit = the 1st digit (index 0).
-  - The encoded birth date is taken from digits 2-7 (indexes 1..6) as YYMMDD.
-  - Compose date_of_birth as YYYY-MM-DD using English digits only. Validate the date (month 01-12, day valid for that month); if invalid, set date_of_birth to an empty string and still return national_id.
-  - Calculate "age" (in years, integer) strictly from the derived date_of_birth using the current date.
+                        Step 1 (must): Extract the national_id first and ensure it is exactly 14 digits using English digits 0-9 only.
+                        Step 2 (must): Derive the date_of_birth **exclusively from the national_id** (do NOT rely on the visual printed date on the card). Use the following decoding rule:
+                        - The national_id is 14 digits. Let firstDigit = the 1st digit (index 0).
+                        - The encoded birth date is taken from digits 2-7 (indexes 1..6) as YYMMDD.
+                        - Compose date_of_birth as YYYY-MM-DD using English digits only. Validate the date (month 01-12, day valid for that month); if invalid, set date_of_birth to an empty string and still return national_id.
+                        - Calculate "age" (in years, integer) strictly from the derived date_of_birth using the current date.
 
-Required fields:
-- name: Full name (Combine all lines even if written on multiple lines, return full name in Arabic in a single field)
-- national_id: (14 digits, English digits 0-9 only)
-- date_of_birth: (Format YYYY-MM-DD, strictly derived from national_id as specified above)
-- age: (integer, derived from date_of_birth)
-- governorate: (Extracted from national_id and returned strictly in Arabic, chosen only from the allowed list below)
+                        Required fields:
+                        - name: Full name (Combine all lines even if written on multiple lines, return full name in Arabic in a single field)
+                        - national_id: (14 digits, English digits 0-9 only)
+                        - date_of_birth: (Format YYYY-MM-DD, strictly derived from national_id as specified above)
+                        - age: (integer, derived from date_of_birth)
+                        - governorate: (Extracted from national_id and returned strictly in Arabic, chosen only from the allowed list below)
 
-Important note: The value of the "governorate" key must be exactly one of the following Arabic values only:
-"القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", "السويس", "أسوان", "أسيوط", "بني سويف", "بورسعيد", "دمياط", "الشرقية", "جنوب سيناء", "كفر الشيخ", "مطروح", "الأقصر", "قنا", "شمال سيناء", "سوهاج", "السعودية", "القدس", "الأردن", "العراق", "لبنان", "فلسطين", "اليمن", "عمان", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين"
+                        Important note: The value of the "governorate" key must be exactly one of the following Arabic values only:
+                        "القاهرة", "الجيزة", "الإسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", "السويس", "أسوان", "أسيوط", "بني سويف", "بورسعيد", "دمياط", "الشرقية", "جنوب سيناء", "كفر الشيخ", "مطروح", "الأقصر", "قنا", "شمال سيناء", "سوهاج", "السعودية", "القدس", "الأردن", "العراق", "لبنان", "فلسطين", "اليمن", "عمان", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين"
 
-Return the output strictly as JSON only (without any explanation or additional text) in the following structure:
-{
-  "name": "",
-  "national_id": "",
-  "date_of_birth": "",
-  "governorate": ""
-}`;
+                        Return the output strictly as JSON only (without any explanation or additional text) in the following structure:
+                        {
+                        "name": "",
+                        "national_id": "",
+                        "date_of_birth": "",
+                        "governorate": ""
+                        }`;
 
                 const result = await model.generateContent({
                     contents: [{

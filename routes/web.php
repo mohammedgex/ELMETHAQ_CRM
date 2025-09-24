@@ -265,9 +265,12 @@ Route::group([
 });
 // قيادة امنة للسائقين
 Route::get('/safe-driving/{test}', [TestController::class, 'safeDriving'])->name('safe.driving');
+Route::get('/leads-show-safe-driving/{id}', [LeadsCustomersController::class, 'show'])->name('leads-safe-driving.show');
+
 
 Route::get('/sign-in/lead', [LeadsCustomersController::class, 'showSignIn']);
 Route::post('/sign-in/lead', [LeadsCustomersController::class, 'createLead'])->name('leads-customers.sign-in');
+
 Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle']);
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
 Route::get('/send-test-email', [GoogleTranslateController::class, 'sendTestEmail']);

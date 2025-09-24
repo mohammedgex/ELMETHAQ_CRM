@@ -105,7 +105,7 @@
                                         <input type="checkbox" class="lead-checkbox" name="lead_ids[]"
                                             value="{{ $lead->id }}">
                                     </td>
-                                    <td>#{{ $lead->evaluations()->latest()->first()->code }}
+                                    <td>#{{ $lead->evaluations()->latest()->first()->code ?? '---' }}
                                     </td>
                                     <td>
 
@@ -165,17 +165,22 @@
                                     </td>
                                     <td>
                                         <div class="d-flex align-items-center gap-1 flex-nowrap">
+                                            @guest
+                                                <a href="{{ route('leads-safe-driving.show', $lead->id) }}"
+                                                    class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                            @endguest
+
                                             @auth
                                                 <a href="{{ route('reports.test_card', [$lead->id, $test->id]) }}"
                                                     target="_blank" class="btn btn-sm btn-info ">
                                                     <i class="fas fa-file-alt"></i>
                                                 </a>
-                                            @endauth
-                                            <a href="{{ route('leads-customers.show', $lead->id) }}"
-                                                class="btn btn-sm btn-primary">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            @auth
+                                                <a href="{{ route('leads-customers.show', $lead->id) }}"
+                                                    class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
                                                 <a href="{{ route('tests.showEvaluation', [$test->id, $lead->id]) }}"
                                                     class="btn btn-sm btn-success">
                                                     <i class="fas fa-chart-bar"></i>

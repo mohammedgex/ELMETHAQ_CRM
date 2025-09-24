@@ -201,7 +201,11 @@ class TestController extends Controller
         # code...
         $test = Test::findOrFail($test_id);
         $lead = LeadsCustomers::findOrFail($lead_id);
+        if ($test->leads()->where('leads_customers.id', $lead->id)->exists()) {
+            return redirect()->back()->with('already_exists', "العميل موجود بالفعل داخل هذا الاختبار");
+        }
         $test->leads()->syncWithoutDetaching($lead);
+
 
         // تحقق من وجود تقييم سابق لنفس العميل والاختبار
         $alreadyExists = Evaluation::where('lead_id', $lead)
@@ -218,7 +222,7 @@ class TestController extends Controller
                 'code'    => $nextCode,
             ]);
         }
-        return redirect()->back()->with('success', "تمت إضافة العميل للاختبار بنجاح");
+        return app(ReportsController::class)->test_card($lead->id, $test_id);
     }
     public function safeDriving($test_name)
     {
