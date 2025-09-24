@@ -612,7 +612,7 @@
                                 <div class="custom-file mb-2">
                                     <input type="file" name="passport_photo"
                                         class="custom-file-input preview-image-input"
-                                        data-preview="#preview_passport_photo" id="passportInput">
+                                        data-preview="#preview_passport_photo" id="passportInput" accept="image/*">
                                     <label class="custom-file-label">اختر صورة</label>
                                 </div>
 
@@ -662,7 +662,8 @@
                                     <div class="custom-file mb-2">
                                         <input type="file" name="img_national_id_card"
                                             class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card" id="ss" required>
+                                            data-preview="#preview_img_national_id_card" id="ss" required
+                                            accept="image/*">
                                         <label class="custom-file-label">اختر صورة</label>
                                     </div>
 
@@ -686,7 +687,8 @@
                                     <div class="custom-file mb-2">
                                         <input type="file" name="img_national_id_card_back"
                                             class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card_back" id="aa" required>
+                                            data-preview="#preview_img_national_id_card_back" id="aa" required
+                                            accept="image/*">
                                         <label class="custom-file-label">اختر صورة</label>
                                     </div>
 
