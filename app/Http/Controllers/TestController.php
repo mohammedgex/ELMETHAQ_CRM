@@ -92,11 +92,12 @@ class TestController extends Controller
             if (! $alreadyExists) {
                 $lastCode = Evaluation::where('test_id', $test->id)->max('code');
                 $nextCode = $lastCode ? $lastCode + 1 : 1;
+                dd($nextCode);
                 // إرسال إشعار بعد التحديث
-                $title = "تمت إضافتك إلى اختبار جديد";
-                $body = "تمت إضافتك إلى اختبار جديد ضمن النظام، ونتمنى لك التوفيق والنجاح.";
-                $icon = null; // أو رابط أيقونة
-                app(ApiAppController::class)->sendFcmMessage("customer", $lead, $title, $body, $icon);
+                // $title = "تمت إضافتك إلى اختبار جديد";
+                // $body = "تمت إضافتك إلى اختبار جديد ضمن النظام، ونتمنى لك التوفيق والنجاح.";
+                // $icon = null; // أو رابط أيقونة
+                // app(ApiAppController::class)->sendFcmMessage("customer", $lead, $title, $body, $icon);
 
                 Evaluation::create([
                     'lead_id' => $lead,
