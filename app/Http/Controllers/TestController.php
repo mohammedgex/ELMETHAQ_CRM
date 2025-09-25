@@ -91,8 +91,8 @@ class TestController extends Controller
 
             if (! $alreadyExists) {
                 $lastCode = Evaluation::where('test_id', $test->id)->max('code');
+                dd($lastCode);
                 $nextCode = $lastCode ? $lastCode + 1 : 1;
-                dd($nextCode);
                 // إرسال إشعار بعد التحديث
                 // $title = "تمت إضافتك إلى اختبار جديد";
                 // $body = "تمت إضافتك إلى اختبار جديد ضمن النظام، ونتمنى لك التوفيق والنجاح.";
