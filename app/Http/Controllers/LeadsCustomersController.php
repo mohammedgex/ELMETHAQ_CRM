@@ -821,7 +821,9 @@ class LeadsCustomersController extends Controller
             ->exists();
 
         if (!$alreadyExists) {
-            $lastCode = Evaluation::where('test_id', $test->id)->max('code');
+            $lastCode = Evaluation::where('test_id', $test->id)
+                ->selectRaw('MAX(CAST(code AS UNSIGNED)) as max_code')
+                ->value('max_code');
             $nextCode = $lastCode ? $lastCode + 1 : 1;
 
             Evaluation::create([
