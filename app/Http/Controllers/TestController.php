@@ -206,16 +206,18 @@ class TestController extends Controller
         if ($test->leads()->where('leads_customers.id', $lead->id)->exists()) {
             return redirect()->back()->with('already_exists', "العميل موجود بالفعل داخل هذا الاختبار");
         }
-        $test->leads()->syncWithoutDetaching($lead);
+        $test->leads()->syncWithoutDetaching($lead->id);
 
 
         // تحقق من وجود تقييم سابق لنفس العميل والاختبار
-        $alreadyExists = Evaluation::where('lead_id', $lead)
+        $alreadyExists = Evaluation::where('lead_id', $lead->id)
             ->where('test_id', $test->id)
             ->exists();
 
         if (! $alreadyExists) {
-            $lastCode = Evaluation::where('test_id', $test->id)->max('code');
+            $lastCode = Evaluation::where('test_id', $test->id)
+                ->selectRaw('MAX(CAST(code AS UNSIGNED)) as max_code')
+                ->value('max_code');
             $nextCode = $lastCode ? $lastCode + 1 : 1;
 
             Evaluation::create([
