@@ -813,14 +813,14 @@ class LeadsCustomersController extends Controller
         $lead = LeadsCustomers::create($lead);
         // #############################################3
         $test = Test::find($request->test_id);
-        $test->leads()->syncWithoutDetaching($lead);
+        $test->leads()->syncWithoutDetaching($lead->id);
 
         // تحقق من وجود تقييم سابق لنفس العميل والاختبار
-        $alreadyExists = Evaluation::where('lead_id', $lead)
+        $alreadyExists = Evaluation::where('lead_id', $lead->id)
             ->where('test_id', $test->id)
             ->exists();
 
-        if (! $alreadyExists) {
+        if (!$alreadyExists) {
             $lastCode = Evaluation::where('test_id', $test->id)->max('code');
             $nextCode = $lastCode ? $lastCode + 1 : 1;
 
