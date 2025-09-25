@@ -13,14 +13,17 @@
         <!-- جدول عرض العملاء المحتملين -->
         <div class="card mt-4">
             <div
-                class="card-header d-flex justify-content-between align-items-center 
+                class="card-header d-flex justify-content-between align-items-center
                         bg-dark text-white dark:bg-dark dark:text-white bg-light text-dark">
                 <h3 class="card-title mb-0">
                     العملاء المحتملين
                 </h3>
                 @auth
-                    <a href="{{ route('sign.lead.in.test', $test->id) }}" class="btn btn-outline-primary btn-sm">
+                    <a href="{{ route('sign.lead.in.test', $test->id) }}" class="btn btn-primary btn-sm">
                         <i class="fas fa-user-plus"></i> إضافة مختبر
+                    </a>
+                    <a href="javascript:void(0)" onclick="exportTableToExcel('example')" class="btn btn-success btn-sm">
+                        <i class="fas fa-file-excel"></i> تصدير إكسيل
                     </a>
                 @endauth
             </div>
@@ -28,32 +31,6 @@
             <div class="card">
                 @auth
                     <div class="card-header d-flex justify-content-between align-items-center ccccc" style="">
-                        <div class="row mb-3">
-                            <div class="col-md-2">
-                                <select id="filter-age" class="form-control">
-                                    <option value="">كل الأعمار</option>
-                                    @foreach ($leads->pluck('age')->unique() as $age)
-                                        <option value="{{ $age }}">{{ $age }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="filter-governorate" class="form-control">
-                                    <option value="">كل المحافظات</option>
-                                    @foreach ($leads->pluck('governorate')->unique() as $gov)
-                                        <option value="{{ $gov }}">{{ $gov }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <select id="filter-status" class="form-control">
-                                    <option value="">كل الحالات</option>
-                                    @foreach ($leads->pluck('status')->unique() as $status)
-                                        <option value="{{ $status }}">{{ $status }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                         <div>
                             عدد المحددين: <span id="selected-count">0</span>
                         </div>
@@ -405,6 +382,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
         <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
         <script>
             $(document).on('click', '.open-evaluation-modal', function() {
                 var leadId = $(this).data('lead-id');
@@ -449,8 +428,6 @@
                 ordering: true
             });
         </script>
-
-
 
         <script type="module">
             document.getElementById('assignGroupForm').addEventListener('submit', function(e) {
@@ -499,45 +476,24 @@
                 // إرسال الفورم
                 this.submit();
             });
-
-            document.addEventListener('DOMContentLoaded', function() {
-                const ageFilter = document.getElementById('filter-age');
-                const govFilter = document.getElementById('filter-governorate');
-                const statusFilter = document.getElementById('filter-status');
-                const dateFilter = document.getElementById('filter-date');
-                const tableRows = document.querySelectorAll('tbody tr');
-
-                function filterTable() {
-                    const selectedAge = ageFilter.value;
-                    const selectedGov = govFilter.value.toLowerCase();
-                    const selectedStatus = statusFilter.value.toLowerCase();
-                    const selectedDate = dateFilter.value;
-
-                    tableRows.forEach(row => {
-                        const age = row.cells[4]?.textContent.trim(); // السن
-                        const gov = row.cells[6]?.textContent.trim().toLowerCase(); // المحافظة
-                        const status = row.cells[7]?.textContent.trim().toLowerCase(); // الحالة
-                        const date = row.cells[9]?.textContent.trim(); // تاريخ التسجيل
-
-                        const matchesAge = !selectedAge || age === selectedAge;
-                        const matchesGov = !selectedGov || gov === selectedGov;
-                        const matchesStatus = !selectedStatus || status === selectedStatus;
-                        const matchesDate = !selectedDate || date === selectedDate;
-
-                        if (matchesAge && matchesGov && matchesStatus && matchesDate) {
-                            row.style.display = "";
-                        } else {
-                            row.style.display = "none";
-                        }
-                    });
-                }
-
-                ageFilter.addEventListener('change', filterTable);
-                govFilter.addEventListener('change', filterTable);
-                statusFilter.addEventListener('change', filterTable);
-                dateFilter.addEventListener('change', filterTable);
-            });
         </script>
 
+        <script>
+            /* نعرّف الدالة في الـ global عشان onclick يعمل */
+            function exportTableToExcel(tableId, filename = 'exported_table.xlsx') {
+                const table = document.getElementById(tableId);
+                if (!table) {
+                    console.error('Table not found:', tableId);
+                    return;
+                }
+                const wb = XLSX.utils.table_to_book(table, {
+                    sheet: "Sheet1"
+                });
+                XLSX.writeFile(wb, filename);
+            }
+
+            /* نضمن وصولها عالميًا (مهم لو السكربت محطوط كـ module) */
+            window.exportTableToExcel = exportTableToExcel;
+        </script>
 
     @stop
