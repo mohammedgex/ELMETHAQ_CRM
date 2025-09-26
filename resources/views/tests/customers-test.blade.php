@@ -66,6 +66,7 @@
                                 <th>الاسم</th>
                                 <th>صورة</th>
                                 <th>السن</th>
+                                <th>ملاحظات</th>
                                 <th>الهاتف</th>
                                 <th>المحافظة</th>
                                 <th>الحالة</th>
@@ -101,6 +102,7 @@
                                         </a>
                                     </td>
                                     <td>{{ $lead->age }}</td>
+                                    <td>{{ $lead->notes }}</td>
                                     <td>{{ $lead->phone }}</td>
                                     <td>{{ $lead->governorate }}</td>
                                     <td data-status="{{ $lead->status }}" class="lead-status">
