@@ -133,7 +133,7 @@
                                         @endif
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label>رقم جواز السفر</label>
+                                        <label>الملاحظات</label>
                                         <textarea name="notes" id="notes" class="form-control p-2" cols="30" rows="10">{{ old('notes', $lead->notes ?? '') }}</textarea>
                                     </div>
                                 </div>

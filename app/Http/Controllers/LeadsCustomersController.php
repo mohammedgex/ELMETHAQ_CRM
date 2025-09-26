@@ -282,6 +282,7 @@ class LeadsCustomersController extends Controller
             'registration_date' => $request->input('registration_date'),
             'job_title_id' => $request->input('job_title_id'),
             'delegate_id' => $request->input('delegate_id'),
+            "notes" => $request->input('notes'),
             'customer_id' => $lead->customer_id, // الحفاظ على customer_id كما هو
         ];
 
