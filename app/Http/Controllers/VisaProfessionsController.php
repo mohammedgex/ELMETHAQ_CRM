@@ -41,7 +41,7 @@ class VisaProfessionsController extends Controller
         # code...
         $request->validate([
             'job' => 'required',
-            'job_title' => 'required',
+            // 'job_title' => 'required',
             'profession_count' => 'required',
             'customer_group_id' => 'required',
         ]);
@@ -69,7 +69,7 @@ class VisaProfessionsController extends Controller
         # code...
         $request->validate([
             'job' => 'required',
-            'job_title' => 'required',
+            // 'job_title' => 'required',
             'profession_count' => 'required',
             'customer_group_id' => 'required',
         ]);
