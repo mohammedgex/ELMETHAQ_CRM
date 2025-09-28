@@ -18,7 +18,7 @@
                     <form action="{{ route('visa-profession.create', $visa_id) }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            {{-- <div class="col-md-6 form-group">
                                 <label class="font-weight-bold" style="color: #343a40;"> التصنيف المهني </label>
                                 <select class="form-control fw-bold" style="border-color: #343a40;" name="job_title">
                                     <option value="">اختر التصنيف المهني </option>
@@ -280,7 +280,7 @@
                                     <option value="" data-select2-id="58">اختر</option>
 
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold" style="color: #343a40;"> المهنة </label>
                                 <input type="text" class="form-control" style="border-color: #343a40;" name="job"
@@ -316,7 +316,7 @@
                     <form action="{{ route('visa-profession.edit', $visaEdit->id) }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6 form-group">
+                            {{-- <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> التصنيف المهني </label>
                                 <select class="form-control fw-bold" style="border-color: #997a44;" name="job_title">
                                     <option value="">اختر التصنيف المهني </option>
@@ -735,7 +735,7 @@
                                     </option>
 
                                 </select>
-                            </div>
+                            </div> --}}
                             <div class="col-md-6 form-group">
                                 <label class="font-weight-bold"> المجموعة </label>
                                 <select class="form-control fw-bold" style="border-color: #997a44;"
