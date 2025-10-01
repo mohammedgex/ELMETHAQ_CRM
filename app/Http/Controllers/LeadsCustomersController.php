@@ -169,6 +169,10 @@ class LeadsCustomersController extends Controller
             }
         }
 
+        if ($request->delegate_id && $lead->delegate && $lead->delegate->phone) {
+            app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name']);
+        }
+
         return redirect()->back();
     }
 
@@ -849,6 +853,9 @@ class LeadsCustomersController extends Controller
                     'answer' => $answer,
                 ]);
             }
+        }
+        if ($request->delegate_id && $lead->delegate && $lead->delegate->phone) {
+            app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name']);
         }
 
         return app(ReportsController::class)->test_card($lead->id, $request->test_id);

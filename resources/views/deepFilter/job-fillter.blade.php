@@ -73,7 +73,8 @@
     @if (isset($leads) && $leads->count() > 0)
         <div id="results-section" style="">
             <div class="table-responsive">
-                <div class="header"> <button onclick="exportTableToExcel()" class="btn btn-success">تصدير Excel</button>
+                <div class="header">
+                    <button onclick="exportTableToExcel()" class="btn btn-success">تصدير Excel</button>
                 </div>
                 <table class="table table-hover text-center" id="myTable">
                     <thead class="bg-secondary text-white">
