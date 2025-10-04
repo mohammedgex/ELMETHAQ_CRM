@@ -417,16 +417,16 @@
                 cb.addEventListener('change', updateSelectedCount);
             });
             $('#example').DataTable({
-                dom: 'ltp', // l = lengthMenu (قائمة تغيير عدد الصفوف), t = الجدول, p = ترقيم الصفحات
-                pageLength: 20, // القيمة الافتراضية
+                dom: 'lftip', // أضف "f" لعرض مربع البحث الافتراضي
+                pageLength: -1,
                 lengthMenu: [
                     [10, 20, 50, -1],
-                    [10, 25, 50, 100, 250, 500, 'الكل']
+                    [10, 25, 50, "الكل"]
                 ],
                 language: {
                     url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
                 },
-                searching: false,
+                searching: true,
                 ordering: true
             });
         </script>
