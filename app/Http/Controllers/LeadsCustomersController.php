@@ -168,9 +168,10 @@ class LeadsCustomersController extends Controller
                 ]);
             }
         }
+        $phoneDelegate = preg_replace('/\D/', '', $lead->delegate->phone); // إزالة كل ما ليس رقم
 
-        if ($request->delegate_id && $lead->delegate && $lead->delegate->phone) {
-            app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name']);
+        if ($request->delegate_id && $lead->delegate && $lead->delegate->phone && strlen($phoneDelegate) == 11) {
+            app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name'] . " && رقم الهاتف: " . $lead['phone']);
         }
 
         return redirect()->back();
@@ -854,8 +855,10 @@ class LeadsCustomersController extends Controller
                 ]);
             }
         }
-        if ($request->delegate_id && $lead->delegate && $lead->delegate->phone) {
-            app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name']);
+        $phoneDelegate = preg_replace('/\D/', '', $lead->delegate->phone); // إزالة كل ما ليس رقم
+
+        if ($request->delegate_id && $lead->delegate && $lead->delegate->phone && strlen($phoneDelegate) == 11) {
+            app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name'] . " && رقم الهاتف: " . $lead['phone']);
         }
 
         return app(ReportsController::class)->test_card($lead->id, $request->test_id);
