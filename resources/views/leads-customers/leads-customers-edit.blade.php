@@ -134,7 +134,9 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label>الملاحظات</label>
-                                        <textarea name="notes" id="notes" class="form-control p-2" cols="30" rows="10">{{ old('notes', $lead->notes ?? '') }}</textarea>
+                                        {{-- <textarea name="notes" id="notes" class="form-control p-2" cols="30" rows="10">{{ old('notes', $lead->notes ?? '') }}</textarea> --}}
+                                        <input type="number" name="notes" class="form-control" required
+                                            value="{{ old('notes', $lead->notes ?? '') }}">
                                     </div>
                                 </div>
                             </div>
