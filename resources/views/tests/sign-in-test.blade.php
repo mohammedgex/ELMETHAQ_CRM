@@ -1355,8 +1355,8 @@
             const age = parseInt(this.value, 10);
             const errorDiv = document.getElementById('age-error');
 
-            if (age > 47) {
-                errorDiv.textContent = 'العمر تخطى 47 سنة';
+            if (age > 44) {
+                errorDiv.textContent = 'العمر تخطى 44 سنة';
             } else {
                 errorDiv.textContent = '';
             }
