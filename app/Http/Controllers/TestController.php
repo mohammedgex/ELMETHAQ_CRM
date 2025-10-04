@@ -65,10 +65,12 @@ class TestController extends Controller
         # code...
         $test = Test::find($test_id);
         $groups = CustomerGroup::all();
+        $tests = Test::latest()->get();
         return view("tests.customers-test", [
             "leads" => $test->leads,
             "test" => $test,
-            "groups" => $groups
+            "groups" => $groups,
+            "tests" => $tests
         ]);
     }
     public function addCustomers(Request $request, Test $test)
@@ -89,7 +91,7 @@ class TestController extends Controller
                 ->where('test_id', $test->id)
                 ->exists();
 
-            if (! $alreadyExists) {
+            if (!$alreadyExists) {
                 $lastCode = Evaluation::where('test_id', $test->id)
                     ->selectRaw('MAX(CAST(code AS UNSIGNED)) as max_code')
                     ->value('max_code');
@@ -178,7 +180,9 @@ class TestController extends Controller
 
         // حساب الكود التالي
         $lastCode = Evaluation::where('test_id', $request->test_id)
-            ->max('code');
+            ->selectRaw('MAX(CAST(code AS UNSIGNED)) as max_code')
+            ->value('max_code');
+
         $nextCode = $lastCode ? $lastCode + 1 : 1;
 
         // رفع الملف

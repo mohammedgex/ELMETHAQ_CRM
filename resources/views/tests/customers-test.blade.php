@@ -49,9 +49,11 @@
                                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
                                     <i class="fas fa-plus text-success"></i> تحويل كعميل أساسي
                                 </button>
+                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#testModal">
+                                    <i class="fas fa-plus text-success"></i> إضافة لاختبار آخر
+                                </button>
                             </div>
                         </div>
-
                     </div>
                 @endauth
 
@@ -83,7 +85,7 @@
                                         <input type="checkbox" class="lead-checkbox" name="lead_ids[]"
                                             value="{{ $lead->id }}">
                                     </td>
-                                    <td>#{{ $lead->evaluations()->latest()->first()->code ?? '---' }}
+                                    <td>#{{ $lead->evaluations->where('test_id', $test->id)->last()->code ?? '---' }}
                                     </td>
                                     <td>
 
@@ -288,6 +290,55 @@
                     </div>
                 </div>
             </div>
+        @endauth
+        @auth
+            <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg rounded-3">
+
+                        <!-- Header -->
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="groupModalLabel">
+                                <i class="fas fa-users me-2"></i> تعيين اختبار للعملاء المحددين
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                                aria-label="إغلاق"></button>
+                        </div>
+
+                        <!-- Form -->
+                        <form id="assignTestForm" action="{{ route('tests.addCustomer') }}" method="POST">
+                            @csrf
+                            <div class="modal-body">
+                                <input type="hidden" name="leads" id="selectedLeadsInputTest" required>
+
+                                <div class="mb-3">
+                                    <label for="groupSelect" class="form-label fw-bold">اختر الاختبار</label>
+                                    <select class="form-select" id="groupSelect" name="test_id" required>
+                                        <option value="" disabled selected>-- اختر الاختبار --</option>
+                                        @foreach ($tests as $testS)
+                                            <option value="{{ $testS->id }}">
+                                                {{ $testS->id }} - {{ $testS->title }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="modal-footer d-flex justify-content-between">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fas fa-times me-1"></i> إلغاء
+                                </button>
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fas fa-check me-1"></i> حفظ التغييرات
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
         @endauth
 
         <!-- Loading Overlay -->
@@ -497,5 +548,37 @@
             /* نضمن وصولها عالميًا (مهم لو السكربت محطوط كـ module) */
             window.exportTableToExcel = exportTableToExcel;
         </script>
+        <script>
+            document.getElementById('assignTestForm').addEventListener('submit', function(e) {
+                e.preventDefault(); // منع الريفريش
 
+                // جلب كل الـ checkboxes المختارة
+                const checkboxes = Array.from(document.querySelectorAll('.lead-checkbox:checked'));
+                if (checkboxes.length === 0) {
+                    Swal.fire({
+                        title: "الرجاء اختيار عميل واحد على الأقل.",
+                        icon: "error",
+                        draggable: true
+                    });
+                    return;
+                }
+
+                const selectedIds = [];
+                let hasExistingCustomer = false;
+
+                // فحص كل تشيك بوكس
+                checkboxes.forEach(cb => {
+                    const leadId = parseInt(cb.value);
+                    const row = cb.closest('tr');
+
+                    selectedIds.push(leadId);
+                });
+
+                // تعبئة hidden input بقائمة الـ IDs
+                document.getElementById('selectedLeadsInputTest').value = JSON.stringify(selectedIds);
+
+                // إرسال الفورم
+                this.submit();
+            });
+        </script>
     @stop
