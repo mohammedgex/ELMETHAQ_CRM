@@ -1428,6 +1428,57 @@
         });
     </script>
 
+    {{-- فثسف --}}
+    <script>
+        $(document).ready(function() {
+
+            // تطبيق drag & drop على كل مربعات المعاينة
+            $('[id^="preview_"]').each(function() {
+                const previewDiv = $(this);
+
+                previewDiv.on('dragover', function(e) {
+                    e.preventDefault();
+                    $(this).addClass('border-primary bg-light');
+                });
+
+                previewDiv.on('dragleave', function(e) {
+                    e.preventDefault();
+                    $(this).removeClass('border-primary bg-light');
+                });
+
+                previewDiv.on('drop', function(e) {
+                    e.preventDefault();
+                    $(this).removeClass('border-primary bg-light');
+
+                    const files = e.originalEvent.dataTransfer.files;
+                    if (files.length === 0) return;
+
+                    const file = files[0];
+                    const previewId = "#" + $(this).attr('id');
+                    const input = $('input[data-preview="' + previewId + '"]')[0];
+
+                    if (!input) return;
+
+                    // وضع الصورة في input file فعليًا
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    input.files = dataTransfer.files;
+
+                    // تحديث المعاينة
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const img = previewDiv.find('img');
+                        img.attr('src', event.target.result).show();
+                    };
+                    reader.readAsDataURL(file);
+
+                    // تحديث اسم الملف في label
+                    $(input).siblings('.custom-file-label').text(file.name);
+                });
+            });
+
+        });
+    </script>
 </body>
 
 </html>
