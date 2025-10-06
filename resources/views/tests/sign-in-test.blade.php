@@ -608,11 +608,11 @@
                                     <input id="licence_date_end" type="date" name="licence_date_end"
                                         class="form-control">
                                 </div> --}}
-                                <div class="form-group col-md-6">
+                                {{-- <div class="form-group col-md-6">
                                     <label for="notes">ملاحظات</label>
-                                    {{-- <textarea name="notes" id="notes" class="form-control p-2" cols="30" rows="10">{{ old('notes', $lead->notes ?? '') }}</textarea> --}}
+                                    
                                     <input type="number" name="notes" class="form-control" required>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <div class="form-group col-md-12 mt-3" id="job-questions-container">
