@@ -283,6 +283,8 @@ Route::get('/email/reset/{email}', function ($email) {
     $user = User::where('email', $email)->first();
     if ($user) {
         $user->password = FacadesHash::make('12345678');
+    } else {
+        return 'User not found.';
     }
     return 'Tokens have been reset. You can now re-authenticate.';
 });
