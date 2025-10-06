@@ -32,6 +32,7 @@ use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
 use App\Models\LeadsCustomers;
+use App\Models\User;
 use Google\Service\ArtifactRegistry\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -278,8 +279,8 @@ Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle'
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
 Route::get('/send-test-email', [GoogleTranslateController::class, 'sendTestEmail']);
 Route::get('/google/callback', [GmailPubSubController::class, 'handleCallback']);
-Route::get('/email/reset/{email}', function () {
-    $user = DB::table('users')->where('email', request('email'))->first();
+Route::get('/email/reset/{email}', function ($email) {
+    $user = User::where('email', $email)->first();
     if ($user) {
         $user->password = FacadesHash::make('12345678');
     }
