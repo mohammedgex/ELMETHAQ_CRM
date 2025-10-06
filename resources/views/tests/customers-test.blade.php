@@ -61,6 +61,7 @@
                     <table id="example" class="table table-hover text-center">
                         <thead class="bg-secondary text-white">
                             <tr>
+                                <th>الرقم</th>
                                 <th>
                                     <input type="checkbox" id="select-all">
                                 </th>
@@ -81,6 +82,9 @@
                         <tbody>
                             @forelse ($leads as $lead)
                                 <tr class="{{ $lead->evaluation == 'جارى المعالجة' ? 'bg-warning text-dark' : '' }}">
+                                    <td>
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td>
                                         <input type="checkbox" class="lead-checkbox" name="lead_ids[]"
                                             value="{{ $lead->id }}">
