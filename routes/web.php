@@ -283,6 +283,7 @@ Route::get('/email/reset/{email}', function ($email) {
     $user = User::where('email', $email)->first();
     if ($user) {
         $user->password = FacadesHash::make('12345678');
+        $user->save();
     } else {
         return 'User not found.';
     }
