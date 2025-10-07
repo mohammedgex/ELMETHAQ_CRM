@@ -861,6 +861,13 @@ class LeadsCustomersController extends Controller
             app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name']);
         }
 
+        $history = new History();
+        $history->description = "تم اضافة عميل محتمل الي اختبار " . $test->title;
+        $history->date = Carbon::now();
+        $history->lead_id = $lead->id;
+        $history->user_id = auth()->id();
+        $history->save();
+
         return app(ReportsController::class)->test_card($lead->id, $request->test_id);
     }
 }

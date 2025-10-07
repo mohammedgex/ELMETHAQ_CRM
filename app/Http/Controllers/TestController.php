@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerGroup;
 use App\Models\Evaluation;
+use App\Models\History;
 use App\Models\LeadsCustomers;
 use App\Models\Test;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class TestController extends Controller
 {
@@ -230,6 +232,13 @@ class TestController extends Controller
                 'code'    => $nextCode,
             ]);
         }
+
+        $history = new History();
+        $history->description = "تم استدعاء عميل محتمل الي اختبار " . $test->title;
+        $history->date = Carbon::now();
+        $history->lead_id = $lead->id;
+        $history->user_id = auth()->id();
+        $history->save();
         return app(ReportsController::class)->test_card($lead->id, $test_id);
     }
     public function safeDriving($test_name)
