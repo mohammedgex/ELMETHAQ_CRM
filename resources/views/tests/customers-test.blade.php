@@ -132,6 +132,7 @@
                                         $lastEvaluation = $lead
                                             ->evaluations()
                                             ->whereNotNull('evaluation')
+                                            ->where('test_id', $test->id)
                                             ->latest()
                                             ->first();
 
