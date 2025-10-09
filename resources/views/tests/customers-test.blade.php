@@ -52,6 +52,11 @@
                                 <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#testModal">
                                     <i class="fas fa-plus text-success"></i> إضافة لاختبار آخر
                                 </button>
+                                <button class="dropdown-item text-primary" data-bs-toggle="modal"
+                                    data-bs-target="#whatsappModal">
+                                    <i class="fas fa-paper-plane text-primary"></i>
+                                    إرسال رسالة نصية
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -355,235 +360,341 @@
                 </div>
             </div>
         </div>
-    @stop
+
+        <!-- ارسال رسالة   -->
+        <div class="modal fade" id="whatsappModal" tabindex="-1" aria-labelledby="whatsappModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="whatsappModalLabel">اختيار القالب لإرسال رسالة نصية</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="إغلاق"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="whatsappForm">
+                            <div class="mb-3">
+                                <label for="customerSelect" class="form-label">اختر قالب الرسالة</label>
+                                <select class="form-select-modal" id="customerSelect" required>
+                                    <option value="" disabled selected>-- اختر القالب --</option>
+                                    <!-- يتم إضافة الأسماء هنا عبر JavaScript -->
+                                    @foreach (App\Models\Template::all() as $template)
+                                        <option value="{{ $template->description }}">{{ $template->title }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button type="submit" class="btn btn-primary px-4">إرسال</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@stop
 
 
-    @section('css')
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
-        <style>
-            .loader {
-                border: 5px solid #f3f3f3;
-                /* لون الخلفية */
-                border-top: 5px solid #4caf50;
-                /* لون الدائرة المتحركة */
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                animation: spin 1.5s linear infinite;
+@section('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <style>
+        .loader {
+            border: 5px solid #f3f3f3;
+            /* لون الخلفية */
+            border-top: 5px solid #4caf50;
+            /* لون الدائرة المتحركة */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
             }
 
-            @keyframes spin {
-                0% {
-                    transform: rotate(0deg);
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-text {
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .ccccc::after {
+            display: none;
+        }
+
+        /* Warning Row Styling - Light Mode */
+        .table tbody tr.bg-warning {
+            background: linear-gradient(135deg, #f2db89 0%, #f0ca30 100%) !important;
+            color: #b7950b !important;
+            border-left: 4px solid #f39c12;
+            box-shadow: 0 2px 4px rgba(243, 156, 18, 0.1);
+        }
+
+        .table tbody tr.bg-warning td {
+            color: #000000 !important;
+        }
+
+        .table tbody tr.bg-warning:hover {
+            background: linear-gradient(135deg, #f3d56a 0%, #eeca37 100%) !important;
+            box-shadow: 0 4px 8px rgba(243, 156, 18, 0.15);
+        }
+
+        /* Warning Row Styling - Dark Mode */
+        body.dark-mode .table tbody tr.bg-warning {
+            background: linear-gradient(135deg, #3e2723 0%, #4e342e 100%) !important;
+            color: #ffb74d !important;
+            border-left: 4px solid #ff9800;
+            box-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
+        }
+
+        body.dark-mode .table tbody tr.bg-warning td {
+            color: #ffb74d !important;
+        }
+
+        body.dark-mode .table tbody tr.bg-warning:hover {
+            background: linear-gradient(135deg, #4e342e 0%, #5d4037 100%) !important;
+            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.25);
+        }
+    </style>
+@stop
+
+@section('js')
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery & DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- DataTables Buttons -->
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        $(document).on('click', '.open-evaluation-modal', function() {
+            var leadId = $(this).data('lead-id');
+            $('#modal-lead-id').val(leadId);
+        });
+        ['assignGroupForm', 'leadForm', "delete", "add"].forEach(function(formId) {
+            var form = document.getElementById(formId);
+            if (form) {
+                form.addEventListener('submit', function() {
+                    document.getElementById('loading-overlay').style.display = 'block';
+                });
+            }
+        });
+        // تحديث العداد
+        function updateSelectedCount() {
+            let count = document.querySelectorAll('.lead-checkbox:checked').length;
+            document.getElementById('selected-count').textContent = count;
+        }
+
+        // تحديد الكل
+        document.getElementById('select-all').addEventListener('change', function() {
+            let checkboxes = document.querySelectorAll('.lead-checkbox');
+            checkboxes.forEach(cb => cb.checked = this.checked);
+            updateSelectedCount(); // تحديث العداد بعد التحديد الكلي
+        });
+
+        // عند تغيير أي checkbox فرعي
+        document.querySelectorAll('.lead-checkbox').forEach(cb => {
+            cb.addEventListener('change', updateSelectedCount);
+        });
+        $('#example').DataTable({
+            dom: 'lftip', // أضف "f" لعرض مربع البحث الافتراضي
+            pageLength: -1,
+            lengthMenu: [
+                [10, 20, 50, -1],
+                [10, 25, 50, "الكل"]
+            ],
+            language: {
+                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+            },
+            searching: true,
+            ordering: true
+        });
+    </script>
+
+    <script type="module">
+        document.getElementById('assignGroupForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع الريفريش
+
+            // جلب كل الـ checkboxes المختارة
+            const checkboxes = Array.from(document.querySelectorAll('.lead-checkbox:checked'));
+            if (checkboxes.length === 0) {
+                document.getElementById('loading-overlay').style.display = 'none';
+                Swal.fire({
+                    title: "الرجاء اختيار عميل واحد على الأقل.",
+                    icon: "error",
+                    draggable: true
+                });
+                return;
+            }
+
+            const selectedIds = [];
+            let hasExistingCustomer = false;
+
+            // فحص كل تشيك بوكس
+            checkboxes.forEach(cb => {
+                const leadId = parseInt(cb.value);
+                const row = cb.closest('tr');
+                const status = row.querySelector('.lead-status')?.dataset.status;
+                if (status === 'عميل اساسي') {
+                    hasExistingCustomer = true;
                 }
 
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-
-            .loading-text {
-                font-size: 16px;
-                text-align: center;
-            }
-
-            .ccccc::after {
-                display: none;
-            }
-
-            /* Warning Row Styling - Light Mode */
-            .table tbody tr.bg-warning {
-                background: linear-gradient(135deg, #f2db89 0%, #f0ca30 100%) !important;
-                color: #b7950b !important;
-                border-left: 4px solid #f39c12;
-                box-shadow: 0 2px 4px rgba(243, 156, 18, 0.1);
-            }
-
-            .table tbody tr.bg-warning td {
-                color: #000000 !important;
-            }
-
-            .table tbody tr.bg-warning:hover {
-                background: linear-gradient(135deg, #f3d56a 0%, #eeca37 100%) !important;
-                box-shadow: 0 4px 8px rgba(243, 156, 18, 0.15);
-            }
-
-            /* Warning Row Styling - Dark Mode */
-            body.dark-mode .table tbody tr.bg-warning {
-                background: linear-gradient(135deg, #3e2723 0%, #4e342e 100%) !important;
-                color: #ffb74d !important;
-                border-left: 4px solid #ff9800;
-                box-shadow: 0 2px 4px rgba(255, 152, 0, 0.2);
-            }
-
-            body.dark-mode .table tbody tr.bg-warning td {
-                color: #ffb74d !important;
-            }
-
-            body.dark-mode .table tbody tr.bg-warning:hover {
-                background: linear-gradient(135deg, #4e342e 0%, #5d4037 100%) !important;
-                box-shadow: 0 4px 8px rgba(255, 152, 0, 0.25);
-            }
-        </style>
-    @stop
-
-    @section('js')
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- jQuery & DataTables JS -->
-        <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-        <!-- DataTables Buttons -->
-        <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-
-        <script>
-            $(document).on('click', '.open-evaluation-modal', function() {
-                var leadId = $(this).data('lead-id');
-                $('#modal-lead-id').val(leadId);
-            });
-            ['assignGroupForm', 'leadForm', "delete", "add"].forEach(function(formId) {
-                var form = document.getElementById(formId);
-                if (form) {
-                    form.addEventListener('submit', function() {
-                        document.getElementById('loading-overlay').style.display = 'block';
-                    });
-                }
-            });
-            // تحديث العداد
-            function updateSelectedCount() {
-                let count = document.querySelectorAll('.lead-checkbox:checked').length;
-                document.getElementById('selected-count').textContent = count;
-            }
-
-            // تحديد الكل
-            document.getElementById('select-all').addEventListener('change', function() {
-                let checkboxes = document.querySelectorAll('.lead-checkbox');
-                checkboxes.forEach(cb => cb.checked = this.checked);
-                updateSelectedCount(); // تحديث العداد بعد التحديد الكلي
+                selectedIds.push(leadId);
             });
 
-            // عند تغيير أي checkbox فرعي
-            document.querySelectorAll('.lead-checkbox').forEach(cb => {
-                cb.addEventListener('change', updateSelectedCount);
+            if (hasExistingCustomer) {
+                document.getElementById('loading-overlay').style.display = 'none';
+                Swal.fire({
+                    title: "يوجد عميل أساسي بالفعل في الاختيارات.",
+                    icon: "error",
+                    draggable: true
+                });
+                return;
+            }
+
+            // تعبئة hidden input بقائمة الـ IDs
+            document.getElementById('selectedLeadsInput').value = JSON.stringify(selectedIds);
+
+            // إرسال الفورم
+            this.submit();
+        });
+    </script>
+
+    <script>
+        /* نعرّف الدالة في الـ global عشان onclick يعمل */
+        function exportTableToExcel(tableId, filename = 'exported_table.xlsx') {
+            const table = document.getElementById(tableId);
+            if (!table) {
+                console.error('Table not found:', tableId);
+                return;
+            }
+            const wb = XLSX.utils.table_to_book(table, {
+                sheet: "Sheet1"
             });
-            $('#example').DataTable({
-                dom: 'lftip', // أضف "f" لعرض مربع البحث الافتراضي
-                pageLength: -1,
-                lengthMenu: [
-                    [10, 20, 50, -1],
-                    [10, 25, 50, "الكل"]
-                ],
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
+            XLSX.writeFile(wb, filename);
+        }
+
+        /* نضمن وصولها عالميًا (مهم لو السكربت محطوط كـ module) */
+        window.exportTableToExcel = exportTableToExcel;
+    </script>
+    <script>
+        document.getElementById('assignTestForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع الريفريش
+
+            // جلب كل الـ checkboxes المختارة
+            const checkboxes = Array.from(document.querySelectorAll('.lead-checkbox:checked'));
+            if (checkboxes.length === 0) {
+                Swal.fire({
+                    title: "الرجاء اختيار عميل واحد على الأقل.",
+                    icon: "error",
+                    draggable: true
+                });
+                return;
+            }
+
+            const selectedIds = [];
+            let hasExistingCustomer = false;
+
+            // فحص كل تشيك بوكس
+            checkboxes.forEach(cb => {
+                const leadId = parseInt(cb.value);
+                const row = cb.closest('tr');
+
+                selectedIds.push(leadId);
+            });
+
+            // تعبئة hidden input بقائمة الـ IDs
+            document.getElementById('selectedLeadsInputTest').value = JSON.stringify(selectedIds);
+
+            // إرسال الفورم
+            this.submit();
+        });
+
+        document.getElementById("whatsappForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: '<span style="font-size: 20px; font-weight: bold;">جاري ارسال الرسالة ...</span>',
+                html: `
+                        <div dir="rtl" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px;">
+                            <div style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; padding: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                                <div class="spinner-border text-white" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
+                            </div>
+                            <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;">جاري تنفيذ ارسال الرسائل الي العملاء...</h2>
+                            <p style="font-size: 15px; color: #666; margin-top: 5px;">يرجى الانتظار حتى انتهاء ارسال الرسائل للعملاء</p>
+                        </div>
+                    `,
+                background: '#fff',
+                width: '400px',
+                customClass: {
+                    popup: 'modern-swal-popup',
                 },
-                searching: true,
-                ordering: true
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                backdrop: `rgba(0,0,0,0.2)`
             });
-        </script>
+            const templite = document.getElementById('customerSelect').value;
+            const selectedCustomerIds = Array.from(
+                document.querySelectorAll('input[name="lead_ids[]"]:checked')
+            ).map(checkbox => checkbox.value);
 
-        <script type="module">
-            document.getElementById('assignGroupForm').addEventListener('submit', function(e) {
-                e.preventDefault(); // منع الريفريش
-
-                // جلب كل الـ checkboxes المختارة
-                const checkboxes = Array.from(document.querySelectorAll('.lead-checkbox:checked'));
-                if (checkboxes.length === 0) {
-                    document.getElementById('loading-overlay').style.display = 'none';
-                    Swal.fire({
-                        title: "الرجاء اختيار عميل واحد على الأقل.",
-                        icon: "error",
-                        draggable: true
-                    });
-                    return;
-                }
-
-                const selectedIds = [];
-                let hasExistingCustomer = false;
-
-                // فحص كل تشيك بوكس
-                checkboxes.forEach(cb => {
-                    const leadId = parseInt(cb.value);
-                    const row = cb.closest('tr');
-                    const status = row.querySelector('.lead-status')?.dataset.status;
-                    if (status === 'عميل اساسي') {
-                        hasExistingCustomer = true;
-                    }
-
-                    selectedIds.push(leadId);
+            if (selectedCustomerIds.length === 0) {
+                Swal.fire({
+                    title: 'تنبيه',
+                    text: 'يرجى تحديد العملاء أولاً',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
                 });
-
-                if (hasExistingCustomer) {
-                    document.getElementById('loading-overlay').style.display = 'none';
-                    Swal.fire({
-                        title: "يوجد عميل أساسي بالفعل في الاختيارات.",
-                        icon: "error",
-                        draggable: true
-                    });
-                    return;
-                }
-
-                // تعبئة hidden input بقائمة الـ IDs
-                document.getElementById('selectedLeadsInput').value = JSON.stringify(selectedIds);
-
-                // إرسال الفورم
-                this.submit();
-            });
-        </script>
-
-        <script>
-            /* نعرّف الدالة في الـ global عشان onclick يعمل */
-            function exportTableToExcel(tableId, filename = 'exported_table.xlsx') {
-                const table = document.getElementById(tableId);
-                if (!table) {
-                    console.error('Table not found:', tableId);
-                    return;
-                }
-                const wb = XLSX.utils.table_to_book(table, {
-                    sheet: "Sheet1"
-                });
-                XLSX.writeFile(wb, filename);
+                return;
             }
 
-            /* نضمن وصولها عالميًا (مهم لو السكربت محطوط كـ module) */
-            window.exportTableToExcel = exportTableToExcel;
-        </script>
-        <script>
-            document.getElementById('assignTestForm').addEventListener('submit', function(e) {
-                e.preventDefault(); // منع الريفريش
-
-                // جلب كل الـ checkboxes المختارة
-                const checkboxes = Array.from(document.querySelectorAll('.lead-checkbox:checked'));
-                if (checkboxes.length === 0) {
+            fetch('{{ route('send.sms.lead') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        customer_ids: selectedCustomerIds,
+                        templite: templite
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
                     Swal.fire({
-                        title: "الرجاء اختيار عميل واحد على الأقل.",
-                        icon: "error",
-                        draggable: true
+                        position: "center",
+                        icon: "success",
+                        title: "تم ارسالة رسالة نصية بنجاح",
+                        showConfirmButton: false,
+                        timer: 3000
                     });
-                    return;
-                }
-
-                const selectedIds = [];
-                let hasExistingCustomer = false;
-
-                // فحص كل تشيك بوكس
-                checkboxes.forEach(cb => {
-                    const leadId = parseInt(cb.value);
-                    const row = cb.closest('tr');
-
-                    selectedIds.push(leadId);
+                    setTimeout(() => {
+                        location.reload();
+                    }, 3000);
+                })
+                .catch(err => {
+                    console.error(err);
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "حدث خطأ أثناء التعيين",
+                        showConfirmButton: false,
+                        timer: 3000
+                    });
                 });
-
-                // تعبئة hidden input بقائمة الـ IDs
-                document.getElementById('selectedLeadsInputTest').value = JSON.stringify(selectedIds);
-
-                // إرسال الفورم
-                this.submit();
-            });
-        </script>
-    @stop
+        });
+    </script>
+@stop

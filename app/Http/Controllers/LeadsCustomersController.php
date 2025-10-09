@@ -18,6 +18,7 @@ use App\Models\Test;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 
 class LeadsCustomersController extends Controller
@@ -869,5 +870,33 @@ class LeadsCustomersController extends Controller
         $history->save();
 
         return app(ReportsController::class)->test_card($lead->id, $request->test_id);
+    }
+
+    public function sendSmsLead(Request $request)
+    {
+        $request->validate([
+            'customer_ids' => "required",
+            "templite" => "required"
+        ]);
+        ini_set('max_execution_time', 300); // 5 minutes
+
+        $customers = LeadsCustomers::whereIn("id", $request->customer_ids)->get();
+        foreach ($customers as $customer) {
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer 714|qEOqBniIAUxUDwelNt6yR243dSFztZgBeEOmcm8Hb27a6438',
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+            ])->post('https://bulk.whysms.com/api/v3/sms/send', [
+                'recipient' => "2" . $customer->phone, // make sure it's in correct international format
+                'sender_id' => 'Elmethaq Co',
+                'type' => 'plain',
+                'message' =>  $request->templite,
+            ]);
+        }
+
+        return response()->json([
+            'success' => 'true',
+            'message' => $response->json(),
+        ]);
     }
 }

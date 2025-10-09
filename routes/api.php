@@ -10,6 +10,7 @@ use App\Http\Controllers\GmailPubSubController;
 use App\Http\Controllers\JobAnswerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JopController;
+use App\Http\Controllers\LeadsCustomersController;
 use App\Http\Controllers\VisaProfessionsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,6 +37,7 @@ Route::post('/assign-group', [CustomerGroupController::class, 'assignGroup'])->n
 Route::post('/assign-delegate', [DelegateController::class, 'assignDelegate'])->name("delegate.assign");
 Route::post('/assign-bag', [BagController::class, 'assignBag'])->name("bag.assign");
 Route::post('/send-sms', [JopController::class, 'sendSms'])->name('send.sms');
+Route::post('/send-sms-lead', [LeadsCustomersController::class, 'sendSmsLead'])->name('send.sms.lead');
 Route::post('/savePDF', [JopController::class, 'savePDF'])->name('savePDF');
 Route::post('/send-engaz', [CustomerController::class, 'engaz_request'])->name('engaz_request');
 Route::post('/professions', [VisaProfessionsController::class, 'professionFromAtutomition'])->name('profession');
