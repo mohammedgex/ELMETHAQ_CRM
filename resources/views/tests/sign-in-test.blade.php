@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <style>
         :root {
@@ -454,14 +455,16 @@
 <body>
     <div class="container-fluid">
         <div class="card card-primary">
-            <div class="card-header bg-secondary d-flex justify-content-between align-items-center ">
-                <h3 class="card-title">تسجيل عميل داخل اختبار</h3>
-                <h3>
-                    <a href="{{ route('test.leads', $test_id) }}" class="btn btn-light btn-sm">
-                        <i class="fas fa-arrow-left"></i>
-                    </a>
+            <div class="card-header bg-secondary d-flex justify-content-between align-items-center p-2 p-md-3">
+                <h3 class="card-title mb-0" style="font-size: 13px; font-weight: normal;">
+                    تسجيل عميل داخل اختبار
                 </h3>
+                <a href="{{ route('test.leads', $test_id) }}" class="btn btn-light btn-sm px-2 py-1">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
             </div>
+
+
 
             @if ($errors->any())
                 <script>
@@ -488,26 +491,76 @@
                 <div class="card-body">
                     <div class="row">
                         <!-- الحقول الرئيسية -->
-                        <div class="col-md-8">
-                            <!-- الصورة الشخصية -->
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
-                                <label for="image">الصورة الشخصية</label>
+                        <div class="col-md-12">
+                            <div class="d-flex flex-wrap">
+                                <!-- الصورة الشخصية -->
+                                <div class="col-12 col-md-6 form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                                    <label for="image">الصورة الشخصية</label>
 
-                                <div class="custom-file mb-2">
-                                    <input type="file" name="image" class="custom-file-input preview-image-input"
-                                        data-preview="#preview_image" id="dd" required>
-                                    <label class="custom-file-label">اختر صورة</label>
-                                </div>
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="image"
+                                            class="custom-file-input preview-image-input" data-preview="#preview_image"
+                                            id="dd" required>
+                                        <label class="custom-file-label">اختر صورة</label>
+                                    </div>
 
-                                <div id="preview_image" class="border rounded p-2 text-center bg-light"
-                                    style="min-height: 130px;">
-                                    <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
-                                        style="max-width: 100px; display: none;" alt="Preview">
+                                    <div id="preview_image" class="border rounded p-2 text-center bg-light"
+                                        style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
+                                            class="img-thumbnail" style="max-width: 100px; display: none;"
+                                            alt="Preview">
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                        data-input="#dd" data-preview="#preview_image">
+                                        اقتصاص
+                                    </button>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                    data-input="#dd" data-preview="#preview_image">
-                                    اقتصاص
-                                </button>
+                                <!-- بطاقة الرقم القومي -->
+                                <div class="col-12 col-md-6 form-group p-3 mb-4 bg-white rounded border shadow-sm"
+                                    style="flex: 1 1 48%;">
+                                    <label for="img_national_id_card">بطاقة الرقم القومي من الامام</label>
+
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="img_national_id_card"
+                                            class="custom-file-input preview-image-input"
+                                            data-preview="#preview_img_national_id_card" id="ss" required>
+                                        <label class="custom-file-label">اختر صورة</label>
+                                    </div>
+
+                                    <div id="preview_img_national_id_card"
+                                        class="border rounded p-2 text-center bg-light" style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
+                                            class="img-thumbnail" style="max-width: 100px; display: none;"
+                                            alt="Preview">
+                                    </div>
+                                    <div class="mt-3 d-flex align-items-center gap-3  justify-content-between">
+
+                                        <div>
+                                            <button type="button" id="analyzeBtn" class="btn btn-primary">
+                                                استخراج البيانات
+                                            </button>
+                                        </div>
+
+                                        <!-- Loader -->
+                                        <div id="loader_container" class="d-flex align-items-center gap-2"
+                                            style="display: none;">
+                                            <div id="passportInput_loader" class="spinner-border text-primary"
+                                                role="status"
+                                                style="width: 24px; height: 24px;margin-left: 14px; display: none;">
+                                            </div>
+                                            <div id="passportInput_loader_text" class="loading-text text-primary"
+                                                style="font-size: 14px; display: none;">
+                                                الرجاء الانتظار...
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                                data-input="#ss" data-preview="#preview_img_national_id_card">
+                                                اقتصاص
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- باقي الحقول -->
@@ -521,8 +574,8 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="card_id">الرقم القومي</label>
-                                    <input type="text" name="card_id" id="card_id" class="form-control" required
-                                        placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
+                                    <input type="text" name="card_id" id="card_id" class="form-control"
+                                        required placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
                                         pattern="^[0-9]{14}$" maxlength="14"
                                         title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
@@ -536,7 +589,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label>المندوب</label>
-                                    <select name="delegate_id" class="form-control" required>
+                                    <select name="delegate_id" class="form-control select2" required>
                                         <option value="">اختر المندوب</option>
                                         @foreach ($delegates as $delegate)
                                             <option value="{{ $delegate->id }}"
@@ -621,112 +674,13 @@
                         </div>
 
                         <!-- صور -->
-                        <div class="col-md-4">
-
-                            <!-- صور البطاقة الشخصية (جنباً إلى جنب) -->
-                            <div class="d-flex flex-wrap gap-3">
-                                <!-- بطاقة الرقم القومي من الأمام -->
-                                <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm"
-                                    style="flex: 1 1 48%;">
-                                    <label for="img_national_id_card">بطاقة الرقم القومي من الامام</label>
-
-                                    <div class="custom-file mb-2">
-                                        <input type="file" name="img_national_id_card"
-                                            class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card" id="ss" required>
-                                        <label class="custom-file-label">اختر صورة</label>
-                                    </div>
-
-                                    <div id="preview_img_national_id_card"
-                                        class="border rounded p-2 text-center bg-light" style="min-height: 130px;">
-                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
-                                            class="img-thumbnail" style="max-width: 100px; display: none;"
-                                            alt="Preview">
-                                    </div>
-                                    <div class="mt-3 d-flex align-items-center gap-3  justify-content-between">
-
-                                        <div>
-                                            <button type="button" id="analyzeBtn" class="btn btn-primary">
-                                                استخراج البيانات
-                                            </button>
-                                        </div>
-
-                                        <!-- Loader -->
-                                        <div id="loader_container" class="d-flex align-items-center gap-2"
-                                            style="display: none;">
-                                            <div id="passportInput_loader" class="spinner-border text-primary"
-                                                role="status"
-                                                style="width: 24px; height: 24px;margin-left: 14px; display: none;">
-                                            </div>
-                                            <div id="passportInput_loader_text" class="loading-text text-primary"
-                                                style="font-size: 14px; display: none;">
-                                                الرجاء الانتظار...
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                                data-input="#ss" data-preview="#preview_img_national_id_card">
-                                                اقتصاص
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- بطاقة الرقم القومي من الخلف -->
-                                <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm"
-                                    style="flex: 1 1 48%;">
-                                    <label for="img_national_id_card_back">بطاقة الرقم القومي من الخلف</label>
-
-                                    <div class="custom-file mb-2">
-                                        <input type="file" name="img_national_id_card_back"
-                                            class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card_back" id="aa" required>
-                                        <label class="custom-file-label">اختر صورة</label>
-                                    </div>
-
-                                    <div id="preview_img_national_id_card_back"
-                                        class="border rounded p-2 text-center bg-light" style="min-height: 130px;">
-                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
-                                            class="img-thumbnail" style="max-width: 100px; display: none;"
-                                            alt="Preview">
-                                    </div>
-                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                        data-input="#aa" data-preview="#preview_img_national_id_card_back">
-                                        اقتصاص
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- إثبات مهنة -->
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
-                                <label for="license_photo">اثبات مهنة ( رخصة او شهادة او CV) اختياري</label>
-
-                                <div class="custom-file mb-2">
-                                    <input type="file" name="license_photo"
-                                        class="custom-file-input preview-image-input"
-                                        data-preview="#preview_license_photo" id="ff" required>
-                                    <label class="custom-file-label">اختر صورة</label>
-                                </div>
-
-                                <div id="preview_license_photo" class="border rounded p-2 text-center bg-light"
-                                    style="min-height: 130px;">
-                                    <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
-                                        style="max-width: 100px; display: none;" alt="Preview">
-                                </div>
-                                <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                    data-input="#ff" data-preview="#preview_license_photo">
-                                    اقتصاص
-                                </button>
-                            </div>
-                        </div>
                     </div>
-                </div>
 
-                <div class="card-footer text-center">
-                    <button type="submit" id="submitBtn" class="btn btn-success" style="width: 250px">
-                        <i class="fas fa-plus-circle"></i> حفظ
-                    </button>
-                </div>
+                    <div class="card-footer text-center p-0">
+                        <button type="submit" id="submitBtn" class="btn btn-success" style="width: 250px">
+                            <i class="fas fa-plus-circle"></i> حفظ
+                        </button>
+                    </div>
             </form>
         </div>
     </div>
@@ -794,24 +748,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script>
-        // مثال لمعاينة الصور
-        // $(document).on('change', '.preview-image-input', function() {
-        //     var input = this;
-        //     var previewId = $(this).data('preview');
-
-        //     if (input.files && input.files[0]) {
-        //         var reader = new FileReader
-        //         reader.onload = function(e) {
-        //             var img = $(previewId).find('img');
-        //             img.attr('src', e.target.result);
-        //             img.show();
-        //         }
-        //         reader.readAsDataURL(input.files[0]);
-        //     }
-        // });
-    </script>
     {{-- قص الصورة --}}
     <script>
         let cropper;
@@ -1477,6 +1415,16 @@
                 });
             });
 
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "اختر المندوب",
+                allowClear: true,
+                width: '100%'
+            });
         });
     </script>
 </body>
