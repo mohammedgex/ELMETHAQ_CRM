@@ -293,13 +293,22 @@
 </head>
 
 <body>
-    <div style="text-align: center; margin: 10px 0;">
-        <button onclick="window.print()" class="btn btn-print no-print">
-            <i class="fas fa-print me-1"></i> طباعة
-        </button>
-        <button class="btn btn-print no-print" onclick="window.history.back()">
-            <i class="fas fa-print me-1"></i>رجوع
-        </button>
+    <div style="text-align: center; margin: 10px 0; display: flex; justify-content: space-around; gap: 15px;">
+        <div>
+            <a class="btn btn-print no-print" href="{{ route('leads-customers.update', $lead->id) }}">
+                <i class="fas fa-print me-1"></i>تعديل
+            </a>
+        </div>
+        <div>
+            <button onclick="window.print()" class="btn btn-print no-print">
+                <i class="fas fa-print me-1"></i> طباعة
+            </button>
+        </div>
+        <div>
+            <a class="btn btn-print no-print" href="{{ route('sign.lead.in.test', $test->id) }}">
+                <i class="fas fa-print me-1"></i>رجوع
+            </a>
+        </div>
     </div>
 
     <style>
@@ -416,6 +425,8 @@
                 <div>{{ $lead->governorate }}</div>
                 <div>المندوب:</div>
                 <div>{{ $lead->delegate->name ?? '' }}</div>
+                <div class="no-print">الهاتف:</div>
+                <div class="no-print">{{ $lead->phone }}</div>
             </div>
         </div>
 
