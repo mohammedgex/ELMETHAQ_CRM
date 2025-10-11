@@ -297,6 +297,9 @@
         <button onclick="window.print()" class="btn btn-print no-print">
             <i class="fas fa-print me-1"></i> طباعة
         </button>
+        <button class="btn btn-print no-print" onclick="window.history.back()">
+            <i class="fas fa-print me-1"></i>رجوع
+        </button>
     </div>
 
     <style>

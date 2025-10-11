@@ -464,25 +464,6 @@
                 </a>
             </div>
 
-
-
-            @if ($errors->any())
-                <script>
-                    let errorMessages = `<ul style="text-align:right;direction:rtl;"> 
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>`;
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'حدثت أخطاء في الإدخال:',
-                        html: errorMessages,
-                        confirmButtonText: 'حسناً'
-                    });
-                </script>
-            @endif
-
-            </script>
             <form action="{{ route('create.lead.in.test', $test_id) }}" id="myForm" method="POST"
                 enctype="multipart/form-data">
                 @csrf
@@ -575,8 +556,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="card_id">الرقم القومي</label>
                                     <input type="text" name="card_id" id="card_id" class="form-control"
-                                        required placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
-                                        pattern="^[0-9]{14}$" maxlength="14"
+                                        required placeholder="أدخل الرقم القومي" pattern="^[0-9]{14}$" maxlength="14"
                                         title="يجب أن يكون الرقم القومي مكونًا من 14 رقمًا"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
 
@@ -592,8 +572,7 @@
                                     <select name="delegate_id" class="form-control select2" required>
                                         <option value="">اختر المندوب</option>
                                         @foreach ($delegates as $delegate)
-                                            <option value="{{ $delegate->id }}"
-                                                {{ old('delegate_id') == $delegate->id ? 'selected' : '' }}>
+                                            <option value="{{ $delegate->id }}">
                                                 {{ $delegate->name }}
                                             </option>
                                         @endforeach
@@ -605,8 +584,7 @@
                                     <select name="job_title_id" id="job_title_id" class="form-control" required>
                                         <option value="">اختر الوظيفة</option>
                                         @foreach ($jobs as $job)
-                                            <option value="{{ $job->id }}"
-                                                {{ old('job_title_id') == $job->id ? 'selected' : '' }}>
+                                            <option value="{{ $job->id }}">
                                                 {{ $job->title }}
                                             </option>
                                         @endforeach
@@ -626,8 +604,7 @@
                                 <div class="form-group col-md-6">
                                     <label for="phone">رقم الهاتف</label>
                                     <input type="text" name="phone" id="phone" class="form-control"
-                                        required placeholder="أدخل رقم الهاتف" value="{{ old('phone') }}"
-                                        maxlength="11" pattern="^[0-9]{11}$"
+                                        required placeholder="أدخل رقم الهاتف" maxlength="11" pattern="^[0-9]{11}$"
                                         title="يجب أن يكون رقم الهاتف مكونًا من 11 رقمًا"
                                         oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                                     <div id="phone-error" class="text-danger"></div>
@@ -643,8 +620,7 @@
                                     <select name="governorate" id="governorate" class="form-control" required>
                                         <option value="">اختر المحافظة</option>
                                         @foreach ($governorates as $gov)
-                                            <option value="{{ $gov }}"
-                                                {{ old('governorate') == $gov ? 'selected' : '' }}>
+                                            <option value="{{ $gov }}">
                                                 {{ $gov }}
                                             </option>
                                         @endforeach
@@ -872,6 +848,110 @@
         });
     </script>
     <script type="module">
+        function extractInfoFromNationalID(nationalID) {
+            // قائمة المحافظات حسب كود المحافظة
+            const governorates = {
+                "01": "القاهرة",
+                "02": "الأسكندرية",
+                "03": "بورسعيد",
+                "04": "السويس",
+                "11": "دمياط",
+                "12": "الدقهلية",
+                "13": "الشرقية",
+                "14": "القليوبية",
+                "15": "كفر الشيخ",
+                "16": "الغربية",
+                "17": "المنوفية",
+                "18": "البحيرة",
+                "19": "الإسماعيلية",
+                "21": "الجيزة",
+                "22": "بني سويف",
+                "23": "الفيوم",
+                "24": "المنيا",
+                "25": "أسيوط",
+                "26": "سوهاج",
+                "27": "قنا",
+                "28": "أسوان",
+                "29": "الأقصر",
+                "31": "البحر الأحمر",
+                "32": "الوادي الجديد",
+                "33": "مطروح",
+                "34": "شمال سيناء",
+                "35": "جنوب سيناء"
+            };
+
+            // التحقق من صحة الرقم القومي
+            if (!nationalID || nationalID.toString().length !== 14) {
+                return {
+                    success: false,
+                    error: "رقم قومي غير صحيح - يجب أن يكون 14 رقم"
+                };
+            }
+
+            const id = nationalID.toString();
+
+            // استخراج البيانات من الرقم القومي
+            const centuryDigit = parseInt(id[0]);
+            let year = parseInt(id.substring(1, 3));
+            const month = parseInt(id.substring(3, 5));
+            const day = parseInt(id.substring(5, 7));
+            const governorateCode = id.substring(7, 9);
+
+            // استخراج المحافظة
+            const governorate = governorates[governorateCode] || "غير معروف";
+
+            // تحديد القرن
+            if (centuryDigit === 2) {
+                year += 1900;
+            } else if (centuryDigit === 3) {
+                year += 2000;
+            } else {
+                return {
+                    success: false,
+                    error: "رقم قومي غير صحيح - رقم القرن خاطئ"
+                };
+            }
+
+            // التحقق من صحة التاريخ
+            const birthDate = new Date(year, month - 1, day);
+
+            if (
+                birthDate.getFullYear() !== year ||
+                birthDate.getMonth() !== month - 1 ||
+                birthDate.getDate() !== day
+            ) {
+                return {
+                    success: false,
+                    error: "تاريخ ميلاد غير صحيح في الرقم القومي"
+                };
+            }
+
+            // حساب السن
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            // التعديل إذا لم يأتي عيد الميلاد بعد هذا العام
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            // تنسيق تاريخ الميلاد
+            const formattedDate = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+
+            return {
+                success: true,
+                birthDate: formattedDate,
+                birthDateObject: birthDate,
+                age: age,
+                year: year,
+                month: month,
+                day: day,
+                governorate: governorate,
+                governorateCode: governorateCode
+            };
+        }
+
         function calculateAge(dateOfBirth) {
             const today = new Date();
             const birthDate = new Date(dateOfBirth);
@@ -942,7 +1022,7 @@
                         - governorate: (Extracted from national_id and returned strictly in Arabic, chosen only from the allowed list below)
 
                         Important note: The value of the "governorate" key must be exactly one of the following Arabic values only:
-                        "القاهرة", "الجيزة", "الأسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", "الغربية", "الإسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", "السويس", "أسوان", "أسيوط", "بني سويف", "بورسعيد", "دمياط", "الشرقية", "جنوب سيناء", "كفر الشيخ", "مطروح", "الأقصر", "قنا", "شمال سيناء", "سوهاج", "السعودية", "القدس", "الأردن", "العراق", "لبنان", "فلسطين", "اليمن", "عمان", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين"
+                        "القاهرة", "الجيزة", "الأسكندرية", "الدقهلية", "البحر الأحمر", "البحيرة", "الفيوم", "الغربية", "الاسماعيلية", "المنوفية", "المنيا", "القليوبية", "الوادي الجديد", "السويس", "أسوان", "أسيوط", "بني سويف", "بورسعيد", "دمياط", "الشرقية", "جنوب سيناء", "كفر الشيخ", "مطروح", "الأقصر", "قنا", "شمال سيناء", "سوهاج", "السعودية", "القدس", "الأردن", "العراق", "لبنان", "فلسطين", "اليمن", "عمان", "الإمارات العربية المتحدة", "الكويت", "قطر", "البحرين"
 
                         Return the output strictly as JSON only (without any explanation or additional text) in the following structure:
                         {
@@ -1104,6 +1184,15 @@
         $(document).on("input", "#card_id", function() {
             let card_id = $(this).val();
             if (card_id.length === 14) {
+                let data = extractInfoFromNationalID(document.getElementById("card_id").value);
+                console.log(data);
+
+                if (data.success) {
+                    document.getElementById("age").value = data.age;
+                    document.getElementById("date_of_birth").value = data.birthDateISO; // استخدم birthDateISO
+                    document.getElementById("governorate").value = data.governorate;
+                }
+
                 $.post("{{ route('check.card') }}", {
                     _token: "{{ csrf_token() }}",
                     card_id: card_id
@@ -1426,6 +1515,114 @@
                 width: '100%'
             });
         });
+    </script>
+
+    <script>
+        function extractInfoFromNationalID(nationalID) {
+            // قائمة المحافظات حسب كود المحافظة
+            const governorates = {
+                "01": "القاهرة",
+                "02": "الأسكندرية",
+                "03": "بورسعيد",
+                "04": "السويس",
+                "11": "دمياط",
+                "12": "الدقهلية",
+                "13": "الشرقية",
+                "14": "القليوبية",
+                "15": "كفر الشيخ",
+                "16": "الغربية",
+                "17": "المنوفية",
+                "18": "البحيرة",
+                "19": "الاسماعيلية",
+                "21": "الجيزة",
+                "22": "بني سويف",
+                "23": "الفيوم",
+                "24": "المنيا",
+                "25": "أسيوط",
+                "26": "سوهاج",
+                "27": "قنا",
+                "28": "أسوان",
+                "29": "الأقصر",
+                "31": "البحر الأحمر",
+                "32": "الوادي الجديد",
+                "33": "مطروح",
+                "34": "شمال سيناء",
+                "35": "جنوب سيناء"
+            };
+
+            // التحقق من صحة الرقم القومي
+            if (!nationalID || nationalID.toString().length !== 14) {
+                return {
+                    success: false,
+                    error: "رقم قومي غير صحيح - يجب أن يكون 14 رقم"
+                };
+            }
+
+            const id = nationalID.toString();
+
+            // استخراج البيانات من الرقم القومي
+            const centuryDigit = parseInt(id[0]);
+            let year = parseInt(id.substring(1, 3));
+            const month = parseInt(id.substring(3, 5));
+            const day = parseInt(id.substring(5, 7));
+            const governorateCode = id.substring(7, 9);
+
+            // استخراج المحافظة
+            const governorate = governorates[governorateCode] || "غير معروف";
+
+            // تحديد القرن
+            if (centuryDigit === 2) {
+                year += 1900;
+            } else if (centuryDigit === 3) {
+                year += 2000;
+            } else {
+                return {
+                    success: false,
+                    error: "رقم قومي غير صحيح - رقم القرن خاطئ"
+                };
+            }
+
+            // التحقق من صحة التاريخ
+            const birthDate = new Date(year, month - 1, day);
+
+            if (
+                birthDate.getFullYear() !== year ||
+                birthDate.getMonth() !== month - 1 ||
+                birthDate.getDate() !== day
+            ) {
+                return {
+                    success: false,
+                    error: "تاريخ ميلاد غير صحيح في الرقم القومي"
+                };
+            }
+
+            // حساب السن
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+
+            // التعديل إذا لم يأتي عيد الميلاد بعد هذا العام
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+
+            // تنسيق تاريخ الميلاد
+            const formattedDateArabic = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+            const formattedDateISO = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
+            return {
+                success: true,
+                birthDate: formattedDateArabic,
+                birthDateISO: formattedDateISO,
+                birthDateObject: birthDate,
+                age: age,
+                year: year,
+                month: month,
+                day: day,
+                governorate: governorate,
+                governorateCode: governorateCode
+            };
+        }
     </script>
 </body>
 
