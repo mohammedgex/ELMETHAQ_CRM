@@ -2071,6 +2071,66 @@
             });
         });
     </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropArea = document.getElementById('preview_passport_photo');
+            const input = document.getElementById('passportInput');
+            const previewImg = document.getElementById('imagePreviewpass');
 
+            // منع السلوك الافتراضي عند السحب فوق المربع
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, e => e.preventDefault());
+                dropArea.addEventListener(eventName, e => e.stopPropagation());
+            });
+
+            // تمييز المربع عند السحب
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.add('border-primary');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, () => {
+                    dropArea.classList.remove('border-primary');
+                });
+            });
+
+            // عند إفلات الصورة
+            dropArea.addEventListener('drop', (e) => {
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    setFileToInput(file);
+                }
+            });
+
+            // عند لصق الصورة (Ctrl + V)
+            document.addEventListener('paste', (e) => {
+                const items = e.clipboardData.items;
+                for (const item of items) {
+                    if (item.type.startsWith('image/')) {
+                        const file = item.getAsFile();
+                        setFileToInput(file);
+                        break;
+                    }
+                }
+            });
+
+            // عرض الصورة وتحديث input
+            function setFileToInput(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'inline-block';
+                };
+                reader.readAsDataURL(file);
+
+                // إنشاء DataTransfer لتعيين الملف داخل input
+                const dataTransfer = new DataTransfer();
+                dataTransfer.items.add(file);
+                input.files = dataTransfer.files;
+            }
+        });
+    </script>
 
 @stop
