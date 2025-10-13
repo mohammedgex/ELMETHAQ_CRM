@@ -31,13 +31,8 @@ use App\Http\Controllers\PermissionsController;
 use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\TemplateController;
 use App\Http\Controllers\TestController;
-use App\Models\LeadsCustomers;
-use App\Models\User;
-use Google\Service\ArtifactRegistry\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash as FacadesHash;
 
 Auth::routes();
 

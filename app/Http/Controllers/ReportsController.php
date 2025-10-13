@@ -37,9 +37,6 @@ class ReportsController extends Controller
             if (!$customer->name_ar) {
                 $errors[] = 'الاسم العربي للعميل مفقود.';
             }
-            if (!$customer->customerGroup?->visaType?->embassy?->title) {
-                $errors[] = 'عنوان السفارة مفقود.';
-            }
             if (!$customer->customerGroup?->visaProfession?->job) {
                 $errors[] = 'المسمى الوظيفي في التأشيرة مفقود.';
             }
@@ -58,10 +55,17 @@ class ReportsController extends Controller
             if (!$customer->image) {
                 $errors[] = 'الصورة الشخصية مفقودة.';
             }
+            if (!$customer->customerGroup?->visaType?->embassy?->title) {
+                $errors[] = 'عنوان السفارة مفقود.';
+            }
         }
 
         if (!empty($errors)) {
             return redirect()->back()->with('swal_errors', $errors);
+        }
+
+        if ($customer->customerGroup->visaType->embassy->title = "القاهرة") {
+            return view("reports.nomination_card.cairo", compact('customer'));
         }
 
         return view("reports.nomination_card.nomination_card", compact('customer'));
