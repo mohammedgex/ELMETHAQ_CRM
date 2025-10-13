@@ -56,7 +56,7 @@
             text-align: center;
             font-size: 14px;
             font-weight: bold;
-            margin: 25px 0 15px 0;
+            margin: 25px 0 5px 0;
         }
 
         table {
@@ -202,15 +202,18 @@
 
     <div class="page">
         <div class="header">
-            <h1
+            <h1 id="title1"
                 style="border: 3px solid black;
     width: fit-content;
     padding: 5px;
     margin: 0 auto 5px;
     color:red;
-    font-weight: bold;">
-                اعاده
-                طباعة</h1>
+    font-weight: bold;
+    display:none;">
+                اعاده طباعة
+            </h1>
+
+            <h1 id="title2">استمارة ترشيح عمل</h1>
             <h2> <u>بيانات صاحب العمل</u> </h2>
         </div>
 
@@ -367,6 +370,17 @@
             const agencyNumber = prompt("من فضلك أدخل رقم الوكالة:");
             if (agencyNumber) {
                 document.getElementById("number").textContent = agencyNumber;
+            }
+
+            const choice = confirm("هل تريد إعادة طباعة؟\nاضغط 'موافق' لإعادة الطباعة، أو 'إلغاء' لبطاقة عادية.");
+
+            if (choice) {
+                // المستخدم اختار "إعادة طباعة"
+                document.getElementById("title1").style.display = "block";
+                document.getElementById("title2").style.display = "none";
+            } else {
+                // المستخدم اختار "بطاقة عادية"
+                document.getElementById("title1").style.display = "none";
             }
         };
     </script>
