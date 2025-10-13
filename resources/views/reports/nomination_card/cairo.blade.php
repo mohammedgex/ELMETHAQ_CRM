@@ -214,8 +214,8 @@
             <h2> <u>بيانات صاحب العمل</u> </h2>
         </div>
 
-        <div style="display: flex; gap: 10px;">
-            <table class="top" style="border: 7px solid black; margin: 0 auto; height: 164px;">
+        <div style="display: flex; gap: 10px; height: 164px;">
+            <table class="top" style="border: 7px solid black; margin: 0 auto; ">
                 <tr>
                     <td style="text-align: start;">الاسم</td>
                     <td style="width: 60%;">{{ $customer->customerGroup?->visaType?->sponser?->name ?? '-' }}</td>
