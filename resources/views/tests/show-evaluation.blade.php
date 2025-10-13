@@ -141,7 +141,14 @@
 
                                                 <div class="form-group">
                                                     <label>مرفق</label>
-                                                    <input type="file" name="attach" class="form-control" required>
+                                                    <div id="file-drop-zone" class="border rounded p-3 bg-light text-center"
+                                                        style="min-height: 120px; cursor: pointer;">
+                                                        <p class="text-muted mb-1">📎 اسحب الملف هنا أو اضغط للاختيار أو
+                                                            الصق (Ctrl + V)</p>
+                                                        <input type="file" name="attach" id="attachInput"
+                                                            class="form-control d-none" required>
+                                                        <p id="file-name" class="small text-primary mt-2"></p>
+                                                    </div>
                                                     @if ($evaluation->attach)
                                                         <a href="{{ asset('storage/' . $evaluation->attach) }}"
                                                             target="_blank" class="btn btn-sm btn-outline-primary mt-1">
@@ -317,6 +324,65 @@
                     previewImg.style.display = 'none';
                 }
             });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropZone = document.getElementById('file-drop-zone');
+            const input = document.getElementById('attachInput');
+            const fileName = document.getElementById('file-name');
+
+            // ✅ عند الضغط على المربع افتح نافذة اختيار الملف
+            dropZone.addEventListener('click', () => input.click());
+
+            // ✅ تحديث اسم الملف عند الاختيار
+            input.addEventListener('change', () => {
+                if (input.files.length > 0) {
+                    fileName.textContent = `تم اختيار: ${input.files[0].name}`;
+                }
+            });
+
+            // ✅ منع السلوك الافتراضي للسحب
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(event => {
+                dropZone.addEventListener(event, e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+            });
+
+            // ✅ تأثير عند السحب فوق المربع
+            ['dragenter', 'dragover'].forEach(event => {
+                dropZone.addEventListener(event, () => dropZone.classList.add('border-primary'));
+            });
+            ['dragleave', 'drop'].forEach(event => {
+                dropZone.addEventListener(event, () => dropZone.classList.remove('border-primary'));
+            });
+
+            // ✅ عند إفلات الملف داخل المربع
+            dropZone.addEventListener('drop', e => {
+                const file = e.dataTransfer.files[0];
+                if (file) setFileToInput(file);
+            });
+
+            // ✅ عند اللصق (Ctrl + V)
+            document.addEventListener('paste', e => {
+                const items = e.clipboardData.items;
+                for (const item of items) {
+                    if (item.kind === 'file') {
+                        const file = item.getAsFile();
+                        setFileToInput(file);
+                        break;
+                    }
+                }
+            });
+
+            // ✅ دالة لتعيين الملف داخل input وتحديث الاسم
+            function setFileToInput(file) {
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                input.files = dt.files;
+                fileName.textContent = `تم اختيار: ${file.name}`;
+            }
         });
     </script>
 @stop
