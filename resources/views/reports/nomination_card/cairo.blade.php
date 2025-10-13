@@ -238,8 +238,8 @@
                 </tr>
             </table>
             <div style="width: 25%;">
-                <img style="max-width: 100%; border-radius: 8px;" src="{{ asset('storage/' . $customer->image) }}"
-                    alt="">
+                <img style="max-width: 100%; border-radius: 8px; height: 164px;"
+                    src="{{ asset('storage/' . $customer->image) }}" alt="">
             </div>
         </div>
 
