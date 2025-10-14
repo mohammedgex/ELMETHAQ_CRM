@@ -14,7 +14,7 @@ class GmailAuthCommand extends Command
     {
         $client = new Client();
         $client->setAuthConfig(storage_path('app/google-client.json'));
-        $client->setRedirectUri('https://eliraqitravel.com/google/callback');
+        $client->setRedirectUri('https://mishcrm.com/google/callback');
         $client->setAccessType('offline');
         $client->setPrompt('consent');
         $client->addScope([
