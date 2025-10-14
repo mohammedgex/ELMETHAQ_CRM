@@ -64,7 +64,7 @@ class ReportsController extends Controller
             return redirect()->back()->with('swal_errors', $errors);
         }
 
-        if ($customer->customerGroup->visaType->embassy->title = "القاهرة") {
+        if ($customer->customerGroup->visaType->embassy->title == "القاهرة") {
             return view("reports.nomination_card.cairo", compact('customer'));
         }
 
