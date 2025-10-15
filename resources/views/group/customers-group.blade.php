@@ -133,8 +133,11 @@
                             <table class="table table-hover text-center" id="example">
                                 <thead class="bg-secondary text-white">
                                     <tr>
-                                        <th><input type="checkbox" id="checkAll"
-                                                class="form-check-input cccccccc width-input"></th>
+                                        <th>الرقم</th>
+                                        <th>
+                                            <input type="checkbox" id="checkAll"
+                                                class="form-check-input cccccccc width-input">
+                                        </th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
@@ -154,6 +157,8 @@
                                                         @if ($customer->blackList && $customer->blackList->block) tr-blocked
                                                         @elseif(is_null($customer->passport_expire_date)) tr-warning @endif
                                                     ">
+                                            <td> {{ $loop->iteration }}
+                                            </td>
                                             <td style="position: relative !important;" class="text-center align-middle">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
