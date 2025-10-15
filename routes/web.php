@@ -40,7 +40,7 @@ Route::get('/sync-gmail', [JopController::class, 'sync'])->name('sync');
 
 Route::group([
     'prefix' => 'admin',
-    'middleware' => ['auth'] // أو أي Middleware آخر تريده
+    'middleware' => ['auth']
 ], function () {
     Route::get('/', function () {
         return redirect('admin/home');
@@ -127,8 +127,8 @@ Route::group([
     // عرض مجموعات
     Route::get('/customer-groups/{id?}', [CustomerGroupController::class, 'index'])->name('customer-groups.index')->middleware("check.permission:group-create");
     Route::post('/customer-groups', [CustomerGroupController::class, 'create'])->name('customer-groups.create')->middleware("check.permission:group-create");
-    Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit')->middleware("check.permission:group-create");;
-    Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete')->middleware("check.permission:group-create");;
+    Route::post('/customer-groups/edit/{id}', [CustomerGroupController::class, 'edit'])->name('customer-groups.edit')->middleware("check.permission:group-create");
+    Route::delete('/customer-groups/{id}', [CustomerGroupController::class, 'delete'])->name('customer-groups.delete')->middleware("check.permission:group-create");
     Route::get('/groups/{group}/customers/{customer}/remove', [CustomerGroupController::class, 'removeFromGroup'])->name('groups.removeCustomer');
 
     // المناديب

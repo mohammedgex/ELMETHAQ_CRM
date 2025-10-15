@@ -129,7 +129,7 @@ class CustomerGroupController extends Controller
             ], 400);
         }
 
-        $customer->customer_group_id = null;  // إزالة العميل من المجموعة
+        $customer->customer_group_id = null;
         $customer->save();  // حفظ التغييرات
 
         $history = new History();
