@@ -142,6 +142,7 @@
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
+                                        <th>المندوب</th>
                                         <th>رقم الجوز</th>
                                         <th width="120px">الكشف الطبي</th>
                                         <th width="120px">البصمة</th>
@@ -178,6 +179,7 @@
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
+                                            <td>{{ $customer->delegate->name }}</td>
                                             <td>{{ $customer->passport_id }}</td>
                                             <td class="text-center align-middle position-relative examination-cell medical-cell"
                                                 data-status="{{ $customer->medical_examination }}"
