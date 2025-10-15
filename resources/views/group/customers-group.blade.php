@@ -179,7 +179,7 @@
                                                 </a>
                                             </td>
                                             <td>{{ $customer->phone }}</td>
-                                            <td>{{ $customer->delegate->name }}</td>
+                                            <td>{{ $customer->delegate->name ?? '-' }}</td>
                                             <td>{{ $customer->passport_id }}</td>
                                             <td class="text-center align-middle position-relative examination-cell medical-cell"
                                                 data-status="{{ $customer->medical_examination }}"
