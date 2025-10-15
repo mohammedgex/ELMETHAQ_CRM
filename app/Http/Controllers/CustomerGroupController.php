@@ -130,6 +130,12 @@ class CustomerGroupController extends Controller
         }
 
         $customer->customer_group_id = null;
+        $customer->visa_number = null;
+        $customer->hospital_address = null;
+        $customer->medical_examination = null;
+        $customer->finger_print_examination = null;
+        $customer->virus_examination = null;
+        $customer->engaz_request = null;
         $customer->save();  // حفظ التغييرات
 
         $history = new History();
