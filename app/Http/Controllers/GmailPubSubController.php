@@ -137,7 +137,8 @@ class GmailPubSubController extends Controller
                             $document->customer_id = $customer->id;
                             $document->required = "اجباري";
                             $document->save();
-                            app(ApiAppController::class)->sendSms("01222540002", "تم اصدار التاشيرة للعميل :" . $customer->name_ar . " رقم التاشيرة :" . $visaNumber);
+                            $jop = $customer->$customer->customerGroup?->visaProfession?->job;
+                            app(ApiAppController::class)->sendSms("01222540002", "تم اصدار التاشيرة للعميل :" . $customer->name_ar . " رقم التاشيرة :" . $visaNumber . " المهنة :" . ($jop ?? 'غير محدد') . "الرابط :" . asset('storage/' . $document->file));
 
                             \Log::info("✅ Visa number {$visaNumber} saved for customer {$customer->id}");
                         } else {
