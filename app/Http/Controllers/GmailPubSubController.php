@@ -140,7 +140,7 @@ class GmailPubSubController extends Controller
                             $jop = $customer->customerGroup?->visaProfession?->job;
                             app(ApiAppController::class)->sendSms("01222540002", "تم اصدار التاشيرة للعميل :" . $customer->name_ar . " رقم التاشيرة :" . $visaNumber . " المهنة :" . ($jop ?? 'غير محدد') . "الرابط :" . asset('storage/' . $document->file));
 
-                            \Log::info("✅ Visa number {$visaNumber} saved for customer {$customer->id}");
+                            \Log::info("✅ Visa number {$visaNumber} saved for customer {$customer->name_ar}");
                         } else {
                             \Log::info("⏩ Skipped: customer not found OR already has visa");
                         }
