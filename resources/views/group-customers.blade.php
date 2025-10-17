@@ -51,6 +51,10 @@
                                         </span>
                                     </a>
                                 </li>
+                                <li>
+                                    <button id="exportBtn" class="dropdown-item btn btn-success mb-3">تصدير إلى
+                                        Excel</button>
+                                </li>
                             </ul>
 
                         </div>
@@ -66,6 +70,7 @@
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
                                         <th>الصورة</th>
+                                        <th>المندوب</th>
                                         <th>الهاتف</th>
                                         <th>اصدار التاشيرة</th>
                                         <th>الرابط</th>
@@ -95,6 +100,7 @@
                                                         height="40" class="img-circle border" alt="صورة">
                                                 </a>
                                             </td>
+                                            <td>{{ $customer->delegate->name ?? '-' }}</td>
                                             <td>{{ $customer->phone }}</td>
                                             <td>
                                                 {!! $customer->visa_number
@@ -261,6 +267,22 @@
                     cb.checked = this.checked;
                 });
             });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+    <script>
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            // احصل على الجدول
+            var table = document.getElementById('dataTable');
+
+            // حوّل الجدول إلى ورقة عمل Excel
+            var workbook = XLSX.utils.table_to_book(table, {
+                sheet: "Customers"
+            });
+
+            // احفظ الملف
+            XLSX.writeFile(workbook, 'customers.xlsx');
         });
     </script>
 @stop
