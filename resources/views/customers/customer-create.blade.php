@@ -969,7 +969,7 @@
                                         <div class="input-group rounded">
                                             <input type="text" value="{{ $edit->name_en_mrz }}" id="full_name"
                                                 name="name_en_mrz" class="form-control fw-bold"
-                                                style="height: 60px; border-color: #343a40;" readonly>
+                                                style="height: 60px; border-color: #343a40;">
                                             <button class="btn" style="background-color: #343a40; color: white;"
                                                 type="button" onclick="copyText()" title="نسخ">
                                                 <i class="fas fa-copy"></i>
@@ -985,7 +985,7 @@
                                         <div class="input-group rounded">
                                             <input type="text" id="passport_number" value="{{ $edit->passport_id }}"
                                                 name="passport_id" class="form-control fw-bold"
-                                                style="height: 60px; border-color: #343a40;" readonly>
+                                                style="height: 60px; border-color: #343a40;">
                                             <button class="btn" style="background-color: #343a40; color: white;"
                                                 type="button" onclick="copyText()" title="نسخ">
                                                 <i class="fas fa-copy"></i>
@@ -1002,7 +1002,7 @@
                                         <div class="input-group rounded">
                                             <input type="text" id="nationality" value="{{ $edit->nationality }}"
                                                 name="nationality" class="form-control fw-bold"
-                                                style="height: 60px; border-color: #343a40;" readonly>
+                                                style="height: 60px; border-color: #343a40;">
                                             <button class="btn" style="background-color: #343a40; color: white;"
                                                 type="button" onclick="copyText()" title="نسخ">
                                                 <i class="fas fa-copy"></i>
@@ -1018,7 +1018,6 @@
                                         <div class="input-group rounded">
                                             <input type="text" id="dob" name="date_birth"
                                                 class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                                readonly
                                                 value="{{ $edit->date_birth ? \Carbon\Carbon::parse($edit->date_birth)->format('d/m/Y') : '' }}">
                                             <button class="btn" style="background-color: #343a40; color: white;"
                                                 type="button" onclick="copyText()" title="نسخ">
@@ -1037,7 +1036,6 @@
                                         <div class="input-group rounded">
                                             <input type="text" id="expiry_date" name="passport_expire_date"
                                                 class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                                readonly
                                                 value="{{ $edit->passport_expire_date ? \Carbon\Carbon::parse($edit->passport_expire_date)->format('d/m/Y') : '' }}">
                                             <button class="btn" style="background-color: #343a40; color: white;"
                                                 type="button" onclick="copyText()" title="نسخ">
@@ -1053,7 +1051,7 @@
                                         <div class="input-group rounded">
                                             <input type="text" name="gender" value="{{ $edit->gender }}"
                                                 id="gender" class="form-control fw-bold"
-                                                style="height: 60px; border-color: #343a40;" readonly>
+                                                style="height: 60px; border-color: #343a40;">
                                             <button class="btn" style="background-color: #343a40; color: white;"
                                                 type="button" onclick="copyText()" title="نسخ">
                                                 <i class="fas fa-copy"></i>
@@ -1069,7 +1067,7 @@
                                     <div class="input-group rounded">
                                         <input type="text" id="age" value="{{ $edit->age }}"
                                             class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                            name="age" readonly>
+                                            name="age">
                                         <button class="btn" style="background-color: #343a40; color: white;"
                                             type="button" onclick="copyText()" title="نسخ">
                                             <i class="fas fa-copy"></i>
@@ -1082,7 +1080,7 @@
                                     <div class="input-group rounded">
                                         <input type="text" class="form-control fw-bold"
                                             style="height: 60px; border-color: #343a40;" id="issue_place"
-                                            name="issue_place" value="{{ $edit->issue_place }}" readonly>
+                                            name="issue_place" value="{{ $edit->issue_place }}">
                                         <button class="btn" style="background-color: #343a40; color: white;"
                                             type="button" onclick="copyText()" title="نسخ">
                                             <i class="fas fa-copy"></i>
