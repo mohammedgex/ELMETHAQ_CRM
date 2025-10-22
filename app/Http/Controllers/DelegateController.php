@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Delegate;
+use App\Models\Test;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class DelegateController extends Controller
@@ -107,5 +108,35 @@ class DelegateController extends Controller
             $customer->save();
         }
         return response()->json(['message' => 'تم تعيين المندوب بنجاح']);
+    }
+
+    public function statistics($test_id)
+    {
+        $test = Test::findOrFail($test_id);
+
+        // ===== 1. المناديب الذين لديهم عملاء مرتبطين بالاختبار =====
+        $delegates = Delegate::withCount(['leadsCustomers as total_with_test' => function ($query) use ($test_id) {
+            $query->whereHas('tests', function ($q) use ($test_id) {
+                $q->where('tests.id', $test_id);
+            });
+        }])
+            ->get(['id', 'name']);
+
+        // ===== 2. العملاء بدون مندوب =====
+        $withoutDelegateCount = \App\Models\LeadsCustomers::whereNull('delegate_id')
+            ->whereHas('tests', function ($q) use ($test_id) {
+                $q->where('tests.id', $test_id);
+            })
+            ->count();
+
+        // ===== 3. تجهيز البيانات للرسم =====
+        $delegateNames = $delegates->pluck('name')->toArray();
+        $customersCount = $delegates->pluck('total_with_test')->toArray();
+
+        // إضافة "بدون مندوب" في النهاية
+        $delegateNames[] = 'بدون مندوب';
+        $customersCount[] = $withoutDelegateCount;
+
+        return view('tests.test-statistics', compact('test', 'delegateNames', 'customersCount'));
     }
 }

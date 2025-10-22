@@ -25,6 +25,10 @@
                     <a href="javascript:void(0)" onclick="exportTableToExcel('example')" class="btn btn-success btn-sm">
                         <i class="fas fa-file-excel"></i> تصدير إكسيل
                     </a>
+                    <a href="{{ route('delegates.statistics', $test->id) }}" class="btn btn-sm btn-outline-primary"
+                        style="font-weight:bold; border-radius:8px;">
+                        <i class="fas fa-chart-bar"></i> عرض الإحصائيات
+                    </a>
                 @endauth
             </div>
 
