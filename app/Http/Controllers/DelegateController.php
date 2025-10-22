@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Delegate;
+use App\Models\LeadsCustomers;
 use App\Models\Test;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 
@@ -115,15 +116,18 @@ class DelegateController extends Controller
         $test = Test::findOrFail($test_id);
 
         // ===== 1. المناديب الذين لديهم عملاء مرتبطين بالاختبار =====
-        $delegates = Delegate::withCount(['leadsCustomers as total_with_test' => function ($query) use ($test_id) {
-            $query->whereHas('tests', function ($q) use ($test_id) {
-                $q->where('tests.id', $test_id);
-            });
-        }])
+        $delegates = Delegate::whereHas('leadsCustomers.tests', function ($q) use ($test_id) {
+            $q->where('tests.id', $test_id);
+        })
+            ->withCount(['leadsCustomers as total_with_test' => function ($query) use ($test_id) {
+                $query->whereHas('tests', function ($q) use ($test_id) {
+                    $q->where('tests.id', $test_id);
+                });
+            }])
             ->get(['id', 'name']);
 
-        // ===== 2. العملاء بدون مندوب =====
-        $withoutDelegateCount = \App\Models\LeadsCustomers::whereNull('delegate_id')
+        // ===== 2. العملاء بدون مندوب المرتبطين بالاختبار =====
+        $withoutDelegateCount = LeadsCustomers::whereNull('delegate_id')
             ->whereHas('tests', function ($q) use ($test_id) {
                 $q->where('tests.id', $test_id);
             })
@@ -133,9 +137,11 @@ class DelegateController extends Controller
         $delegateNames = $delegates->pluck('name')->toArray();
         $customersCount = $delegates->pluck('total_with_test')->toArray();
 
-        // إضافة "بدون مندوب" في النهاية
-        $delegateNames[] = 'بدون مندوب';
-        $customersCount[] = $withoutDelegateCount;
+        // إضافة "بدون مندوب" لو فيه عملاء فعلاً بدون مندوب
+        if ($withoutDelegateCount > 0) {
+            $delegateNames[] = 'بدون مندوب';
+            $customersCount[] = $withoutDelegateCount;
+        }
 
         return view('tests.test-statistics', compact('test', 'delegateNames', 'customersCount'));
     }
