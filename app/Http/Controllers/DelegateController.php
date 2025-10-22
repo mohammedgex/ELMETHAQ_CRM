@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use App\Models\Delegate;
+use App\Models\Evaluation;
 use App\Models\LeadsCustomers;
 use App\Models\Test;
 use Barryvdh\Snappy\Facades\SnappyPdf;
+use Illuminate\Support\Facades\DB;
 
 class DelegateController extends Controller
 {
@@ -115,34 +117,58 @@ class DelegateController extends Controller
     {
         $test = Test::findOrFail($test_id);
 
-        // ===== 1. المناديب الذين لديهم عملاء مرتبطين بالاختبار =====
         $delegates = Delegate::whereHas('leadsCustomers.tests', function ($q) use ($test_id) {
             $q->where('tests.id', $test_id);
-        })
-            ->withCount(['leadsCustomers as total_with_test' => function ($query) use ($test_id) {
-                $query->whereHas('tests', function ($q) use ($test_id) {
-                    $q->where('tests.id', $test_id);
-                });
-            }])
-            ->get(['id', 'name']);
+        })->get(['id', 'name']);
 
-        // ===== 2. العملاء بدون مندوب المرتبطين بالاختبار =====
-        $withoutDelegateCount = LeadsCustomers::whereNull('delegate_id')
-            ->whereHas('tests', function ($q) use ($test_id) {
-                $q->where('tests.id', $test_id);
-            })
-            ->count();
+        $delegateNames = [];
+        $customersCount = [];
+        $successCount = [];
 
-        // ===== 3. تجهيز البيانات للرسم =====
-        $delegateNames = $delegates->pluck('name')->toArray();
-        $customersCount = $delegates->pluck('total_with_test')->toArray();
+        foreach ($delegates as $delegate) {
+            // إجمالي العملاء المرتبطين بالاختبار
+            $total = LeadsCustomers::where('delegate_id', $delegate->id)
+                ->whereHas('tests', fn($q) => $q->where('tests.id', $test_id))
+                ->count();
 
-        // إضافة "بدون مندوب" لو فيه عملاء فعلاً بدون مندوب
-        if ($withoutDelegateCount > 0) {
-            $delegateNames[] = 'بدون مندوب';
-            $customersCount[] = $withoutDelegateCount;
+            // أحدث تقييم لكل عميل مرتبط بالاختبار والمندوب
+            $latestEvaluations = Evaluation::where('test_id', $test_id)
+                ->whereHas('leads', fn($q) => $q->where('delegate_id', $delegate->id))
+                ->select('lead_id', DB::raw('MAX(id) as latest_id'))
+                ->groupBy('lead_id')
+                ->pluck('latest_id');
+
+            // العملاء الناجحين فقط من أحدث تقييم
+            $passed = Evaluation::whereIn('id', $latestEvaluations)
+                ->where('evaluation', 'مقبول')
+                ->count();
+
+            $delegateNames[] = $delegate->name;
+            $customersCount[] = $total;
+            $successCount[] = $passed;
         }
 
-        return view('tests.test-statistics', compact('test', 'delegateNames', 'customersCount'));
+        // العملاء بدون مندوب
+        $withoutDelegateTotal = LeadsCustomers::whereNull('delegate_id')
+            ->whereHas('tests', fn($q) => $q->where('tests.id', $test_id))
+            ->count();
+
+        $latestEvaluationsWithoutDelegate = Evaluation::where('test_id', $test_id)
+            ->whereHas('leads', fn($q) => $q->whereNull('delegate_id'))
+            ->select('lead_id', DB::raw('MAX(id) as latest_id'))
+            ->groupBy('lead_id')
+            ->pluck('latest_id');
+
+        $withoutDelegatePassed = Evaluation::whereIn('id', $latestEvaluationsWithoutDelegate)
+            ->where('evaluation', 'مقبول')
+            ->count();
+
+        if ($withoutDelegateTotal > 0) {
+            $delegateNames[] = 'بدون مندوب';
+            $customersCount[] = $withoutDelegateTotal;
+            $successCount[] = $withoutDelegatePassed;
+        }
+
+        return view('tests.test-statistics', compact('test', 'delegateNames', 'customersCount', 'successCount'));
     }
 }
