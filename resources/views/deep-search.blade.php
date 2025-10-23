@@ -14,7 +14,6 @@
         </div>
         <div class="card-body">
             <form id="searchForm" class="row g-3 text-right" method="POST" action="{{ route('deepSearchFN') }}">
-
                 @csrf
 
                 <div class="col-md-3">
@@ -25,25 +24,36 @@
                         <option value="passport" {{ request('searchType') == 'passport' ? 'selected' : '' }}>رقم الجواز
                         </option>
                         <option value="nid" {{ request('searchType') == 'nid' ? 'selected' : '' }}>الرقم القومي</option>
+                        <option value="phone" {{ request('searchType') == 'phone' ? 'selected' : '' }}>رقم الهاتف</option>
                     </select>
                 </div>
 
+                {{-- البحث بالاسم --}}
                 <div class="col-md-3 search-field" id="searchByName" style="display:none;">
                     <label for="name" class="form-label">الاسم</label>
                     <input type="text" name="name" id="name" value="{{ request('name') }}" class="form-control"
                         placeholder="ابحث بالاسم">
                 </div>
 
+                {{-- البحث برقم الجواز --}}
                 <div class="col-md-3 search-field" id="searchByPassport" style="display:none;">
                     <label for="passport" class="form-label">رقم الجواز</label>
                     <input type="text" name="passport" id="passport" value="{{ request('passport') }}"
                         class="form-control" placeholder="ابحث برقم الجواز">
                 </div>
 
+                {{-- البحث بالرقم القومي --}}
                 <div class="col-md-3 search-field" id="searchByNID" style="display:none;">
                     <label for="nid" class="form-label">الرقم القومي</label>
                     <input type="text" name="nid" id="nid" value="{{ request('nid') }}" class="form-control"
                         placeholder="ابحث بالرقم القومي">
+                </div>
+
+                {{-- البحث برقم الهاتف --}}
+                <div class="col-md-3 search-field" id="searchByPhone" style="display:none;">
+                    <label for="phone" class="form-label">رقم الهاتف</label>
+                    <input type="text" name="phone" id="phone" value="{{ request('phone') }}" class="form-control"
+                        placeholder="ابحث برقم الهاتف">
                 </div>
 
                 <div class="col-12 text-left mt-3">
@@ -163,14 +173,14 @@
     {{-- دعم RTL وتحسين المظهر --}}
     <style>
         /* body {
-                    direction: rtl;
-                    text-align: left;
-                }
+                                    direction: rtl;
+                                    text-align: left;
+                                }
 
-                .dataTables_filter,
-                .dataTables_info {
-                    text-align: left !important;
-                } */
+                                .dataTables_filter,
+                                .dataTables_info {
+                                    text-align: left !important;
+                                } */
 
         .dropdown-item {
             max-width: 250px;
@@ -189,29 +199,27 @@
     <script>
         $(document).ready(function() {
 
-            // 🔹 دالة لإظهار الحقل المناسب بناءً على نوع البحث
-            function toggleSearchFields() {
-                const type = $('#searchType').val();
-                $('.search-field').hide(); // إخفاء جميع الحقول
-
-                if (type === 'name') {
-                    $('#searchByName').show();
-                } else if (type === 'passport') {
-                    $('#searchByPassport').show();
-                } else if (type === 'nid') {
-                    $('#searchByNID').show();
-                }
+            // عند تحميل الصفحة، أظهر الحقل المناسب (لو فيه قيمة محفوظة)
+            const initialType = $('#searchType').val();
+            if (initialType) {
+                $('.search-field').hide();
+                if (initialType === 'name') $('#searchByName').show();
+                else if (initialType === 'passport') $('#searchByPassport').show();
+                else if (initialType === 'nid') $('#searchByNID').show();
+                else if (initialType === 'phone') $('#searchByPhone').show();
             }
 
-            // 🔹 عند تحميل الصفحة أول مرة
-            toggleSearchFields();
-
-            // 🔹 عند تغيير نوع البحث
+            // تغيير طريقة البحث
             $('#searchType').on('change', function() {
-                toggleSearchFields();
+                $('.search-field').hide();
+                const type = $(this).val();
+                if (type === 'name') $('#searchByName').show();
+                else if (type === 'passport') $('#searchByPassport').show();
+                else if (type === 'nid') $('#searchByNID').show();
+                else if (type === 'phone') $('#searchByPhone').show();
             });
 
-            // 🔹 عند إعادة تعيين الفورم
+            // عند إعادة تعيين الفورم
             $('#searchForm').on('reset', function() {
                 setTimeout(() => {
                     $('#searchType').val('');
@@ -220,5 +228,4 @@
             });
         });
     </script>
-
 @stop

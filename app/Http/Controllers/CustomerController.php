@@ -1086,12 +1086,22 @@ class CustomerController extends Controller
             $keyword = $request->nid;
             $customers->where('card_id', 'like', "%{$keyword}%");
             $leads->where('card_id', 'like', "%{$keyword}%");
+        } elseif ($type === 'phone' && $request->filled('phone')) {
+            $keyword = $request->phone;
+            $customers->where(function ($q) use ($keyword) {
+                $q->where('phone', 'like', "%{$keyword}%")
+                    ->orWhere('phone_two', 'like', "%{$keyword}%");
+            });
+
+            $leads->where(function ($q) use ($keyword) {
+                $q->where('phone', 'like', "%{$keyword}%")
+                    ->orWhere('phone_two', 'like', "%{$keyword}%");
+            });
         }
 
         // 🔹 تنفيذ البحث
         $customers = $customers->get();
         $leads = $leads->get();
-        // dd($customers, $leads);
 
         // 🔹 عرض النتائج في الصفحة
         return view('deep-search', compact('customers', 'leads', 'type'));
