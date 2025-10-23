@@ -59,6 +59,7 @@
                                     'show-group-customers' => ' عرض عملاء المجموعات',
                                     'show-leads' => 'عرض العملاء المحتملين',
                                     'job-question-create' => 'تعريف اسئلة الوظائف',
+                                    'deep-search-access' => 'البحث المتقدم',
                                 ];
                             @endphp
 

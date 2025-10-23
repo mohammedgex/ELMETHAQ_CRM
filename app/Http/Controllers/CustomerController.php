@@ -15,6 +15,7 @@ use App\Models\Evaluation;
 use App\Models\FileTitle;
 use App\Models\History;
 use App\Models\JobTitle;
+use App\Models\LeadsCustomers;
 use App\Models\Payments;
 use App\Models\PaymentTitle;
 use App\Models\Sponser;
@@ -1056,5 +1057,43 @@ class CustomerController extends Controller
 
         // dd($customers->count());
         return view('deepFilter.deep-filter', compact('customers', "delegates", "sponsors", "consulates", "packages", "jobs"));
+    }
+
+    public function deepSearch()
+    {
+        # code...
+
+        return view('deep-search');
+    }
+
+    public function deepSearchFN(Request $request)
+    {
+        $type = $request->searchType;
+
+        $customers = Customer::query()->with(['customerGroup', 'jobTitle']);
+        $leads = LeadsCustomers::query()->with(['jobTitle', 'delegate']);
+
+        // 🔍 البحث بناءً على النوع المختار
+        if ($type === 'name' && $request->filled('name')) {
+            $keyword = $request->name;
+            $customers->where('name_ar', 'like', "%{$keyword}%");
+            $leads->where('name', 'like', "%{$keyword}%");
+        } elseif ($type === 'passport' && $request->filled('passport')) {
+            $keyword = $request->passport;
+            $customers->where('passport_id', 'like', "%{$keyword}%");
+            $leads->where('passport_numder', 'like', "%{$keyword}%");
+        } elseif ($type === 'nid' && $request->filled('nid')) {
+            $keyword = $request->nid;
+            $customers->where('card_id', 'like', "%{$keyword}%");
+            $leads->where('card_id', 'like', "%{$keyword}%");
+        }
+
+        // 🔹 تنفيذ البحث
+        $customers = $customers->get();
+        $leads = $leads->get();
+        // dd($customers, $leads);
+
+        // 🔹 عرض النتائج في الصفحة
+        return view('deep-search', compact('customers', 'leads', 'type'));
     }
 }

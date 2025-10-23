@@ -83,6 +83,14 @@ class AppServiceProvider extends ServiceProvider
                     'url' => 'admin/home'
                 ];
             }
+            if ($user && ($user->role === 'admin' || $user->permissions->contains('permission', 'deep-search-access'))) {
+                $existingMenu[] = [
+                    'text' => 'البحث المتقدم',
+                    'icon' => 'fas fa-search',
+                    'url'  => 'admin/deep-search',
+                ];
+            }
+
 
             // العملاء المحتملون
             if ($user->role === 'admin' || $user->permissions->contains('permission', 'leads-customers-show')) {

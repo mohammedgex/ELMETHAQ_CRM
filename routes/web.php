@@ -263,6 +263,9 @@ Route::group([
     Route::get('/calling-lead/{test_id}/{lead_id}', [TestController::class, 'callingClient'])->name('calling.client');
     Route::get('/delegates/statistics/{test_id}', [DelegateController::class, 'statistics'])
         ->name('delegates.statistics');
+
+    Route::get('/deep-search', [CustomerController::class, 'deepSearch'])->name('deep.search');
+    Route::post('/deep-search', [CustomerController::class, 'deepSearchFN'])->name('deepSearchFN');
 });
 // قيادة امنة للسائقين
 Route::get('/safe-driving/{test}', [TestController::class, 'safeDriving'])->name('safe.driving');
