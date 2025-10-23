@@ -134,7 +134,7 @@
                                             <div class="dropdown-menu">
                                                 @foreach ($l->tests as $test)
                                                     <a class="dropdown-item" title="{{ $test->title }}"
-                                                        href="{{ route('test.leads', $l->id) }}">
+                                                        href="{{ route('test.leads', $test->id) }}">
                                                         {{ $test->title }}
                                                     </a>
                                                 @endforeach
@@ -163,14 +163,14 @@
     {{-- دعم RTL وتحسين المظهر --}}
     <style>
         /* body {
-                direction: rtl;
-                text-align: left;
-            }
+                    direction: rtl;
+                    text-align: left;
+                }
 
-            .dataTables_filter,
-            .dataTables_info {
-                text-align: left !important;
-            } */
+                .dataTables_filter,
+                .dataTables_info {
+                    text-align: left !important;
+                } */
 
         .dropdown-item {
             max-width: 250px;
