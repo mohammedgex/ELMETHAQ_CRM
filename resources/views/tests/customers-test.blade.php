@@ -180,6 +180,10 @@
                                                     class="btn btn-sm btn-success">
                                                     <i class="fas fa-chart-bar"></i>
                                                 </a>
+                                                <a href="https://wa.me/2{{ $lead->phone }}" target="_blank"
+                                                    class="btn btn-sm btn-success">
+                                                    <i class="fab fa-whatsapp"></i>
+                                                </a>
                                                 <form action="{{ route('tests.removeLead', [$test->id, $lead->id]) }}"
                                                     method="POST">
                                                     @csrf

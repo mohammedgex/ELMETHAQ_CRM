@@ -279,13 +279,3 @@ Route::get('/google/auth', [GoogleTranslateController::class, 'redirectToGoogle'
 Route::get('/google/oauth2callback', [GoogleTranslateController::class, 'handleCallback']);
 Route::get('/send-test-email', [GoogleTranslateController::class, 'sendTestEmail']);
 Route::get('/google/callback', [GmailPubSubController::class, 'handleCallback']);
-// Route::get('/email/reset/{email}', function ($email) {
-//     $user = User::where('email', $email)->first();
-//     if ($user) {
-//         $user->password = FacadesHash::make('12345678');
-//         $user->save();
-//     } else {
-//         return 'User not found.';
-//     }
-//     return 'Tokens have been reset. You can now re-authenticate.';
-// });
