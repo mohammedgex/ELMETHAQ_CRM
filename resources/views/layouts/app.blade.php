@@ -2030,7 +2030,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="d-flex align-items-center ms-4">
+                <div class="d-none d-md-flex align-items-center ms-4">
                     <a href="https://wa.me/201288000245" target="_blank" class="btn whatsapp-btn"
                         style="background: #008000 !important; border: none; border-radius: 50px; padding: 12px 24px; font-weight: 600; color: white; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(184, 156, 90, 0.3); display: flex; align-items: center; gap: 8px; text-decoration: none;">
                         <i class="fab fa-whatsapp" style="font-size: 1.2rem;"></i>
