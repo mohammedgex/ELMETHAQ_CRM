@@ -1991,7 +1991,7 @@
                     style="transition: all 0.3s ease;">
                     <div class="logo-container" style="position: relative; display: inline-block;">
                         <img src="{{ asset('images/logo-methaq.png') }}" alt="الميثاق Logo"
-                            style="height: 60px; width: auto; background: linear-gradient(135deg, #fff 0%, #f8fafc 100%); border-radius: 18px; padding: 8px; border: 3px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.15); transition: all 0.3s ease;">
+                            style="height: 60px; width: auto; background: linear-gradient(135deg, #fff 0%, #f8fafc 100%); border-radius: 18px; padding: 0px; border: 3px solid rgba(255,255,255,0.3); box-shadow: 0 8px 32px rgba(0,0,0,0.15); transition: all 0.3s ease;">
                         <div class="logo-glow"
                             style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent); border-radius: 18px; opacity: 0; transition: opacity 0.3s ease;">
                         </div>
