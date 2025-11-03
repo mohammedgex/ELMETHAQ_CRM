@@ -175,7 +175,8 @@
                                                     href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
                                             </td>
                                             <td>
-                                                {{ $customer->LeadCustomer?->evaluations()->latest()->first()->evaluation ?? 'لا يوجد' }}
+                                                {{ $customer->LeadCustomer?->evaluations()?->whereNotNull('evaluation')->latest()->first()->evaluation ??
+                                                    'لا يوجد' }}
                                             </td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="blank">
