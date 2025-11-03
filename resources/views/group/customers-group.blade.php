@@ -174,10 +174,21 @@
                                             <td><a
                                                     href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
                                             </td>
+                                            @php
+                                                $latestEvaluation = $customer->LeadCustomer
+                                                    ?->evaluations()
+                                                    ?->whereNotNull('evaluation')
+                                                    ->latest()
+                                                    ->first();
+                                            @endphp
                                             <td>
-                                                <a
-                                                    href="{{ asset('storage/' . $customer->LeadCustomer?->evaluations()?->whereNotNull('evaluation')->latest()->first()->attach) }}">{{ $customer->LeadCustomer?->evaluations()?->whereNotNull('evaluation')->latest()->first()->evaluation ??
-                                                        'لا يوجد' }}</a>
+                                                @if ($latestEvaluation)
+                                                    <a href="{{ asset('storage/' . $latestEvaluation->attach) }}">
+                                                        {{ $latestEvaluation->evaluation }}
+                                                    </a>
+                                                @else
+                                                    لا يوجد
+                                                @endif
                                             </td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="blank">
