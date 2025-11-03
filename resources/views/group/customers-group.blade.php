@@ -140,6 +140,7 @@
                                         </th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
+                                        <th>نتيجة اخر اختبار</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
                                         <th>السن</th>
@@ -172,6 +173,9 @@
                                             <td>#{{ $customer->id }}</td>
                                             <td><a
                                                     href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
+                                            </td>
+                                            <td>
+                                                {{ $customer->LeadCustomer?->evaluations()->latest()->first()->evaluation ?? 'لا يوجد' }}
                                             </td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="blank">
