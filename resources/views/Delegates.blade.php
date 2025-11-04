@@ -177,6 +177,16 @@
             });
         </script>
     @endif
+    @if (Session::has('delete_error'))
+        <script>
+            Swal.fire({
+                title: "  '{{ Session::get('delete_error') }}' ",
+                icon: "error",
+                confirmButtonText: "تم",
+                draggable: true
+            });
+        </script>
+    @endif
 
     @if (Session::has('pdf_export'))
         <script>

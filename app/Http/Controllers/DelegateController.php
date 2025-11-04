@@ -76,6 +76,10 @@ class DelegateController extends Controller
                 'error' => 'the delegate is not find.'
             ]);
         }
+        if ($delegate->customers()->count() > 0 || $delegate->leadsCustomers()->count() > 0) {
+            # code...
+            return redirect()->route('Delegates.create')->with('delete_error', 'لا يمكن حذف المندوب لارتباطه بعملاء.');
+        }
         $delegate->delete();
         return redirect()->route('Delegates.create')->with('delete_success', '');
     }
