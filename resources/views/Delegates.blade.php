@@ -88,7 +88,10 @@
                                     <td>{{ $delegate->card_id }}</td>
                                     <td>
                                         <span class="badge bg-success text-white">
-                                            {{ $delegate->customers->count() }} عميل
+                                            {{ $delegate->customers->count() }} عميل اساسي
+                                        </span>
+                                        <span class="badge bg-success text-white">
+                                            {{ $delegate->leadsCustomers->count() }} عميل محتمل
                                         </span>
                                     </td>
                                     <td class="d-flex justify-content-center align-items-center gap-1">
