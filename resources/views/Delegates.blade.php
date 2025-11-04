@@ -97,7 +97,7 @@
                                             <i class="fas fa-edit"></i>
                                         </a>
 
-                                        {{-- <form action="{{ route('Delegates.delete', $delegate->id) }}" method="POST"
+                                        <form action="{{ route('Delegates.delete', $delegate->id) }}" method="POST"
                                             class="mx-1">
                                             @csrf
                                             @method('DELETE')
@@ -105,7 +105,7 @@
                                                 title="حذف" onsubmit="confirmDelete(event)">
                                                 <i class="fas fa-trash"></i>
                                             </button>
-                                        </form> --}}
+                                        </form>
 
                                         <form action="{{ route('customers.filter') }}" method="POST">
                                             @csrf
@@ -133,11 +133,6 @@
                                                         <i class="fas fa-print"></i> طباعة تقرير
                                                     </a>
                                                 </li>
-                                                <li>
-                                                    <button class="dropdown-item text-danger">
-                                                        <i class="fas fa-ban"></i> بلاك ليست
-                                                    </button>
-                                                </li>
                                             </ul>
                                         </div>
                                     </td>
@@ -161,6 +156,17 @@
         </script>
     @endif
 
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'خطأ ⚠️',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonText: 'حسنًا',
+                confirmButtonColor: '#dc2626',
+            });
+        </script>
+    @endif
     @if (Session::has('edit_success'))
         <script>
             Swal.fire({

@@ -35,14 +35,17 @@ class DelegateController extends Controller
     {
         $request->validate([
             'name' => 'required|string',
-            'phone' => 'required|string',
+            'phone' => 'required|string|unique:delegates,phone',
             'card_id' => 'required|string',
+        ], [
+            'phone.unique' => 'رقم الهاتف مسجل بالفعل.',
         ]);
 
-        Delegate::create(attributes: $request->all());
+        Delegate::create($request->all());
 
         return redirect()->back()->with('success', 'تمت إضافة المندوب بنجاح!');
     }
+
     public function edit(Request $request, $id)
     {
         $request->validate([
