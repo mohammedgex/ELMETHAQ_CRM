@@ -88,10 +88,14 @@
                                     <td>{{ $delegate->card_id }}</td>
                                     <td>
                                         <span class="badge bg-success text-white">
-                                            {{ $delegate->customers->count() }} عميل اساسي
+                                            <a href="{{ route('Delegates.customers', $delegate->id) }}">
+                                                {{ $delegate->customers->count() }} عميل اساسي
+                                            </a>
                                         </span>
                                         <span class="badge bg-success text-white">
-                                            {{ $delegate->leadsCustomers->count() }} عميل محتمل
+                                            <a href="{{ route('Delegates.leads', $delegate->id) }}">
+                                                {{ $delegate->leadsCustomers->count() }} عميل محتمل
+                                            </a>
                                         </span>
                                     </td>
                                     <td class="d-flex justify-content-center align-items-center gap-1">

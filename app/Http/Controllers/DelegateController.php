@@ -178,4 +178,26 @@ class DelegateController extends Controller
 
         return view('tests.test-statistics', compact('test', 'delegateNames', 'customersCount', 'successCount'));
     }
+
+    public function leads($id)
+    {
+        # code...
+        $delegate = Delegate::findOrFail($id);
+        $leads = LeadsCustomers::where('delegate_id', $id)->get();
+        return view('lead-delegate', [
+            'delegate' => $delegate,
+            'leads' => $leads
+        ]);
+    }
+
+    public function customers($id)
+    {
+        # code...
+        $delegate = Delegate::findOrFail($id);
+        $customers = Customer::where('delegate_id', $id)->get();
+        return view('customers-delegate', [
+            'delegate' => $delegate,
+            'customers' => $customers
+        ]);
+    }
 }

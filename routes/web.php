@@ -136,6 +136,9 @@ Route::group([
     Route::post('/delegates',  [DelegateController::class, 'store'])->name('delegates.store')->middleware("check.permission:delegate-create");
     Route::post('/delegates/edit/{id}',  [DelegateController::class, 'edit'])->name('delegates.edit')->middleware("check.permission:delegate-create");
     Route::delete('/Delegates-delete/{id}', [DelegateController::class, 'delete'])->name('Delegates.delete')->middleware("check.permission:delegate-create");
+    Route::get('/Delegates-lead/{id}', [DelegateController::class, 'leads'])->name('Delegates.leads')->middleware("check.permission:delegate-create");
+
+    Route::get('/Delegates-customer/{id}', [DelegateController::class, 'customers'])->name('Delegates.customers')->middleware("check.permission:delegate-create");
 
     // عرض العملاء
     Route::get('/customers',  [CustomerController::class, 'index'])->name('customer.indes')->middleware("check.permission:customers-show");
