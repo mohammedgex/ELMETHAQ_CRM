@@ -51,12 +51,12 @@ return new class extends Migration
             $table->string('hospital_address')->nullable();
             $table->string('issue_place')->nullable();
             $table->boolean('travel_before')->nullable();
-            $table->foreignId('delegate_id')->nullable()->constrained('delegates')->onDelete('cascade');
-            $table->foreignId('job_title_id')->nullable()->constrained('job_titles')->onDelete('cascade');
-            $table->foreignId('customer_group_id')->nullable()->constrained('customer_groups')->onDelete('cascade');
-            $table->foreignId('sponser_id')->nullable()->constrained('sponsers')->onDelete('cascade');
-            $table->foreignId('visa_type_id')->nullable()->constrained('visa_types')->onDelete('cascade');
-            $table->foreignId('bag_id')->nullable()->constrained('bags')->onDelete('cascade');
+            $table->foreignId('delegate_id')->nullable()->constrained('delegates')->onDelete('set null');
+            $table->foreignId('job_title_id')->nullable()->constrained('job_titles')->onDelete('set null');
+            $table->foreignId('customer_group_id')->nullable()->constrained('customer_groups')->onDelete('set null');
+            $table->foreignId('sponser_id')->nullable()->constrained('sponsers')->onDelete('set null');
+            $table->foreignId('visa_type_id')->nullable()->constrained('visa_types')->onDelete('set null');
+            $table->foreignId('bag_id')->nullable()->constrained('bags')->onDelete('set null');
             $table->string('fcm_token')->nullable();
             $table->timestamps();
         });

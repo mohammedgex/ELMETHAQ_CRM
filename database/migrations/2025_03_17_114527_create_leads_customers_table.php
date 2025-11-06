@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('governorate')->nullable();
             $table->string('phone')->unique()->nullable(); //عدلها يدوي
             $table->string('phone_two')->unique()->nullable();
-            $table->foreignId('job_title_id')->nullable()->constrained('job_titles')->onDelete('cascade');
+            $table->foreignId('job_title_id')->nullable()->constrained('job_titles')->onDelete('set null');
             $table->string('have_you_ever_traveled_before?')->nullable();
             $table->string('password')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
@@ -36,8 +36,8 @@ return new class extends Migration
             $table->string('test_type')->nullable();
             $table->string('fcm_token')->nullable();
             $table->date('registration_date')->nullable();
-            $table->foreignId('delegate_id')->nullable()->constrained('delegates')->onDelete('cascade');
-            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('delegate_id')->nullable()->constrained('delegates')->onDelete('set null');
+            $table->foreignId('customer_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

@@ -140,7 +140,7 @@
                                         </th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
-                                        <th>نتيجة اخر اختبار</th>
+                                        {{-- <th>نتيجة اخر اختبار</th> --}}
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
                                         <th>السن</th>
@@ -174,7 +174,7 @@
                                             <td><a
                                                     href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
                                             </td>
-                                            @php
+                                            {{-- @php
                                                 $latestEvaluation = $customer->LeadCustomer
                                                     ?->evaluations()
                                                     ?->whereNotNull('evaluation')
@@ -189,7 +189,7 @@
                                                 @else
                                                     لا يوجد
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="blank">
                                                     <img src="{{ asset('storage/' . $customer->image) }}" width="40"

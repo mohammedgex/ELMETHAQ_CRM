@@ -27,10 +27,10 @@
                                 @foreach ($customers as $customer)
                                     <tr class="table-light">
                                         <td>{{ $customer->id }}</td>
-                                        <td>{{ $customer->name }}</td>
+                                        <td>{{ $customer->name_ar }}</td>
                                         <td>{{ $customer->phone }}</td>
                                         <td class="d-flex justify-content-center align-items-center gap-1">
-                                            <a href="{{ route('customer-groups.create', $customer->id) }}"
+                                            <a href="{{ route('customer.add', $customer->id) }}"
                                                 class="btn btn-sm btn-outline-success shadow-sm" title="تعديل">
                                                 <i class="fas fa-edit"></i>
                                             </a>
