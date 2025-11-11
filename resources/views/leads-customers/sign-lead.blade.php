@@ -482,26 +482,54 @@
                 <div class="card-body">
                     <div class="row">
                         <!-- الحقول الرئيسية -->
-                        <div class="col-md-8">
+                        <div class="col-md-12">
                             <!-- الصورة الشخصية -->
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
-                                <label for="image">الصورة الشخصية</label>
+                            <div class="row">
+                                <div class="col-md-6 form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                                    <label for="image">الصورة الشخصية</label>
 
-                                <div class="custom-file mb-2">
-                                    <input type="file" name="image" class="custom-file-input preview-image-input"
-                                        data-preview="#preview_image" id="dd" required accept="image/*">
-                                    <label class="custom-file-label">اختر صورة</label>
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="image"
+                                            class="custom-file-input preview-image-input" data-preview="#preview_image"
+                                            id="dd" required accept="image/*">
+                                        <label class="custom-file-label">اختر صورة</label>
+                                    </div>
+
+                                    <div id="preview_image" class="border rounded p-2 text-center bg-light"
+                                        style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
+                                            class="img-thumbnail" style="max-width: 100px; display: none;"
+                                            alt="Preview">
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                        data-input="#dd" data-preview="#preview_image">
+                                        اقتصاص
+                                    </button>
                                 </div>
 
-                                <div id="preview_image" class="border rounded p-2 text-center bg-light"
-                                    style="min-height: 130px;">
-                                    <img src="https://via.placeholder.com/100x100?text=No+Image" class="img-thumbnail"
-                                        style="max-width: 100px; display: none;" alt="Preview">
+                                <div class="col-md-6 form-group p-3 mb-4 bg-white rounded border shadow-sm"
+                                    style="flex: 1 1 48%;">
+                                    <label for="img_national_id_card">بطاقة الرقم القومي من الامام</label>
+
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="img_national_id_card"
+                                            class="custom-file-input preview-image-input"
+                                            data-preview="#preview_img_national_id_card" id="ss" required
+                                            accept="image/*">
+                                        <label class="custom-file-label">اختر صورة</label>
+                                    </div>
+
+                                    <div id="preview_img_national_id_card"
+                                        class="border rounded p-2 text-center bg-light" style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
+                                            class="img-thumbnail" style="max-width: 100px; display: none;"
+                                            alt="Preview">
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                        data-input="#ss" data-preview="#preview_img_national_id_card">
+                                        اقتصاص
+                                    </button>
                                 </div>
-                                <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                    data-input="#dd" data-preview="#preview_image">
-                                    اقتصاص
-                                </button>
                             </div>
 
                             <!-- باقي الحقول -->
@@ -530,10 +558,10 @@
 
                                 <div class="form-group col-md-6">
                                     <label for="age">السن</label>
-                                    <input type="text" name="age" id="age" class="form-control" required
-                                        placeholder="أدخل السن" value=""
-                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="^[0-9]{1,3}$"
-                                        title="الرجاء إدخال أرقام إنجليزية فقط">
+                                    <input type="text" name="age" id="age" class="form-control"
+                                        required placeholder="أدخل السن" value=""
+                                        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                        pattern="^[0-9]{1,3}$" title="الرجاء إدخال أرقام إنجليزية فقط">
                                 </div>
 
                                 <div class="form-group col-md-6">
@@ -551,11 +579,11 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                {{-- <div class="form-group col-md-6">
                                     <label for="phone_two">رقم هاتف آخر(اختياري)</label>
                                     <input type="text" name="phone_two" id="phone_two" class="form-control"
                                         placeholder="أدخل رقم الهاتف الآخر" value="">
-                                </div>
+                                </div> --}}
 
                                 <div class="form-group col-md-6">
                                     <label for="card_id">الرقم القومي</label>
@@ -573,11 +601,11 @@
                                     @endif
                                 </div>
 
-                                <div class="form-group col-md-6">
+                                {{-- <div class="form-group col-md-6">
                                     <label for="passport_numder">رقم الجواز (اختياري)</label>
                                     <input type="text" name="passport_numder" id="passport_numder"
                                         class="form-control" placeholder="ادخل رقم الجواز" value="">
-                                </div>
+                                </div> --}}
 
                                 <div class="form-group col-md-6">
                                     <label for="governorate">المحافظة</label>
@@ -606,7 +634,7 @@
                         <!-- صور -->
                         <div class="col-md-4">
                             <!-- صورة جواز السفر -->
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                            {{-- <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
                                 <label for="passport_photo">صورة جواز السفر (اختياري)</label>
 
                                 <div class="custom-file mb-2">
@@ -650,37 +678,15 @@
                                     </div>
                                 </div>
 
-                            </div>
+                            </div> --}}
 
                             <!-- صور البطاقة الشخصية (جنباً إلى جنب) -->
                             <div class="d-flex flex-wrap gap-3">
                                 <!-- بطاقة الرقم القومي من الأمام -->
-                                <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm"
-                                    style="flex: 1 1 48%;">
-                                    <label for="img_national_id_card">بطاقة الرقم القومي من الامام</label>
 
-                                    <div class="custom-file mb-2">
-                                        <input type="file" name="img_national_id_card"
-                                            class="custom-file-input preview-image-input"
-                                            data-preview="#preview_img_national_id_card" id="ss" required
-                                            accept="image/*">
-                                        <label class="custom-file-label">اختر صورة</label>
-                                    </div>
-
-                                    <div id="preview_img_national_id_card"
-                                        class="border rounded p-2 text-center bg-light" style="min-height: 130px;">
-                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
-                                            class="img-thumbnail" style="max-width: 100px; display: none;"
-                                            alt="Preview">
-                                    </div>
-                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
-                                        data-input="#ss" data-preview="#preview_img_national_id_card">
-                                        اقتصاص
-                                    </button>
-                                </div>
 
                                 <!-- بطاقة الرقم القومي من الخلف -->
-                                <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm"
+                                {{-- <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm"
                                     style="flex: 1 1 48%;">
                                     <label for="img_national_id_card_back">بطاقة الرقم القومي من الخلف</label>
 
@@ -702,11 +708,11 @@
                                         data-input="#aa" data-preview="#preview_img_national_id_card_back">
                                         اقتصاص
                                     </button>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <!-- إثبات مهنة -->
-                            <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                            {{-- <div class="form-group p-3 mb-4 bg-white rounded border shadow-sm">
                                 <label for="license_photo">اثبات مهنة ( رخصة او شهادة او CV) اختياري</label>
 
                                 <div class="custom-file mb-2">
@@ -725,7 +731,7 @@
                                     data-input="#ff" data-preview="#preview_license_photo">
                                     اقتصاص
                                 </button>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
@@ -786,14 +792,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery & DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    {{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> --}}
-    <!-- DataTables Buttons -->
-    {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script> --}}
-    {{-- <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -936,7 +934,7 @@
             }
         });
     </script>
-    <script type="module">
+    {{-- <script type="module">
         function calculateAge(dateOfBirthStr) {
             // تحويل التاريخ إلى أجزاء
             const [day, month, year] = dateOfBirthStr.split('/').map(Number);
@@ -1144,7 +1142,7 @@
                 alert("حدث خطأ أثناء تحليل الصورة");
             }
         });
-    </script>
+    </script> --}}
     <script>
         // التحقق من رقم الهاتف
         $(document).on("input", "#phone", function() {
