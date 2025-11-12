@@ -507,7 +507,7 @@
                                     </button>
                                 </div>
 
-                                <div class="col-md-6 form-group p-3 mb-4 bg-white rounded border shadow-sm"
+                                {{-- <div class="col-md-4 form-group p-3 mb-4 bg-white rounded border shadow-sm"
                                     style="flex: 1 1 48%;">
                                     <label for="img_national_id_card">بطاقة الرقم القومي من الامام</label>
 
@@ -527,6 +527,28 @@
                                     </div>
                                     <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
                                         data-input="#ss" data-preview="#preview_img_national_id_card">
+                                        اقتصاص
+                                    </button>
+                                </div> --}}
+
+                                <div class="col-md-6 form-group p-3 mb-4 bg-white rounded border shadow-sm">
+                                    <label for="license_photo">اثبات مهنة ( رخصة او شهادة او CV) اختياري</label>
+
+                                    <div class="custom-file mb-2">
+                                        <input type="file" name="license_photo"
+                                            class="custom-file-input preview-image-input"
+                                            data-preview="#preview_license_photo" id="ff">
+                                        <label class="custom-file-label">اختر صورة</label>
+                                    </div>
+
+                                    <div id="preview_license_photo" class="border rounded p-2 text-center bg-light"
+                                        style="min-height: 130px;">
+                                        <img src="https://via.placeholder.com/100x100?text=No+Image"
+                                            class="img-thumbnail" style="max-width: 100px; display: none;"
+                                            alt="Preview">
+                                    </div>
+                                    <button type="button" class="btn btn-primary btn-sm mt-2 crop-image-btn"
+                                        data-input="#ff" data-preview="#preview_license_photo">
                                         اقتصاص
                                     </button>
                                 </div>
@@ -585,7 +607,7 @@
                                         placeholder="أدخل رقم الهاتف الآخر" value="">
                                 </div> --}}
 
-                                <div class="form-group col-md-6">
+                                {{-- <div class="form-group col-md-6">
                                     <label for="card_id">الرقم القومي</label>
                                     <input type="text" name="card_id" id="card_id" class="form-control"
                                         required placeholder="أدخل الرقم القومي" value="{{ old('card_id') }}"
@@ -599,7 +621,7 @@
                                             {{ $errors->first('card_id') }}
                                         </div>
                                     @endif
-                                </div>
+                                </div> --}}
 
                                 {{-- <div class="form-group col-md-6">
                                     <label for="passport_numder">رقم الجواز (اختياري)</label>
