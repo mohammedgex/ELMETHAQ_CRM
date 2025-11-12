@@ -662,7 +662,7 @@ class LeadsCustomersController extends Controller
     public function createLead(Request $request)
     {
         $request->validate([
-            "card_id" => 'required|unique:leads_customers,card_id',
+            // "card_id" => 'required|unique:leads_customers,card_id',
             "phone" => 'required|unique:leads_customers,phone',
             // "phone_two" => 'nullable|unique:leads_customers,phone_two',
             // "img_national_id_card" => 'required|image|mimes:jpeg,png,jpg,gif',
