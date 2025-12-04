@@ -371,6 +371,9 @@
                             <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#groupModal">
                                 <i class="fas fa-plus text-success"></i> تعيين اختبار
                             </button>
+                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#testModal">
+                                <i class="fas fa-plus text-success"></i> تعيين مجموعة
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -503,7 +506,7 @@
             </div>
         </div>
     @endif
-
+    {{-- اضافة عميل الي الاختبار --}}
     <div class="modal fade" id="groupModal" tabindex="-1" aria-labelledby="groupModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
@@ -527,6 +530,48 @@
                                 <option value="" disabled selected>-- اختر الاختبار --</option>
                                 @foreach ($tests as $test)
                                     <option value="{{ $test->id }}">{{ $test->id }}: {{ $test->title }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times-circle mr-1"></i> إلغاء
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save mr-1"></i> حفظ التغييرات
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    {{-- اضافة عميل الي مجموعة --}}
+    <div class="modal fade" id="testModal" tabindex="-1" aria-labelledby="testModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="fas fa-users mr-2"></i> تعيين مجموعة للعملاء المحددين
+                    </h5>
+                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="إغلاق">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <form id="assignTestForm" action="{{ route('customer.leadToCustomer') }}" method="POST">
+                    @csrf
+                    <div class="modal-body">
+                        <input type="hidden" name="leads" id="selectedLeadsInputGroup">
+
+                        <div class="form-test">
+                            <label for="testSelect">اختر المجموعة</label>
+                            <select class="form-control" id="testSelect" name="group_id" required>
+                                <option value="" disabled selected>-- اختر المجموعة --</option>
+                                @foreach ($groups as $groups)
+                                    <option value="{{ $groups->id }}">{{ $groups->id }}: {{ $groups->title }}
                                     </option>
                                 @endforeach
                             </select>
@@ -995,6 +1040,63 @@
 
             // تعبئة hidden input بقائمة الـ IDs
             document.getElementById('selectedLeadsInput').value = JSON.stringify(selectedIds);
+
+            // إرسال الفورم
+            this.submit();
+        });
+
+
+        document.getElementById('assignTestForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // منع الريفريش
+
+            // جلب كل الـ checkboxes المختارة
+            const checkboxes = Array.from(document.querySelectorAll('.lead-checkbox:checked'));
+            if (checkboxes.length === 0) {
+                Swal.fire({
+                    title: "الرجاء اختيار عميل واحد على الأقل.",
+                    icon: "error",
+                    draggable: true
+                });
+                return;
+            }
+
+            const selectedIds = [];
+            let hasExistingCustomer = false;
+
+            // فحص كل تشيك بوكس
+            // checkboxes.forEach(cb => {
+            //     const leadId = parseInt(cb.value);
+            //     const row = cb.closest('tr');
+
+            //     selectedIds.push(leadId);
+            // });
+
+            checkboxes.forEach(cb => {
+                const leadId = parseInt(cb.value);
+                const row = cb.closest('tr');
+
+                selectedIds.push(leadId);
+
+                // 🔥 قراءة حالة العميل من الـ <td data-status="..">
+                const status = row.querySelector('.lead-status').getAttribute('data-status');
+
+                if (status === 'عميل اساسي') {
+                    hasExistingCustomer = true;
+                }
+            });
+
+            // 🔥 إذا يوجد عميل أساسي → منع الإرسال وإظهار Swal
+            if (hasExistingCustomer) {
+                Swal.fire({
+                    title: "لا يمكن تعيين مجموعة لعميل أساسي!",
+                    text: "يرجى الذهاب الي العملاء الاسايين والبحث عنه",
+                    icon: "warning"
+                });
+                return;
+            }
+
+            // تعبئة hidden input بقائمة الـ IDs
+            document.getElementById('selectedLeadsInputGroup').value = JSON.stringify(selectedIds);
 
             // إرسال الفورم
             this.submit();

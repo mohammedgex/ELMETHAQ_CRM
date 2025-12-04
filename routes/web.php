@@ -66,6 +66,8 @@ Route::group([
     Route::post('/leads-edit/{id}', [LeadsCustomersController::class, 'edit'])->name('leads-customers.edit')->middleware("check.permission:leads-customers-show");
     Route::delete('/leads-delete/{id}', [LeadsCustomersController::class, 'delete'])->name('leads-customers.delete')->middleware("check.permission:leads-customers-show");
     Route::get('/leads-search', [LeadsCustomersController::class, 'search'])->name('leads-customers.search');
+    Route::post('/lead/change/img/{id}', [LeadsCustomersController::class, 'changeImage'])->name('leads-customers.changeImage');
+
 
     Route::get('/users', [UserController::class, 'index'])->name('users')->middleware("check.permission:users-manage");
 

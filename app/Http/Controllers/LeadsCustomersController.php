@@ -754,7 +754,7 @@ class LeadsCustomersController extends Controller
             'ج سيناء',
             'كفر الشيخ',
             'مطروح',
-            'الاقصر',
+            'الأقصر',
             'قنا',
             'ش سيناء',
             'سوهاج',
@@ -898,5 +898,16 @@ class LeadsCustomersController extends Controller
             'success' => 'true',
             'message' => $response->json(),
         ]);
+    }
+
+    public function changeImage(Request $request, $id)
+    {
+        # code...
+        $lead = LeadsCustomers::find($id);
+        if ($request->hasFile('image')) {
+            $lead['image'] = $request->file('image')->store('uploads', 'public');
+        }
+        $lead->save();
+        return redirect()->back();
     }
 }

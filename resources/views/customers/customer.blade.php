@@ -643,6 +643,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="mt-3 d-flex justify-content-center">
+                                {{ $customers->links() }}
+                            </div>
                         </div>
                     </div> <!-- End card-body -->
                 </div> <!-- End card -->
@@ -864,8 +867,8 @@
         }
 
         /* .content-wrapper {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: fit-content;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: fit-content;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
 
         .dt-button {
             padding: 8px 15px;
@@ -1286,13 +1289,13 @@
         });
         $(document).ready(function() {
             $('#dataTable').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": false,
-                "info": true,
+                "lengthChange": false,
                 "autoWidth": false,
                 "responsive": true,
+                info: true, // إلغاء النص "عرض X من Y"
+                ordering: true, // إلغاء ترتيب الأعمدة
+                searching: false,
+                paging: false,
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
                 }
@@ -1379,8 +1382,10 @@
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
             },
+            info: true, // إلغاء النص "عرض X من Y"
+            ordering: true, // إلغاء ترتيب الأعمدة
             searching: false,
-            pageLength: 100,
+            paging: false,
         });
 
         document.querySelectorAll(".finger-print").forEach(button => {
@@ -1527,7 +1532,7 @@
                     alert("حدث خطأ أثناء التعيين");
                 });
         });
-        // ###################################################################### تعيين حقيبة 
+        // ###################################################################### تعيين حقيبة
         document.getElementById('assignBagForm').addEventListener('submit', function(e) {
             document.getElementById("hhhh").style.display = "block"
             document.getElementById("gggg").style.display = "block"
@@ -1656,62 +1661,62 @@
                 });
         });
 
-        document.getElementById('labBookingBtn').addEventListener('click', function() {
-            const selectedCustomers = [];
+        // document.getElementById('labBookingBtn').addEventListener('click', function() {
+        //     const selectedCustomers = [];
 
-            document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
-                const customerData = checkbox.getAttribute('data-customer');
-                selectedCustomers.push(JSON.parse(customerData));
-            });
+        //     document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
+        //         const customerData = checkbox.getAttribute('data-customer');
+        //         selectedCustomers.push(JSON.parse(customerData));
+        //     });
 
-            selectedCustomers.forEach(customer => {
-                console.log(customer.e_visa_number);
-                fetch('http://localhost:3000/submit-form', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            nationalId: customer.card_id,
-                            passportNumber: customer.passport_id,
-                            fullName: customer.name_ar,
-                            e_visa_number: customer.e_visa_number,
-                        })
-                    })
-                    .then(response => {
-                        return response.json(); // إذا كنت تتوقع JSON كرد
-                    })
-                    .then(data => {
-                        fetch("{{ route('savePDF') }}", {
-                                method: "POST",
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({
-                                    pdf: data.pdf,
-                                    customer_id: customer.id,
-                                    user: "{{ auth()->user()->email }}"
-                                })
-                            })
-                            .then(res => res.json())
-                            .then(data => {
-                                Swal.fire({
-                                    title: "نجحت العملية!",
-                                    text: "تم حجز كشف المعامل بنجاح!",
-                                    icon: "success"
-                                });
-                            })
-                            .catch(err => {
-                                console.error("خطأ:", err);
-                                alert("فشل في حفظ PDF");
-                            });
-                    })
-                    .catch(error => {
-                        console.error('خطأ أثناء الإرسال:', error);
-                    });
-            });
+        //     selectedCustomers.forEach(customer => {
+        //         console.log(customer.e_visa_number);
+        //         fetch('http://localhost:3000/submit-form', {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify({
+        //                     nationalId: customer.card_id,
+        //                     passportNumber: customer.passport_id,
+        //                     fullName: customer.name_ar,
+        //                     e_visa_number: customer.e_visa_number,
+        //                 })
+        //             })
+        //             .then(response => {
+        //                 return response.json(); // إذا كنت تتوقع JSON كرد
+        //             })
+        //             .then(data => {
+        //                 fetch("{{ route('savePDF') }}", {
+        //                         method: "POST",
+        //                         headers: {
+        //                             'Content-Type': 'application/json'
+        //                         },
+        //                         body: JSON.stringify({
+        //                             pdf: data.pdf,
+        //                             customer_id: customer.id,
+        //                             user: "{{ auth()->user()->email }}"
+        //                         })
+        //                     })
+        //                     .then(res => res.json())
+        //                     .then(data => {
+        //                         Swal.fire({
+        //                             title: "نجحت العملية!",
+        //                             text: "تم حجز كشف المعامل بنجاح!",
+        //                             icon: "success"
+        //                         });
+        //                     })
+        //                     .catch(err => {
+        //                         console.error("خطأ:", err);
+        //                         alert("فشل في حفظ PDF");
+        //                     });
+        //             })
+        //             .catch(error => {
+        //                 console.error('خطأ أثناء الإرسال:', error);
+        //             });
+        //     });
 
-        });
+        // });
 
         // document.getElementById('medical-examination').addEventListener('click', function() {
         //     const selectedCustomers = [];
@@ -1821,413 +1826,413 @@
         // });
 
 
-        document.getElementById('visa').addEventListener('click', async function() {
+        // document.getElementById('visa').addEventListener('click', async function() {
 
-            const selectedCustomers = [];
+        //     const selectedCustomers = [];
 
-            document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
-                const customerData = checkbox.getAttribute('data-customer');
-                selectedCustomers.push(JSON.parse(customerData));
-            });
+        //     document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
+        //         const customerData = checkbox.getAttribute('data-customer');
+        //         selectedCustomers.push(JSON.parse(customerData));
+        //     });
 
-            if (selectedCustomers.length === 0) {
-                Swal.fire({
-                    title: 'تنبيه',
-                    text: 'يرجى تحديد العملاء أولاً',
-                    icon: 'warning',
-                    confirmButtonText: 'حسناً'
-                });
-                return;
-            }
+        //     if (selectedCustomers.length === 0) {
+        //         Swal.fire({
+        //             title: 'تنبيه',
+        //             text: 'يرجى تحديد العملاء أولاً',
+        //             icon: 'warning',
+        //             confirmButtonText: 'حسناً'
+        //         });
+        //         return;
+        //     }
 
-            for (const customer of selectedCustomers) {
-                await handleCustomerVisa(customer); // دالة async
-            }
-        });
+        //     for (const customer of selectedCustomers) {
+        //         await handleCustomerVisa(customer); // دالة async
+        //     }
+        // });
 
-        async function handleCustomerVisa(customer) {
-            // ✅ 1. رسالة البدء
-            const loadingSwal = Swal.fire({
-                title: '<span style="font-size: 20px; font-weight: bold;">جاري تنفيذ الكشف عن التأشيرة أو طلب الدخول...</span>',
-                html: `
-                        <div dir="rtl" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px;">
-                            <div style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; padding: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
-                                <div class="spinner-border text-white" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
-                            </div>
-                            <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;">يرجى الانتظار حتى انتهاء الحجز للعميل: ${customer.name_ar}</h2>
-                        </div>
-                    `,
-                background: '#fff',
-                width: '400px',
-                customClass: {
-                    popup: 'modern-swal-popup',
-                },
-                showConfirmButton: false,
-                allowOutsideClick: false,
-                backdrop: `rgba(0,0,0,0.2)`
-            });
+        // async function handleCustomerVisa(customer) {
+        //     // ✅ 1. رسالة البدء
+        //     const loadingSwal = Swal.fire({
+        //         title: '<span style="font-size: 20px; font-weight: bold;">جاري تنفيذ الكشف عن التأشيرة أو طلب الدخول...</span>',
+        //         html: `
+    //                 <div dir="rtl" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px;">
+    //                     <div style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; padding: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+    //                         <div class="spinner-border text-white" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
+    //                     </div>
+    //                     <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;">يرجى الانتظار حتى انتهاء الحجز للعميل: ${customer.name_ar}</h2>
+    //                 </div>
+    //             `,
+        //         background: '#fff',
+        //         width: '400px',
+        //         customClass: {
+        //             popup: 'modern-swal-popup',
+        //         },
+        //         showConfirmButton: false,
+        //         allowOutsideClick: false,
+        //         backdrop: `rgba(0,0,0,0.2)`
+        //     });
 
-            const name_en = customer.name_en_mrz?.split(" ") || [];
-            const name_ar = customer.name_ar || "";
+        //     const name_en = customer.name_en_mrz?.split(" ") || [];
+        //     const name_ar = customer.name_ar || "";
 
-            if (name_ar.length < 3 || name_en.length < 3) {
-                await Swal.close(); // ⛔️ غلق رسالة الانتظار
-                await Swal.fire({
-                    title: "فشلت العملية!",
-                    text: "هناك مشكلة في الاسم: " + name_ar,
-                    icon: "error"
-                });
-                return;
-            }
+        //     if (name_ar.length < 3 || name_en.length < 3) {
+        //         await Swal.close(); // ⛔️ غلق رسالة الانتظار
+        //         await Swal.fire({
+        //             title: "فشلت العملية!",
+        //             text: "هناك مشكلة في الاسم: " + name_ar,
+        //             icon: "error"
+        //         });
+        //         return;
+        //     }
 
-            try {
-                const response = await fetch('http://localhost:3000/open-mofa', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        applicationNumber: customer.e_visa_number,
-                        sponserId: customer.passport_id,
-                        name: customer.name_en_mrz,
-                        customer_id: customer.id,
-                        email: "{{ auth()->user()->email }}",
-                    }),
-                });
+        //     try {
+        //         const response = await fetch('http://localhost:3000/open-mofa', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify({
+        //                 applicationNumber: customer.e_visa_number,
+        //                 sponserId: customer.passport_id,
+        //                 name: customer.name_en_mrz,
+        //                 customer_id: customer.id,
+        //                 email: "{{ auth()->user()->email }}",
+        //             }),
+        //         });
 
-                const data = await response.json();
+        //         const data = await response.json();
 
-                await Swal.close(); // ✅ غلق الرسالة السابقة قبل عرض الجديدة
+        //         await Swal.close(); // ✅ غلق الرسالة السابقة قبل عرض الجديدة
 
-                if (data.status === true) {
-                    const successMessage = data.visaNumber ?
-                        `تم فتح موقع وزارة الخارجية بنجاح!\nرقم التأشيرة: ${data.visaNumber}\nاسم العميل: ${customer.name_ar}` :
-                        `تم إصدار طلب الدخول للعميل: ${customer.name_ar}`;
+        //         if (data.status === true) {
+        //             const successMessage = data.visaNumber ?
+        //                 `تم فتح موقع وزارة الخارجية بنجاح!\nرقم التأشيرة: ${data.visaNumber}\nاسم العميل: ${customer.name_ar}` :
+        //                 `تم إصدار طلب الدخول للعميل: ${customer.name_ar}`;
 
-                    await Swal.fire({
-                        title: "نجحت العملية!",
-                        text: successMessage,
-                        icon: "success",
-                        timer: 3000, // ✅ الانتظار 3 ثواني
-                        timerProgressBar: true,
-                        showConfirmButton: false
-                    });
+        //             await Swal.fire({
+        //                 title: "نجحت العملية!",
+        //                 text: successMessage,
+        //                 icon: "success",
+        //                 timer: 3000, // ✅ الانتظار 3 ثواني
+        //                 timerProgressBar: true,
+        //                 showConfirmButton: false
+        //             });
 
-                } else {
-                    await Swal.fire({
-                        title: "فشلت العملية!",
-                        text: data.message || "حدث خطأ غير معروف",
-                        icon: "error"
-                    });
-                }
+        //         } else {
+        //             await Swal.fire({
+        //                 title: "فشلت العملية!",
+        //                 text: data.message || "حدث خطأ غير معروف",
+        //                 icon: "error"
+        //             });
+        //         }
 
-            } catch (error) {
-                await Swal.close();
-                console.error('❌ Error:', error);
-                await Swal.fire({
-                    title: "فشلت العملية!",
-                    text: "حدثت مشكلة في فتح الموقع",
-                    icon: "error"
-                });
-            }
-        }
+        //     } catch (error) {
+        //         await Swal.close();
+        //         console.error('❌ Error:', error);
+        //         await Swal.fire({
+        //             title: "فشلت العملية!",
+        //             text: "حدثت مشكلة في فتح الموقع",
+        //             icon: "error"
+        //         });
+        //     }
+        // }
 
-        document.getElementById('collectSelected').addEventListener('click', async function() {
-            const selectedCustomers = [];
+        // document.getElementById('collectSelected').addEventListener('click', async function() {
+        //     const selectedCustomers = [];
 
-            document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
-                const customerData = checkbox.getAttribute('data-customer');
-                selectedCustomers.push(JSON.parse(customerData));
-            });
+        //     document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
+        //         const customerData = checkbox.getAttribute('data-customer');
+        //         selectedCustomers.push(JSON.parse(customerData));
+        //     });
 
-            if (selectedCustomers.length === 0) {
-                return Swal.fire({
-                    title: 'تنبيه',
-                    text: 'يرجى تحديد العملاء أولاً',
-                    icon: 'warning',
-                    confirmButtonText: 'حسناً'
-                });
-            }
+        //     if (selectedCustomers.length === 0) {
+        //         return Swal.fire({
+        //             title: 'تنبيه',
+        //             text: 'يرجى تحديد العملاء أولاً',
+        //             icon: 'warning',
+        //             confirmButtonText: 'حسناً'
+        //         });
+        //     }
 
-            // إظهار رسالة التحميل (مرة واحدة)
+        //     // إظهار رسالة التحميل (مرة واحدة)
 
 
-            const btn = document.getElementById('collectSelected');
-            const companyData = JSON.parse(btn.getAttribute('data-company'));
+        //     const btn = document.getElementById('collectSelected');
+        //     const companyData = JSON.parse(btn.getAttribute('data-company'));
 
-            for (const customer of selectedCustomers) {
-                Swal.fire({
-                    title: '<span style="font-size: 20px; font-weight: bold;">جاري تنفيذ الحجز...</span>',
-                    html: `
-                        <div dir="rtl" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px;">
-                            <div style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; padding: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
-                                <div class="spinner-border text-white" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
-                            </div>
-                            <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;">جاري تنفيذ الحجز لكل عميل...</h2>
-                            <p style="font-size: 15px; color: #666; margin-top: 5px;">يرجى الانتظار</p>
-                        </div>
-                        `,
-                    background: '#fff',
-                    width: '400px',
-                    showConfirmButton: false,
-                    allowOutsideClick: false,
-                    backdrop: `rgba(0,0,0,0.2)`
-                });
-                const name_ar = customer.name_ar?.split(" ") || [];
-                const name_en = customer.name_en_mrz?.split(" ") || [];
+        //     for (const customer of selectedCustomers) {
+        //         Swal.fire({
+        //             title: '<span style="font-size: 20px; font-weight: bold;">جاري تنفيذ الحجز...</span>',
+        //             html: `
+    //                 <div dir="rtl" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px;">
+    //                     <div style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; padding: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+    //                         <div class="spinner-border text-white" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
+    //                     </div>
+    //                     <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;">جاري تنفيذ الحجز لكل عميل...</h2>
+    //                     <p style="font-size: 15px; color: #666; margin-top: 5px;">يرجى الانتظار</p>
+    //                 </div>
+    //                 `,
+        //             background: '#fff',
+        //             width: '400px',
+        //             showConfirmButton: false,
+        //             allowOutsideClick: false,
+        //             backdrop: `rgba(0,0,0,0.2)`
+        //         });
+        //         const name_ar = customer.name_ar?.split(" ") || [];
+        //         const name_en = customer.name_en_mrz?.split(" ") || [];
 
-                if (name_ar.length < 3 || name_en.length < 3) {
-                    await Swal.fire({
-                        title: "فشلت العملية!",
-                        text: "هناك مشكلة في الاسم: " + customer.name_ar,
-                        icon: "error"
-                    });
-                    await new Promise(resolve => setTimeout(resolve, 3000));
-                    continue;
-                }
+        //         if (name_ar.length < 3 || name_en.length < 3) {
+        //             await Swal.fire({
+        //                 title: "فشلت العملية!",
+        //                 text: "هناك مشكلة في الاسم: " + customer.name_ar,
+        //                 icon: "error"
+        //             });
+        //             await new Promise(resolve => setTimeout(resolve, 3000));
+        //             continue;
+        //         }
 
-                const data = {
-                    UserName: companyData.engaz_email,
-                    Password: companyData.engaz_password,
-                    VisaKind: customer.customer_group.visa_type.visa_peroid,
-                    NATIONALITY: "EGY",
-                    ResidenceCountry: "272",
-                    EmbassyCode: customer.customer_group.visa_type.embassy.title,
-                    NumberOfEntries: "0",
-                    NumberEntryDay: "90",
-                    ResidencyInKSA: "120",
-                    AFIRSTNAME: name_ar[0] || "",
-                    AFATHER: name_ar[1] || "",
-                    AGRAND: name_ar[2] || "",
-                    AFAMILY: name_ar[name_ar.length - 1] || "",
-                    EFIRSTNAME: name_en[0] || "",
-                    EFATHER: name_en[1] || "",
-                    EGRAND: name_en[2] || "",
-                    EFAMILY: name_en[name_en.length - 1] || "",
-                    PASSPORTnumber: customer.passport_id,
-                    imageUrl: `{{ asset('storage') }}/${customer.image}`,
-                    PASSPORType: "1",
-                    PASSPORT_ISSUE_PLACE: "مصر",
-                    PASSPORT_ISSUE_DATE: "05/04/2023",
-                    PASSPORT_EXPIRY_DATE: customer.passport_expire_date,
-                    BIRTH_PLACE: "القاهرة",
-                    BIRTH_DATE: customer.date_birth,
-                    PersonId: customer.card_id,
-                    DEGREE: "-",
-                    DEGREE_SOURCE: "-",
-                    ADDRESS_HOME: "بحره",
-                    Personal_Email: "moha@gmail.com",
-                    SPONSER_NAME: customer.customer_group.visa_type.sponser.name,
-                    SPONSER_NUMBER: customer.customer_group.visa_type.sponser.id_number,
-                    SPONSER_ADDRESS: customer.customer_group.visa_type.sponser.address,
-                    SPONSER_PHONE: customer.customer_group.visa_type.sponser.phone,
-                    COMING_THROUGH: "2",
-                    ENTRY_POINT: "1",
-                    ExpectedEntryDate: new Date(new Date().setMonth(new Date().getMonth() + 2))
-                        .toLocaleDateString('en-GB'),
-                    porpose: "عمل",
-                    car_number: "SV123",
-                    RELIGION: "1",
-                    SOCIAL_STATUS: "2",
-                    Sex: "1",
-                    JOB_OR_RELATION_Id: customer.customer_group.visa_profession.job
-                };
+        //         const data = {
+        //             UserName: companyData.engaz_email,
+        //             Password: companyData.engaz_password,
+        //             VisaKind: customer.customer_group.visa_type.visa_peroid,
+        //             NATIONALITY: "EGY",
+        //             ResidenceCountry: "272",
+        //             EmbassyCode: customer.customer_group.visa_type.embassy.title,
+        //             NumberOfEntries: "0",
+        //             NumberEntryDay: "90",
+        //             ResidencyInKSA: "120",
+        //             AFIRSTNAME: name_ar[0] || "",
+        //             AFATHER: name_ar[1] || "",
+        //             AGRAND: name_ar[2] || "",
+        //             AFAMILY: name_ar[name_ar.length - 1] || "",
+        //             EFIRSTNAME: name_en[0] || "",
+        //             EFATHER: name_en[1] || "",
+        //             EGRAND: name_en[2] || "",
+        //             EFAMILY: name_en[name_en.length - 1] || "",
+        //             PASSPORTnumber: customer.passport_id,
+        //             imageUrl: `{{ asset('storage') }}/${customer.image}`,
+        //             PASSPORType: "1",
+        //             PASSPORT_ISSUE_PLACE: "مصر",
+        //             PASSPORT_ISSUE_DATE: "05/04/2023",
+        //             PASSPORT_EXPIRY_DATE: customer.passport_expire_date,
+        //             BIRTH_PLACE: "القاهرة",
+        //             BIRTH_DATE: customer.date_birth,
+        //             PersonId: customer.card_id,
+        //             DEGREE: "-",
+        //             DEGREE_SOURCE: "-",
+        //             ADDRESS_HOME: "بحره",
+        //             Personal_Email: "moha@gmail.com",
+        //             SPONSER_NAME: customer.customer_group.visa_type.sponser.name,
+        //             SPONSER_NUMBER: customer.customer_group.visa_type.sponser.id_number,
+        //             SPONSER_ADDRESS: customer.customer_group.visa_type.sponser.address,
+        //             SPONSER_PHONE: customer.customer_group.visa_type.sponser.phone,
+        //             COMING_THROUGH: "2",
+        //             ENTRY_POINT: "1",
+        //             ExpectedEntryDate: new Date(new Date().setMonth(new Date().getMonth() + 2))
+        //                 .toLocaleDateString('en-GB'),
+        //             porpose: "عمل",
+        //             car_number: "SV123",
+        //             RELIGION: "1",
+        //             SOCIAL_STATUS: "2",
+        //             Sex: "1",
+        //             JOB_OR_RELATION_Id: customer.customer_group.visa_profession.job
+        //         };
 
-                try {
-                    const res = await fetch('http://localhost:3000/submit-all', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(data)
-                    });
+        //         try {
+        //             const res = await fetch('http://localhost:3000/submit-all', {
+        //                 method: 'POST',
+        //                 headers: {
+        //                     'Content-Type': 'application/json'
+        //                 },
+        //                 body: JSON.stringify(data)
+        //             });
 
-                    const response = await res.json();
+        //             const response = await res.json();
 
-                    if (response.appNo) {
-                        await fetch('{{ route('engaz_request') }}', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json'
-                            },
-                            body: JSON.stringify({
-                                customer_id: customer.id,
-                                e_number: response.appNo,
-                                email: "{{ auth()->user()->email }}"
-                            })
-                        });
+        //             if (response.appNo) {
+        //                 await fetch('{{ route('engaz_request') }}', {
+        //                     method: 'POST',
+        //                     headers: {
+        //                         'Content-Type': 'application/json'
+        //                     },
+        //                     body: JSON.stringify({
+        //                         customer_id: customer.id,
+        //                         e_number: response.appNo,
+        //                         email: "{{ auth()->user()->email }}"
+        //                     })
+        //                 });
 
-                        await new Promise((resolve) => {
-                            Swal.fire({
-                                title: "نجحت العملية!",
-                                text: `تم إصدار طلب إنجاز للعميل: ${customer.name_ar}\nرقم الطلب: ${response.appNo}`,
-                                icon: "success",
-                                timer: 3000,
-                                timerProgressBar: true,
-                                showConfirmButton: false,
-                                didClose: resolve // ⬅️ هنا يتم تنفيذ resolve عند غلق الرسالة
-                            });
-                        });
+        //                 await new Promise((resolve) => {
+        //                     Swal.fire({
+        //                         title: "نجحت العملية!",
+        //                         text: `تم إصدار طلب إنجاز للعميل: ${customer.name_ar}\nرقم الطلب: ${response.appNo}`,
+        //                         icon: "success",
+        //                         timer: 3000,
+        //                         timerProgressBar: true,
+        //                         showConfirmButton: false,
+        //                         didClose: resolve // ⬅️ هنا يتم تنفيذ resolve عند غلق الرسالة
+        //                     });
+        //                 });
 
-                    } else {
-                        await new Promise((resolve) => {
-                            Swal.fire({
-                                title: "فشلت العملية!",
-                                text: "لم يتم إصدار الطلب للعميل: " + customer.name_ar,
-                                icon: "error",
-                                timer: 3000,
-                                timerProgressBar: true,
-                                showConfirmButton: false,
-                                didClose: resolve
-                            });
-                        });
-                    }
-                } catch (error) {
-                    await new Promise((resolve) => {
-                        Swal.fire({
-                            title: "فشلت العملية!",
-                            text: "حدث خطأ أثناء تنفيذ الطلب للعميل: " + customer.name_ar,
-                            icon: "error",
-                            timer: 3000,
-                            timerProgressBar: true,
-                            showConfirmButton: false,
-                            didClose: resolve
-                        });
-                    });
+        //             } else {
+        //                 await new Promise((resolve) => {
+        //                     Swal.fire({
+        //                         title: "فشلت العملية!",
+        //                         text: "لم يتم إصدار الطلب للعميل: " + customer.name_ar,
+        //                         icon: "error",
+        //                         timer: 3000,
+        //                         timerProgressBar: true,
+        //                         showConfirmButton: false,
+        //                         didClose: resolve
+        //                     });
+        //                 });
+        //             }
+        //         } catch (error) {
+        //             await new Promise((resolve) => {
+        //                 Swal.fire({
+        //                     title: "فشلت العملية!",
+        //                     text: "حدث خطأ أثناء تنفيذ الطلب للعميل: " + customer.name_ar,
+        //                     icon: "error",
+        //                     timer: 3000,
+        //                     timerProgressBar: true,
+        //                     showConfirmButton: false,
+        //                     didClose: resolve
+        //                 });
+        //             });
 
-                }
-            }
-        });
+        //         }
+        //     }
+        // });
 
-        document.getElementById('check-medical').addEventListener('click', async function() {
-            const companyData = JSON.parse(btn.getAttribute('data-company'));
-            console.log(companyData);
+        // document.getElementById('check-medical').addEventListener('click', async function() {
+        //     const companyData = JSON.parse(btn.getAttribute('data-company'));
+        //     console.log(companyData);
 
-            const customer = JSON.parse(this.getAttribute('data-customer'));
-            Swal.fire({
-                title: 'جاري فتح المتصفح لك...',
-                text: 'في انتظار',
-                allowOutsideClick: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+        //     const customer = JSON.parse(this.getAttribute('data-customer'));
+        //     Swal.fire({
+        //         title: 'جاري فتح المتصفح لك...',
+        //         text: 'في انتظار',
+        //         allowOutsideClick: false,
+        //         didOpen: () => {
+        //             Swal.showLoading();
+        //         }
+        //     });
 
-            function reverseDateFormat(dateStr) {
-                if (!dateStr) return null;
+        //     function reverseDateFormat(dateStr) {
+        //         if (!dateStr) return null;
 
-                const parts = dateStr.split("-");
-                if (parts.length !== 3) return null;
+        //         const parts = dateStr.split("-");
+        //         if (parts.length !== 3) return null;
 
-                const [year, month, day] = parts;
-                return `${day}-${month}-${year}`;
-            }
+        //         const [year, month, day] = parts;
+        //         return `${day}-${month}-${year}`;
+        //     }
 
-            const payload = {
-                firstName: extractFirstName(customer.name_en_mrz),
-                lastName: extractLastName(customer.name_en_mrz),
-                passportNumber: customer.passport_id,
-                dateOfBirth: reverseDateFormat(customer.date_birth),
-                maritalStatus: customer.marital_status,
-                passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
-                passportIssuePlace: customer.issue_place,
-                passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
-                phone: "+" + customer.phone,
-                nationalId: customer.card_id,
-                position: customer.customer_group.visa_profession.job,
-            };
-            console.log(customer.card_id);
+        //     const payload = {
+        //         firstName: extractFirstName(customer.name_en_mrz),
+        //         lastName: extractLastName(customer.name_en_mrz),
+        //         passportNumber: customer.passport_id,
+        //         dateOfBirth: reverseDateFormat(customer.date_birth),
+        //         maritalStatus: customer.marital_status,
+        //         passportIssueDate: reverseDateFormat(customer.passport_issuance_date),
+        //         passportIssuePlace: customer.issue_place,
+        //         passportExpiryDate: reverseDateFormat(customer.passport_expire_date),
+        //         phone: "+" + customer.phone,
+        //         nationalId: customer.card_id,
+        //         position: customer.customer_group.visa_profession.job,
+        //     };
+        //     console.log(customer.card_id);
 
-            const fieldLabels = {
-                firstName: "الاسم الأول",
-                lastName: "اسم العائلة",
-                passportNumber: "رقم الجواز",
-                dateOfBirth: "تاريخ الميلاد",
-                maritalStatus: "الحالة الاجتماعية",
-                passportIssueDate: "تاريخ إصدار الجواز",
-                passportIssuePlace: "مكان إصدار الجواز",
-                passportExpiryDate: "تاريخ انتهاء الجواز",
-                phone: "رقم الهاتف",
-                nationalId: "الرقم القومي",
-                position: "المهنة الخاصة بمجموعته"
-            };
+        //     const fieldLabels = {
+        //         firstName: "الاسم الأول",
+        //         lastName: "اسم العائلة",
+        //         passportNumber: "رقم الجواز",
+        //         dateOfBirth: "تاريخ الميلاد",
+        //         maritalStatus: "الحالة الاجتماعية",
+        //         passportIssueDate: "تاريخ إصدار الجواز",
+        //         passportIssuePlace: "مكان إصدار الجواز",
+        //         passportExpiryDate: "تاريخ انتهاء الجواز",
+        //         phone: "رقم الهاتف",
+        //         nationalId: "الرقم القومي",
+        //         position: "المهنة الخاصة بمجموعته"
+        //     };
 
-            // التحقق من القيم الناقصة فقط لهذه الحقول
-            const missingFields = [];
+        //     // التحقق من القيم الناقصة فقط لهذه الحقول
+        //     const missingFields = [];
 
-            for (const [key, value] of Object.entries(payload)) {
-                if (!value || value === "N/A" || value === "unknown") {
-                    missingFields.push(fieldLabels[key] || key);
-                }
-            }
+        //     for (const [key, value] of Object.entries(payload)) {
+        //         if (!value || value === "N/A" || value === "unknown") {
+        //             missingFields.push(fieldLabels[key] || key);
+        //         }
+        //     }
 
-            if (missingFields.length > 0) {
-                Swal.close(); // إغلاق الانتظار
+        //     if (missingFields.length > 0) {
+        //         Swal.close(); // إغلاق الانتظار
 
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'بيانات ناقصة',
-                    html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields.join(
-                        '<br>') + '</b>',
-                });
-                return;
-            }
+        //         Swal.fire({
+        //             icon: 'warning',
+        //             title: 'بيانات ناقصة',
+        //             html: 'يرجى استكمال الحقول التالية قبل المتابعة:<br><b>' + missingFields.join(
+        //                 '<br>') + '</b>',
+        //         });
+        //         return;
+        //     }
 
-            // باقي البيانات ثابتة أو افتراضية
-            payload.country = "EGY";
-            payload.city = "87";
-            payload.destinationCountry = "SA";
-            payload.nationality = "55";
-            payload.visaType = "wv";
-            payload.gender = "male";
-            payload.email = companyData.medical_email;
-            payload.userEmail = "{{ auth()->user()->email }}";
+        //     // باقي البيانات ثابتة أو افتراضية
+        //     payload.country = "EGY";
+        //     payload.city = "87";
+        //     payload.destinationCountry = "SA";
+        //     payload.nationality = "55";
+        //     payload.visaType = "wv";
+        //     payload.gender = "male";
+        //     payload.email = companyData.medical_email;
+        //     payload.userEmail = "{{ auth()->user()->email }}";
 
-            try {
-                const response = await fetch('http://localhost:3000/api/wafid', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
-                });
+        //     try {
+        //         const response = await fetch('http://localhost:3000/api/wafid', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //             },
+        //             body: JSON.stringify(payload),
+        //         });
 
-                const result = await response.json();
-                console.log('Result:', result);
-                Swal.close(); // إغلاق الانتظار
-                if (result.success) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'تم الحجز',
-                        text: 'تم إرسال البيانات بنجاح.',
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'خطأ',
-                        text: 'حدث خطأ أثناء الاتصال بالخادم.',
-                    });
-                }
+        //         const result = await response.json();
+        //         console.log('Result:', result);
+        //         Swal.close(); // إغلاق الانتظار
+        //         if (result.success) {
+        //             Swal.fire({
+        //                 icon: 'success',
+        //                 title: 'تم الحجز',
+        //                 text: 'تم إرسال البيانات بنجاح.',
+        //             });
+        //         } else {
+        //             Swal.fire({
+        //                 icon: 'error',
+        //                 title: 'خطأ',
+        //                 text: 'حدث خطأ أثناء الاتصال بالخادم.',
+        //             });
+        //         }
 
-            } catch (error) {
-                console.error('Fetch error:', error);
-                Swal.close(); // إغلاق الانتظار
-                Swal.fire({
-                    icon: 'error',
-                    title: 'خطأ',
-                    text: 'حدث خطأ أثناء الاتصال بالخادم.',
-                });
-            }
+        //     } catch (error) {
+        //         console.error('Fetch error:', error);
+        //         Swal.close(); // إغلاق الانتظار
+        //         Swal.fire({
+        //             icon: 'error',
+        //             title: 'خطأ',
+        //             text: 'حدث خطأ أثناء الاتصال بالخادم.',
+        //         });
+        //     }
 
-            // مساعدات لتقسيم الاسم
-            function extractFirstName(fullName) {
-                return fullName?.split(" ")[0] ?? "Unknown";
-            }
+        //     // مساعدات لتقسيم الاسم
+        //     function extractFirstName(fullName) {
+        //         return fullName?.split(" ")[0] ?? "Unknown";
+        //     }
 
-            function extractLastName(fullName) {
-                const parts = fullName?.split(" ");
-                return parts?.slice(1).join(" ") ?? "Unknown";
-            }
-        });
+        //     function extractLastName(fullName) {
+        //         const parts = fullName?.split(" ");
+        //         return parts?.slice(1).join(" ") ?? "Unknown";
+        //     }
+        // });
     </script>
 @stop

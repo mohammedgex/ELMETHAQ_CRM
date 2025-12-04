@@ -69,7 +69,7 @@
                                                 </p>
                                             @endif
 
-                                            @if ($evaluation->attach && !Str::endsWith($evaluation->attach, ['.jpg', '.jpeg', '.png', '.webp']))
+                                            @if ($evaluation->attach)
                                                 <p class="mb-2">
                                                     <i class="fas fa-paperclip text-secondary"></i>
                                                     <strong>مرفق:</strong>
@@ -78,6 +78,14 @@
                                                         <i class="fas fa-eye"></i> عرض الملف
                                                     </a>
                                                 </p>
+                                                @if (auth()->user()?->role == 'admin')
+                                                    <div class="text-right mt-3">
+                                                        <a href="" style="color: black !important;"
+                                                            class="btn btn-warning btn-sm">
+                                                            <i class="fas fa-edit"></i> تعديل
+                                                        </a>
+                                                    </div>
+                                                @endif
                                             @endif
                                         </div>
                                     </div>

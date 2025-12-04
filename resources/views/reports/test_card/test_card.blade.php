@@ -413,6 +413,69 @@
                     <div>📅 التاريخ: {{ $time->format('d/m/Y') }}</div>
                     <div>⏰ الوقت: {{ $time->format('h:i A') }}</div>
                 </div>
+
+                <form class="no-print" id="imageUploadForm"
+                    action="{{ route('leads-customers.changeImage', $lead->id) }}" method="POST"
+                    enctype="multipart/form-data">
+                    @csrf
+
+                    <style>
+                        .custom-file-upload {
+                            display: block;
+                            padding: 15px;
+                            cursor: pointer;
+                            background: #fafafa;
+                            border: 2px dashed #bfc4c9;
+                            border-radius: 12px;
+                            text-align: center;
+                            transition: 0.25s ease-in-out;
+                            margin-top: 5px;
+                        }
+
+                        .custom-file-upload:hover {
+                            background: #f0f0f0;
+                            border-color: #6c757d;
+                        }
+
+                        .custom-file-upload:active {
+                            background: #e9ecef;
+                        }
+
+                        .custom-file-upload i {
+                            font-size: 32px;
+                            margin-bottom: 8px;
+                            display: block;
+                            color: #6c757d;
+                        }
+
+                        #fileName {
+                            font-size: 14px;
+                            margin-top: 8px;
+                            color: #444;
+                            font-weight: 500;
+                        }
+
+                        /* إخفاء ال input */
+                        input[type="file"] {
+                            display: none;
+                        }
+                    </style>
+
+                    <label for="imageInput" class="custom-file-upload">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        اضغط لتغيير صورة
+                        <div id="fileName">لم يتم اختيار ملف بعد</div>
+                    </label>
+
+                    <input id="imageInput" type="file" name="image" accept="image/*"
+                        onchange="submitImageForm(event)">
+                </form>
+                <script>
+                    function submitImageForm(event) {
+                        // إرسال النموذج تلقائياً
+                        document.getElementById('imageUploadForm').submit();
+                    }
+                </script>
             </div>
 
             <!-- بيانات -->

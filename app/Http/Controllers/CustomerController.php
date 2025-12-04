@@ -98,7 +98,7 @@ class CustomerController extends Controller
             'delegate',
             'evaluation',
             'jobTitle',
-        ])->latest()->get();
+        ])->latest()->paginate(30);
 
         return view("customers.customer", [
             'customers' => $customers,
@@ -333,7 +333,7 @@ class CustomerController extends Controller
         $searchInput = $request->input('searchInput');
 
         // البحث في جدول العملاء
-        $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->get();
+        $customers = Customer::where($searchBy, 'LIKE', "%$searchInput%")->paginate(30);
 
         $company = CompanySetting::first();
         $delegates = Delegate::all();
@@ -737,7 +737,7 @@ class CustomerController extends Controller
             'delegate',
             'evaluation',
             'jobTitle',
-        ])->where('customer_group_id', $group_id)->get();
+        ])->where('customer_group_id', $group_id)->paginate(50);
         return view('group.customers-group', [
             'customers' => $customers,
             'delegates' => $delegates,

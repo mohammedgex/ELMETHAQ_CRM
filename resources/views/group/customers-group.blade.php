@@ -25,7 +25,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>الرقم الصادر</label>
                                         <div class="input-group">
@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>رقم السجل</label>
                                         <div class="input-group">
@@ -47,12 +47,22 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="form-group">
                                         <label>القنصلية</label>
                                         <div class="input-group">
                                             <input type="text" class="form-control"
                                                 value="{{ $group->visaType->embassy->title ?? '-' }}" readonly>
+                                            <button class="btn btn-primary" onclick="copyValue(this)">نسخ</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label>المهنة</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control"
+                                                value="{{ $group->visaProfession->job ?? '-' }}" readonly>
                                             <button class="btn btn-primary" onclick="copyValue(this)">نسخ</button>
                                         </div>
                                     </div>
@@ -157,7 +167,7 @@
                                     @foreach ($customers as $customer)
                                         <tr
                                             class="
-                                                        @if ($customer->blackList && $customer->blackList->block) tr-blocked
+                                                        @if ($customer->blackList && $customer->blackList?->block) tr-blocked
                                                         @elseif(is_null($customer->passport_expire_date)) tr-warning @endif
                                                     ">
                                             <td> {{ $loop->iteration }}
@@ -523,9 +533,11 @@
                                                                 {{-- البلوك --}}
                                                                 <li>
                                                                     <a class="dropdown-item text-danger"
-                                                                        href="{{ $customer->blackList->block ? route('customers.unblock', $customer->id) : route('customers.block', $customer->id) }}">
+                                                                        href="{{ $customer->blackList?->block
+                                                                            ? route('customers.unblock', $customer->id)
+                                                                            : route('customers.block', $customer->id) }}">
                                                                         <i class="fas fa-user-slash me-1"></i>
-                                                                        {{ $customer->blackList->block ? 'إزالة البلوك' : 'بلوك' }}
+                                                                        {{ $customer->blackList?->block ? 'إزالة البلوك' : 'بلوك' }}
                                                                     </a>
                                                                 </li>
                                                                 {{-- أرشفة / استرجاع --}}
@@ -565,7 +577,12 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            <div class="mt-3 d-flex justify-content-center">
+                                {{ $customers->links() }}
+                            </div>
+
                         </div>
+
                     </div> <!-- End card-body -->
                 </div> <!-- End card -->
             </div>
@@ -1185,8 +1202,10 @@
             language: {
                 url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
             },
+            info: true, // إلغاء النص "عرض X من Y"
+            ordering: true, // إلغاء ترتيب الأعمدة
             searching: false,
-            pageLength: 100,
+            paging: false, // إلغاء الصفحات
         });
 
         // ######################################################################### تعيين مجموعة
