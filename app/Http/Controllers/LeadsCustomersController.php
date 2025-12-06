@@ -900,7 +900,7 @@ class LeadsCustomersController extends Controller
         ]);
     }
 
-    public function changeImage(Request $request, $id)
+    public function changeImage(Request $request, $id, $test_id)
     {
         # code...
         $lead = LeadsCustomers::find($id);
@@ -908,6 +908,6 @@ class LeadsCustomersController extends Controller
             $lead['image'] = $request->file('image')->store('uploads', 'public');
         }
         $lead->save();
-        return redirect()->back();
+        return redirect()->route('reports.test_card', ['id' => $id, 'test_id' => $test_id]);
     }
 }

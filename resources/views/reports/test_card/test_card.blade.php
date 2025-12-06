@@ -415,7 +415,7 @@
                 </div>
 
                 <form class="no-print" id="imageUploadForm"
-                    action="{{ route('leads-customers.changeImage', $lead->id) }}" method="POST"
+                    action="{{ route('leads-customers.changeImage', [$lead->id, $test->id]) }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
 
