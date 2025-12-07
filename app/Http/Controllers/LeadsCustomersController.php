@@ -908,6 +908,6 @@ class LeadsCustomersController extends Controller
             $lead['image'] = $request->file('image')->store('uploads', 'public');
         }
         $lead->save();
-        return redirect()->route('reports.test_card', ['id' => $id, 'test_id' => $test_id]);
+        return redirect()->route('reports.test_card', ['lead' => $id, 'test' => $test_id]);
     }
 }
