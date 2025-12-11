@@ -1003,7 +1003,7 @@
             try {
                 const base64Image = await fileToBase64(file);
                 const model = genAI.getGenerativeModel({
-                    model: "gemini-2.0-flash"
+                    model: "gemini-2.5-flash"
                 });
                 const prompt = `Please analyze the attached national ID card image and extract the following data, then return the result strictly in JSON format.
 

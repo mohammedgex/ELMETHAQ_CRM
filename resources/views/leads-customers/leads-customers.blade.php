@@ -838,6 +838,7 @@
         } from "https://esm.sh/@google/generative-ai";
 
         const genAI = new GoogleGenerativeAI("{{ env('GOOGLE_API_KEY') }}");
+        // const genAI = new GoogleGenerativeAI("AIzaSyB3eYcmiN5c20UMG2WLXBwndGjgfpcdjTY");
 
         async function fileToBase64(file) {
             const buffer = await file.arrayBuffer();
@@ -868,7 +869,7 @@
             try {
                 const base64Image = await fileToBase64(file);
                 const model = genAI.getGenerativeModel({
-                    model: "gemini-2.0-flash"
+                    model: "gemini-2.5-flash"
                 });
                 const prompt = `"Extract all information from the passport image with high accuracy, ensuring no errors, and present the output as a JSON object. The JSON should include the following keys:
 
