@@ -838,7 +838,6 @@
         } from "https://esm.sh/@google/generative-ai";
 
         const genAI = new GoogleGenerativeAI("{{ env('GOOGLE_API_KEY') }}");
-        // const genAI = new GoogleGenerativeAI("AIzaSyB3eYcmiN5c20UMG2WLXBwndGjgfpcdjTY");
 
         async function fileToBase64(file) {
             const buffer = await file.arrayBuffer();
