@@ -868,7 +868,7 @@
             try {
                 const base64Image = await fileToBase64(file);
                 const model = genAI.getGenerativeModel({
-                    model: "gemini-2.5-flash"
+                    model: "gemini-2.0-flash",
                 });
                 const prompt = `"Extract all information from the passport image with high accuracy, ensuring no errors, and present the output as a JSON object. The JSON should include the following keys:
 
