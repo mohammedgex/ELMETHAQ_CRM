@@ -273,6 +273,8 @@ Route::group([
 
     Route::get('/change-password/{id}', [userController::class, 'changePasswordUser'])->name('user.changePasswordUser');
     Route::post('/change-password/{id}', [userController::class, 'changePassword'])->name('user.changePassword');
+    Route::get('/group/{id}/delegates-stats', [CustomerGroupController::class, 'showDelegatesStats'])
+        ->name('group.delegates-stats');
 });
 // قيادة امنة للسائقين
 Route::get('/safe-driving/{test}', [TestController::class, 'safeDriving'])->name('safe.driving');

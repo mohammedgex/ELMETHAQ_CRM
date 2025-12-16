@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Models\Delegate;
 use App\Models\History;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
@@ -146,5 +147,41 @@ class CustomerGroupController extends Controller
         $history->save();
 
         return redirect()->back()->with('success', 'تم إزالة العميل من المجموعة بنجاح');
+    }
+
+
+    public function showDelegatesStats($id)
+    {
+        $delegates = Delegate::all(); // كل المندوبين
+        $delegateNames = [];
+        $customersCount = [];
+        $colors = [];
+        $borders = [];
+        $group = CustomerGroup::findOrFail($id);
+
+        foreach ($delegates as $delegate) {
+            // عدد العملاء التابعين للمندوب داخل هذه المجموعة فقط
+            $count = $delegate->customers()
+                ->where('customer_group_id', $id)
+                ->count();
+
+            // إذا كان عدد العملاء أكبر من صفر فقط
+            if ($count > 0) {
+                $delegateNames[] = $delegate->name;
+                $customersCount[] = $count;
+
+                // ألوان الأعمدة
+                $colors[] = 'rgba(54, 162, 235, 0.6)';
+                $borders[] = 'rgba(54, 162, 235, 1)';
+            }
+        }
+
+        return view('group.group-statistics', compact(
+            'group',
+            'delegateNames',
+            'customersCount',
+            'colors',
+            'borders'
+        ));
     }
 }

@@ -130,6 +130,13 @@
                                                 تعيين حقيبة
                                             </button>
                                         </li>
+                                        <li>
+                                            <a href="{{ route('group.delegates-stats', $group->id) }}">
+                                                <button class="dropdown-item text-info">
+                                                    احصائيات المجموعة
+                                                </button>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
 
