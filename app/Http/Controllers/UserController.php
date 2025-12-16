@@ -13,7 +13,7 @@ class UserController extends Controller
     public function index()
     {
         # code...
-        $users = User::where('id', '!=', auth()->user()->id)->get();
+        $users = User::all();
         return view('users.users', [
             'users' => $users
         ]);
