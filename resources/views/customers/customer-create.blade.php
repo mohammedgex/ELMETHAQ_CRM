@@ -1088,9 +1088,37 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row mt-2">
+                                <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #343a40;">تاريخ اصدار الجواز</label>
+                                    <div class="input-group rounded">
+                                        <input type="text" id="date_of_issue"
+                                            value="{{ $edit->passport_issuance_date ? \Carbon\Carbon::parse($edit->passport_issuance_date)->format('d/m/Y') : '' }}"
+                                            class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
+                                            name="passport_issuance_date">
+                                        <button class="btn" style="background-color: #343a40; color: white;"
+                                            type="button" onclick="copyText()" title="نسخ">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {{-- <div class="col-md-6">
+                                    <label class="fw-bold" style="color: #343a40;">جهة الاصدار</label>
+                                    <div class="input-group rounded">
+                                        <input type="text" class="form-control fw-bold"
+                                            style="height: 60px; border-color: #343a40;" id="issue_place"
+                                            name="issue_place" value="{{ $edit->issue_place }}">
+                                        <button class="btn" style="background-color: #343a40; color: white;"
+                                            type="button" onclick="copyText()" title="نسخ">
+                                            <i class="fas fa-copy"></i>
+                                        </button>
+                                    </div>
+                                </div> --}}
+                            </div>
 
                             <input type="hidden" id="card_id" name="card_id" value="">
-                            <input type="hidden" id="date_of_issue" name="passport_issuance_date" value="">
+                            {{-- <input type="hidden" id="date_of_issue" name="passport_issuance_date" value=""> --}}
                             <div class="d-flex justify-content-between mt-5">
                                 <!-- زر الحفظ -->
                                 <button type="submit" class="btn text-white fw-bold w-100"

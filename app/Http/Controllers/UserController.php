@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -51,5 +52,32 @@ class UserController extends Controller
             'histories' => $histories,
             'user'      => $user
         ]);
+    }
+
+    public function changePasswordUser($id)
+    {
+        # code...
+        $user = User::findOrFail($id);
+        return view('users.change-password', [
+            'user' => $user
+        ]);
+    }
+
+    public function changePassword(Request $request, $id)
+    {
+        $request->validate([
+            'password' => 'required|min:8',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'password' => Hash::make($request->password),
+        ]);
+
+        // حذف جميع الجلسات الأخرى
+        DB::table('sessions')->where('user_id', $user->id)->delete();
+
+        return redirect()->back()->with('success', 'تم تغيير كلمة المرور بنجاح.');
     }
 }

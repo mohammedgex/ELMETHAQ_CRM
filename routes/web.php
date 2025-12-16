@@ -68,7 +68,6 @@ Route::group([
     Route::get('/leads-search', [LeadsCustomersController::class, 'search'])->name('leads-customers.search');
     Route::post('/lead/change/img/{id}/{test_id}', [LeadsCustomersController::class, 'changeImage'])->name('leads-customers.changeImage');
 
-
     Route::get('/users', [UserController::class, 'index'])->name('users')->middleware("check.permission:users-manage");
 
     // عرض المهام
@@ -271,6 +270,9 @@ Route::group([
 
     Route::get('/deep-search', [CustomerController::class, 'deepSearch'])->name('deep.search');
     Route::post('/deep-search', [CustomerController::class, 'deepSearchFN'])->name('deepSearchFN');
+
+    Route::get('/change-password/{id}', [userController::class, 'changePasswordUser'])->name('user.changePasswordUser');
+    Route::post('/change-password/{id}', [userController::class, 'changePassword'])->name('user.changePassword');
 });
 // قيادة امنة للسائقين
 Route::get('/safe-driving/{test}', [TestController::class, 'safeDriving'])->name('safe.driving');
