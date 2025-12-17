@@ -153,7 +153,9 @@
             let headerHtml = '';
             if (isFirst) {
                 headerHtml = `
-                <h2>كشف دخول جوازات</h2>
+                <h2>
+                    كشف دخول جوازات${headerData.status ? `(${headerData.status}) ` : ''}
+                </h2>
                 <table class="info-table">
                   <tr>
                     <td colspan="2">اسم المكتب / <b>شركة الميثاق لالحاق العمالة المصرية بالخارج ترخيص (768)</b></td>
@@ -178,14 +180,14 @@
                     <th>الاسم</th>
                     <th>الباركود</th>
                 </tr>
-        `;
+            `;
             dataSlice.forEach((item, i) => {
                 const index = pageIndex * rowsPerPage + i + 1;
                 tableHtml += `
                 <tr>
                     <td>${index}</td>
                     <td style="font-weight: bold;">${escapeHtml(item.name_ar ?? item.name ?? '')}</td>
-                    <td class="tdbarcode"><svg id="barcode-${pageIndex}-${i}"></svg></td>
+                    <td style="height: 100px;"></td>
                 </tr>
             `;
             });
@@ -221,22 +223,30 @@
                 });
             });
         }
-
         window.onload = function() {
             const boxNumber = prompt("أدخل صندوق رقم:", "");
-            const visa = prompt("ادخل نوع التاشيرة", "");
+            const visa = prompt("ادخل نوع التأشيرة:", "");
             const day = prompt("أدخل اليوم:", "");
             const date = prompt("أدخل التاريخ:", new Date().toLocaleDateString('ar-EG'));
+
+            const type = prompt(
+                "اختر النوع:\n1 - مؤهلات\n2 - إعادة طباعة\n3 - فارغة",
+                "1"
+            );
+
+            let status = '';
+            if (type === '1') status = 'مؤهلات';
+            else if (type === '2') status = 'إعادة طباعة';
+            else if (type === '3') status = '';
             renderPages({
                 boxNumber: boxNumber || '........',
                 visa: visa || '........',
                 day: day || '.............',
-                date: date || '.............'
+                date: date || '.............',
+                status: status
             });
         };
     </script>
-
-
 </body>
 
 </html>
