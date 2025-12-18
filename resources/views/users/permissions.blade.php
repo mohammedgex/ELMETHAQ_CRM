@@ -60,6 +60,7 @@
                                     'show-leads' => 'عرض العملاء المحتملين',
                                     'job-question-create' => 'تعريف اسئلة الوظائف',
                                     'deep-search-access' => 'البحث المتقدم',
+                                    'delegates-settings' => 'اعدادات المناديب',
                                 ];
                             @endphp
 

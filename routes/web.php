@@ -265,17 +265,16 @@ Route::group([
     Route::get('/sign-lead-in-test/{id}', [LeadsCustomersController::class, 'signLeadinTest'])->name('sign.lead.in.test');
     Route::post('/sign-lead-in-test', [LeadsCustomersController::class, 'createLeadToTest'])->name('create.lead.in.test');
     Route::get('/calling-lead/{test_id}/{lead_id}', [TestController::class, 'callingClient'])->name('calling.client');
-    Route::get('/delegates/statistics/{test_id}', [DelegateController::class, 'statistics'])
-        ->name('delegates.statistics');
+    Route::get('/delegates/statistics/{test_id}', [DelegateController::class, 'statistics'])->name('delegates.statistics');
 
     Route::get('/deep-search', [CustomerController::class, 'deepSearch'])->name('deep.search');
     Route::post('/deep-search', [CustomerController::class, 'deepSearchFN'])->name('deepSearchFN');
 
     Route::get('/change-password/{id}', [userController::class, 'changePasswordUser'])->name('user.changePasswordUser');
     Route::post('/change-password/{id}', [userController::class, 'changePassword'])->name('user.changePassword');
-    Route::get('/group/{id}/delegates-stats', [CustomerGroupController::class, 'showDelegatesStats'])
-        ->name('group.delegates-stats');
+    Route::get('/group/{id}/delegates-stats', [CustomerGroupController::class, 'showDelegatesStats'])->name('group.delegates-stats');
 });
+
 // قيادة امنة للسائقين
 Route::get('/safe-driving/{test}', [TestController::class, 'safeDriving'])->name('safe.driving');
 Route::get('/leads-show-safe-driving/{id}', [LeadsCustomersController::class, 'show'])->name('leads-safe-driving.show');

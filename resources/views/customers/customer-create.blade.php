@@ -683,7 +683,7 @@
                                 <div class="col-md-6">
                                     <label class="fw-bold" style="color: #343a40;">اختر المندوب</label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                        name="delegate_id">
+                                        name="delegate_id" @if (!auth()->user()?->permissions->contains('permission', 'delegates-settings')) disabled @endif>
                                         <option value="">اختر المندوب</option>
                                         @foreach ($delegates as $delegate)
                                             <option value="{{ $delegate->id }}"

@@ -1158,6 +1158,8 @@
                             showCancelButton: true,
                             confirmButtonText: "📂 استدعاء العميل",
                             cancelButtonText: "❌ إلغاء",
+                            allowOutsideClick: false, // ← تمنع الإغلاق بالضغط خارج النافذة
+                            allowEscapeKey: false
                         }).then((result) => {
                             if (result.isConfirmed) {
                                 // Laravel يولّد الرابط مع قيم افتراضية (:test_id و :lead_id)

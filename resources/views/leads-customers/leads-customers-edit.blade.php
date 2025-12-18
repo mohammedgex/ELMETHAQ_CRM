@@ -154,7 +154,8 @@
                                         @if ($lead->delegate_id == null)
                                             <span>({{ $lead->licence_type }})</span>
                                         @endif
-                                        <select class="form-control" name="delegate_id">
+                                        <select class="form-control" name="delegate_id"
+                                            @if (!auth()->user()?->permissions->contains('permission', 'delegates-settings')) disabled @endif>
                                             <option value="">اختر المندوب</option>
                                             @foreach ($delegates as $delegate)
                                                 <option value="{{ $delegate->id }}"
