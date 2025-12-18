@@ -2026,7 +2026,7 @@
 
         // ###################################################################### تصدير اكسيل
         async function downloadExcel() {
-            const customers = @json($customers);
+            const customers = @json($customers->items());
 
             const workbook = new ExcelJS.Workbook();
             const worksheet = workbook.addWorksheet("العملاء");
