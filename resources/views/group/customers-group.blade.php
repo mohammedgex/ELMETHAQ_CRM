@@ -157,7 +157,7 @@
                                         </th>
                                         <th>كود العميل</th>
                                         <th>اسم العميل</th>
-                                        {{-- <th>نتيجة اخر اختبار</th> --}}
+                                        <th>السن</th>
                                         <th>الصورة</th>
                                         <th>الهاتف</th>
                                         <th>السن</th>
@@ -191,22 +191,9 @@
                                             <td><a
                                                     href="{{ route('customer.add', $customer->id) }}">{{ $customer->name_ar }}</a>
                                             </td>
-                                            {{-- @php
-                                                $latestEvaluation = $customer->LeadCustomer
-                                                    ?->evaluations()
-                                                    ?->whereNotNull('evaluation')
-                                                    ->latest()
-                                                    ->first();
-                                            @endphp
                                             <td>
-                                                @if ($latestEvaluation)
-                                                    <a href="{{ asset('storage/' . $latestEvaluation->attach) }}">
-                                                        {{ $latestEvaluation->evaluation }}
-                                                    </a>
-                                                @else
-                                                    لا يوجد
-                                                @endif
-                                            </td> --}}
+                                                {{ $customer->age ?? '-' }}
+                                            </td>
                                             <td>
                                                 <a href="{{ asset('storage/' . $customer->image) }}" target="blank">
                                                     <img src="{{ asset('storage/' . $customer->image) }}" width="40"
@@ -2061,6 +2048,11 @@
                     key: "delegate",
                     width: 25
                 },
+                {
+                    header: "السن",
+                    key: "delegate",
+                    width: 25
+                },
             ];
 
             // إدخال البيانات
@@ -2072,6 +2064,7 @@
                     passport: c.passport_id,
                     gov: c.governorate_live,
                     delegate: c.delegate ? c.delegate.name : ""
+                    age: c.age,
                 });
             });
 
