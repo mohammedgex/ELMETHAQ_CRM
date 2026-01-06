@@ -2063,7 +2063,7 @@
                     phone: c.phone,
                     passport: c.passport_id,
                     gov: c.governorate_live,
-                    delegate: c.delegate ? c.delegate.name : ""
+                    delegate: c.delegate ? c.delegate.name : "",
                     age: c.age,
                 });
             });
