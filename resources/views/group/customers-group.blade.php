@@ -2050,7 +2050,7 @@
                 },
                 {
                     header: "السن",
-                    key: "delegate",
+                    key: "age",
                     width: 25
                 },
             ];
