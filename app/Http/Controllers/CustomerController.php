@@ -737,7 +737,7 @@ class CustomerController extends Controller
             'delegate',
             'evaluation',
             'jobTitle',
-        ])->where('customer_group_id', $group_id)->paginate(100);
+        ])->where('customer_group_id', $group_id)->paginate(50);
         return view('group.customers-group', [
             'customers' => $customers,
             'delegates' => $delegates,

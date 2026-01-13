@@ -360,10 +360,47 @@
             </tr>
         </table>
 
-        <div class="signature-section">
-            <div>أتعهد بصحة البيانات أعلاه</div>
-            <div>التوقيع المعتمد والختم</div>
+        <div class="signature-section" style="display: flex; justify-content: space-between; gap:20px">
+
+            <div style="margin: 0; padding:0;">
+                <span>المرفقات:</span>
+                <p id="signatureResult"
+                    style="display:none; white-space: pre-wrap; padding: 0; font-size:12px; font-weight:100;">
+                </p>
+                <textarea id="signatureText" cols="30" rows="5"></textarea>
+                <br>
+
+                <button id="saveBtn" onclick="saveSignature()">حفظ</button>
+
+            </div>
+
+            <div>
+                <div>أتعهد بصحة البيانات أعلاه</div>
+                <div>التوقيع المعتمد والختم</div>
+            </div>
+
         </div>
+
+        <script>
+            function saveSignature() {
+                const textarea = document.getElementById('signatureText');
+                const result = document.getElementById('signatureResult');
+                const button = document.getElementById('saveBtn');
+
+                if (textarea.value.trim() === '') {
+                    alert('من فضلك اكتب التوقيع');
+                    return;
+                }
+
+                result.textContent = textarea.value;
+
+                textarea.style.display = 'none';
+                button.style.display = 'none';
+                result.style.display = 'block';
+            }
+        </script>
+
+
     </div>
     <script>
         window.onload = function() {
