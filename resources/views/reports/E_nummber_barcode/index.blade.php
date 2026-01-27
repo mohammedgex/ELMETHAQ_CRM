@@ -24,6 +24,30 @@
             max-width: 100%;
             height: auto;
         }
+
+        @page {
+            size: 80mm 40mm;
+            /* مقاس الورقة */
+            margin: 0;
+        }
+
+        @media print {
+            body {
+                margin: 0;
+                padding: 0;
+                width: 80mm;
+                height: 40mm;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            img {
+                width: 80mm;
+                height: 40mm;
+                border: none;
+            }
+        }
     </style>
 </head>
 

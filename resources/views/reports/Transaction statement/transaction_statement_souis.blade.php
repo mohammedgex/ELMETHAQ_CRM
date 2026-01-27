@@ -202,7 +202,7 @@
 
     <script>
         /***** إعدادات محلية *****/
-        const rowsPerPage = 15; // عدد الصفوف في كل صفحة
+        const rowsPerPage = 10; // عدد الصفوف في كل صفحة
         let globalData = [];
         const customersFromServer = @json(array_values($customers ?? []), JSON_UNESCAPED_UNICODE);
 
