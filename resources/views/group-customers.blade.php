@@ -116,14 +116,24 @@
                                                 @endphp
 
                                                 @if ($visaDoc)
-                                                    <a href="{{ asset('storage/' . $visaDoc->file) }}" download
-                                                        class="btn btn-sm btn-success">
-                                                        <i class="fa fa-download"></i> تحميل التأشيرة
-                                                    </a>
+                                                    <div class="d-flex gap-1">
+                                                        {{-- زر العرض --}}
+                                                        <a href="{{ asset('storage/' . $visaDoc->file) }}" target="_blank"
+                                                            class="btn btn-sm btn-primary">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+
+                                                        {{-- زر التحميل --}}
+                                                        <a href="{{ route('download.visa', $visaDoc->id) }}"
+                                                            class="btn btn-sm btn-success">
+                                                            <i class="fa fa-download"></i>
+                                                        </a>
+                                                    </div>
                                                 @else
                                                     <span class="text-muted">لا يوجد تأشيرة</span>
                                                 @endif
                                             </td>
+
                                             <td>
                                                 <div class="btn-group dropstart">
                                                     <button type="button"
