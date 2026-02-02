@@ -124,7 +124,7 @@
                                                         </a>
 
                                                         {{-- زر التحميل --}}
-                                                        <a href="{{ asset('storage/', $visaDoc->file) }}"
+                                                        <a href="{{ asset('storage/' . $visaDoc->file) }}" download
                                                             class="btn btn-sm btn-success">
                                                             <i class="fa fa-download"></i>
                                                         </a>
