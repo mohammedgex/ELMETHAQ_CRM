@@ -116,8 +116,9 @@
                                                 @endphp
 
                                                 @if ($visaDoc)
-                                                    <a href="{{ asset('storage/' . $visaDoc->file) }}" target="_blank">
-                                                        عرض التأشيرة
+                                                    <a href="{{ asset('storage/' . $visaDoc->file) }}" download
+                                                        class="btn btn-sm btn-success">
+                                                        <i class="fa fa-download"></i> تحميل التأشيرة
                                                     </a>
                                                 @else
                                                     <span class="text-muted">لا يوجد تأشيرة</span>
