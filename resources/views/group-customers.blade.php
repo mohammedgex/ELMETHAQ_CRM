@@ -55,6 +55,10 @@
                                     <button id="exportBtn" class="dropdown-item btn btn-success mb-3">تصدير إلى
                                         Excel</button>
                                 </li>
+                                <li>
+                                    <button id="visa" class="dropdown-item btn btn-success mb-3">جلب بيانات
+                                        التاشيرة</button>
+                                </li>
                             </ul>
 
                         </div>
@@ -84,8 +88,8 @@
                                             <td style="position: relative !important;">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"
-                                                    class="form-check-input row-checkbox width-input" type="checkbox"
-                                                    class="form-check-input centered-checkbox">
+                                                    class="form-check-input row-checkbox width-input centered-checkbox"
+                                                    type="checkbox" data-customer='@json($customer)'>
                                             </td>
                                             <td>#{{ $customer->id }}</td>
                                             <td>
@@ -258,9 +262,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
     <script>
@@ -296,4 +297,118 @@
             XLSX.writeFile(workbook, 'customers.xlsx');
         });
     </script>
+
+    <Script>
+        document.getElementById('visa').addEventListener('click', async function() {
+
+            const selectedCustomers = [];
+
+            document.querySelectorAll('.row-checkbox:checked').forEach(checkbox => {
+                const customerData = checkbox.getAttribute('data-customer');
+                selectedCustomers.push(JSON.parse(customerData));
+            });
+            console.log(selectedCustomers);
+
+            if (selectedCustomers.length === 0) {
+                Swal.fire({
+                    title: 'تنبيه',
+                    text: 'يرجى تحديد العملاء أولاً',
+                    icon: 'warning',
+                    confirmButtonText: 'حسناً'
+                });
+                return;
+            }
+
+            for (const customer of selectedCustomers) {
+                await handleCustomerVisa(customer); // دالة async
+            }
+        });
+
+        async function handleCustomerVisa(customer) {
+            // ✅ 1. رسالة البدء
+            const loadingSwal = Swal.fire({
+                title: '<span style="font-size: 20px; font-weight: bold;">جاري تنفيذ الكشف عن التأشيرة أو طلب الدخول...</span>',
+                html: `
+                        <div dir="rtl" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px 10px;">
+                            <div style="background: linear-gradient(135deg, #007bff, #6610f2); border-radius: 50%; padding: 18px; box-shadow: 0 0 20px rgba(0,0,0,0.1);">
+                                <div class="spinner-border text-white" role="status" style="width: 2.5rem; height: 2.5rem;"></div>
+                            </div>
+                            <h2 style="margin-top: 20px; font-size: 20px; font-weight: bold; color: #333;">يرجى الانتظار حتى انتهاء الحجز للعميل: ${customer.name_ar}</h2>
+                        </div>
+                    `,
+                background: '#fff',
+                width: '400px',
+                customClass: {
+                    popup: 'modern-swal-popup',
+                },
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                backdrop: `rgba(0,0,0,0.2)`
+            });
+
+            const name_en = customer.name_en_mrz?.split(" ") || [];
+            const name_ar = customer.name_ar || "";
+
+            if (name_ar.length < 3 || name_en.length < 3) {
+                await Swal.close(); // ⛔️ غلق رسالة الانتظار
+                await Swal.fire({
+                    title: "فشلت العملية!",
+                    text: "هناك مشكلة في الاسم: " + name_ar,
+                    icon: "error"
+                });
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/open-mofa', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        applicationNumber: customer.e_visa_number,
+                        sponserId: customer.passport_id,
+                        name: customer.name_en_mrz,
+                        customer_id: customer.id,
+                        email: "{{ auth()->user()->email }}",
+                    }),
+                });
+
+                const data = await response.json();
+
+                await Swal.close(); // ✅ غلق الرسالة السابقة قبل عرض الجديدة
+
+                if (data.status === true) {
+                    const successMessage = data.visaNumber ?
+                        `تم فتح موقع وزارة الخارجية بنجاح!\nرقم التأشيرة: ${data.visaNumber}\nاسم العميل: ${customer.name_ar}` :
+                        `تم إصدار طلب الدخول للعميل: ${customer.name_ar}`;
+
+                    await Swal.fire({
+                        title: "نجحت العملية!",
+                        text: successMessage,
+                        icon: "success",
+                        timer: 3000, // ✅ الانتظار 3 ثواني
+                        timerProgressBar: true,
+                        showConfirmButton: false
+                    });
+
+                } else {
+                    await Swal.fire({
+                        title: "فشلت العملية!",
+                        text: data.message || "حدث خطأ غير معروف",
+                        icon: "error"
+                    });
+                }
+
+            } catch (error) {
+                await Swal.close();
+                console.error('❌ Error:', error);
+                await Swal.fire({
+                    title: "فشلت العملية!",
+                    text: "حدثت مشكلة في فتح الموقع",
+                    icon: "error"
+                });
+            }
+        }
+    </Script>
 @stop
