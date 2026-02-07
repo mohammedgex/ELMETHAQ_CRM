@@ -503,29 +503,29 @@
         // });
 
 
-        // function detectDevTools() {
-        //     const start = performance.now();
-        //     debugger; // لو DevTools مفتوح هيتأخر هنا
-        //     const end = performance.now();
+        function detectDevTools() {
+            const start = performance.now();
+            debugger; // لو DevTools مفتوح هيتأخر هنا
+            const end = performance.now();
 
-        //     if (end - start > 100) { // فرق زمني كبير يعني DevTools مفتوح
-        //         document.body.innerHTML = `
-    // <h1 style="color:red; text-align:center; margin-top:20%; font-size:50px;">
-    //     🚨 تم كشف فتح أدوات المطور 🚨
-    // </h1>
-    // <h2 style="text-align:center; font-size:30px;">
-    //     لا تحاول العبث في الكود، هذا قد يؤدي إلى حظر حسابك!
-    // </h2>
-    // @if (auth()->user())
-    //     <h3 style="text-align:center; font-size:20px;">
-    //     من فضلك يا {{ auth()->user()->name }} اغلق وضع المطور وقم بعمل ريفريش
-    // </h3>
-    // @endif
-    // `;
-        //     }
-        // }
+            if (end - start > 100) { // فرق زمني كبير يعني DevTools مفتوح
+                document.body.innerHTML = `
+    <h1 style="color:red; text-align:center; margin-top:20%; font-size:50px;">
+        🚨 تم كشف فتح أدوات المطور 🚨
+    </h1>
+    <h2 style="text-align:center; font-size:30px;">
+        لا تحاول العبث في الكود، هذا قد يؤدي إلى حظر حسابك!
+    </h2>
+    @if (auth()->user())
+        <h3 style="text-align:center; font-size:20px;">
+        من فضلك يا {{ auth()->user()->name }} اغلق وضع المطور وقم بعمل ريفريش
+    </h3>
+    @endif
+    `;
+            }
+        }
 
-        // setInterval(detectDevTools, 1000);
+        setInterval(detectDevTools, 1000);
     </script>
 
 </body>
