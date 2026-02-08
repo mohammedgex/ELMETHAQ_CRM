@@ -306,6 +306,10 @@ class LeadsCustomersController extends Controller
                 $data[$field] = $request->file($field)->store('uploads', 'public');
             }
         }
+        if ($lead->delegate_id != null) {
+            # code...
+            $lead->delegate_id = $request->delegate_id;
+        }
 
         // التحديث النهائي
         $lead->update($data);
