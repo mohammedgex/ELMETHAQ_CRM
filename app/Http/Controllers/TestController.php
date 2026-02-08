@@ -9,6 +9,7 @@ use App\Models\LeadsCustomers;
 use App\Models\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class TestController extends Controller
 {
@@ -166,6 +167,32 @@ class TestController extends Controller
         $evaluation->notes = $request->notes;
         $evaluation->attach = $filePath;
         $evaluation->save();
+
+        $lead = LeadsCustomers::find($evaluation->lead_id);
+
+        if ($request->evaluation == "مقبول") {
+            # code...
+            Http::withHeaders([
+                'Content-Type'  => 'application/json',
+                'Authorization' => 'Bearer ' . env('API_TOKEN_WHATSAPP'),
+            ])->post(env('API_URL_WHATSAPP'), [
+                'from_phone_number_id' => '0',
+                'phone_number'         => $lead->phone,
+                'message_body'         => '🎉 تهانينا بمناسبة النجاح في الاختبار 🎉
+                        يسعدنا إبلاغكم باجتيازكم الاختبار بنجاح، ونتمنى لكم دوام التوفيق والنجاح في الخطوات القادمة.
+
+                        نرجو من سيادتكم التوجه إلى المكتب في أقرب وقت ممكن لاستكمال الإجراءات اللازمة وتوقيع العقود.
+
+                        📍 عنوان المكتب:
+                        الجيزة – بجوار مكمة الجيزة
+                        برج أبو الفداء – الدور السادس – شقة 60
+
+                        🗺️ موقع المكتب على الخريطة:
+                        https://maps.app.goo.gl/JkvHNvnq9VdjpHnFA
+
+                        في انتظاركم، ومع خالص تمنياتنا بالتوفيق 🌷',
+            ]);
+        }
 
         return redirect()->back()->with('success', 'تم إضافة التقييم بنجاح.');
     }
