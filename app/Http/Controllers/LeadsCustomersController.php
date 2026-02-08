@@ -287,7 +287,6 @@ class LeadsCustomersController extends Controller
             'test_type' => $request->input('test_type'),
             'registration_date' => $request->input('registration_date'),
             'job_title_id' => $request->input('job_title_id'),
-            'delegate_id' => $request->input('delegate_id'),
             "notes" => $request->input('notes'),
             'customer_id' => $lead->customer_id, // الحفاظ على customer_id كما هو
         ];
@@ -306,9 +305,11 @@ class LeadsCustomersController extends Controller
                 $data[$field] = $request->file($field)->store('uploads', 'public');
             }
         }
-        if ($lead->delegate_id != null) {
+
+        // // dd($lead->delegate_id);
+        if ($request->delegate_id != null) {
             # code...
-            $lead->delegate_id = $request->delegate_id;
+            $data['delegate_id'] = $request->delegate_id;
         }
 
         // التحديث النهائي
