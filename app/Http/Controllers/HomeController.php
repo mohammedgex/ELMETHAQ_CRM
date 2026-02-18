@@ -55,6 +55,10 @@ class HomeController extends Controller
         $users = User::latest()->get();
         $tests = Test::latest()->get();
         $histories = History::latest()->take(10)->get();
+        $historiesCount = History::whereBetween('created_at', [
+            Carbon::today()->startOfDay(),
+            Carbon::today()->endOfDay()
+        ])->count();
         $tasks = User_task::with(['sender', 'receiver'])
             ->latest() // مرتب بالأحدث
             ->take(10) // حد أقصى 10
@@ -100,6 +104,7 @@ class HomeController extends Controller
             'totalDCustomers' => $delegatesTravel->pluck('total_customers'),
             'traveledCustomers' => $delegatesTravel->pluck('traveled_customers'),
             'tasks' => $tasks,
+            'historiesCount' => $historiesCount,
         ]);
     }
 

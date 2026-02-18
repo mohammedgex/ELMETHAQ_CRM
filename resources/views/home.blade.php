@@ -3,122 +3,289 @@
 @section('title', 'لوحة التحكم')
 
 @section('content_header')
-    <h1 style="font-weight:bold">لوحة التحكم</h1>
+    <div class="dashboard-wrapper" style="font-family: 'Cairo', sans-serif; direction: rtl;">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="header-welcome shadow-lg custom-header"
+                    style="border-radius: 24px; padding: 35px; position: relative; overflow: hidden; background: var(--header-gradient);">
+
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-7">
+                            <div class="d-flex align-items-center">
+                                <div class="welcome-icon ml-3 d-none d-md-flex"
+                                    style="background: rgba(255, 255, 255, 0.2); width: 65px; height: 65px; border-radius: 18px; align-items: center; justify-content: center; backdrop-filter: blur(10px); margin-left: 15px !important;">
+                                    <i class="fas fa-hand-peace fa-2x text-white"></i>
+                                </div>
+                                <div>
+                                    <h2 class="mb-1 text-white" style="font-weight: 800;">أهلاً بك،
+                                        {{ auth()->user()->name }} 👋</h2>
+                                    <p class="mb-0 text-white-50" style="font-size: 1.1rem;">
+                                        {{ \Carbon\Carbon::now()->translatedFormat('l، d F Y') }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5 text-md-left text-center mt-3 mt-md-0">
+                            <div class="quick-action">
+                                <span class="text-white-50 d-block mb-1">إجمالي نشاط اليوم</span>
+                                <h3 class="text-white font-weight-bold mb-0" style="font-size: 2.2rem;">
+                                    {{ $historiesCount }}</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr style="border-top: 1px solid rgba(255,255,255,0.15); margin: 25px 0;">
+
+                    <div class="row mt-4">
+                        @php
+                            $stats = [
+                                [
+                                    'count' => $customers->count(),
+                                    'label' => 'العملاء',
+                                    'icon' => 'fas fa-user-friends',
+                                    'color' => '#60a5fa',
+                                ],
+                                [
+                                    'count' => $delegates->count(),
+                                    'label' => 'المناديب',
+                                    'icon' => 'fas fa-eye',
+                                    'color' => '#34d399',
+                                ],
+                                [
+                                    'count' => $groups->count(),
+                                    'label' => 'المجموعات',
+                                    'icon' => 'fas fa-users',
+                                    'color' => '#fbbf24',
+                                ],
+                                [
+                                    'count' => $users->count(),
+                                    'label' => 'الموظفين',
+                                    'icon' => 'fas fa-user-tie',
+                                    'color' => '#f87171',
+                                ],
+                                [
+                                    'count' => $visas->count(),
+                                    'label' => 'التأشيرات',
+                                    'icon' => 'fas fa-passport',
+                                    'color' => '#a78bfa',
+                                ],
+                                [
+                                    'count' => $bags->count(),
+                                    'label' => 'الحقائب',
+                                    'icon' => 'fas fa-briefcase',
+                                    'color' => '#fb923c',
+                                ],
+                            ];
+                        @endphp
+
+                        @foreach ($stats as $stat)
+                            <div class="col-lg-2 col-md-4 col-6 mb-3 mb-lg-0">
+                                <div class="inner-stat-card"
+                                    style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 16px; padding: 15px; transition: 0.3s; backdrop-filter: blur(5px);">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <i class="{{ $stat['icon'] }} mr-2"
+                                            style="color: {{ $stat['color'] }}; font-size: 0.9rem;"></i>
+                                        <small class="text-white-50 font-weight-bold">{{ $stat['label'] }}</small>
+                                    </div>
+                                    <h4 class="text-white mb-0 font-weight-bold">{{ $stat['count'] }}</h4>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div style="position: absolute; left: -20px; bottom: -20px; opacity: 0.05; pointer-events: none;">
+                        <i class="fas fa-rocket" style="font-size: 200px; color: white;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        /* --- المتغيرات والتنسيق المتكيف --- */
+        :root {
+            --header-gradient: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+
+        .dark-mode :root,
+        body.dark-mode {
+            --header-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        }
+
+        .inner-stat-card:hover {
+            background: rgba(255, 255, 255, 0.2) !important;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .text-white-50 {
+            color: rgba(255, 255, 255, 0.7) !important;
+        }
+
+        /* لضمان تناسق الأيقونات والمسافات في العربي */
+        .mr-2 {
+            margin-left: 8px !important;
+            margin-right: 0 !important;
+        }
+
+        .ml-3 {
+            margin-right: 15px !important;
+            margin-left: 0 !important;
+        }
+
+        @media (max-width: 768px) {
+            .custom-header {
+                padding: 20px !important;
+            }
+
+            .badge-value {
+                font-size: 1.5rem !important;
+            }
+        }
+    </style>
 @stop
+
 @section('content')
     <div class="container-fluid">
-        <!-- بطاقات الإحصائيات -->
-        <div class="row">
-            <div class="col-lg-2 col-6">
-                <div class="small-box bg-info">
-                    <div class="inner">
-                        <h3>{{ $customers->count() }}</h3>
-                        <p>عملاء اليوم</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-user-friends"></i>
-                    </div>
-                    <a href="{{ route('leads-customers.index') }}" class="small-box-footer">المزيد <i
-                            class="fas fa-arrow-circle-left"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-6">
-                <div class="small-box bg-success">
-                    <div class="inner">
-                        <h3>{{ $delegates->count() }}</h3>
-                        <p>إجمالي المناديب</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-eye"></i>
-                    </div>
-                    <a href="{{ route('Delegates.create') }}" class="small-box-footer">المزيد <i
-                            class="fas fa-arrow-circle-left"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-6">
-                <div class="small-box bg-warning">
-                    <div class="inner">
-                        <h3>{{ $groups->count() }}</h3>
-                        <p>إجمالي المجموعات</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-users"></i>
-                    </div>
-                    <a href="{{ route('customer-groups.create') }}" class="small-box-footer">المزيد <i
-                            class="fas fa-arrow-circle-left"></i></a>
-                </div>
-            </div>
-
-            <div class="col-lg-2 col-6">
-                <div class="small-box bg-danger">
-                    <div class="inner">
-                        <h3>{{ $users->count() }}</h3>
-                        <p>إجمالي الموظفين</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-user-tie"></i>
-                    </div>
-                    <a href="{{ route('users') }}" class="small-box-footer">المزيد <i
-                            class="fas fa-arrow-circle-left"></i></a>
-                </div>
-            </div>
-            <div class="col-lg-2 col-6">
-                <div class="small-box" style="background: linear-gradient(135deg, #6f42c1, #8e63d4); color: white;">
-                    <div class="inner">
-                        <h3>{{ $visas->count() }}</h3>
-                        <p>إجمالي التأشيرات</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-passport"></i>
-                    </div>
-                    <a href="{{ route('visa-type.index') }}" class="small-box-footer" style="color: white;">
-                        المزيد <i class="fas fa-arrow-circle-left"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-2 col-6">
-                <div class="small-box" style="background: linear-gradient(135deg, #ff7f50, #ff9966); color: white;">
-                    <div class="inner">
-                        <h3>{{ $bags->count() }}</h3>
-                        <p>إجمالي الحقائب</p>
-                    </div>
-                    <div class="icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <a href="{{ route('bags.index') }}" class="small-box-footer" style="color: white;">
-                        المزيد <i class="fas fa-arrow-circle-left"></i>
-                    </a>
-                </div>
-            </div>
-
-        </div>
-
         <!-- قسم الاختبارات -->
         <div class="card card-primary card-outline position-relative">
-            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                <h3 class="card-title">الاختبارات ({{ $tests->count() }})</h3>
-                <div>
-                    <button id="scrollRight" class="btn btn-light btn-sm"><i class="fas fa-chevron-right"></i></button>
-                    <button id="scrollLeft" class="btn btn-light btn-sm me-1"><i class="fas fa-chevron-left"></i></button>
+            <style>
+                /* --- تعريف متغيرات الهيدر لتناسب الوضعين --- */
+                :root {
+                    --header-bg: #ffffff;
+                    --header-text: #1e293b;
+                    --badge-bg: #f1f5f9;
+                    --badge-text: #475569;
+                    --btn-scroll-bg: #f8fafc;
+                    --btn-scroll-border: #e2e8f0;
+                    --btn-scroll-text: #64748b;
+                }
+
+                /* تحويل المتغيرات في الدارك مود */
+                .dark-mode :root,
+                body.dark-mode {
+                    --header-bg: #1e293b;
+                    /* نفس لون خلفية الكارت في الدارك */
+                    --header-text: #f1f5f9;
+                    --badge-bg: rgba(255, 255, 255, 0.1);
+                    --badge-text: #cbd5e1;
+                    --btn-scroll-bg: rgba(255, 255, 255, 0.05);
+                    --btn-scroll-border: rgba(255, 255, 255, 0.1);
+                    --btn-scroll-text: #f1f5f9;
+                }
+
+                .modern-card-header {
+                    background-color: var(--header-bg) !important;
+                    padding: 20px 25px;
+                    border-bottom: 1px solid var(--btn-scroll-border);
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    border-radius: 20px 20px 0 0 !important;
+                    transition: background-color 0.3s ease;
+                }
+
+                .header-title-wrapper {
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+
+                .modern-card-title {
+                    font-size: 1.25rem;
+                    font-weight: 800;
+                    color: var(--header-text);
+                    margin: 0;
+                }
+
+                .test-count-pill {
+                    background: var(--badge-bg);
+                    color: var(--badge-text);
+                    padding: 4px 14px;
+                    border-radius: 50px;
+                    font-size: 0.85rem;
+                    font-weight: 700;
+                    border: 1px solid var(--btn-scroll-border);
+                }
+
+                /* أزرار السكرول */
+                .scroll-actions {
+                    display: flex;
+                    gap: 10px;
+                }
+
+                .btn-scroll-custom {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 12px;
+                    background: var(--btn-scroll-bg);
+                    border: 1px solid var(--btn-scroll-border);
+                    color: var(--btn-scroll-text);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    cursor: pointer;
+                }
+
+                .btn-scroll-custom:hover {
+                    background: #3f6791;
+                    /* لونك المفضل الأساسي */
+                    color: #ffffff;
+                    border-color: #3f6791;
+                    transform: translateY(-3px);
+                    box-shadow: 0 5px 15px rgba(63, 103, 145, 0.3);
+                }
+
+                .btn-scroll-custom:active {
+                    transform: translateY(0);
+                }
+
+                /* أيقونة العنوان */
+                .title-icon {
+                    width: 35px;
+                    height: 35px;
+                    background: rgba(63, 103, 145, 0.1);
+                    color: #3f6791;
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 0.9rem;
+                }
+            </style>
+
+            <div class="modern-card-header">
+                <div class="header-title-wrapper">
+                    <div class="title-icon">
+                        <i class="fas fa-clipboard-check"></i>
+                    </div>
+                    <h3 class="modern-card-title">الاختبارات</h3>
+                    <span class="test-count-pill">{{ $tests->count() }}</span>
+                </div>
+
+                <div class="scroll-actions">
+                    <button id="scrollRight" class="btn-scroll-custom" title="السابق">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                    <button id="scrollLeft" class="btn-scroll-custom" title="التالي">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
                 </div>
             </div>
 
             <div class="card-body position-relative">
                 <!-- الحاوية اللي فيها الكروت -->
-                <div id="testsContainer" class="d-flex flex-row flex-nowrap overflow-auto"
-                    style="gap: 20px; scroll-behavior: smooth; padding: 10px 40px;">
-
+                <div id="testsContainer" class="d-flex flex-row flex-nowrap overflow-auto py-4"
+                    style="gap: 20px; scroll-behavior: smooth;">
                     @foreach ($tests as $test)
                         @php
+                            // حساب الإحصائيات
                             $latestEvaluations = \App\Models\Evaluation::select(
                                 'lead_id',
                                 \DB::raw('MAX(created_at) as latest_date'),
                             )
                                 ->where('test_id', $test->id)
                                 ->groupBy('lead_id');
-
                             $latestEvaluationIds = \App\Models\Evaluation::where('test_id', $test->id)
                                 ->joinSub($latestEvaluations, 'latest', function ($join) {
                                     $join
@@ -127,81 +294,51 @@
                                 })
                                 ->pluck('evaluations.id');
 
-                            $latestEvaluationsRecords = \App\Models\Evaluation::whereIn(
-                                'id',
-                                $latestEvaluationIds,
-                            )->get();
+                            $latestRecords = \App\Models\Evaluation::whereIn('id', $latestEvaluationIds)->get();
+                            $accepted = $latestRecords->where('evaluation', 'مقبول')->count();
+                            $rejected = $latestRecords->where('evaluation', 'غير مقبول')->count();
+                            $reserve = $latestRecords->where('evaluation', 'احتياطي')->count();
+                            $total = $latestRecords->count();
 
-                            $acceptedCount = $latestEvaluationsRecords->where('evaluation', 'مقبول')->count();
-                            $rejectedCount = $latestEvaluationsRecords->where('evaluation', 'غير مقبول')->count();
-                            $reserveCount = $latestEvaluationsRecords->where('evaluation', 'احتياطي')->count();
-                            $totalLeads = $latestEvaluationsRecords->count();
+                            $pAcc = $total > 0 ? ($accepted / $total) * 100 : 0;
+                            $pRej = $total > 0 ? ($rejected / $total) * 100 : 0;
+                            $pRes = $total > 0 ? ($reserve / $total) * 100 : 0;
                         @endphp
 
-                        <div class="col-md-3 col-6 mb-4" style="min-width: 280px;">
-                            <a href="{{ route('test.leads', $test->id) }}" class="text-decoration-none">
-                                <div class="info-box bg-gradient-primary text-white shadow rounded p-2">
-                                    <span
-                                        class="info-box-icon bg-primary d-flex align-items-center justify-content-center rounded">
-                                        <i class="fas fa-file-alt fa-lg"></i>
-                                    </span>
-                                    <div class="info-box-content">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h5 title="{{ $test->title }}" class="fw-bold mb-2 text-truncate">
-                                                {{ $test->title }}</h5>
-                                            <button type="button" class="btn btn-sm btn-pin" data-id="{{ $test->id }}"
-                                                data-type="test">
-                                                <i class="fas fa-thumbtack"></i>
-                                            </button>
-                                        </div>
-                                        <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded"
-                                            style="background-color: #e2e3e5; color :#000">
-                                            <span class="small">العملاء:</span>
-                                            <span
-                                                class="fw-semibold bg-primary text-white px-2 py-1 rounded">{{ $totalLeads }}</span>
-                                        </div>
+                        <div class="test-item col-md-3">
+                            <a href="{{ route('test.leads', $test->id) }}" class="test-card-modern">
 
-                                        <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded"
-                                            style="background-color: #d4edda; color: #155724;">
-                                            <small>مقبولين</small>
-                                            <small class="fw-semibold">{{ $acceptedCount }}</small>
-                                        </div>
+                                <button type="button" class="btn-pin btn-pin-top" data-id="{{ $test->id }}"
+                                    data-type="test">
+                                    <i class="fas fa-thumbtack"></i>
+                                </button>
 
-                                        <div class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded"
-                                            style="background-color: #f8d7da; color: #721c24;">
-                                            <small>مرفوضين</small>
-                                            <small class="fw-semibold">{{ $rejectedCount }}</small>
-                                        </div>
+                                <div class="icon-wrapper">
+                                    <i class="fas fa-layer-group"></i>
+                                </div>
 
-                                        <div class="d-flex justify-content-between align-items-center mb-3 px-3 py-1 rounded"
-                                            style="background-color: #fff3cd; color: #856404;">
-                                            <small>احتياط</small>
-                                            <small class="fw-semibold">{{ $reserveCount }}</small>
-                                        </div>
+                                <div class="test-title-modern">{{ $test->title }}</div>
 
-                                        @php
-                                            $acceptedPercent =
-                                                $totalLeads > 0 ? round(($acceptedCount / $totalLeads) * 100) : 0;
-                                            $rejectedPercent =
-                                                $totalLeads > 0 ? round(($rejectedCount / $totalLeads) * 100) : 0;
-                                            $reservePercent =
-                                                $totalLeads > 0 ? round(($reserveCount / $totalLeads) * 100) : 0;
-                                        @endphp
+                                <div class="stats-container-modern">
+                                    <div class="stat-box-modern">
+                                        <span class="label">مقبول</span>
+                                        <span class="value val-accepted">{{ $accepted }}</span>
+                                    </div>
+                                    <div class="stat-box-modern">
+                                        <span class="label">مرفوض</span>
+                                        <span class="value val-rejected">{{ $rejected }}</span>
+                                    </div>
+                                </div>
 
-                                        <div class="progress" style="height: 12px; border-radius: 5px;">
-                                            <div class="progress-bar bg-success d-flex justify-content-center align-items-center"
-                                                style="width: {{ $acceptedPercent }}%;">
-                                                {{ $acceptedPercent }}%
-                                            </div>
-                                            <div class="progress-bar bg-danger d-flex justify-content-center align-items-center"
-                                                style="width: {{ $rejectedPercent }}%;">
-                                                {{ $rejectedPercent }}%
-                                            </div>
-                                            <div class="progress-bar bg-warning d-flex justify-content-center align-items-center"
-                                                style="width: {{ $reservePercent }}%;">
-                                                {{ $reservePercent }}%
-                                            </div>
-                                        </div>
+                                <div class="progress-section-modern">
+                                    <div class="progress-header">
+                                        <span>الإجمالي: <strong>{{ $total }}</strong></span>
+                                        <span class="fw-bold">{{ round($pAcc) }}% مقبول</span>
+                                    </div>
+                                    <div class="progress-bar-stack">
+                                        <div class="progress-bar bg-success" style="width: {{ $pAcc }}%"></div>
+                                        <div class="progress-bar bg-danger" style="width: {{ $pRej }}%"></div>
+                                        <div class="progress-bar bg-warning" style="width: {{ $pRes }}%"></div>
                                     </div>
                                 </div>
                             </a>
@@ -210,6 +347,179 @@
                 </div>
             </div>
         </div>
+
+        <style>
+            /* --- المتغيرات المودرن --- */
+            :root {
+                /* Light Mode */
+                --card-gradient: linear-gradient(-180deg, #5c7ea2, #3f6791);
+                --glass-bg: rgba(255, 255, 255, 0.15);
+                --glass-border: rgba(255, 255, 255, 0.2);
+                --text-bright: #ffffff;
+                --text-sub: #e0e6ed;
+                --success-modern: #2ecc71;
+                /* أخضر زاهي */
+                --danger-modern: #e74c3c;
+                /* أحمر زاهي */
+                --warning-modern: #f1c40f;
+            }
+
+            .dark-mode :root,
+            body.dark-mode {
+                /* Dark Mode - جعلنا التدرج أغمق قليلاً ليتناسب مع بيئة الدارك */
+                --card-gradient: linear-gradient(-180deg, #2c3e50, #1a252f);
+                --glass-bg: rgba(0, 0, 0, 0.2);
+                --glass-border: rgba(255, 255, 255, 0.05);
+                --text-bright: #f8f9fa;
+                --text-sub: #bdc3c7;
+            }
+
+            /* --- تنسيق الكارت المودرن --- */
+            .test-card-modern {
+                background: #3f6791 !important;
+                border-radius: 24px;
+                padding: 22px;
+                border: 1px solid var(--glass-border);
+                transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+                display: flex;
+                flex-direction: column;
+                min-width: 290px;
+                text-decoration: none !important;
+                position: relative;
+                overflow: hidden;
+            }
+
+            /* تأثير الإضاءة عند التحويم */
+            .test-card-modern:hover {
+                transform: translateY(-8px) scale(1.01);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+            }
+
+            /* .test-card-modern::after {
+                                                                                                            content: "";
+                                                                                                            position: absolute;
+                                                                                                            top: -50%;
+                                                                                                            left: -50%;
+                                                                                                            width: 200%;
+                                                                                                            height: 200%;
+                                                                                                            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+                                                                                                            opacity: 0;
+                                                                                                            transition: opacity 0.4s;
+                                                                                                        } */
+
+            .test-card-modern:hover::after {
+                opacity: 1;
+            }
+
+            /* --- العناصر الداخلية --- */
+            .icon-wrapper {
+                width: 48px;
+                height: 48px;
+                background: var(--glass-bg);
+                backdrop-filter: blur(8px);
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--text-bright);
+                font-size: 1.2rem;
+                margin-bottom: 18px;
+                border: 1px solid var(--glass-border);
+            }
+
+            .test-title-modern {
+                color: var(--text-bright);
+                font-weight: 700;
+                font-size: 1.15rem;
+                margin-bottom: 20px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* صف الإحصائيات */
+            .stats-container-modern {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+
+            .stat-box-modern {
+                background: var(--glass-bg);
+                padding: 12px;
+                border-radius: 18px;
+                text-align: center;
+                border: 1px solid var(--glass-border);
+            }
+
+            .stat-box-modern .label {
+                color: var(--text-sub);
+                font-size: 0.75rem;
+                display: block;
+                margin-bottom: 4px;
+                font-weight: 500;
+            }
+
+            .stat-box-modern .value {
+                font-size: 1.25rem;
+                font-weight: 800;
+            }
+
+            /* الألوان المطلوبة */
+            .val-accepted {
+                color: var(--success-modern) !important;
+            }
+
+            .val-rejected {
+                color: var(--danger-modern) !important;
+            }
+
+            /* شريط التقدم */
+            .progress-section-modern {
+                background: var(--glass-bg);
+                padding: 15px;
+                border-radius: 20px;
+                border: 1px solid var(--glass-border);
+            }
+
+            .progress-header {
+                display: flex;
+                justify-content: space-between;
+                color: var(--text-bright);
+                font-size: 0.85rem;
+                margin-bottom: 10px;
+            }
+
+            .progress-bar-stack {
+                height: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                display: flex;
+                overflow: hidden;
+            }
+
+            /* زر التثبيت */
+            .btn-pin-top {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                /* بما أن الاتجاه RTL */
+                background: var(--glass-bg);
+                border: none;
+                color: var(--text-bright);
+                padding: 6px 10px;
+                border-radius: 10px;
+                backdrop-filter: blur(5px);
+                transition: 0.3s;
+            }
+
+            .btn-pin-top:hover {
+                background: var(--warning-modern);
+                color: #000;
+            }
+        </style>
 
         <script>
             const container = document.getElementById('testsContainer');
@@ -228,19 +538,22 @@
         </script>
 
         <!-- قسم المجموعات -->
-        <div class="card card-info card-outline">
-            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
-                <h3 class="card-title">المجموعات ({{ $groups->count() }})</h3>
-                <div>
-                    <button id="scrollRight" class="btn btn-light btn-sm"><i class="fas fa-chevron-right"></i></button>
-                    <button id="scrollLeft" class="btn btn-light btn-sm me-1"><i
-                            class="fas fa-chevron-left"></i></button>
+        <div class="card card-outline shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+            <div class="modern-card-header">
+                <div class="header-title-wrapper">
+                    <div class="title-icon"><i class="fas fa-users"></i></div>
+                    <h3 class="modern-card-title">المجموعات</h3>
+                    <span class="test-count-pill">{{ $groups->count() }}</span>
+                </div>
+                <div class="scroll-actions">
+                    <button id="scrollRightGroups" class="btn-scroll-custom"><i class="fas fa-chevron-right"></i></button>
+                    <button id="scrollLeftGroups" class="btn-scroll-custom"><i class="fas fa-chevron-left"></i></button>
                 </div>
             </div>
 
-            <div class="card-body">
-                <div id="groupsContainer" class="d-flex overflow-auto"
-                    style="scroll-behavior: smooth; gap: 15px; white-space: nowrap;">
+            <div class="card-body bg-light-custom">
+                <div id="groupsContainer" class="d-flex overflow-auto py-2"
+                    style="scroll-behavior: smooth; gap: 20px; white-space: nowrap; padding-bottom: 15px;">
 
                     @foreach ($groups as $group)
                         @php
@@ -254,77 +567,153 @@
                                 })
                                 ->count();
                         @endphp
-                        <div class="col-md-3 col-6 mb-4">
-                            <a href="{{ route('group.customer', $group->id) }}" class="text-decoration-none">
-                                <div class="info-box bg-gradient-info text-white shadow rounded">
-                                    <span class="info-box-icon bg-primary"><i class="fas fa-kaaba"></i></span>
-                                    <div class="info-box-content">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <h5 class="fw-bold mb-2 text-truncate" title="{{ $group->title }}">
-                                                {{ $group->title }}</h5>
-                                            <button type="button" class="btn btn-sm btn-pin"
-                                                data-id="{{ $group->id }}" data-type="group">
-                                                <i class="fas fa-thumbtack"></i>
-                                            </button>
 
-                                        </div>
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-2 px-3 py-1 rounded bg-white text-dark shadow-sm">
-                                            <small class="fw-semibold">عدد العملاء:</small>
-                                            <small
-                                                class="fw-bold badge bg-primary px-3 py-1">{{ $totalCustomers }}</small>
-                                        </div>
-                                        <div
-                                            class="d-flex justify-content-between align-items-center mb-3 px-3 py-1 rounded bg-white text-dark shadow-sm">
-                                            <small class="fw-semibold">عدد المؤهلين للقنصلية:</small>
-                                            <small
-                                                class="fw-bold badge bg-success px-3 py-1">{{ $qualifiedCustomers }}</small>
-                                        </div>
+                        <div class="col-md-3" style="min-width: 300px; flex: 0 0 auto; position: relative;">
+                            <button type="button" class="btn-pin btn-pin-group" data-id="{{ $group->id }}"
+                                data-type="group">
+                                <i class="fas fa-thumbtack"></i>
+                            </button>
 
-                                        @if ($group->visaProfession)
-                                            <span class="info-box-number fw-semibold fs-6 text-white-75">
-                                                {{ $totalCustomers }} / {{ $group->visaProfession->profession_count }}
-                                            </span>
-                                        @endif
-
-                                        @if ($group->visaProfession && $group->visaType)
-                                            <div class="progress mt-2"
-                                                style="height: 14px; border-radius: 8px; overflow: hidden;">
-                                                @php
-                                                    $percentage =
-                                                        $group->visaProfession->profession_count > 0 &&
-                                                        $totalCustomers > 0
-                                                            ? ($qualifiedCustomers / $totalCustomers) * 100
-                                                            : 0;
-                                                @endphp
-                                                <div class="progress-bar bg-white d-flex justify-content-center align-items-center"
-                                                    role="progressbar"
-                                                    style="width: {{ $percentage }}%; color: #000; font-weight: bold;">
-                                                    {{ round($percentage, 1) }}%
-                                                </div>
-                                            </div>
-                                        @elseif (!$group->visaProfession && $group->visaType)
-                                            <small class="text-white-50 d-block mt-3 fst-italic">
-                                                مربوطة بالتأشيرة وغير مربوطة بالمهنة
-                                            </small>
-                                        @elseif ($group->visaProfession && !$group->visaType)
-                                            <small class="text-white-50 d-block mt-3 fst-italic">
-                                                مربوطة بالمهنة وغير مربوطة بالتأشيرة
-                                            </small>
-                                        @else
-                                            <small class="text-white-50 d-block mt-3 fst-italic">
-                                                غير مربوطة بمهنة أو تأشيرة
-                                            </small>
-                                        @endif
+                            <a href="{{ route('group.customer', $group->id) }}" class="group-card-modern shadow-sm">
+                                <div>
+                                    <div class="group-icon-circle">
+                                        <i class="fas fa-kaaba"></i>
                                     </div>
+                                    <span class="group-title-text text-truncate" title="{{ $group->title }}">
+                                        {{ $group->title }}
+                                    </span>
+
+                                    <div class="glass-stat-row">
+                                        <small class="fw-bold">عدد العملاء</small>
+                                        <span class="badge bg-primary rounded-pill">{{ $totalCustomers }}</span>
+                                    </div>
+
+                                    <div class="glass-stat-row">
+                                        <small class="fw-bold">مؤهل للقنصلية</small>
+                                        <span class="badge bg-success rounded-pill">{{ $qualifiedCustomers }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    @if ($group->visaProfession && $group->visaType)
+                                        @php
+                                            $percentage =
+                                                $totalCustomers > 0 ? ($qualifiedCustomers / $totalCustomers) * 100 : 0;
+                                        @endphp
+                                        <div class="d-flex justify-content-between text-white mb-1">
+                                            <small>نسبة الجاهزية</small>
+                                            <small class="fw-bold">{{ round($percentage) }}%</small>
+                                        </div>
+                                        <div class="progress progress-slim">
+                                            <div class="progress-bar bg-white" style="width: {{ $percentage }}%"></div>
+                                        </div>
+                                    @else
+                                        <small class="text-white-50 fst-italic" style="font-size: 0.75rem;">
+                                            مربوطة بالتأشيرة / غير مربوطة بالمهنة
+                                        </small>
+                                    @endif
                                 </div>
                             </a>
                         </div>
                     @endforeach
-
                 </div>
             </div>
         </div>
+        <style>
+            /* --- تنسيق كارت المجموعات المودرن --- */
+            .group-card-modern {
+                background: linear-gradient(135deg, #17a2b8, #117a8b) !important;
+                /* لون Info الأصلي بتدرج */
+                border-radius: 20px;
+                padding: 20px;
+                min-width: 290px;
+                position: relative;
+                transition: all 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                height: 100%;
+                text-decoration: none !important;
+            }
+
+            .group-card-modern:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px rgba(23, 162, 184, 0.3);
+            }
+
+            /* تأثير الدارك مود للمجموعات */
+            .dark-mode .group-card-modern {
+                background: linear-gradient(135deg, #0f6674, #0a4b55) !important;
+                border-color: rgba(255, 255, 255, 0.05);
+            }
+
+            /* الصناديق الداخلية (البيضاء الشفافة) */
+            .glass-stat-row {
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(5px);
+                border-radius: 12px;
+                padding: 8px 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 10px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: white;
+            }
+
+            /* زر التثبيت الخاص بالمجموعات */
+            .btn-pin-group {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                z-index: 5;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: 0.3s;
+            }
+
+            .btn-pin-group.btn-warning {
+                background: #ffc107 !important;
+                color: #000 !important;
+            }
+
+            .group-icon-circle {
+                width: 45px;
+                height: 45px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: white;
+                margin-bottom: 15px;
+            }
+
+            .group-title-text {
+                font-weight: 800;
+                color: white;
+                font-size: 1.1rem;
+                margin-bottom: 15px;
+                display: block;
+            }
+
+            /* تخصيص شريط التقدم ليكون نحيفاً وأنيقاً */
+            .progress-slim {
+                height: 10px !important;
+                border-radius: 20px !important;
+                background: rgba(0, 0, 0, 0.1) !important;
+                margin-top: 10px;
+            }
+        </style>
 
         <script>
             const container = document.getElementById('groupsContainer');
@@ -343,18 +732,127 @@
         </script>
 
         <!-- قسم الحقائب -->
-        <div class="card card-success card-outline">
-            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                <h3 class="card-title">الحقائب ({{ $bags->count() }})</h3>
-                <div>
-                    <button id="scrollRightBags" class="btn btn-light btn-sm"><i
-                            class="fas fa-chevron-right"></i></button>
-                    <button id="scrollLeftBags" class="btn btn-light btn-sm me-1"><i
-                            class="fas fa-chevron-left"></i></button>
+        <style>
+            /* --- تنسيق كارت الحقائب المودرن --- */
+            .bag-card-modern {
+                background: linear-gradient(135deg, #28a745, #1e7e34) !important;
+                /* لون Success الأصلي بتدرج */
+                border-radius: 20px;
+                padding: 20px;
+                min-width: 290px;
+                position: relative;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                text-decoration: none !important;
+                height: 100%;
+            }
+
+            .bag-card-modern:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 25px rgba(40, 167, 69, 0.3);
+            }
+
+            /* تحسين المظهر في الدارك مود للحقائب */
+            .dark-mode .bag-card-modern {
+                background: linear-gradient(135deg, #1e7e34, #145523) !important;
+                border-color: rgba(255, 255, 255, 0.05);
+            }
+
+            /* صناديق البيانات الداخلية */
+            .bag-glass-row {
+                background: rgba(255, 255, 255, 0.12);
+                backdrop-filter: blur(4px);
+                border-radius: 12px;
+                padding: 10px 15px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                color: white;
+            }
+
+            /* أيقونة الحقيبة */
+            .bag-icon-wrapper {
+                width: 45px;
+                height: 45px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.3rem;
+                color: white;
+                margin-bottom: 15px;
+            }
+
+            .bag-title-text {
+                font-weight: 800;
+                color: white;
+                font-size: 1.2rem;
+                margin-bottom: 15px;
+                display: block;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            /* زر التثبيت الخاص بالحقائب */
+            .btn-pin-bag {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                z-index: 10;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 34px;
+                height: 34px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .btn-pin-bag.btn-warning {
+                background: #ffc107 !important;
+                color: #000 !important;
+                box-shadow: 0 0 10px rgba(255, 193, 7, 0.4);
+            }
+
+            /* شريط تقدم الحقائب */
+            .progress-bag-modern {
+                height: 12px !important;
+                border-radius: 20px !important;
+                background: rgba(0, 0, 0, 0.15) !important;
+                overflow: hidden;
+            }
+        </style>
+
+        <div class="card card-outline shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+            <div class="modern-card-header">
+                <div class="header-title-wrapper">
+                    <div class="title-icon" style="background: rgba(40, 167, 69, 0.1); color: #28a745;">
+                        <i class="fas fa-suitcase"></i>
+                    </div>
+                    <h3 class="modern-card-title">الحقائب</h3>
+                    <span class="test-count-pill">{{ $bags->count() }}</span>
+                </div>
+                <div class="scroll-actions">
+                    <button id="scrollRightBags" class="btn-scroll-custom"><i class="fas fa-chevron-right"></i></button>
+                    <button id="scrollLeftBags" class="btn-scroll-custom"><i class="fas fa-chevron-left"></i></button>
                 </div>
             </div>
+
             <div class="card-body">
-                <div class="d-flex overflow-auto" id="bagsContainer" style="gap: 1rem; white-space: nowrap;">
+                <div id="bagsContainer" class="d-flex overflow-auto py-2"
+                    style="scroll-behavior: smooth; gap: 20px; white-space: nowrap; padding-bottom: 15px;">
+
                     @foreach ($bags as $bag)
                         @php
                             $totalCustomers = count($bag->customers);
@@ -366,56 +864,55 @@
                             $percentage =
                                 $totalCustomers > 0 ? round(($customersWithVisaNumber / $totalCustomers) * 100) : 0;
 
-                            if ($percentage >= 75) {
-                                $progressBarClass = 'bg-success';
-                            } elseif ($percentage >= 40) {
-                                $progressBarClass = 'bg-warning';
-                            } else {
-                                $progressBarClass = 'bg-danger';
+                            // تحديد لون شريط التقدم بناءً على النسبة
+                            $barColor = 'bg-white'; // لون افتراضي يتناسب مع الأخضر
+                            if ($percentage < 40) {
+                                $barColor = 'bg-danger';
+                            } elseif ($percentage < 75) {
+                                $barColor = 'bg-warning';
                             }
                         @endphp
-                        <a href="{{ route('bags.customers', $bag->id) }}" class="text-decoration-none"
-                            style="display: inline-block; flex: 0 0 auto; width: 300px;">
-                            <div class="info-box shadow rounded border border-success bg-dark"
-                                style="background-color: #1e2a1e !important; min-height: 180px;">
-                                <span
-                                    class="info-box-icon bg-success text-white d-flex align-items-center justify-content-center"
-                                    style="font-size: 1.8rem; width: 60px; height: 60px;">
-                                    <i class="fas fa-suitcase"></i>
-                                </span>
-                                <div class="info-box-content py-2">
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <h5 class="info-box-text fw-bold mb-2" style="font-size: 1.25rem; color: #a8d5a8;"
-                                            title="{{ $bag->name }}">
-                                            {{ $bag->name }}
-                                        </h5>
-                                        <button style="color: white" type="button" class="btn btn-sm btn-pin"
-                                            data-id="{{ $bag->id }}" data-type="bag">
-                                            <i class="fas fa-thumbtack"></i>
-                                        </button>
+
+                        <div class="col-md-3" style="min-width: 300px; flex: 0 0 auto; position: relative;">
+                            <button type="button" class="btn-pin btn-pin-bag" data-id="{{ $bag->id }}"
+                                data-type="bag">
+                                <i class="fas fa-thumbtack"></i>
+                            </button>
+
+                            <a href="{{ route('bags.customers', $bag->id) }}" class="bag-card-modern shadow-sm">
+                                <div>
+                                    <div class="bag-icon-wrapper">
+                                        <i class="fas fa-suitcase"></i>
                                     </div>
 
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <small class="text-muted" style="color: #b5b5b5;">إجمالي العملاء</small>
-                                        <span class="fw-semibold" style="color: #a8d5a8;">{{ $totalCustomers }}</span>
+                                    <span class="bag-title-text" title="{{ $bag->name }}">
+                                        {{ $bag->name }}
+                                    </span>
+
+                                    <div class="bag-glass-row">
+                                        <small class="fw-bold">إجمالي العملاء</small>
+                                        <span class="fw-bold">{{ $totalCustomers }}</span>
                                     </div>
-                                    <div class="d-flex justify-content-between align-items-center mb-3">
-                                        <small class="text-muted" style="color: #b5b5b5;">العملاء برقم تأشيرة</small>
-                                        <span class="fw-semibold text-success"
-                                            style="color: #7bd17b;">{{ $customersWithVisaNumber }}</span>
+
+                                    <div class="bag-glass-row">
+                                        <small class="fw-bold">برقم تأشيرة</small>
+                                        <span class="fw-bold">{{ $customersWithVisaNumber }}</span>
                                     </div>
-                                    <div class="progress rounded" style="height: 14px; background-color: #274927;">
-                                        <div class="progress-bar {{ $progressBarClass }}" role="progressbar"
-                                            style="width: {{ $percentage }}%;" aria-valuenow="{{ $percentage }}"
-                                            aria-valuemin="0" aria-valuemax="100">
-                                            <span class="fw-bold" style="font-size: 0.85rem; color: #e0f2e9;">
-                                                {{ $percentage }}%
-                                            </span>
+                                </div>
+
+                                <div class="mt-3">
+                                    <div class="d-flex justify-content-between text-white mb-1">
+                                        <small style="font-size: 0.75rem;">نسبة الإنجاز</small>
+                                        <small class="fw-bold">{{ $percentage }}%</small>
+                                    </div>
+                                    <div class="progress progress-bag-modern">
+                                        <div class="progress-bar {{ $barColor }}" role="progressbar"
+                                            style="width: {{ $percentage }}%">
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     @endforeach
                 </div>
             </div>
@@ -437,64 +934,151 @@
         </script>
 
 
-        <!-- قسم التأشيرات -->
-        <div class="card card-success card-outline">
-            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                <h3 class="card-title">التأشيرات ({{ $visas->count() }})</h3>
-                <div>
-                    <button id="visaScrollRight" class="btn btn-light btn-sm"><i
-                            class="fas fa-chevron-right"></i></button>
-                    <button id="visaScrollLeft" class="btn btn-light btn-sm me-1"><i
-                            class="fas fa-chevron-left"></i></button>
+        <style>
+            /* --- تنسيق كارت التأشيرات المودرن --- */
+            .visa-card-modern {
+                background: linear-gradient(135deg, #2ecc71, #27ae60) !important;
+                /* درجة أخضر زاهية للتأشيرات */
+                border-radius: 20px;
+                padding: 20px;
+                min-width: 280px;
+                position: relative;
+                transition: all 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                text-decoration: none !important;
+                height: 100%;
+            }
+
+            .visa-card-modern:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(46, 204, 113, 0.2);
+            }
+
+            /* صفوف البيانات الشفافة */
+            .visa-glass-row {
+                background: rgba(255, 255, 255, 0.15);
+                backdrop-filter: blur(4px);
+                border-radius: 12px;
+                padding: 8px 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+                color: white;
+            }
+
+            .visa-icon-box {
+                width: 40px;
+                height: 40px;
+                background: rgba(255, 255, 255, 0.25);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                color: white;
+                margin-bottom: 12px;
+            }
+
+            .visa-period-tag {
+                font-size: 0.75rem;
+                background: rgba(0, 0, 0, 0.2);
+                padding: 2px 8px;
+                border-radius: 6px;
+                color: #eee;
+                display: inline-block;
+                margin-top: 5px;
+            }
+
+            .btn-pin-visa {
+                position: absolute;
+                top: 15px;
+                left: 15px;
+                z-index: 10;
+                background: rgba(255, 255, 255, 0.2);
+                border: none;
+                color: white;
+                width: 30px;
+                height: 30px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn-pin-visa.btn-warning {
+                background: #ffc107 !important;
+                color: black !important;
+            }
+        </style>
+
+        <div class="card card-outline shadow-sm border-0" style="border-radius: 20px; overflow: hidden;">
+            <div class="modern-card-header">
+                <div class="header-title-wrapper">
+                    <div class="title-icon" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;">
+                        <i class="fas fa-passport"></i>
+                    </div>
+                    <h3 class="modern-card-title">التأشيرات</h3>
+                    <span class="test-count-pill">{{ $visas->count() }}</span>
+                </div>
+                <div class="scroll-actions">
+                    <button id="visaScrollRight" class="btn-scroll-custom"><i class="fas fa-chevron-right"></i></button>
+                    <button id="visaScrollLeft" class="btn-scroll-custom"><i class="fas fa-chevron-left"></i></button>
                 </div>
             </div>
+
             <div class="card-body">
-                <div class="d-flex overflow-auto" id="visaScrollContainer" style="gap: 15px;">
+                <div id="visaScrollContainer" class="d-flex overflow-auto py-2"
+                    style="scroll-behavior: smooth; gap: 20px; white-space: nowrap; padding-bottom: 15px;">
+
                     @foreach ($visas as $visa)
-                        <div style="flex: 0 0 auto; width: 250px;">
-                            <a href="{{ route('groups.visa', $visa->id) }}" class="text-decoration-none">
-                                <div class="info-box bg-gradient-success text-white shadow">
-                                    <span class="info-box-icon bg-success"><i class="fas fa-passport"></i></span>
-                                    <div class="info-box-content">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <span title="{{ $visa->name }}"
-                                                class="info-box-text fw-bold">{{ $visa->name }}</span>
-                                            <button type="button" class="btn btn-sm btn-pin"
-                                                data-id="{{ $visa->id }}" data-type="visa">
-                                                <i class="fas fa-thumbtack"></i>
-                                            </button>
-                                        </div>
-                                        <span class="info-box-number">عدد العملاء:
-                                            {{ $visa->customerGroups->sum(function ($group) {
-                                                return $group->customers->count();
-                                            }) }}</span>
-                                        <span class="info-box-number">عدد المغادرين:
-                                            {{ $visa->customerGroups->sum(function ($group) {
-                                                return $group->customers->where('status', 'تم السفر')->count();
-                                            }) }}</span>
+                        @php
+                            $totalCustomers = $visa->customerGroups->sum(fn($g) => $g->customers->count());
+                            $totalOutgoing = $visa->customerGroups->sum(
+                                fn($g) => $g->customers->where('status', 'تم السفر')->count(),
+                            );
+                            $percentage = $totalCustomers > 0 ? ($totalOutgoing / $totalCustomers) * 100 : 0;
+                        @endphp
 
-                                        @php
-                                            $totalCustomers = $visa->customerGroups->sum(function ($group) {
-                                                return $group->customers->count();
-                                            });
+                        <div class="col-md-3" style="min-width: 280px; flex: 0 0 auto; position: relative;">
+                            <button type="button" class="btn-pin btn-pin-visa" data-id="{{ $visa->id }}"
+                                data-type="visa">
+                                <i class="fas fa-thumbtack"></i>
+                            </button>
 
-                                            $totalOutgoing = $visa->customerGroups->sum(function ($group) {
-                                                return $group->customers->where('status', 'تم السفر')->count();
-                                            });
+                            <a href="{{ route('groups.visa', $visa->id) }}" class="visa-card-modern shadow-sm">
+                                <div>
+                                    <div class="visa-icon-box">
+                                        <i class="fas fa-passport"></i>
+                                    </div>
 
-                                            $percentage =
-                                                $totalCustomers > 0 ? ($totalOutgoing / $totalCustomers) * 100 : 0;
-                                        @endphp
+                                    <span class="fw-bold text-white d-block mb-2 text-truncate"
+                                        title="{{ $visa->name }}">
+                                        {{ $visa->name }}
+                                    </span>
 
-                                        <div class="progress mt-2" style="height: 12px;">
-                                            <div class="progress-bar bg-white d-flex justify-content-center align-items-center"
-                                                style="width: {{ $percentage }}%; color: #000; font-weight: bold;">
-                                                {{ round($percentage, 1) }}%
-                                            </div>
-                                        </div>
-                                        <span class="progress-description text-white-50">
-                                            {{ $visa->visa_peroid }}
-                                        </span>
+                                    <div class="visa-glass-row">
+                                        <small>إجمالي العملاء</small>
+                                        <span class="fw-bold">{{ $totalCustomers }}</span>
+                                    </div>
+
+                                    <div class="visa-glass-row">
+                                        <small>تم السفر</small>
+                                        <span class="fw-bold">{{ $totalOutgoing }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-3">
+                                    <div class="progress progress-slim bg-dark-transparent"
+                                        style="height: 8px !important;">
+                                        <div class="progress-bar bg-white" style="width: {{ $percentage }}%"></div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mt-1">
+                                        <span class="visa-period-tag">{{ $visa->visa_peroid }}</span>
+                                        <small class="text-white fw-bold">{{ round($percentage) }}%</small>
                                     </div>
                                 </div>
                             </a>
@@ -521,181 +1105,448 @@
         </script>
 
 
-        <div class="card shadow-sm border-0 rounded-3">
-            <div class="card-body p-3 table-responsive">
-                <table class="table table-hover align-middle text-center mb-0">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col">اسم الموظف</th>
-                            <th scope="col">اسم العميل</th>
-                            <th scope="col">النوع</th> {{-- ✨ العمود الجديد --}}
-                            <th scope="col">الوصف</th>
-                            <th scope="col">تاريخ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($histories as $history)
+        <div class="card history-card">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table modern-table align-middle text-center mb-0">
+                        <thead>
                             <tr>
-                                <td class="fw-semibold">
-                                    <a href="{{ route('users.history', $history->user->id) }}"
-                                        class="text-decoration-none text-dark">
-                                        {{ $history->user->name ?? '-' }}</a>
-                                </td>
-                                <td>
-                                    @if ($history->customer)
-                                        <a href="{{ route('customer.show', $history->customer->id) }}"
-                                            class="text-decoration-none text-primary fw-bold">
-                                            {{ $history->customer->name_ar }}
-                                        </a>
-                                    @elseif($history->lead)
-                                        <a href="{{ route('leads-customers.show', $history->lead->id) }}"
-                                            class="text-decoration-none text-warning fw-bold">
-                                            {{ $history->lead->name }}
-                                        </a>
-                                    @else
-                                        <span class="text-muted">-</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if ($history->customer)
-                                        <span class="badge bg-primary">عميل أساسي</span>
-                                    @elseif($history->lead)
-                                        <span class="badge bg-warning text-dark">عميل محتمل</span>
-                                    @else
-                                        <span class="badge bg-secondary">غير محدد</span>
-                                    @endif
-                                </td>
-                                <td class="text-muted">{{ $history->description }}</td>
-                                <td class="text-secondary">{{ $history->created_at->format('Y-m-d H:i') }}</td>
+                                <th scope="col">الموظف</th>
+                                <th scope="col">الطرف المعني</th>
+                                <th scope="col">التصنيف</th>
+                                <th scope="col">تفاصيل النشاط</th>
+                                <th scope="col">التوقيت</th>
                             </tr>
-                        @empty
-                            <tr>
-                                <td colspan="5" class="text-muted py-4">لا توجد تقييمات حالياً</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($histories as $history)
+                                <tr>
+                                    <td class="text-start pr-4">
+                                        <div class="d-flex align-items-center">
+
+                                            <a href="{{ route('users.history', $history->user->id) }}"
+                                                class="text-decoration-none fw-bold"
+                                                style="color: var(--header-text, #1e293b);">
+                                                {{ $history->user->name ?? '-' }}
+                                            </a>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @if ($history->customer)
+                                            <a href="{{ route('customer.show', $history->customer->id) }}"
+                                                class="text-decoration-none fw-bold text-primary">
+                                                <i class="fas fa-user-check me-1"></i> {{ $history->customer->name_ar }}
+                                            </a>
+                                        @elseif($history->lead)
+                                            <a href="{{ route('leads-customers.show', $history->lead->id) }}"
+                                                class="text-decoration-none fw-bold text-warning">
+                                                <i class="fas fa-user-tag me-1"></i> {{ $history->lead->name }}
+                                            </a>
+                                        @else
+                                            <span class="text-muted">نظام عام</span>
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        @if ($history->customer)
+                                            <span class="badge rounded-pill bg-soft-primary px-3 py-2"
+                                                style="background: rgba(13, 110, 253, 0.1); color: #0d6efd;">عميل
+                                                أساسي</span>
+                                        @elseif($history->lead)
+                                            <span class="badge rounded-pill bg-soft-warning px-3 py-2"
+                                                style="background: rgba(255, 193, 7, 0.1); color: #ffc107;">عميل
+                                                محتمل</span>
+                                        @else
+                                            <span class="badge rounded-pill bg-soft-secondary px-3 py-2">أخرى</span>
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        <div class="description-text mx-auto text-truncate-2">
+                                            {{ $history->description }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="time-badge">
+                                            <i class="far fa-clock"></i>
+                                            {{ $history->created_at->diffForHumans() }}
+                                            <br>
+                                            <small style="font-size: 10px opacity: 0.7">
+                                                {{ $history->created_at->format('Y/m/d H:i') }}
+                                            </small>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="py-5 text-center">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/7486/7486744.png" width="80"
+                                            style="opacity: 0.2">
+                                        <p class="text-muted mt-3">سجل النشاطات فارغ تماماً</p>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
+        <style>
+            /* الحاوية الرئيسية */
+            .tasks-card {
+                border: none;
+                border-radius: 20px;
+                background: #ffffff;
+                /* افتراضي لايت */
+                transition: background 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05) !important;
+            }
 
-        <div class="card shadow-sm border-0 rounded-3">
-            <div class="card-body p-3 table-responsive">
-                <table class="table  align-middle text-center mb-0" style="color: white;">
-                    <thead class="table-dark">
-                        <tr>
-                            <th scope="col">👤 المرسل</th>
-                            <th scope="col">👥 المستلم</th>
-                            <th scope="col">📝 الوصف</th>
-                            <th scope="col">⏰ الوقت</th>
-                            <th scope="col">📌 الحالة</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse($tasks as $task)
-                            <tr class="{{ $task->status == 'new' ? 'row-new' : 'row-done' }}">
-                                <td class="fw-semibold">{{ $task->sender->name ?? '-' }}</td>
-                                <td class="fw-semibold">{{ $task->receiver->name ?? '-' }}</td>
-                                <td class="text-start" title="{{ $task->description }}">
-                                    {{ \Illuminate\Support\Str::limit($task->description, 50) }}
-                                </td>
-                                <td class="text-secondary" style="color: white !important;">
-                                    {{ $task->created_at->format('Y-m-d H:i') }}</td>
-                                <td>
-                                    @if ($task->status == 'new')
-                                        <span class="badge status-new">جديدة ⏳</span>
-                                    @elseif($task->status == 'done')
-                                        <span class="badge status-done">مكتملة ✅</span>
-                                    @else
-                                        <span class="badge bg-secondary">غير معروف</span>
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
+            /* تحويل الحاوية في الدارك مود */
+            .dark-mode .tasks-card {
+                background: #1e293b !important;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+            }
+
+            .tasks-table {
+                border-collapse: separate;
+                border-spacing: 0 12px;
+                /* مسافة بين الكروت */
+            }
+
+            .tasks-table thead th {
+                background: transparent !important;
+                color: #64748b;
+                border: none;
+                font-weight: 700;
+                text-transform: uppercase;
+                font-size: 0.75rem;
+                letter-spacing: 0.5px;
+            }
+
+            /* تنسيق الصف (الكارت) */
+            .tasks-table tbody tr {
+                background: #ffffff;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+                transition: all 0.3s ease;
+                border-radius: 12px;
+            }
+
+            /* الدارك مود للصفوف */
+            .dark-mode .tasks-table tbody tr {
+                background: rgba(255, 255, 255, 0.03) !important;
+            }
+
+            .tasks-table tbody tr:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            }
+
+            /* تمييز الحالات بالخط الجانبي */
+            .row-new {
+                border-right: 5px solid #f59e0b !important;
+            }
+
+            .row-done {
+                border-right: 5px solid #10b981 !important;
+            }
+
+            .tasks-table td {
+                padding: 16px !important;
+                border: none !important;
+                color: #334155;
+                /* لون نص اللايت */
+            }
+
+            .dark-mode .tasks-table td {
+                color: #e2e8f0 !important;
+            }
+
+            /* تنسيق الروابط والأسماء */
+            .user-name-cell {
+                font-weight: 700;
+                color: inherit;
+            }
+
+            /* شارات الحالة المودرن */
+            .status-badge {
+                padding: 6px 14px;
+                border-radius: 10px;
+                font-size: 0.75rem;
+                font-weight: 800;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .status-new-modern {
+                background: rgba(245, 158, 11, 0.12);
+                color: #d97706;
+            }
+
+            .status-done-modern {
+                background: rgba(16, 185, 129, 0.12);
+                color: #059669;
+            }
+
+            /* أيقونة الوقت */
+            .time-wrapper {
+                font-size: 0.8rem;
+                color: #94a3b8;
+            }
+        </style>
+        <div class="card tasks-card">
+            <div class="card-body p-3">
+                <div class="table-responsive">
+                    <table class="table tasks-table align-middle text-center mb-0">
+                        <thead>
                             <tr>
-                                <td colspan="5" class="text-muted py-4">لا توجد مهام حالياً</td>
+                                <th>👤 المرسل</th>
+                                <th>👥 المستلم</th>
+                                <th class="text-start">📝 الوصف</th>
+                                <th>⏰ الوقت</th>
+                                <th>📌 الحالة</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @forelse($tasks as $task)
+                                <tr class="{{ $task->status == 'new' ? 'row-new' : 'row-done' }}">
+                                    <td>
+                                        <span class="user-name-cell">{{ $task->sender->name ?? '-' }}</span>
+                                    </td>
+
+                                    <td>
+                                        <span class="text-muted fw-semibold">{{ $task->receiver->name ?? '-' }}</span>
+                                    </td>
+
+                                    <td class="text-start">
+                                        <div style="max-width: 280px; white-space: normal; line-height: 1.5; font-size: 0.85rem;"
+                                            title="{{ $task->description }}">
+                                            {{ \Illuminate\Support\Str::limit($task->description, 70) }}
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="time-wrapper">
+                                            <div class="mb-1"><i class="far fa-calendar-check me-1"></i>
+                                                {{ $task->created_at->format('Y-m-d') }}</div>
+                                            <div class="fw-bold"><i class="far fa-clock me-1"></i>
+                                                {{ $task->created_at->format('H:i') }}</div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @if ($task->status == 'new')
+                                            <span class="status-badge status-new-modern">
+                                                <i class="fas fa-dot-circle fa-beat-fade"></i> جديدة
+                                            </span>
+                                        @elseif($task->status == 'done')
+                                            <span class="status-badge status-done-modern">
+                                                <i class="fas fa-check-double"></i> مكتملة
+                                            </span>
+                                        @else
+                                            <span class="badge bg-secondary rounded-pill">غير معروف</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="py-5">
+                                        <div class="text-center opacity-50">
+                                            <i class="fas fa-clipboard-list fa-4x mb-3"></i>
+                                            <h5 class="fw-bold">لا يوجد مهام حالياً</h5>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <div class="container py-3">
+        <style>
+            <style>
+
+            /* تنسيق الحاويات الرئيسي */
+            .stats-card {
+                border: none;
+                border-radius: 20px;
+                background: #ffffff;
+                transition: all 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05) !important;
+                overflow: hidden;
+            }
+
+            .dark-mode .stats-card {
+                background: #1e293b !important;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2) !important;
+            }
+
+            /* رأس الكارت المودرن */
+            .stats-header {
+                padding: 15px 20px;
+                border: none;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: transparent !important;
+            }
+
+            .stats-title {
+                font-size: 1rem;
+                font-weight: 700;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            /* أيقونات بجانب العناوين */
+            .title-icon-wrapper {
+                width: 35px;
+                height: 35px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.1rem;
+            }
+
+            /* تخصيص الألوان لكل قسم */
+            .icon-primary {
+                background: rgba(13, 110, 253, 0.1);
+                color: #0d6efd;
+            }
+
+            .icon-info {
+                background: rgba(13, 202, 240, 0.1);
+                color: #0dcaf0;
+            }
+
+            .icon-success {
+                background: rgba(25, 135, 84, 0.1);
+                color: #198754;
+            }
+
+            .icon-warning {
+                background: rgba(255, 193, 7, 0.1);
+                color: #ffc107;
+            }
+
+            .icon-secondary {
+                background: rgba(108, 117, 125, 0.1);
+                color: #6c757d;
+            }
+
+            /* تحسين شكل الفلتر */
+            .modern-select {
+                border-radius: 8px;
+                border: 1px solid #e2e8f0;
+                font-size: 0.85rem;
+                padding: 5px 10px;
+                cursor: pointer;
+            }
+
+            .dark-mode .modern-select {
+                background: #0f172a;
+                color: white;
+                border-color: #334155;
+            }
+
+            /* تأثير المرور على الكارت */
+            .stats-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1) !important;
+            }
+        </style>
+        </style>
+        <div class="container-fluid py-4">
             <div class="row">
-                <!-- إحصائيات العملاء -->
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="card-title mb-0">📈 إحصائيات العملاء</h5>
+                <div class="col-xl-6 mb-4">
+                    <div class="card stats-card h-100">
+                        <div class="stats-header">
+                            <h5 class="stats-title" style="color: #0d6efd;">
+                                <div class="title-icon-wrapper icon-primary"><i class="fas fa-chart-line"></i></div>
+                                إحصائيات العملاء
+                            </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="customers" height="200"></canvas>
+                            <canvas id="customers" height="180"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- إحصائيات المجموعات -->
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="card-title mb-0">📊 إحصائيات المجموعات</h5>
+                <div class="col-xl-6 mb-4">
+                    <div class="card stats-card h-100">
+                        <div class="stats-header">
+                            <h5 class="stats-title" style="color: #0dcaf0;">
+                                <div class="title-icon-wrapper icon-info"><i class="fas fa-layer-group"></i></div>
+                                إحصائيات المجموعات
+                            </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="groupsChart" height="200"></canvas>
+                            <canvas id="groupsChart" height="180"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-                <!-- إحصائيات المناديب -->
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="card-title mb-0">🧑‍💼 إحصائيات المناديب والعملاء</h5>
+                <div class="col-xl-6 mb-4">
+                    <div class="card stats-card h-100">
+                        <div class="stats-header">
+                            <h5 class="stats-title" style="color: #198754;">
+                                <div class="title-icon-wrapper icon-success"><i class="fas fa-users-cog"></i></div>
+                                المناديب والعملاء
+                            </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="delegatesChart" height="200"></canvas>
+                            <canvas id="delegatesChart" height="180"></canvas>
                         </div>
                     </div>
                 </div>
 
-                <!-- العملاء المحتملين -->
-                <div class="col-md-6 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
-                            <h5 class="card-title mb-0">📅 العملاء المحتملين</h5>
-                            <select id="filterSelect" class="form-select form-select-sm w-auto" aria-label="تحديد فلتر">
+                <div class="col-xl-6 mb-4">
+                    <div class="card stats-card h-100">
+                        <div class="stats-header">
+                            <h5 class="stats-title" style="color: #f59e0b;">
+                                <div class="title-icon-wrapper icon-warning"><i class="fas fa-user-clock"></i></div>
+                                العملاء المحتملين
+                            </h5>
+                            <select id="filterSelect" class="form-select modern-select w-auto shadow-sm">
                                 <option value="day">اليوم</option>
                                 <option value="month" selected>الشهر</option>
                                 <option value="year">السنة</option>
                             </select>
                         </div>
                         <div class="card-body">
-                            <canvas id="potentialChart" height="200"></canvas>
+                            <canvas id="potentialChart" height="180"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <!-- إحصائيات التأشيرات -->
-                <div class="col-6 mb-3">
-                    <div class="card shadow-sm h-100">
-                        <div class="card-header bg-secondary text-white">
-                            <h5 class="card-title mb-0">🎫 إحصائيات التأشيرات</h5>
+            <div class="row justify-content-center">
+                <div class="col-xl-8 mb-4">
+                    <div class="card stats-card h-100">
+                        <div class="stats-header border-bottom mb-2">
+                            <h5 class="stats-title" style="color: #64748b;">
+                                <div class="title-icon-wrapper icon-secondary"><i class="fas fa-passport"></i></div>
+                                إحصائيات التأشيرات الإجمالية
+                            </h5>
                         </div>
                         <div class="card-body">
-                            <canvas id="visaChart" height="250"></canvas>
+                            <canvas id="visaChart" height="220"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     @stop
-
 
     @section('css')
         <style>
