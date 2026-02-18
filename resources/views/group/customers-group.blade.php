@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'العملاء')
+@section('title', 'العملاء في مجموعة : (' . $group->title . ')')
 
 @section('content_header')
     <h1>العملاء في مجموعة : ({{ $group->title }})</h1>

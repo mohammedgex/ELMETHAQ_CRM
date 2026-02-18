@@ -173,14 +173,14 @@
     {{-- دعم RTL وتحسين المظهر --}}
     <style>
         /* body {
-                                    direction: rtl;
-                                    text-align: left;
-                                }
+                                        direction: rtl;
+                                        text-align: left;
+                                    }
 
-                                .dataTables_filter,
-                                .dataTables_info {
-                                    text-align: left !important;
-                                } */
+                                    .dataTables_filter,
+                                    .dataTables_info {
+                                        text-align: left !important;
+                                    } */
 
         .dropdown-item {
             max-width: 250px;
