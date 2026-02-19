@@ -11,18 +11,14 @@
         <!-- ✅ قسم إضافة مجموعة -->
         <div class="col-md-12 mb-4">
             @if ($visaTypeEdit->outgoing_number === '')
-                <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
-                    style="border-radius: 15px; background-color: #f8f9fa;">
-                    <div class="d-flex justify-content-between">
-                        <h4 class="mb-3" style="color: #343a40; font-weight: bold;">إضافة تأشيرة جديدة</h4>
-                    </div>
+                <div class="card shadow-sm p-4 border-0 animate__animated animate__fadeIn visa-card-container">
+
                     <form action="{{ route('visa-type.create') }}" method="POST" id="visa-type">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">نوع التأشيرة</label>
-                                <select class="form-control fw-bold" style="border-color: #343a40;" name="visa_peroid"
-                                    required>
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">نوع التأشيرة</label>
+                                <select class="form-control custom-input" name="visa_peroid" required>
                                     <option value="">اختر النوع</option>
                                     <option value='تأشيرة العمل المؤقت لخدمات الحج والعمرة'>تأشيرة العمل المؤقت لخدمات الحج
                                         والعمرة</option>
@@ -30,137 +26,218 @@
                                     <option value="عمل مؤقت">عمل مؤقت</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">اسم التأشيرة</label>
-                                <input type="text" class="form-control" style="border-color: #343a40;" name="name"
+
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">اسم التأشيرة</label>
+                                <input type="text" class="form-control custom-input" name="name"
                                     placeholder="أدخل اسم التأشيرة" required>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">رقم السجل</label>
-                                <input type="number" id="registration_number" class="form-control"
-                                    style="border-color: #343a40;" name="registration_number" placeholder="أدخل رقم السجل"
-                                    required>
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">رقم السجل</label>
+                                <input type="number" class="form-control custom-input" name="registration_number"
+                                    placeholder="أدخل رقم السجل" required>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">رقم الصادر</label>
-                                <input type="number" id="outgoing_number" class="form-control"
-                                    style="border-color: #343a40;" name="outgoing_number" placeholder="أدخل رقم الصادر"
-                                    required>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">رقم الصادر</label>
+                                <input type="number" class="form-control custom-input" name="outgoing_number"
+                                    placeholder="أدخل رقم الصادر" required>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">القنصلية</label>
-                                <select class="form-control fw-bold" id="embassy_id" style="border-color: #343a40;"
-                                    name="embassy_id" required>
-                                    <option value="">اختر الحالة</option>
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">القنصلية</label>
+                                <select class="form-control custom-input" name="embassy_id" required>
+                                    <option value="">اختر القنصلية</option>
                                     @foreach ($embassions as $embassy)
                                         <option value="{{ $embassy->id }}">{{ $embassy->title }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">الكفيل</label>
-                                <select class="form-control fw-bold" style="border-color: #343a40;" name="sponser_id"
-                                    required>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">الكفيل</label>
+                                <select class="form-control custom-input" name="sponser_id" required>
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
                                         <option value="{{ $sponser->id }}">{{ $sponser->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">الغرض</label>
-                                <input type="text" class="form-control" style="border-color: #343a40;" name="porpose"
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">الغرض</label>
+                                <input type="text" class="form-control custom-input" name="porpose"
                                     value="{{ old('porpose', $visaTypeEdit->porpose ?? '') }}" placeholder="أدخل الغرض"
                                     required>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">تاريخ اصدار التاشيرة</label>
-                                <input type="date" class="form-control" name="issuing_visa"
+
+                            <div class="col-md-6 mb-3">
+                                <label class="custom-label">تاريخ اصدار التاشيرة</label>
+                                <input type="date" class="form-control custom-input" name="issuing_visa"
                                     value="{{ old('issuing_visa') }}" required>
                             </div>
                         </div>
 
-                        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100 fw-bold"
-                            style="background-color: #28a745; color: white;">
-                            إضافة تأشيرة جديدة
-                        </button>
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm main-btn">
+                                <i class="fas fa-save ml-2"></i> حفظ بيانات التأشيرة
+                            </button>
+                        </div>
                     </form>
+
+                    <style>
+                        /* --- التصميم الموحد والحل لمشكلة اللون الأسود --- */
+
+                        .visa-card-container {
+                            background-color: #ffffff !important;
+                            border-radius: 15px;
+                            border: 1px solid #edf2f7;
+                        }
+
+                        .card-title-text {
+                            color: #2c3e50 !important;
+                            /* لون هيدر الصفحة الموحد */
+                            font-weight: 700 !important;
+                        }
+
+                        .border-bottom-custom {
+                            border-bottom: 2px solid #f4f7f6;
+                        }
+
+                        .custom-label {
+                            color: #000 !important;
+                            /* لون رمادي غامق وواضح جداً في اللايت مود */
+                            font-weight: 600;
+                            font-size: 0.92rem;
+                            margin-bottom: 8px;
+                            display: block;
+                        }
+
+                        .custom-input {
+                            background-color: #ffffff !important;
+                            border: 1px solid #dce1e7 !important;
+                            color: #2d3436 !important;
+                            /* لون النص داخل المدخل */
+                            border-radius: 8px !important;
+                            height: 45px !important;
+                        }
+
+                        .badge-soft-success {
+                            background-color: rgba(39, 174, 96, 0.1);
+                            color: #27ae60;
+                            font-weight: 600;
+                        }
+
+                        /* --- دعم الدارك مود (بناءً على تفضيلات النظام) --- */
+                        @media (prefers-color-scheme: dark) {
+                            .visa-card-container {}
+
+                            .card-title-text {
+                                color: #ffffff !important;
+                            }
+
+                            .custom-label {
+                                color: #000 !important;
+                            }
+
+                            .custom-input {
+                                /* background-color: #2b2b40 !important; */
+                                border-color: #3f3f5f !important;
+                                color: #000 !important;
+                            }
+
+                            .border-bottom-custom {
+                                border-bottom-color: #2b2b40;
+                            }
+
+                            input[type="date"]::-webkit-calendar-picker-indicator {
+                                filter: invert(1);
+                            }
+                        }
+
+                        .main-btn {
+                            background-color: #27ae60 !important;
+                            /* تطابق مع accent-color */
+                            border: none;
+                            font-weight: bold;
+                            transition: all 0.3s ease;
+                        }
+
+                        .main-btn:hover {
+                            background-color: #219150 !important;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+                        }
+                    </style>
                 </div>
             @else
-                <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
-                    style="border-radius: 15px; background-color: #f8f9fa;">
-                    <h4 class="mb-3 text-dark font-weight-bold">إضافة تأشيرة جديدة</h4>
+                <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn visa-card-custom">
+                    <h4 class="mb-4 card-main-title">إضافة تأشيرة جديدة</h4>
+
                     <form action="{{ route('visa-type.edit', $visaTypeEdit->id) }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;"> نوع التاشيرة التأشيرة </label>
-                                <select class="form-control fw-bold" style="border-color: #343a40;" name="visa_peroid"
-                                    required>
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">نوع التأشيرة</label>
+                                <select class="form-control custom-field-input fw-bold" name="visa_peroid" required>
                                     <option value="">اختر النوع</option>
                                     <option value="تأشيرة العمل المؤقت لخدمات الحج والعمرة"
                                         {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'تأشيرة العمل المؤقت لخدمات الحج والعمرة' ? 'selected' : '' }}>
                                         تأشيرة العمل المؤقت لخدمات الحج والعمرة
                                     </option>
                                     <option value="عمل"
-                                        {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'عمل' ? 'selected' : '' }}>
-                                        عمل
+                                        {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'عمل' ? 'selected' : '' }}>عمل
                                     </option>
                                     <option value="عمل مؤقت"
                                         {{ old('visa_peroid', $visaTypeEdit->visa_peroid) == 'عمل مؤقت' ? 'selected' : '' }}>
-                                        عمل مؤقت
-                                    </option>
+                                        عمل مؤقت</option>
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;"> اسم التاشيرة </label>
-                                <input type="text" class="form-control" style="border-color: #343a40;" name="name"
-                                    value="{{ $visaTypeEdit->name }}" placeholder="أدخل اسم التاشيرة" required>
+
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">اسم التأشيرة</label>
+                                <input type="text" class="form-control custom-field-input" name="name"
+                                    value="{{ $visaTypeEdit->name }}" placeholder="أدخل اسم التأشيرة" required>
                             </div>
-
-
                         </div>
+
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;"> رقم السجل </label>
-                                <input type="number" class="form-control" style="border-color: #343a40;"
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">رقم السجل</label>
+                                <input type="number" class="form-control custom-field-input"
                                     value="{{ $visaTypeEdit->registration_number }}" name="registration_number"
                                     placeholder="أدخل رقم السجل" required>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;"> رقم الصادر </label>
-                                <input type="number" class="form-control" style="border-color: #343a40;"
-                                    name="outgoing_number" placeholder="أدخل رقم الصادر" required
-                                    value="{{ $visaTypeEdit->outgoing_number }}">
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">رقم الصادر</label>
+                                <input type="number" class="form-control custom-field-input" name="outgoing_number"
+                                    placeholder="أدخل رقم الصادر" required value="{{ $visaTypeEdit->outgoing_number }}">
                             </div>
-
                         </div>
 
                         <div class="row">
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;"> القنصلية </label>
-                                <select class="form-control fw-bold" style="border-color: #343a40;" name="embassy_id"
-                                    required>
-                                    <option value="">اختر القمصلية</option>
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">القنصلية</label>
+                                <select class="form-control custom-field-input fw-bold" name="embassy_id" required>
+                                    <option value="">اختر القنصلية</option>
                                     @foreach ($embassions as $embassy)
                                         <option value="{{ $embassy->id }}"
-                                            {{ old('embassy_id', $visaTypeEdit->embassy_id ?? '') == $embassy->id ? 'selected class= bg-success' : '' }}>
+                                            {{ old('embassy_id', $visaTypeEdit->embassy_id ?? '') == $embassy->id ? 'selected' : '' }}>
                                             {{ $embassy->title }}
                                         </option>
                                     @endforeach
                                 </select>
-
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;"> الكفيل </label>
-                                <select class="form-control fw-bold" style="border-color: #343a40;" name="sponser_id"
-                                    required>
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">الكفيل</label>
+                                <select class="form-control custom-field-input fw-bold" name="sponser_id" required>
                                     <option value="">اختر الكفيل</option>
                                     @foreach ($sponsers as $sponser)
                                         <option value="{{ $sponser->id }}"
@@ -170,57 +247,125 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">الغرض</label>
-                                <input type="text" class="form-control" style="border-color: #343a40;" name="porpose"
-                                    value="{{ old('porpose', isset($visaTypeEdit->porpose) ? $visaTypeEdit->porpose : '') }}"
-                                    placeholder="أدخل الغرض" required>
-                            </div>
-                            <div class="col-md-6 form-group">
-                                <label class="font-weight-bold" style="color: #343a40;">تاريخ اصدار التاشيرة</label>
-                                <input type="date" class="form-control" style="border-color: #343a40;"
-                                    name="issuing_visa"
-                                    value="{{ old('issuing_visa', isset($visaTypeEdit->issuing_visa) ? $visaTypeEdit->issuing_visa : '') }}"
-                                    placeholder="أدخل الغرض" required>
-                            </div>
-
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-6 form-group mb-3">
+                                <label class="custom-field-label">الغرض</label>
+                                <input type="text" class="form-control custom-field-input" name="porpose"
+                                    value="{{ old('porpose', $visaTypeEdit->porpose ?? '') }}" placeholder="أدخل الغرض"
+                                    required>
+                            </div>
+                            <div class="col-md-6 form-group mb-4">
+                                <label class="custom-field-label">تاريخ إصدار التأشيرة</label>
+                                <input type="date" class="form-control custom-field-input" name="issuing_visa"
+                                    value="{{ old('issuing_visa', $visaTypeEdit->issuing_visa ?? '') }}" required>
+                            </div>
+                        </div>
 
-                        <!-- زر بعرض كامل -->
-                        <button type="submit" class="btn mt-3 px-4 shadow-sm w-100"
-                            style="background-color: #28a745; color: white;">
-                            حفظ التعديلات
+                        <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm main-btn">
+                            <i class="fas fa-check-circle ml-2"></i> حفظ التعديلات
                         </button>
                     </form>
+
+
+                    <style>
+                        /* --- التصميم الموحد والحل لمشكلة اللون الأسود --- */
+
+                        .visa-card-container {
+                            background-color: #ffffff !important;
+                            border-radius: 15px;
+                            border: 1px solid #edf2f7;
+                        }
+
+                        .card-title-text {
+                            color: #2c3e50 !important;
+                            /* لون هيدر الصفحة الموحد */
+                            font-weight: 700 !important;
+                        }
+
+                        .border-bottom-custom {
+                            border-bottom: 2px solid #f4f7f6;
+                        }
+
+                        .custom-label {
+                            color: #000 !important;
+                            /* لون رمادي غامق وواضح جداً في اللايت مود */
+                            font-weight: 600;
+                            font-size: 0.92rem;
+                            margin-bottom: 8px;
+                            display: block;
+                        }
+
+                        .custom-input {
+                            background-color: #ffffff !important;
+                            border: 1px solid #dce1e7 !important;
+                            color: #2d3436 !important;
+                            /* لون النص داخل المدخل */
+                            border-radius: 8px !important;
+                            height: 45px !important;
+                        }
+
+                        .badge-soft-success {
+                            background-color: rgba(39, 174, 96, 0.1);
+                            color: #27ae60;
+                            font-weight: 600;
+                        }
+
+                        /* --- دعم الدارك مود (بناءً على تفضيلات النظام) --- */
+                        @media (prefers-color-scheme: dark) {
+                            .visa-card-container {}
+
+                            .card-title-text {
+                                color: #ffffff !important;
+                            }
+
+                            .custom-label {
+                                color: #000 !important;
+                            }
+
+                            .custom-input {
+                                /* background-color: #2b2b40 !important; */
+                                border-color: #3f3f5f !important;
+                                color: #000 !important;
+                            }
+
+                            .border-bottom-custom {
+                                border-bottom-color: #2b2b40;
+                            }
+
+                            input[type="date"]::-webkit-calendar-picker-indicator {
+                                filter: invert(1);
+                            }
+                        }
+
+                        .main-btn {
+                            background-color: #27ae60 !important;
+                            /* تطابق مع accent-color */
+                            border: none;
+                            font-weight: bold;
+                            transition: all 0.3s ease;
+                        }
+
+                        .main-btn:hover {
+                            background-color: #219150 !important;
+                            transform: translateY(-2px);
+                            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
+                        }
+                    </style>
                 </div>
             @endif
         </div>
 
-        <!-- ✅ قسم البحث والعرض -->
         <div class="col-md-12">
-            <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn"
-                style="border-radius: 15px; background-color: #ccc;">
-                <h4 class="mb-3" style="color: #343a40; font-weight: bold;">قائمة التأشيرات</h4>
-
-                <!-- 🔎 مربع البحث والفلترة -->
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <select id="filterType" class="form-control" onchange="searchTable()">
-                            <option value="all">البحث في جميع الحقول</option>
-                            <option value="id">كود التأشيرة</option>
-                            <option value="name">نوع التأشيرة</option>
-                        </select>
-                    </div>
-                    <div class="col-md-6">
-                        <input type="text" id="searchInput" class="form-control" placeholder="أدخل كلمة البحث..."
-                            onkeyup="searchTable()">
-                    </div>
-                </div>
+            <div class="card shadow-lg p-4 border-0 animate__animated animate__fadeIn visa-list-card">
+                <h4 class="mb-4 list-title">
+                    <i class="fas fa-list-ul ml-2"></i> قائمة التأشيرات
+                </h4>
 
                 <div class="table-responsive">
-                    <table class="table table-hover text-center animate__animated animate__fadeInUp" id="delegatesTable">
-                        <thead style="background-color: #343a40;">
+                    <table class="table custom-table text-center id="delegatesTable">
+                        <thead>
                             <tr>
                                 <th>كود التأشيرة</th>
                                 <th>الاسم</th>
@@ -237,75 +382,56 @@
                         </thead>
                         <tbody>
                             @foreach ($visa_types as $visa_type)
-                                <tr class="table-light">
-                                    <td>#{{ $visa_type->id }}</td>
-                                    <td>{{ $visa_type->name }}</td>
+                                <tr>
+                                    <td class="id-column">#{{ $visa_type->id }}</td>
+                                    <td class="name-column">{{ $visa_type->name }}</td>
                                     <td>{{ $visa_type->visa_peroid }}</td>
-                                    <td>{{ $visa_type->registration_number }}</td>
+                                    <td><span class="reg-number">{{ $visa_type->registration_number }}</span></td>
                                     <td>{{ $visa_type->outgoing_number }}</td>
                                     <td>{{ $visa_type->porpose }}</td>
                                     <td>
-                                        <span class="badge bg-success">
+                                        <span class="badge-count-custom">
                                             {{ $visa_type->count }} عميل
                                         </span>
                                     </td>
                                     <td>{{ $visa_type->sponser->name }}</td>
                                     <td>{{ $visa_type->embassy->title }}</td>
                                     <td>
-                                        <span class="badge bg-info">
+                                        <span class="badge-profession-custom">
                                             {{ count($visa_type->visa_professions) }} مهن
                                         </span>
                                     </td>
-                                    <td class="d-flex justify-content-center align-items-center gap-1">
-                                        <a href="{{ route('visa-type.index', $visa_type->id) }}"
-                                            class="btn btn-sm btn-outline-success shadow-sm" title="تعديل">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                    <td>
+                                        <div class="d-flex justify-content-center align-items-center gap-2">
+                                            <a href="{{ route('visa-type.index', $visa_type->id) }}"
+                                                class="btn-edit-action" title="تعديل">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
 
-                                        {{-- <form action="{{ route('visa-type.delete', $visa_type->id) }}" method="POST"
-                                            class="d-inline mx-1">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button class="btn btn-sm btn-outline-danger shadow-sm" type="submit"
-                                                title="حذف">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form> --}}
-
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-outline-secondary shadow-sm dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <a data-embassy="{{ $visa_type->embassy->title }}"
-                                                        data-outgoing_number="{{ $visa_type->outgoing_number }}"
-                                                        data-registration_number="{{ $visa_type->registration_number }}"
-                                                        data-visa="{{ $visa_type->id }}"
-                                                        class="dropdown-item text-success profession-outomation"
-                                                        id="profession">
-                                                        <i class="fas fa-edit"></i> جلب المهن
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a class="dropdown-item text-primary"
-                                                        href="{{ route('visa-profession.index', $visa_type->id) }}">
-                                                        <i class="fas fa-list"></i> المهن
-                                                    </a>
-                                                </li>
-                                                {{-- <li>
-                                                    <a class="dropdown-item text-warning" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModal">
-                                                        <i class="fas fa-print"></i> طباعة تقرير
-                                                    </a>
-                                                </li> --}}
-                                                {{-- <li>
-                                                    <button class="dropdown-item text-danger">
-                                                        <i class="fas fa-users"></i> بلاك ليست
-                                                    </button>
-                                                </li> --}}
-                                            </ul>
+                                            <div class="dropdown">
+                                                <button class="btn-more-action dropdown-toggle" type="button"
+                                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-h"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                                    <li>
+                                                        <a data-embassy="{{ $visa_type->embassy->title }}"
+                                                            data-outgoing_number="{{ $visa_type->outgoing_number }}"
+                                                            data-registration_number="{{ $visa_type->registration_number }}"
+                                                            data-visa="{{ $visa_type->id }}"
+                                                            class="dropdown-item text-success profession-outomation"
+                                                            id="profession">
+                                                            <i class="fas fa-sync-alt ml-2"></i> جلب المهن
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="dropdown-item text-primary"
+                                                            href="{{ route('visa-profession.index', $visa_type->id) }}">
+                                                            <i class="fas fa-briefcase ml-2"></i> عرض المهن
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
@@ -314,6 +440,152 @@
                     </table>
                 </div>
             </div>
+
+            <style>
+                /* --- الأساسيات (اللايت مود - أسود صريح) --- */
+                .visa-list-card {
+                    background-color: #ffffff !important;
+                    border-radius: 12px;
+                }
+
+                .table-responsive {
+                    overflow-x: inherit !important;
+                }
+
+                .list-title {
+                    color: #000000 !important;
+                    /* أسود صريح */
+                    font-weight: 800 !important;
+                    border-right: 5px solid #28a745;
+                    padding-right: 15px;
+                }
+
+                .custom-table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+
+                /* الهيدر دائماً داكن ليعطي فخامة */
+                .custom-table thead th {
+                    background-color: #1e1e2d !important;
+                    color: #ffffff !important;
+                    padding: 15px;
+                    font-weight: 600;
+                    border: none;
+                }
+
+                .custom-table tbody tr {
+                    border-bottom: 1px solid #ebebeb;
+                    background-color: #ffffff !important;
+                }
+
+                .custom-table td {
+                    color: #000000 !important;
+                    /* نصوص الجداول سوداء تماماً في اللايت مود */
+                    padding: 14px 10px !important;
+                    vertical-align: middle;
+                    font-weight: 500;
+                }
+
+                /* تمييز الأعمدة */
+                .id-column {
+                    color: #28a745 !important;
+                    font-weight: bold !important;
+                }
+
+                .reg-number {
+                    background: #f1f2f6;
+                    padding: 4px 8px;
+                    border-radius: 5px;
+                    color: #000;
+                    font-family: monospace;
+                }
+
+                /* البادجات */
+                .badge-count-custom {
+                    background: #e8f5e9;
+                    color: #2e7d32;
+                    padding: 5px 10px;
+                    border-radius: 6px;
+                    font-weight: 700;
+                }
+
+                .badge-profession-custom {
+                    background: #e3f2fd;
+                    color: #1565c0;
+                    padding: 5px 10px;
+                    border-radius: 6px;
+                    font-weight: 700;
+                }
+
+                /* أزرار الإجراءات */
+                .btn-edit-action {
+                    color: #28a745;
+                    background: #e8f5e9;
+                    border: none;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                    transition: 0.3s;
+                }
+
+                .btn-more-action {
+                    color: #5f6368;
+                    background: #f1f3f4;
+                    border: none;
+                    padding: 6px 10px;
+                    border-radius: 6px;
+                }
+
+                /* --- الدارك مود (أبيض صريح) --- */
+                @media (prefers-color-scheme: dark) {
+                    .visa-list-card {
+                        background-color: #1a1a27 !important;
+                    }
+
+                    .list-title {
+                        color: #ffffff !important;
+                    }
+
+                    .custom-table tbody tr {
+                        background-color: #212130 !important;
+                        border-bottom: 1px solid #2b2b40;
+                    }
+
+                    .custom-table td {
+                        color: #ffffff !important;
+                        /* نصوص الجداول بيضاء تماماً في الدارك مود */
+                    }
+
+                    .reg-number {
+                        background: #2b2b40;
+                        color: #ffffff;
+                    }
+
+                    .badge-count-custom {
+                        background: rgba(40, 167, 69, 0.2);
+                        color: #81c784;
+                    }
+
+                    .badge-profession-custom {
+                        background: rgba(33, 150, 243, 0.2);
+                        color: #90caf9;
+                    }
+
+                    .btn-more-action {
+                        background: #2b2b40;
+                        color: #b5b5c3;
+                    }
+
+                    .dropdown-menu {
+                        background: #1e1e2d;
+                        border: 1px solid #323248;
+                    }
+
+                    .dropdown-item {
+                        color: #b5b5c3;
+                    }
+                }
+            </style>
         </div>
 
     </div>
@@ -341,110 +613,101 @@
 @section('css')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* ✅ تحسين إدخال البيانات */
-        .form-control {
-            border-radius: 10px;
-            padding: 12px;
-            height: 50px;
-            border: 1px solid #ced4da;
-            transition: all 0.3s ease-in-out;
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #27ae60;
+            --bg-light: #f4f7f6;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            font-family: 'Cairo', sans-serif;
+        }
+
+        /* ✅ تحسين الكروت */
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header-custom {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 15px 20px;
+        }
+
+        /* ✅ تحسين المدخلات */
+        .form-control,
+        .select2-container .select2-selection--single {
+            border-radius: 8px !important;
+            border: 1px solid #dce1e7 !important;
+            height: 45px !important;
+            transition: all 0.3s ease;
         }
 
         .form-control:focus {
-            border-color: #997a44;
-            box-shadow: 0 0 8px rgba(153, 122, 68, 0.3);
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 0.2rem rgba(39, 174, 96, 0.15);
         }
 
         /* ✅ تحسين الجدول */
-        .table-hover tbody tr:hover {
-            background-color: #f1ede5;
-            transition: 0.3s ease-in-out;
+        .table {
+            border-collapse: separate;
+            border-spacing: 0 8px;
         }
 
-        /* ✅ تحسين الأزرار */
-        .btn {
-            transition: all 0.3s ease-in-out;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        /* ✅ تحسين تقسيم الأقسام */
-        .card {
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .table-responsive {
-            overflow: visible !important;
-        }
-
-        .loader {
-            border: 5px solid #f3f3f3;
-            /* لون الخلفية */
-            border-top: 5px solid #4caf50;
-            /* لون الدائرة المتحركة */
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1.5s linear infinite;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        .loading-text {
-            font-size: 16px;
-            text-align: center;
-        }
-
-        /* الوضع الفاتح - الألوان الحالية */
-        #delegatesTable thead {
-            background-color: #343a40 !important;
+        .table thead th {
+            background-color: var(--primary-color) !important;
             color: white !important;
+            border: none;
+            padding: 15px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
         }
 
-        #delegatesTable tbody tr.table-light {
-            background-color: #f8f9fa !important;
-            color: #212529 !important;
+        .table tbody tr {
+            background-color: white !important;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s;
         }
 
-        /* الوضع الداكن */
-        body.dark-mode #delegatesTable thead {
-            background-color: #1f2d3d !important;
-            /* هيدر داكن */
-            color: #ffffff !important;
+        /* .table tbody tr:hover {
+                                    transform: scale(1.005);
+                                    background-color: #f9f9f9 !important;
+                                } */
+
+        .table td {
+            vertical-align: middle !important;
+            border: none;
+            padding: 15px !important;
         }
 
-        body.dark-mode #delegatesTable tbody tr.table-light {
-            background-color: #2c3b4c !important;
-            /* صفوف داكنة */
-            color: #ffffff !important;
+        /* ✅ البادجات (Badges) */
+        .badge-custom {
+            padding: 6px 12px;
+            border-radius: 50px;
+            font-weight: 500;
         }
 
-        body.dark-mode #delegatesTable tbody tr:hover {
-            background-color: #3a4b5c !important;
-            /* لون الهوفر */
+        /* ✅ الأزرار */
+        .btn-action {
+            width: 35px;
+            height: 35px;
+            padding: 0;
+            line-height: 35px;
+            border-radius: 8px;
+            margin: 0 2px;
         }
 
-        /* البادجات في الوضع الداكن */
-        body.dark-mode .badge.bg-success {
-            background-color: #28a745 !important;
-            color: #fff !important;
-        }
-
-        body.dark-mode .badge.bg-info {
-            background-color: #17a2b8 !important;
-            color: #fff !important;
+        /* تحسين البحث */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
         }
     </style>
 @stop
