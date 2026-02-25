@@ -1070,7 +1070,7 @@ class CustomerController extends Controller
     {
         $type = $request->searchType;
 
-        $customers = Customer::query()->with(['customerGroup', 'jobTitle']);
+        $customers = Customer::query()->with(['customerGroup', 'jobTitle', 'bag']);
         $leads = LeadsCustomers::query()->with(['jobTitle', 'delegate']);
 
         // 🔍 البحث بناءً على النوع المختار
@@ -1102,6 +1102,21 @@ class CustomerController extends Controller
         // 🔹 تنفيذ البحث
         $customers = $customers->get();
         $leads = $leads->get();
+
+        // 🔥 حساب الترتيب داخل الحقيبة
+        foreach ($customers as $customer) {
+
+            if ($customer->bag_id) {
+
+                $order = Customer::where('bag_id', $customer->bag_id)
+                    ->where('created_at', '<=', $customer->created_at)
+                    ->count();
+
+                $customer->bag_order = $order;
+            } else {
+                $customer->bag_order = null;
+            }
+        }
 
         // 🔹 عرض النتائج في الصفحة
         return view('deep-search', compact('customers', 'leads', 'type'));

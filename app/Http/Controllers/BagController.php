@@ -72,8 +72,10 @@ class BagController extends Controller
 
     public function bagCustomers($bag_id)
     {
-        # code...
-        $bag = bag::find($bag_id);
+        $bag = Bag::with(['customers' => function ($q) {
+            $q->orderBy('created_at');
+        }])->findOrFail($bag_id);
+
         return view('group-customers', [
             'customers' => $bag->customers,
             'bag' => $bag

@@ -68,6 +68,7 @@
                             <table class="table table-hover text-center customers-table" id="dataTable">
                                 <thead>
                                     <tr>
+                                        <th>الرقم</th>
                                         <th width="40px">
                                             <input type="checkbox" id="checkAll" class="form-check-input">
                                         </th>
@@ -85,6 +86,8 @@
                                     @foreach ($customers as $customer)
                                         <tr
                                             class="{{ $customer->blackList && $customer->blackList->block ? 'bg-light-danger' : 'bg-light' }}">
+                                            <td> {{ $loop->iteration }}
+                                            </td>
                                             <td style="position: relative !important;">
                                                 <input
                                                     style="position: absolute;left: 50%;top: 50%;transform: translate(-50%, -50%);"

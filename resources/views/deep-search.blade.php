@@ -90,6 +90,8 @@
                                 <th>الرقم القومي</th>
                                 <th>رقم الهاتف</th>
                                 <th>المجموعة</th>
+                                <th>الحقيبة</th>
+                                <th>ترتيبه داخل الحقيبة</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -113,6 +115,20 @@
                                         @else
                                             -
                                         @endif
+                                    </td>
+                                    <td>
+                                        @if ($c->bag)
+                                            <a href="{{ route('bags.customers', $c->bag->id) }}"
+                                                class="badge badge-info">
+                                                {{ $c->bag->name }}
+                                            </a>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+
+                                    <td class="font-weight-bold text-primary">
+                                        {{ $c->bag_order ?? '-' }}
                                     </td>
                                 </tr>
                             @endforeach
