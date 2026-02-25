@@ -109,7 +109,7 @@ class Customer extends Model
     }
     public function bag()
     {
-        return $this->belongsTo(Bag::class);
+        return $this->belongsTo(bag::class);
     }
     public function routeNotificationForFcm()
     {
