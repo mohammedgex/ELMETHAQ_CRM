@@ -1109,7 +1109,7 @@ class CustomerController extends Controller
             if ($customer->bag_id) {
 
                 $order = Customer::where('bag_id', $customer->bag_id)
-                    ->where('created_at', '<=', $customer->created_at)
+                    ->where('id', '<=', $customer->id)
                     ->count();
 
                 $customer->bag_order = $order;
