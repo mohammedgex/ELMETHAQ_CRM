@@ -337,34 +337,50 @@
             });
 
             // حفظ الملاحظات Ajax
-            $(document).on('click', '.notes-save', function() {
-                let $btn = $(this);
-                let container = $btn.closest('.notes-edit');
-                let customerId = container.data('id');
-                let notes = container.find('.notes-input').val();
 
-                if (!notes || notes <= 0) return alert('أدخل القيمة أولاً');
+            $(document).ready(function() {
+                // الضغط على زر الحفظ
+                $(document).on('click', '.notes-save', function() {
+                    saveNotes($(this).closest('.notes-edit'));
+                });
 
-                $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i>');
-
-                $.ajax({
-                    url: '{{ route('customers.updateNotes') }}',
-                    method: 'POST',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        id: customerId,
-                        notes: notes
-                    },
-                    success: function(res) {
-                        container.replaceWith(
-                            `<span class="badge badge-pill badge-info px-3 py-2 notes-badge shadow-sm" data-id="${customerId}"><i class="fas fa-vial mr-1"></i> ${notes}</span>`
-                        );
-                    },
-                    error: function() {
-                        alert('خطأ بالحفظ');
-                        $btn.prop('disabled', false).html('<i class="fas fa-check"></i>');
+                // الضغط على Enter داخل الـ input
+                $(document).on('keypress', '.notes-input', function(e) {
+                    if (e.which === 13) { // 13 هو كود Enter
+                        e.preventDefault(); // منع السلوك الافتراضي (مثل إرسال form)
+                        saveNotes($(this).closest('.notes-edit'));
                     }
                 });
+
+                // دالة الحفظ العامة
+                function saveNotes(container) {
+                    var customerId = container.data('id');
+                    var notes = container.find('.notes-input').val();
+
+                    if (notes.trim() === '') {
+                        alert('الرجاء إدخال الملاحظات');
+                        return;
+                    }
+
+                    $.ajax({
+                        url: '{{ route('customers.updateNotes') }}',
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            id: customerId,
+                            notes: notes
+                        },
+                        success: function(res) {
+                            container.replaceWith(
+                                `<span class="badge badge-pill badge-info px-3 notes-text" data-id="${customerId}">${notes}</span>`
+                            );
+                        },
+                        error: function(err) {
+                            alert('حدث خطأ أثناء الحفظ');
+                        }
+                    });
+                }
+
             });
 
             // تصدير إكسيل
