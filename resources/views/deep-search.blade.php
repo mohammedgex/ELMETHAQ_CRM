@@ -92,6 +92,9 @@
                                 <th>المجموعة</th>
                                 <th>الحقيبة</th>
                                 <th>ترتيبه داخل الحقيبة</th>
+                                @if (auth()->user()?->permissions->contains('permission', 'financial-matters') || auth()->user()?->role == 'admin')
+                                    <th>كشف حسابه</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -130,6 +133,14 @@
                                     <td class="font-weight-bold text-primary">
                                         {{ $c->bag_order ?? '-' }}
                                     </td>
+                                    @if (auth()->user()?->permissions->contains('permission', 'financial-matters') || auth()->user()?->role == 'admin')
+                                        <td class="font-weight-bold text-primary">
+                                            <a href="{{ route('accounts.index', $c->id) }}"
+                                                class="badge badge-info bg-white" style="font-size: 1.2em;">
+                                                <i class="fas fa-wallet ml-1"></i> كشف الحساب
+                                            </a>
+                                        </td>
+                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
