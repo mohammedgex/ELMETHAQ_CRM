@@ -31,6 +31,7 @@
             <div class="card-body">
                 <form method="POST" action="{{ route('accounts.store') }}">
                     @csrf
+                    <input type="hidden" id="group_id" value="{{ $group_id }}">
                     <div class="row">
                         <div class="col-md-4 mb-3">
                             <label>اسم العميل</label>
@@ -207,7 +208,8 @@
                     dataType: 'json',
                     delay: 250,
                     data: params => ({
-                        q: params.term
+                        q: params.term,
+                        group_id: $('#group_id').val() // <--- هنا بنرسل الـ id بتاع الجروب
                     }),
                     processResults: data => ({
                         results: data

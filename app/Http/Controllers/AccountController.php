@@ -69,15 +69,26 @@ class AccountController extends Controller
                 ($customer->total_credit ?? 0);
         }
 
-        return view('accounts.customers-summary', compact('customers'));
+        return view('accounts.customers-summary', compact('customers', 'group_id'));
     }
     public function customersSearch(Request $request)
     {
         $search = $request->q;
+        $groupId = $request->group_id; // جلب الـ group_id لو موجود
 
-        $customers = \App\Models\Customer::where('name_ar', 'LIKE', "%{$search}%")
-            ->limit(20)
-            ->get();
+        $query = \App\Models\Customer::query();
+
+        // فلتر بالاسم
+        if ($search) {
+            $query->where('name_ar', 'LIKE', "%{$search}%");
+        }
+
+        // فلتر حسب المجموعة لو معرف
+        if ($groupId) {
+            $query->where('customer_group_id', $groupId);
+        }
+
+        $customers = $query->limit(20)->get();
 
         return response()->json(
             $customers->map(function ($customer) {
