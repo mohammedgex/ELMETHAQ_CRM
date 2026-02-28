@@ -277,22 +277,22 @@ Route::group([
 
 
     Route::get('/customers/{id}/accounts', [AccountController::class, 'index'])
-        ->name('accounts.index');
+        ->name('accounts.index')->middleware("check.permission:financial-matters");
 
     Route::get('/customers/{id}/accounts/create', [AccountController::class, 'create'])
-        ->name('accounts.create');
+        ->name('accounts.create')->middleware("check.permission:financial-matters");
 
     Route::post('/accounts/store', [AccountController::class, 'store'])
-        ->name('accounts.store');
+        ->name('accounts.store')->middleware("check.permission:financial-matters");
     Route::get('/ajax/customers-search', [AccountController::class, 'customersSearch'])
-        ->name('ajax.customers.search');
+        ->name('ajax.customers.search')->middleware("check.permission:financial-matters");
 
     Route::get(
         '/accounts/customers-summary/{group_id}',
         [AccountController::class, 'customersSummary']
-    )->name('accounts.customers.summary');
+    )->name('accounts.customers.summary')->middleware("check.permission:financial-matters");
 
-    Route::post('/customers/update-notes', [CustomerController::class, 'updateNotes'])->name('customers.updateNotes');
+    Route::post('/customers/update-notes', [CustomerController::class, 'updateNotes'])->name('customers.updateNotes')->middleware("check.permission:financial-matters");
 });
 
 // قيادة امنة للسائقين

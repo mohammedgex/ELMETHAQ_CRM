@@ -130,13 +130,15 @@
                                                 تعيين حقيبة
                                             </button>
                                         </li>
-                                        <li>
-                                            <a href="{{ route('accounts.customers.summary', $group->id) }}">
-                                                <button class="dropdown-item text-info" id="customersSummary">
-                                                    حسابات العملاء
-                                                </button>
-                                            </a>
-                                        </li>
+                                        @if (auth()->user()?->permissions->contains('permission', 'financial-matters') || auth()->user()?->role == 'admin')
+                                            <li>
+                                                <a href="{{ route('accounts.customers.summary', $group->id) }}">
+                                                    <button class="dropdown-item text-info" id="customersSummary">
+                                                        حسابات العملاء
+                                                    </button>
+                                                </a>
+                                            </li>
+                                        @endif
                                         <li>
                                             <a href="{{ route('group.delegates-stats', $group->id) }}">
                                                 <button class="dropdown-item text-info">
@@ -417,12 +419,14 @@
                                                                 <i class="fas fa-edit me-1"></i> تعديل
                                                             </a>
                                                         </li>
-                                                        <li>
-                                                            <a class="dropdown-item text-primary"
-                                                                href="{{ route('accounts.index', $customer->id) }}">
-                                                                <i class="fas fa-wallet me-1"></i> الحسابات
-                                                            </a>
-                                                        </li>
+                                                        @if (auth()->user()?->permissions->contains('permission', 'financial-matters') || auth()->user()?->role == 'admin')
+                                                            <li>
+                                                                <a class="dropdown-item text-primary"
+                                                                    href="{{ route('accounts.index', $customer->id) }}">
+                                                                    <i class="fas fa-wallet me-1"></i> الحسابات
+                                                                </a>
+                                                            </li>
+                                                        @endif
 
                                                         {{-- تواصل --}}
                                                         @if ($customer->phone != null)
