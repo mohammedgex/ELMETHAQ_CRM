@@ -1121,4 +1121,16 @@ class CustomerController extends Controller
         // 🔹 عرض النتائج في الصفحة
         return view('deep-search', compact('customers', 'leads', 'type'));
     }
+
+    // CustomerController.php
+    public function updateNotes(Request $request)
+    {
+        $customer = Customer::find($request->id);
+        if (!$customer) return response()->json(['error' => 'Customer not found'], 404);
+
+        $customer->notes = $request->notes;
+        $customer->save();
+
+        return response()->json(['success' => true]);
+    }
 }

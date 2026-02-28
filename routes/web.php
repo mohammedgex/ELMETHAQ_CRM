@@ -291,6 +291,8 @@ Route::group([
         '/accounts/customers-summary/{group_id}',
         [AccountController::class, 'customersSummary']
     )->name('accounts.customers.summary');
+
+    Route::post('/customers/update-notes', [CustomerController::class, 'updateNotes'])->name('customers.updateNotes');
 });
 
 // قيادة امنة للسائقين

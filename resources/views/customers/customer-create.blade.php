@@ -263,6 +263,8 @@
                                         <option value="">اختر الخبرات</option>
                                         <option value="جديد">جديد
                                         </option>
+                                        <option value="قديم بركة تجارية">قديم بركة تجارية
+                                        </option>
                                         <option value="قديم شركات">قديم شركات
                                         </option>
 
@@ -746,6 +748,10 @@
                                         <option value="جديد"
                                             {{ old('experience', $edit->experience ?? '') == 'جديد' ? 'selected' : '' }}>
                                             جديد</option>
+                                        <option value='قديم بركة تجارية'
+                                            {{ old('experience', $edit->experience ?? '') == 'قديم بركة تجارية' ? 'selected' : '' }}>
+                                            قديم بركة تجارية
+                                        </option>
                                         <option value="قديم شركات"
                                             {{ old('experience', $edit->experience ?? '') == 'قديم شركات' ? 'selected' : '' }}>
                                             قديم شركات</option>

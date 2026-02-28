@@ -79,68 +79,123 @@
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="accountsTable" class="table m-0 table-hover table-striped text-center">
-                        <thead>
-                            <tr>
-                                <th style="width: 50px;">#</th>
-                                <th class="text-left">اسم العميل</th>
-                                <th>إجمالي المدين</th>
-                                <th>إجمالي الدائن</th>
-                                <th>الرصيد</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @php
-                                $grandDebit = 0;
-                                $grandCredit = 0;
-                                $grandBalance = 0;
-                            @endphp
+                    {{-- جدول ملخص العملاء --}}
+                    <div class="card shadow-sm border-0">
+                        <div class="card-header border-transparent bg-navy">
+                            <h3 class="card-title font-weight-bold">
+                                <i class="fas fa-users-cog mr-2"></i> ملخص أرصدة العملاء
+                            </h3>
+                            <div class="card-tools">
+                                <button id="exportBtn" class="btn btn-sm btn-success shadow-sm mx-1">
+                                    <i class="fas fa-file-excel mr-1"></i> تصدير إكسيل
+                                </button>
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus text-white"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                            @forelse ($customers as $customer)
-                                @php
-                                    $debit = $customer->total_debit ?? 0;
-                                    $credit = $customer->total_credit ?? 0;
-                                    $balance = $customer->balance ?? 0;
-                                    $grandDebit += $debit;
-                                    $grandCredit += $credit;
-                                    $grandBalance += $balance;
-                                @endphp
-                                <tr>
-                                    <td class="font-weight-bold text-muted">{{ $loop->iteration }}</td>
-                                    <td class="text-left">
-                                        <a href="{{ route('accounts.index', $customer->id) }}" class="font-weight-bold">
-                                            {{ $customer->name_ar }}
-                                        </a>
-                                    </td>
-                                    <td class="text-info font-weight-bold">{{ number_format($debit, 2) }}</td>
-                                    <td class="text-warning font-weight-bold">{{ number_format($credit, 2) }}</td>
-                                    <td>
-                                        <span
-                                            class="badge {{ $balance >= 0 ? 'badge-success' : 'badge-danger' }} px-3 py-2">
-                                            {{ number_format($balance, 2) }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="py-5 text-muted">لا توجد بيانات متاحة</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                        @if ($customers->count() > 0)
-                            <tfoot class="bg-light-sum font-weight-bold">
-                                <tr>
-                                    <td>-</td>
-                                    <td class="text-left">الإجمالي العام</td>
-                                    <td class="text-info">{{ number_format($grandDebit, 2) }}</td>
-                                    <td class="text-warning">{{ number_format($grandCredit, 2) }}</td>
-                                    <td class="{{ $grandBalance >= 0 ? 'text-success' : 'text-danger' }}">
-                                        {{ number_format($grandBalance, 2) }}
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        @endif
-                    </table>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table id="accountsTable"
+                                    class="table m-0 table-hover table-striped table-valign-middle text-center">
+                                    <thead class="thead-dark-custom">
+                                        <tr>
+                                            <th style="width: 50px;">#</th>
+                                            <th class="text-right">اسم العميل</th>
+                                            <th>الحالة</th>
+                                            <th>عدد الاختبارات</th>
+                                            <th>إجمالي المدين</th>
+                                            <th>إجمالي الدائن</th>
+                                            <th>الرصيد النهائي</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @php
+                                            $grandDebit = 0;
+                                            $grandCredit = 0;
+                                            $grandBalance = 0;
+                                        @endphp
+
+                                        @forelse ($customers as $customer)
+                                            @php
+                                                $debit = $customer->total_debit ?? 0;
+                                                $credit = $customer->total_credit ?? 0;
+                                                $balance = $customer->balance ?? 0;
+                                                $grandDebit += $debit;
+                                                $grandCredit += $credit;
+                                                $grandBalance += $balance;
+                                            @endphp
+                                            <tr>
+                                                <td class="text-secondary font-italic">{{ $loop->iteration }}</td>
+                                                <td class="text-right py-3">
+                                                    <a href="{{ route('accounts.index', $customer->id) }}"
+                                                        class="customer-link">
+                                                        {{ $customer->name_ar }}
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <span class="badge badge-outline-secondary px-2">
+                                                        {{ $customer->experience ?? 'غير محدد' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    @if (empty($customer->notes) || $customer->notes == 0)
+                                                        <div class="notes-edit" data-id="{{ $customer->id }}">
+                                                            <input type="number"
+                                                                class="form-control form-control-sm notes-input"
+                                                                placeholder="أدخل الملاحظات">
+                                                            <button class="btn btn-sm btn-primary notes-save">حفظ</button>
+                                                        </div>
+                                                    @else
+                                                        <span class="badge badge-pill badge-info px-3 notes-text"
+                                                            data-id="{{ $customer->id }}">
+                                                            {{ $customer->notes }}
+                                                        </span>
+                                                    @endif
+                                                </td>
+
+                                                <td class="text-info font-weight-bold">{{ number_format($debit, 2) }}</td>
+                                                <td class="text-warning font-weight-bold">{{ number_format($credit, 2) }}
+                                                </td>
+                                                <td class="font-weight-bold">
+                                                    <span
+                                                        class="badge {{ $balance >= 0 ? 'badge-success' : 'badge-danger' }} balance-pill shadow-sm">
+                                                        {{ number_format($balance, 2) }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="7" class="py-5">
+                                                    <img src="https://cdn-icons-png.flaticon.com/512/7486/7486744.png"
+                                                        width="50" class="opacity-50 mb-3"><br>
+                                                    <span class="text-muted italic">لا توجد بيانات متاحة حالياً لهذا
+                                                        الجروب</span>
+                                                </td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                    @if ($customers->count() > 0)
+                                        <tfoot class="bg-dark-footer">
+                                            <tr class="font-weight-bold">
+                                                <td>-</td>
+                                                <td class="text-right">الإجمالي العام</td>
+                                                <td>-</td>
+                                                <td>-</td>
+                                                <td class="text-info">{{ number_format($grandDebit, 2) }}</td>
+                                                <td class="text-warning">{{ number_format($grandCredit, 2) }}</td>
+                                                <td
+                                                    class="{{ $grandBalance >= 0 ? 'text-success' : 'text-danger' }} h6 mb-0 font-weight-bold">
+                                                    {{ number_format($grandBalance, 2) }}
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    @endif
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -196,7 +251,41 @@
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        $(document).ready(function() {
 
+            // الضغط على زر الحفظ
+            $(document).on('click', '.notes-save', function() {
+                var container = $(this).closest('.notes-edit');
+                var customerId = container.data('id');
+                var notes = container.find('.notes-input').val();
+
+                if (notes.trim() === '') {
+                    alert('الرجاء إدخال الملاحظات');
+                    return;
+                }
+
+                $.ajax({
+                    url: '{{ route('customers.updateNotes') }}', // راوت للتحديث
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        id: customerId,
+                        notes: notes
+                    },
+                    success: function(res) {
+                        container.replaceWith(
+                            `<span class="badge badge-pill badge-info px-3 notes-text" data-id="${customerId}">${notes}</span>`
+                        );
+                    },
+                    error: function(err) {
+                        alert('حدث خطأ أثناء الحفظ');
+                    }
+                });
+            });
+
+        });
+    </script>
     <script>
         $(document).ready(function() {
             // تهيئة Select2
