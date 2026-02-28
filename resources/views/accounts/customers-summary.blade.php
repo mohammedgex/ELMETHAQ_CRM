@@ -22,8 +22,9 @@
             <div class="card-header">
                 <h3 class="card-title font-weight-bold">إضافة قيد جديد</h3>
                 <div class="card-tools">
-                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
-                            class="fas fa-minus"></i></button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
                 </div>
             </div>
 
@@ -38,14 +39,12 @@
 
                         <div class="col-md-2 mb-3">
                             <label>مدين</label>
-                            <input type="number" step="0.01" name="debit" class="form-control bg-light-input"
-                                placeholder="0.00">
+                            <input type="number" step="0.01" name="debit" class="form-control" placeholder="0.00">
                         </div>
 
                         <div class="col-md-2 mb-3">
                             <label>دائن</label>
-                            <input type="number" step="0.01" name="credit" class="form-control bg-light-input"
-                                placeholder="0.00">
+                            <input type="number" step="0.01" name="credit" class="form-control" placeholder="0.00">
                         </div>
 
                         <div class="col-md-3 mb-3">
@@ -54,7 +53,7 @@
                         </div>
 
                         <div class="col-md-1 d-flex align-items-end mb-3">
-                            <button type="submit" class="btn btn-primary btn-block">
+                            <button type="submit" class="btn btn-primary btn-block shadow-sm">
                                 <i class="fas fa-save"></i>
                             </button>
                         </div>
@@ -69,7 +68,7 @@
                 <h3 class="card-title font-weight-bold">جدول البيانات</h3>
                 <div class="card-tools">
                     <button id="exportBtn" class="btn btn-sm btn-success shadow-sm">
-                        <i class="fas fa-file-excel mr-1"></i> تصدير إكسيل (JS)
+                        <i class="fas fa-file-excel mr-1"></i> تصدير إكسيل
                     </button>
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
@@ -79,10 +78,11 @@
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table m-0 table-hover table-striped text-center">
+                    <table id="accountsTable" class="table m-0 table-hover table-striped text-center">
                         <thead>
                             <tr>
-                                <th class="text-right">اسم العميل</th>
+                                <th style="width: 50px;">#</th>
+                                <th class="text-left">اسم العميل</th>
                                 <th>إجمالي المدين</th>
                                 <th>إجمالي الدائن</th>
                                 <th>الرصيد</th>
@@ -105,7 +105,8 @@
                                     $grandBalance += $balance;
                                 @endphp
                                 <tr>
-                                    <td class="text-right">
+                                    <td class="font-weight-bold text-muted">{{ $loop->iteration }}</td>
+                                    <td class="text-left">
                                         <a href="{{ route('accounts.index', $customer->id) }}" class="font-weight-bold">
                                             {{ $customer->name_ar }}
                                         </a>
@@ -121,20 +122,23 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="4" class="py-5 text-muted">لا توجد بيانات متاحة</td>
+                                    <td colspan="5" class="py-5 text-muted">لا توجد بيانات متاحة</td>
                                 </tr>
                             @endforelse
                         </tbody>
-                        <tfoot class="bg-light-sum font-weight-bold">
-                            <tr>
-                                <td class="text-right">الإجمالي العام</td>
-                                <td class="text-info">{{ number_format($grandDebit, 2) }}</td>
-                                <td class="text-warning">{{ number_format($grandCredit, 2) }}</td>
-                                <td class="{{ $grandBalance >= 0 ? 'text-success' : 'text-danger' }}">
-                                    {{ number_format($grandBalance, 2) }}
-                                </td>
-                            </tr>
-                        </tfoot>
+                        @if ($customers->count() > 0)
+                            <tfoot class="bg-light-sum font-weight-bold">
+                                <tr>
+                                    <td>-</td>
+                                    <td class="text-left">الإجمالي العام</td>
+                                    <td class="text-info">{{ number_format($grandDebit, 2) }}</td>
+                                    <td class="text-warning">{{ number_format($grandCredit, 2) }}</td>
+                                    <td class="{{ $grandBalance >= 0 ? 'text-success' : 'text-danger' }}">
+                                        {{ number_format($grandBalance, 2) }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        @endif
                     </table>
                 </div>
             </div>
@@ -145,7 +149,7 @@
 @section('css')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
-        /* تحسينات ليتوافق Select2 مع الـ Dark Mode */
+        /* التنسيقات المتوافقة مع المود المظلم والمضيء */
         .dark-mode .select2-selection--single {
             background-color: #343a40 !important;
             border-color: #6c757d !important;
@@ -169,7 +173,6 @@
             color: white !important;
         }
 
-        /* تنسيق عام للحقول */
         .select2-container .select2-selection--single {
             height: calc(2.25rem + 2px) !important;
         }
@@ -179,7 +182,6 @@
             padding: .375rem .75rem !important;
         }
 
-        /* ألوان مخصصة للفوتر تتغير حسب المود */
         .bg-light-sum {
             background-color: rgba(0, 0, 0, .05);
         }
@@ -192,8 +194,11 @@
 
 @section('js')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
     <script>
         $(document).ready(function() {
+            // تهيئة Select2
             $('.customer-select').select2({
                 placeholder: 'ابحث عن العميل...',
                 dir: "rtl",
@@ -211,27 +216,23 @@
                 minimumInputLength: 1,
                 width: '100%'
             });
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <script>
-        document.getElementById('exportBtn').addEventListener('click', function() {
-            // 1. تحديد الجدول المراد تصديره
-            var table = document.querySelector(".table");
+            // دالة التصدير
+            $('#exportBtn').on('click', function() {
+                const table = document.getElementById("accountsTable");
 
-            // 2. تحويل الجدول إلى "Worksheet"
-            // نبدأ من صف الرأس وحتى الفوتر
-            var wb = XLSX.utils.table_to_book(table, {
-                sheet: "ملخص الحسابات"
+                // تحويل الجدول إلى كتاب إكسيل مع دعم الترميز العربي
+                const wb = XLSX.utils.table_to_book(table, {
+                    sheet: "ملخص الحسابات"
+                });
+
+                // تسمية الملف بالتاريخ الحالي
+                const date = new Date().toLocaleDateString('en-CA'); // YYYY-MM-DD
+                const fileName = `ملخص_حسابات_${date}.xlsx`;
+
+                // تحميل الملف
+                XLSX.writeFile(wb, fileName);
             });
-
-            // 3. الحصول على التاريخ الحالي لتسمية الملف
-            var date = new Date().toISOString().slice(0, 10);
-            var fileName = "ملخص_حسابات_العملاء_" + date + ".xlsx";
-
-            // 4. تنفيذ عملية التحميل
-            XLSX.writeFile(wb, fileName);
         });
     </script>
 @stop
