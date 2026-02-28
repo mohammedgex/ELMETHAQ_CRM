@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\ApiAppController;
 use App\Http\Controllers\BagController;
 use App\Http\Controllers\BlackListController;
@@ -273,6 +274,23 @@ Route::group([
     Route::get('/change-password/{id}', [userController::class, 'changePasswordUser'])->name('user.changePasswordUser');
     Route::post('/change-password/{id}', [userController::class, 'changePassword'])->name('user.changePassword');
     Route::get('/group/{id}/delegates-stats', [CustomerGroupController::class, 'showDelegatesStats'])->name('group.delegates-stats');
+
+
+    Route::get('/customers/{id}/accounts', [AccountController::class, 'index'])
+        ->name('accounts.index');
+
+    Route::get('/customers/{id}/accounts/create', [AccountController::class, 'create'])
+        ->name('accounts.create');
+
+    Route::post('/accounts/store', [AccountController::class, 'store'])
+        ->name('accounts.store');
+    Route::get('/ajax/customers-search', [AccountController::class, 'customersSearch'])
+        ->name('ajax.customers.search');
+
+    Route::get(
+        '/accounts/customers-summary/{group_id}',
+        [AccountController::class, 'customersSummary']
+    )->name('accounts.customers.summary');
 });
 
 // قيادة امنة للسائقين

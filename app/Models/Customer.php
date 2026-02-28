@@ -124,4 +124,8 @@ class Customer extends Model
     {
         return $query->whereNull('archived_at');
     }
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
 }

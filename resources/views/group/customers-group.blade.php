@@ -131,6 +131,13 @@
                                             </button>
                                         </li>
                                         <li>
+                                            <a href="{{ route('accounts.customers.summary', $group->id) }}">
+                                                <button class="dropdown-item text-info" id="customersSummary">
+                                                    حسابات العملاء
+                                                </button>
+                                            </a>
+                                        </li>
+                                        <li>
                                             <a href="{{ route('group.delegates-stats', $group->id) }}">
                                                 <button class="dropdown-item text-info">
                                                     احصائيات المجموعة
@@ -408,6 +415,12 @@
                                                             <a class="dropdown-item text-primary"
                                                                 href="{{ route('customer.add', $customer->id) }}">
                                                                 <i class="fas fa-edit me-1"></i> تعديل
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item text-primary"
+                                                                href="{{ route('accounts.index', $customer->id) }}">
+                                                                <i class="fas fa-wallet me-1"></i> الحسابات
                                                             </a>
                                                         </li>
 
