@@ -83,7 +83,7 @@
                         <thead>
                             <tr class="thead-custom-row">
                                 <th style="width: 50px;">#</th>
-                                <th class="text-right px-4">اسم العميل</th>
+                                <th class="text-left px-4">اسم العميل</th>
                                 <th>الحالة</th>
                                 <th style="width: 160px;">عدد الاختبارات</th>
                                 <th>إجمالي المدين</th>
@@ -108,13 +108,13 @@
                                 @endphp
                                 <tr>
                                     <td class="text-muted small">#{{ $loop->iteration }}</td>
-                                    <td class="text-right font-weight-bold px-4">
+                                    <td class="text-left font-weight-bold px-4">
                                         <a href="{{ route('accounts.index', $customer->id) }}" class="customer-link">
                                             {{ $customer->name_ar }}
                                         </a>
                                     </td>
                                     <td>
-                                        <span class="badge badge-outline-secondary px-2">
+                                        <span class="badge badge-outline-secondary px-2 text-white">
                                             {{ $customer->experience ?? '---' }}
                                         </span>
                                     </td>
@@ -358,7 +358,7 @@
                     success: function(res) {
                         container.replaceWith(
                             `<span class="badge badge-pill badge-info px-3 py-2 notes-badge shadow-sm" data-id="${customerId}"><i class="fas fa-vial mr-1"></i> ${notes}</span>`
-                            );
+                        );
                     },
                     error: function() {
                         alert('خطأ بالحفظ');
