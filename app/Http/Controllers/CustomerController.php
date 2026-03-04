@@ -179,6 +179,11 @@ class CustomerController extends Controller
 
         // تحديث البيانات كلها
         $customer->update($data);
+        if ($request->filled('payment_title_id') != null && $customer->LeadCustomer != null) {
+            # code...
+            $customer->LeadCustomer->payment_title_id = $request->payment_title_id;
+            $customer->LeadCustomer->save();
+        }
 
         return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }

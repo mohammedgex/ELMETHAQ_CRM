@@ -138,17 +138,23 @@
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    <label class="font-weight-bold text-sm">نوع الاختبار</label>
-                                    <select name="test_type" class="form-control custom-select border-info" required>
-                                        <option value="">اختر النوع...</option>
-                                        <option value="اول اختبار"
-                                            {{ old('test_type') == 'اول اختبار' ? 'selected' : '' }}>أول اختبار</option>
-                                        <option value="اعادة اختبار"
-                                            {{ old('test_type') == 'اعادة اختبار' ? 'selected' : '' }}>إعادة اختبار
-                                        </option>
-                                        <option value="قيادة امنة"
-                                            {{ old('test_type') == 'قيادة امنة' ? 'selected' : '' }}>قيادة آمنة</option>
+                                    <label class="font-weight-bold text-sm text-primary">نوع المعاملة المالية (المسمى
+                                        المالي)</label>
+                                    <select name="payment_title_id"
+                                        class="form-control custom-select border-info shadow-sm">
+                                        <option value="">اختر نوع المعاملة...</option>
+
+                                        @foreach ($paymentTitles as $title)
+                                            <option value="{{ $title->id }}"
+                                                {{ old('payment_title_id') == $title->id || (isset($edit) && $edit->payment_title_id == $title->id) ? 'selected' : '' }}>
+                                                {{ $title->title }}
+                                            </option>
+                                        @endforeach
+
                                     </select>
+                                    @error('payment_title_id')
+                                        <small class="text-danger">{{ $message }}</small>
+                                    @enderror
                                 </div>
 
                                 <div class="form-group col-md-6">

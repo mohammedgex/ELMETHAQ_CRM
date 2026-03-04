@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Customer extends Model
 {
@@ -56,7 +57,8 @@ class Customer extends Model
         'passport_issuance_date',
         'archived_at',
         'fcm_token',
-        "hospital_address"
+        "hospital_address",
+        'payment_title_id'
     ];
 
     public function delegate()
@@ -127,5 +129,10 @@ class Customer extends Model
     public function accounts()
     {
         return $this->hasMany(Account::class);
+    }
+    public function paymentTitle(): BelongsTo
+    {
+        // لاحظ أننا نستخدم belongsTo لأن المفتاح الأجنبي موجود في جدول العملاء
+        return $this->belongsTo(PaymentTitle::class, 'payment_title_id');
     }
 }

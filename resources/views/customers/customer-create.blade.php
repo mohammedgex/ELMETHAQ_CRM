@@ -741,20 +741,18 @@
 
                             <div class="row my-2">
                                 <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #343a40;">الخبرة</label>
+                                    <label class="fw-bold" style="color: #343a40;">نوع المعاملة المالية</label>
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                        name="experience">
-                                        <option value="">اختر الخبرات</option>
-                                        <option value="جديد"
-                                            {{ old('experience', $edit->experience ?? '') == 'جديد' ? 'selected' : '' }}>
-                                            جديد</option>
-                                        <option value='قديم بركة تجارية'
-                                            {{ old('experience', $edit->experience ?? '') == 'قديم بركة تجارية' ? 'selected' : '' }}>
-                                            قديم بركة تجارية
-                                        </option>
-                                        <option value="قديم شركات"
-                                            {{ old('experience', $edit->experience ?? '') == 'قديم شركات' ? 'selected' : '' }}>
-                                            قديم شركات</option>
+                                        name="payment_title_id" @if (!auth()->user()?->permissions->contains('permission', 'financial-matters')) disabled @endif>
+                                        <option value="">اختر نوع المعاملة</option>
+
+                                        @foreach ($paymentTitles as $title)
+                                            <option value="{{ $title->id }}"
+                                                {{ old('payment_title_id', $edit->payment_title_id ?? '') == $title->id ? 'selected' : '' }}>
+                                                {{ $title->title }} ({{ number_format($title->price, 2) }} ج.م)
+                                            </option>
+                                        @endforeach
+
                                     </select>
                                 </div>
                             </div>

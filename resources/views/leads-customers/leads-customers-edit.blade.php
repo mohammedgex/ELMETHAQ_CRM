@@ -196,15 +196,16 @@
 
                                         <div class="form-group col-md-6 mb-3">
                                             <label class="font-weight-bold text-secondary">
-                                                <i class="fas fa-clipboard-check text-info ml-1"></i> نوع الاختبار
+                                                <i class="fas fa-money-bill-wave text-info ml-1"></i> نوع المعاملة المالية
                                             </label>
                                             <select class="form-control custom-select border-2 shadow-none"
-                                                name="test_type">
+                                                name="payment_title_id" @if (!auth()->user()?->permissions->contains('permission', 'financial-matters')) disabled @endif>
                                                 <option value="">اختر النوع...</option>
-                                                @foreach (['اول اختبار', 'اعادة اختبار', 'قيادة امنة'] as $type)
-                                                    <option value="{{ $type }}"
-                                                        {{ $lead->test_type == $type ? 'selected' : '' }}>
-                                                        {{ $type }}
+                                                @foreach ($paymentTitles as $payment)
+                                                    <option value="{{ $payment->id }}"
+                                                        {{ isset($lead) && $lead->payment_title_id == $payment->id ? 'selected' : '' }}>
+                                                        {{ $payment->title }} ({{ number_format($payment->price, 0) }}
+                                                        ج.م)
                                                     </option>
                                                 @endforeach
                                             </select>

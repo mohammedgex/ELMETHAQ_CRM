@@ -14,6 +14,7 @@ use App\Models\JobAnswer;
 use App\Models\JobQuestion;
 use App\Models\JobTitle;
 use App\Models\LeadsCustomers;
+use App\Models\PaymentTitle;
 use App\Models\Test;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -53,6 +54,7 @@ class LeadsCustomersController extends Controller
             ])
             ->paginate(20);
 
+        $paymentTitles = PaymentTitle::select('id', 'title')->get();
         $delegates = Delegate::select('id', 'name')->get();
         $jobs = JobTitle::select('id', 'title')->get();
         $groups = CustomerGroup::select('id', 'title')->get();
@@ -104,7 +106,8 @@ class LeadsCustomersController extends Controller
             'delegates' => $delegates,
             "governorates" => $governorates,
             "groups" => $groups,
-            "tests" => $tests
+            "tests" => $tests,
+            "paymentTitles" => $paymentTitles,
         ]);
     }
 
@@ -235,6 +238,7 @@ class LeadsCustomersController extends Controller
             'البحرين'
         ];
         $questions = JobQuestion::where('job_title_id', $lead->job_title_id)->get();
+        $paymentTitles = PaymentTitle::get();
 
         $history = $lead->historis()->where("description", "تم اضافة عميل محتمل جديد")->with('user')->latest()->first();
 
@@ -245,7 +249,8 @@ class LeadsCustomersController extends Controller
             "governorates" => $governorates,
             'error' => $error, // مررها للواجهة
             'questions' => $questions,
-            "history" => $history
+            "history" => $history,
+            "paymentTitles" => $paymentTitles,
         ]);
     }
 
@@ -310,6 +315,15 @@ class LeadsCustomersController extends Controller
         if ($request->delegate_id != null) {
             # code...
             $data['delegate_id'] = $request->delegate_id;
+        }
+        if ($request->payment_title_id != null) {
+            # code...
+            $data['payment_title_id'] = $request->payment_title_id;
+            if ($lead->customer_id) {
+                $customer = Customer::find($lead->customer_id);
+                $customer->payment_title_id = $request->payment_title_id;
+                $customer->save();
+            }
         }
 
         // التحديث النهائي
@@ -455,6 +469,7 @@ class LeadsCustomersController extends Controller
             }
         }
 
+        $paymentTitles = PaymentTitle::select('id', 'title')->get();
         $leads = $leads->latest()->paginate(20);
         $delegates = Delegate::all();
         $jobs = JobTitle::all();
@@ -509,6 +524,7 @@ class LeadsCustomersController extends Controller
             "governorates" => $governorates,
             "groups" => $groups,
             "tests" => $tests,
+            "paymentTitles" => $paymentTitles,
         ]);
     }
 

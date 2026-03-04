@@ -43,6 +43,7 @@ class LeadsCustomers extends Model
         'fcm_token',
         'licence_date_end',
         'notes',
+        'payment_title_id',
     ];
 
     protected $dates = [
@@ -104,5 +105,9 @@ class LeadsCustomers extends Model
     {
         # code...
         return $this->hasMany(History::class, 'lead_id');
+    }
+    public function paymentTitle()
+    {
+        return $this->belongsTo(PaymentTitle::class, 'payment_title_id');
     }
 }
