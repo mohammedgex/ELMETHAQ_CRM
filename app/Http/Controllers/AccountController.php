@@ -99,4 +99,11 @@ class AccountController extends Controller
             })
         );
     }
+
+    public function destroy(Account $account)
+    {
+        $account->delete();
+
+        return back()->with('success', 'تم حذف القيد بنجاح');
+    }
 }

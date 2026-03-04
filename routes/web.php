@@ -293,6 +293,9 @@ Route::group([
     )->name('accounts.customers.summary')->middleware("check.permission:financial-matters");
 
     Route::post('/customers/update-notes', [CustomerController::class, 'updateNotes'])->name('customers.updateNotes')->middleware("check.permission:financial-matters");
+
+    Route::delete('/accounts/{account}', [AccountController::class, 'destroy'])
+        ->name('accounts.destroy');
 });
 
 // قيادة امنة للسائقين

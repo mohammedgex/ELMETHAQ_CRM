@@ -20,6 +20,7 @@
                     <th>مدين</th>
                     <th>دائن</th>
                     <th>الوصف</th>
+                    <th width="100">إجراء</th> {{-- عمود جديد --}}
                 </tr>
             </thead>
             <tbody>
@@ -29,6 +30,19 @@
                         <td>{{ number_format($account->debit, 2) }}</td>
                         <td>{{ number_format($account->credit, 2) }}</td>
                         <td>{{ $account->description }}</td>
+
+                        <td>
+                            <form action="{{ route('accounts.destroy', $account->id) }}" method="POST"
+                                onsubmit="return confirm('هل أنت متأكد من حذف هذا القيد؟');">
+
+                                @csrf
+                                @method('DELETE')
+
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fas fa-trash"></i> حذف
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
