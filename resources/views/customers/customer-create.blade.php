@@ -741,18 +741,16 @@
 
                             <div class="row my-2">
                                 <div class="col-md-6">
-                                    <label class="fw-bold" style="color: #343a40;">نوع المعاملة المالية</label>
-                                    <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
-                                        name="payment_title_id" @if (!auth()->user()?->permissions->contains('permission', 'financial-matters')) disabled @endif>
-                                        <option value="">اختر نوع المعاملة</option>
+                                    <label class="fw-bold mb-2">عناوين الدفع</label>
+                                    <select class="form-control select2" name="payment_title_id[]" multiple
+                                        @if (!auth()->user()?->permissions->contains('permission', 'financial-matters')) disabled @endif>
 
                                         @foreach ($paymentTitles as $title)
                                             <option value="{{ $title->id }}"
-                                                {{ old('payment_title_id', $edit->payment_title_id ?? '') == $title->id ? 'selected' : '' }}>
-                                                {{ $title->title }} ({{ number_format($title->price, 2) }} ج.م)
+                                                {{ in_array($title->id, old('payment_title_id', optional($edit->paymentTitles)->pluck('id')->toArray() ?? [])) ? 'selected' : '' }}>
+                                                {{ $title->title }} — ({{ number_format($title->price, 2) }} ج.م)
                                             </option>
                                         @endforeach
-
                                     </select>
                                 </div>
                             </div>
@@ -1450,6 +1448,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <style>
         .timeline {
@@ -1605,6 +1604,69 @@
             font-size: 16px;
             text-align: center;
         }
+
+        /* إعدادات الألوان الافتراضية (Light Mode) */
+        :root {
+            --select2-bg: #ffffff;
+            --select2-border: #dee2e6;
+            --select2-text: #212529;
+            --select2-choice-bg: #007bff;
+            --select2-choice-text: #ffffff;
+            --select2-disabled-bg: #e9ecef;
+        }
+
+        /* إعدادات الألوان للوضع الداكن (Dark Mode) */
+        /* ملاحظة: تأكد من الكلاس المستخدم في قالبك (dark أو data-theme) */
+        body.dark-mode,
+        [data-theme='dark'] {
+            --select2-bg: #343a40;
+            --select2-border: #4b545c;
+            --select2-text: #f8f9fa;
+            --select2-choice-bg: #3f6791;
+            /* أزرق داكن هادئ */
+            --select2-choice-text: #ffffff;
+            --select2-disabled-bg: #454d55;
+        }
+
+        /* تطبيق المتغيرات على Select2 */
+        .select2-container--default .select2-selection--multiple {
+            background-color: var(--select2-bg) !important;
+            border: 1px solid var(--select2-border) !important;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: var(--select2-choice-bg) !important;
+            color: var(--select2-choice-text) !important;
+            border: none !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: rgba(255, 255, 255, 0.7) !important;
+            margin-right: 5px !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            color: #fff !important;
+        }
+
+        /* لون النص داخل القائمة المنسدلة */
+        .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+            color: var(--select2-text) !important;
+        }
+
+        /* حالة التعطيل Disabled */
+        .select2-container--default.select2-container--disabled .select2-selection--multiple {
+            background-color: var(--select2-disabled-bg) !important;
+            opacity: 0.8;
+        }
+
+        /* القائمة المنسدلة نفسها (Dropdown) */
+        .select2-dropdown {
+            background-color: var(--select2-bg) !important;
+            color: var(--select2-text) !important;
+            border: 1px solid var(--select2-border) !important;
+        }
     </style>
 
 @stop
@@ -1621,6 +1683,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let htmlMessage = "";
@@ -2163,4 +2227,18 @@
         });
     </script>
 
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "اختر نوع المعاملة",
+                allowClear: true,
+                width: '100%',
+            });
+
+            // لتحديث الألوان إذا تم التبديل بين Dark/Light
+            $(document).on('toggle-dark-mode', function(e, isDarkMode) {
+                $('.select2-container').toggleClass('dark-mode', isDarkMode);
+            });
+        });
+    </script>
 @stop

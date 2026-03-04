@@ -79,49 +79,83 @@
 
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table id="accountsTable" class="table m-0 table-hover table-valign-middle text-center">
+                    <table id="accountsTable"
+                        class="table m-0 table-hover table-valign-middle text-center custom-themed-table">
                         <thead>
                             <tr class="thead-custom-row">
                                 <th style="width: 50px;">#</th>
                                 <th class="text-left px-4">اسم العميل</th>
-                                <th>الحالة</th>
-                                <th style="width: 160px;">عدد الاختبارات</th>
-                                <th>إجمالي المدين</th>
-                                <th>إجمالي الدائن</th>
-                                <th>الرصيد النهائي</th>
+                                <th>نوع المعاملات</th>
+                                <th style="width: 120px;">عدد الاختبارات</th>
+                                <th>المدفوع</th>
+                                <th>المرتجعات</th>
+                                <th>صافي المدفوع</th>
+                                <th>المستحق</th>
+                                <th>صافي المتبقي</th>
                             </tr>
                         </thead>
                         <tbody>
                             @php
+                                // تعريف متغيرات الإجمالي العام في بداية الجدول
                                 $grandDebit = 0;
                                 $grandCredit = 0;
                                 $grandBalance = 0;
+                                $grandNet = 0;
+                                $grandTitlesPrice = 0;
                             @endphp
+
                             @forelse ($customers as $customer)
                                 @php
                                     $debit = $customer->total_debit ?? 0;
                                     $credit = $customer->total_credit ?? 0;
                                     $balance = $customer->balance ?? 0;
+                                    $totalTitlesPrice = $customer->paymentTitles->sum('price');
+                                    $netRemaining = $balance - $totalTitlesPrice;
+
+                                    // إضافة القيم للإجمالي العام
                                     $grandDebit += $debit;
                                     $grandCredit += $credit;
                                     $grandBalance += $balance;
+                                    $grandNet += $netRemaining;
+                                    $grandTitlesPrice += $totalTitlesPrice;
                                 @endphp
                                 <tr>
                                     <td class="text-muted small">#{{ $loop->iteration }}</td>
-                                    <td class="text-left font-weight-bold px-4">
-                                        <a href="{{ route('accounts.index', $customer->id) }}" class="customer-link">
-                                            {{ $customer->name_ar }}
-                                        </a>
+
+                                    <td class="px-4">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <a href="{{ route('accounts.index', $customer->id) }}"
+                                                class="customer-info-link d-flex align-items-center text-decoration-none">
+                                                <div class="avatar-icon-wrapper mr-2"><i
+                                                        class="fas fa-user-circle fa-2xl"></i></div>
+                                                <div class="text-right">
+                                                    <div class="customer-name font-weight-bold">{{ $customer->name_ar }}
+                                                    </div>
+                                                    <small class="customer-phone">{{ $customer->phone }}</small>
+                                                </div>
+                                            </a>
+                                            <a href="{{ route('customer.add', $customer->id) }}"
+                                                class="btn btn-edit-icon btn-sm ml-2"><i class="fas fa-edit"></i></a>
+                                        </div>
                                     </td>
+
                                     <td>
-                                        <span class="badge badge-outline-secondary px-2 text-white">
-                                            {{ $customer->experience ?? '---' }}
-                                        </span>
+                                        @forelse ($customer->paymentTitles as $payment)
+                                            <span class="badge badge-pill custom-item-badge mb-1 mr-1">
+                                                {{ $payment->title }} -
+                                                <span class="item-price">{{ number_format($payment->price, 2) }} ج.م</span>
+                                            </span>
+                                        @empty
+                                            <span class="text-muted small italic">
+                                                <i class="fas fa-info-circle mr-1"></i> لا توجد عملية سداد
+                                            </span>
+                                        @endforelse
                                     </td>
+
                                     <td>
                                         @if (empty($customer->notes) || $customer->notes == 0)
                                             <div class="notes-edit input-group input-group-sm mx-auto"
-                                                style="max-width: 120px;" data-id="{{ $customer->id }}">
+                                                style="max-width: 100px;" data-id="{{ $customer->id }}">
                                                 <input type="number" class="form-control notes-input" placeholder="0">
                                                 <div class="input-group-append">
                                                     <button class="btn btn-primary notes-save"><i
@@ -135,29 +169,61 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="text-info font-weight-bold">{{ number_format($debit, 2) }}</td>
-                                    <td class="text-warning font-weight-bold">{{ number_format($credit, 2) }}</td>
+
+                                    <td class="financial-cell debit-cell">{{ number_format($debit, 2) }}</td>
+                                    <td class="financial-cell credit-cell">{{ number_format($credit, 2) }}</td>
+
                                     <td>
                                         <span
-                                            class="badge {{ $balance >= 0 ? 'badge-success' : 'badge-danger' }} balance-pill">
+                                            class="badge {{ $balance >= 0 ? 'badge-success' : 'badge-danger' }} balance-pill px-3 py-2">
                                             {{ number_format($balance, 2) }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <span
+                                            class="badge total-summary-badge {{ $totalTitlesPrice < 0 ? 'is-negative' : 'is-positive' }}">
+                                            {{ number_format($totalTitlesPrice, 2) }}
+                                        </span>
+                                    </td>
+
+                                    <td class="vertical-align-middle">
+                                        <span
+                                            class="badge net-remaining-pill px-3 py-2 {{ $netRemaining >= 0 ? 'net-positive' : 'net-negative' }}">
+                                            <i
+                                                class="fas {{ $netRemaining >= 0 ? 'fa-check-circle' : 'fa-exclamation-circle' }} mr-1"></i>
+                                            {{ number_format($netRemaining, 2) }}
                                         </span>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7" class="py-5 text-muted">لا توجد بيانات متاحة</td>
+                                    <td colspan="9" class="py-5 text-muted">لا توجد بيانات متاحة</td>
                                 </tr>
                             @endforelse
                         </tbody>
+
                         @if ($customers->count() > 0)
                             <tfoot class="bg-footer-row">
                                 <tr class="font-weight-bold">
-                                    <td colspan="4" class="text-right pr-4">الإجمالي العام</td>
-                                    <td class="text-info text-md">{{ number_format($grandDebit, 2) }}</td>
-                                    <td class="text-warning text-md">{{ number_format($grandCredit, 2) }}</td>
-                                    <td class="{{ $grandBalance >= 0 ? 'text-success' : 'text-danger' }} text-md">
+                                    <td colspan="4" class="text-right pr-4 align-middle">الإجمالي العام</td>
+                                    <td class="text-info text-md align-middle">{{ number_format($grandDebit, 2) }}</td>
+                                    <td class="text-warning text-md align-middle">{{ number_format($grandCredit, 2) }}
+                                    </td>
+                                    <td
+                                        class="{{ $grandBalance >= 0 ? 'text-success' : 'text-danger' }} text-md align-middle">
                                         {{ number_format($grandBalance, 2) }}
+                                    </td>
+                                    <td class="align-middle {{ $grandTitlesPrice < 0 ? 'text-danger' : 'text-dark' }}">
+                                        {{ number_format($grandTitlesPrice, 2) }}
+                                    </td>
+                                    <td class="align-middle">
+                                        <span
+                                            class="badge {{ $grandNet >= 0 ? 'net-positive' : 'net-negative' }} px-3 py-2 shadow-sm"
+                                            style="font-size: 0.95rem;">
+                                            {{ number_format($grandNet, 2) }}
+                                            <small>ج.م</small>
+                                        </span>
                                     </td>
                                 </tr>
                             </tfoot>
@@ -170,8 +236,106 @@
 @endsection
 
 @section('css')
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
+        /* الإعدادات العامة للـ Badge */
+        .net-remaining-pill {
+            font-weight: 700;
+            min-width: 100px;
+            border-radius: 6px;
+        }
+
+        /* --- Light Mode --- */
+        /* موجب - أخضر */
+        .net-positive {
+            background-color: #28a745 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 4px rgba(40, 167, 69, 0.2);
+        }
+
+        /* سالب - أحمر */
+        .net-negative {
+            background-color: #dc3545 !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+        }
+
+        /* --- Dark Mode --- */
+        /* بنستخدم درجات أهدى شوية في الدارك مود عشان العين */
+        [data-theme="dark"] .net-positive,
+        .dark-mode .net-positive {
+            background-color: rgba(40, 167, 69, 0.2) !important;
+            color: #4ade80 !important;
+            border: 1px solid #28a745;
+        }
+
+        [data-theme="dark"] .net-negative,
+        .dark-mode .net-negative {
+            background-color: rgba(220, 53, 69, 0.2) !important;
+            color: #fb7185 !important;
+            border: 1px solid #dc3545;
+        }
+
+        /* ستايل المعاملات الصغيرة */
+        .custom-item-badge {
+            background: rgba(0, 0, 0, 0.05);
+            color: inherit;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            font-size: 0.8rem;
+            padding: 5px 10px;
+        }
+
+        .item-price {
+            font-weight: 600;
+            margin-right: 4px;
+        }
+
+        /* ستايل Badge الإجمالي */
+        .total-summary-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        /* حالة الإجمالي الموجب */
+        .is-positive {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* حالة الإجمالي السالب (مديونية) */
+        .is-negative {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* --- Dark Mode Support --- */
+        [data-theme="dark"] .custom-item-badge,
+        .dark-mode .custom-item-badge {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        [data-theme="dark"] .is-positive,
+        .dark-mode .is-positive {
+            background-color: rgba(40, 167, 69, 0.2);
+            color: #4ade80;
+            border-color: #28a745;
+        }
+
+        [data-theme="dark"] .is-negative,
+        .dark-mode .is-negative {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #fb7185;
+            border-color: #dc3545;
+        }
+
         /* الأساسيات */
         .page-main-title {
             font-size: 1.5rem;
@@ -312,8 +476,24 @@
 @stop
 
 @section('js')
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var table = $('#accountsTable').DataTable({
+                "searching": true, // تفعيل البحث
+                "paging": false, // إيقاف ترقيم الصفحات (لو تريد عرض كل العملاء مرة واحدة)
+                "info": false, // إخفاء نص "عرض 1 من 10"
+                "dom": 'frt', // هذا هو السر: f للبحث، r للمعالجة، t للجدول. (حذفنا حرف l الخاص بالمدخلات)
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.7/i18n/ar.json"
+                },
+            });
+        });
+    </script>
     <script>
         $(document).ready(function() {
             // تهيئة Select2

@@ -177,6 +177,10 @@ class LeadsCustomersController extends Controller
         if ($request->delegate_id && $lead->delegate && $lead->delegate->phone && strlen($phoneDelegate) == 11) {
             app(ApiAppController::class)->sendSms($lead->delegate->phone, "تم تسجيل العميل: " . $lead['name']);
         }
+        if ($request->payment_title_id != null) {
+            # code...
+            $lead->paymentTitles()->sync($request->payment_title_id);
+        }
 
         return redirect()->back();
     }
@@ -318,11 +322,10 @@ class LeadsCustomersController extends Controller
         }
         if ($request->payment_title_id != null) {
             # code...
-            $data['payment_title_id'] = $request->payment_title_id;
+            $lead->paymentTitles()->sync($request->payment_title_id);
             if ($lead->customer_id) {
                 $customer = Customer::find($lead->customer_id);
-                $customer->payment_title_id = $request->payment_title_id;
-                $customer->save();
+                $customer->paymentTitles()->sync($request->payment_title_id);
             }
         }
 
@@ -438,6 +441,10 @@ class LeadsCustomersController extends Controller
             $license_photo->customer_id = $customer->id;
             $license_photo->required = "اجباري";
             $license_photo->save();
+            if ($lead->paymentTitles) {
+                # code...
+                $customer->paymentTitles()->sync($lead->paymentTitles->pluck('id')->toArray());
+            }
 
             $blackList = new BlackList();
             $blackList->block = false;

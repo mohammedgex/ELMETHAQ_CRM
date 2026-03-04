@@ -140,20 +140,20 @@
                                 <div class="form-group col-md-6">
                                     <label class="font-weight-bold text-sm text-primary">نوع المعاملة المالية (المسمى
                                         المالي)</label>
-                                    <select name="payment_title_id"
-                                        class="form-control custom-select border-info shadow-sm">
-                                        <option value="">اختر نوع المعاملة...</option>
+
+                                    <select name="payment_title_id[]" class="form-control select2 fw-bold" multiple
+                                        data-placeholder="اختر المسميات المالية...">
 
                                         @foreach ($paymentTitles as $title)
-                                            <option value="{{ $title->id }}"
-                                                {{ old('payment_title_id') == $title->id || (isset($edit) && $edit->payment_title_id == $title->id) ? 'selected' : '' }}>
-                                                {{ $title->title }}
+                                            <option value="{{ $title->id }}" @selected(in_array($title->id, old('payment_title_id', [])))>
+                                                {{ $title->title }} — ({{ number_format($title->price, 2) }} ج.م)
                                             </option>
                                         @endforeach
 
                                     </select>
+
                                     @error('payment_title_id')
-                                        <small class="text-danger">{{ $message }}</small>
+                                        <small class="text-danger mt-1 d-block">{{ $message }}</small>
                                     @enderror
                                 </div>
 
@@ -744,6 +744,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         .loader {
             border: 5px solid #f3f3f3;
@@ -827,13 +828,81 @@
             background: #f0f8ff;
             transition: 0.2s;
         }
+
+        /* الألوان الأساسية - Light Mode */
+        :root {
+            --select2-bg: #ffffff;
+            --select2-border: #17a2b8;
+            --select2-text: #333;
+            --select2-pill: #e3f2fd;
+            --select2-pill-text: #007bff;
+        }
+
+        /* الألوان في Dark Mode */
+        body.dark-mode,
+        [data-theme='dark'] {
+            --select2-bg: #2c3034;
+            --select2-border: #3bc3d9;
+            --select2-text: #e9ecef;
+            --select2-pill: #1f3a56;
+            --select2-pill-text: #74c0fc;
+        }
+
+        /* تنسيق الحاوية الرئيسية */
+        .select2-container--default .select2-selection--multiple {
+            min-height: 55px !important;
+            background-color: var(--select2-bg) !important;
+            border: 1px solid var(--select2-border) !important;
+            border-radius: 10px !important;
+            padding: 5px !important;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* تنسيق العناصر المختارة (الكبسولات) */
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background-color: var(--select2-pill) !important;
+            border: 1px solid var(--select2-pill-text) !important;
+            color: var(--select2-pill-text) !important;
+            border-radius: 6px !important;
+            padding: 3px 10px !important;
+            font-weight: 600;
+        }
+
+        /* تنسيق زر الحذف داخل الكبسولة */
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+            color: var(--select2-pill-text) !important;
+            margin-right: 5px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__remove:hover {
+            background: transparent !important;
+            color: #ff4d4d !important;
+        }
+
+        /* القائمة المنسدلة */
+        .select2-dropdown {
+            background-color: var(--select2-bg) !important;
+            border-color: var(--select2-border) !important;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .select2-results__option {
+            color: var(--select2-text) !important;
+        }
+
+        /* تأثير التحديد في القائمة */
+        .select2-container--default .select2-results__option--highlighted[aria-selected] {
+            background-color: var(--select2-border) !important;
+            color: white !important;
+        }
     </style>
 @stop
 
 @section('js')
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <!-- DataTables Buttons -->
     <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -1637,6 +1706,15 @@
                         })
                         .catch(err => console.error(err));
                 }
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "اختر نوع المعاملة...",
+                allowClear: true,
+                width: '100%',
             });
         });
     </script>

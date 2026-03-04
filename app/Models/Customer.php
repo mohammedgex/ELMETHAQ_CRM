@@ -58,7 +58,6 @@ class Customer extends Model
         'archived_at',
         'fcm_token',
         "hospital_address",
-        'payment_title_id'
     ];
 
     public function delegate()
@@ -130,9 +129,8 @@ class Customer extends Model
     {
         return $this->hasMany(Account::class);
     }
-    public function paymentTitle(): BelongsTo
+    public function paymentTitles()
     {
-        // لاحظ أننا نستخدم belongsTo لأن المفتاح الأجنبي موجود في جدول العملاء
-        return $this->belongsTo(PaymentTitle::class, 'payment_title_id');
+        return $this->belongsToMany(PaymentTitle::class);
     }
 }

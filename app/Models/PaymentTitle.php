@@ -14,8 +14,12 @@ class PaymentTitle extends Model
     {
         return $this->hasMany(Payments::class);
     }
-    public function customers(): HasMany
+    public function customers()
     {
-        return $this->hasMany(Customer::class, 'payment_title_id');
+        return $this->belongsToMany(Customer::class);
+    }
+    public function leadCustomers()
+    {
+        return $this->belongsToMany(LeadsCustomers::class, 'lead_customer_payment_title');
     }
 }

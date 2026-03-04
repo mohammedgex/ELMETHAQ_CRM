@@ -177,14 +177,15 @@ class CustomerController extends Controller
             }
         }
 
+
         // تحديث البيانات كلها
         $customer->update($data);
-        if ($request->filled('payment_title_id') != null && $customer->LeadCustomer != null) {
-            # code...
-            $customer->LeadCustomer->payment_title_id = $request->payment_title_id;
-            $customer->LeadCustomer->save();
+        if ($request->filled('payment_title_id')) {
+            $customer->paymentTitles()->sync($request->payment_title_id);
+            if ($customer->LeadCustomer) {
+                $customer->LeadCustomer->paymentTitles()->sync($request->payment_title_id);
+            }
         }
-
         return redirect()->route("customer.add", $customer->id)->with('tap', 'info');
     }
 

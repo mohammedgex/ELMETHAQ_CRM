@@ -23,7 +23,7 @@ class PaymentTitleController extends Controller
         // 1. التحقق من البيانات (Validation)
         $request->validate([
             'title' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0', // إضافة التحقق من السعر
+            'price' => 'required|numeric', // إضافة التحقق من السعر
         ]);
 
         // 2. الحفظ (استخدام create أفضل إذا كنت فعلت الـ fillable في الموديل)
@@ -37,7 +37,7 @@ class PaymentTitleController extends Controller
         // 1. التحقق من البيانات
         $request->validate([
             'title' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric',
         ]);
 
         // 2. التحديث

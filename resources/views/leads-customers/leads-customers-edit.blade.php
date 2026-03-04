@@ -195,20 +195,31 @@
                                         </div>
 
                                         <div class="form-group col-md-6 mb-3">
-                                            <label class="font-weight-bold text-secondary">
-                                                <i class="fas fa-money-bill-wave text-info ml-1"></i> نوع المعاملة المالية
+                                            <label class="fw-bold text-secondary mb-2">
+                                                <i class="fas fa-money-bill-wave text-info ml-1"></i>
+                                                نوع المعاملة المالية
                                             </label>
-                                            <select class="form-control custom-select border-2 shadow-none"
-                                                name="payment_title_id" @if (!auth()->user()?->permissions->contains('permission', 'financial-matters')) disabled @endif>
-                                                <option value="">اختر النوع...</option>
+
+                                            <select
+                                                class="form-control select2 custom-select custom-dark-select border-2 shadow-none"
+                                                name="payment_title_id[]" multiple
+                                                style="width: 100%; min-height: 60px; border-radius: 8px;"
+                                                @if (!auth()->user()?->permissions->contains('permission', 'financial-matters')) disabled @endif>
+
+                                                <option value="" disabled>اختر النوع...</option>
+
                                                 @foreach ($paymentTitles as $payment)
                                                     <option value="{{ $payment->id }}"
-                                                        {{ isset($lead) && $lead->payment_title_id == $payment->id ? 'selected' : '' }}>
-                                                        {{ $payment->title }} ({{ number_format($payment->price, 0) }}
+                                                        {{ isset($lead) && in_array($payment->id, optional($lead->paymentTitles)->pluck('id')->toArray() ?? []) ? 'selected' : '' }}>
+                                                        {{ $payment->title }} — ({{ number_format($payment->price, 0) }}
                                                         ج.م)
                                                     </option>
                                                 @endforeach
                                             </select>
+
+                                            @error('payment_title_id')
+                                                <small class="text-danger">{{ $message }}</small>
+                                            @enderror
                                         </div>
 
                                         <div class="form-group col-md-6 mb-3">
@@ -778,6 +789,7 @@
 
 @section('css')
     <link href="https://cdn.jsdelivr.net/npm/cropperjs@1.6.2/dist/cropper.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
         /* تحسينات CSS للمودال وتخطيط الصور */
         #cropperModal .modal-content {
@@ -932,12 +944,69 @@
             border-color: var(#dee2e6);
             font-weight: 600;
         }
+
+        /* الإعدادات الافتراضية (Light Mode) */
+        :root {
+            --select-bg: #ffffff;
+            --select-text: #333333;
+            --select-border: #dee2e6;
+            --select-shadow: rgba(0, 0, 0, 0.05);
+            --select-option-hover: #f8f9fa;
+        }
+
+        /* إعدادات الدارك مود (بيشتغل لو البودي عليه كلاس dark أو حسب إعدادات الويندوز) */
+        [data-theme="dark"],
+        .dark-mode {
+            --select-bg: #2b2b2b;
+            --select-text: #e0e0e0;
+            --select-border: #444444;
+            --select-shadow: rgba(0, 0, 0, 0.3);
+            --select-option-hover: #3d3d3d;
+        }
+
+        /* تطبيق الاستايل على Select2 */
+        .custom-dark-select+.select2-container .select2-selection--multiple {
+            background-color: var(--select-bg) !important;
+            border: 2px solid var(--select-border) !important;
+            border-radius: 8px !important;
+            color: var(--select-text) !important;
+            padding: 5px !important;
+        }
+
+        /* تظبيط شكل الـ Tags المختارة (Choices) */
+        .custom-dark-select+.select2-container .select2-selection__choice {
+            background-color: #007bff !important;
+            /* لون أزرق براند */
+            border: none !important;
+            color: #fff !important;
+            border-radius: 4px !important;
+            padding: 2px 8px !important;
+        }
+
+        /* تظبيط القائمة المنسدلة نفسها */
+        .select2-dropdown {
+            background-color: var(--select-bg) !important;
+            border: 1px solid var(--select-border) !important;
+            color: var(--select-text) !important;
+        }
+
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: var(--select-option-hover) !important;
+            color: var(--select-text) !important;
+        }
+
+        /* حالة الـ Disabled */
+        .custom-dark-select:disabled+.select2-container .select2-selection--multiple {
+            background-color: #e9ecef !important;
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
     </style>
 @stop
 
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         // إصلاح مشاكل اقتصاص الصورة
         // إصلاح مشاكل اقتصاص الصورة
@@ -1638,6 +1707,15 @@
                         console.error("خطأ في جلب الأسئلة:", err);
                         questionsContainer.innerHTML = "<p class='text-danger'>تعذر تحميل الأسئلة</p>";
                     });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "اختر النوع...",
+                allowClear: true,
+                width: '100%',
             });
         });
     </script>

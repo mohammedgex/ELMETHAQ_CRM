@@ -85,8 +85,13 @@
                                 <tr>
                                     <td class="font-weight-bold text-muted">#{{ $payment->id }}</td>
                                     <td class="text-center pr-4">{{ $payment->title }}</td>
-                                    <td><span class="badge badge-pill badge-info px-3 py-2"
-                                            style="font-size: 0.9rem;">{{ number_format($payment->price, 2) }} ج.م</span>
+                                    <td>
+                                        <span
+                                            class="badge badge-pill px-3 py-2 {{ $payment->price < 0 ? 'badge-danger' : 'badge-info' }}"
+                                            style="font-size: 0.9rem;">
+                                            {{ $payment->price < 0 ? '-' : '' }}
+                                            {{ number_format(abs($payment->price), 2) }} ج.م
+                                        </span>
                                     </td>
                                     <td>
                                         <div class="btn-group">

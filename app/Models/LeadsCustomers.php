@@ -43,7 +43,6 @@ class LeadsCustomers extends Model
         'fcm_token',
         'licence_date_end',
         'notes',
-        'payment_title_id',
     ];
 
     protected $dates = [
@@ -106,8 +105,13 @@ class LeadsCustomers extends Model
         # code...
         return $this->hasMany(History::class, 'lead_id');
     }
-    public function paymentTitle()
+    public function paymentTitles()
     {
-        return $this->belongsTo(PaymentTitle::class, 'payment_title_id');
+        return $this->belongsToMany(
+            PaymentTitle::class,
+            'lead_customer_payment_title', // اسم جدول الـ pivot
+            'lead_customer_id',            // اسم العمود الذي يشير إلى هذا الموديل
+            'payment_title_id'             // اسم العمود الذي يشير إلى الموديل المرتبط
+        );
     }
 }
