@@ -105,7 +105,7 @@
                                 $grandTitlesPrice = 0;
                             @endphp
 
-                            @forelse ($customers as $customer)
+                            @forelse ($customers as $customer )
                                 @php
                                     $debit = $customer->total_debit ?? 0;
                                     $credit = $customer->total_credit ?? 0;
@@ -121,7 +121,7 @@
                                     $grandTitlesPrice += $totalTitlesPrice;
                                 @endphp
                                 <tr>
-                                    <td class="text-muted small">#{{ $loop->iteration }}</td>
+                                    <td class="text-muted small">{{ $loop->iteration }}</td>
 
                                     <td class="px-4">
                                         <div class="d-flex align-items-center justify-content-between">
@@ -210,7 +210,7 @@
                         @if ($customers->count() > 0)
                             <tfoot class="bg-footer-row">
                                 <tr class="font-weight-bold">
-                                    <td colspan="4" class="text-right pr-4 align-middle">الإجمالي العام</td>
+                                    <td colspan="5" class="text-right pr-4 align-middle">الإجمالي العام</td>
                                     <td class="text-info text-md align-middle">{{ number_format($grandDebit, 2) }}</td>
                                     <td class="text-warning text-md align-middle">{{ number_format($grandCredit, 2) }}
                                     </td>
