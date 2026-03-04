@@ -85,6 +85,7 @@
                             <tr class="thead-custom-row">
                                 <th style="width: 50px;">#</th>
                                 <th class="text-left px-4">اسم العميل</th>
+                                <th>الهاتف</th>
                                 <th>نوع المعاملات</th>
                                 <th style="width: 120px;">عدد الاختبارات</th>
                                 <th>المدفوع</th>
@@ -131,12 +132,15 @@
                                                 <div class="text-right">
                                                     <div class="customer-name font-weight-bold">{{ $customer->name_ar }}
                                                     </div>
-                                                    <small class="customer-phone">{{ $customer->phone }}</small>
                                                 </div>
                                             </a>
                                             <a href="{{ route('customer.add', $customer->id) }}"
                                                 class="btn btn-edit-icon btn-sm ml-2"><i class="fas fa-edit"></i></a>
                                         </div>
+                                    </td>
+                                    <td>
+                                        <p class="customer-phone">{{ $customer->phone }}</p>
+
                                     </td>
 
                                     <td>
