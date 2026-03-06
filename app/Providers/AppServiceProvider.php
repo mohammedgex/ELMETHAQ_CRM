@@ -83,6 +83,13 @@ class AppServiceProvider extends ServiceProvider
                     'url' => 'admin/home'
                 ];
             }
+            if ($user->role === 'admin' || $user->permissions->contains('permission', 'financial-matters')) {
+                $existingMenu[] = [
+                    'text' => 'كشف الحساب اليومي',
+                    'icon' => 'fas fa-file-invoice-dollar',
+                    'url' => 'admin/accounts/day'
+                ];
+            }
             if ($user && ($user->role === 'admin' || $user->permissions->contains('permission', 'deep-search-access'))) {
                 $existingMenu[] = [
                     'text' => 'البحث المتقدم',
