@@ -211,7 +211,7 @@ class AppServiceProvider extends ServiceProvider
                     'icon' => 'fas fa-file-alt' // مستند نصي
                 ],
                 [
-                    'permission' => 'payment-create',
+                    'permission' => 'financial-matters',
                     'text' => 'تعريف المعاملات المالية',
                     'url' => 'admin/payment-type-view',
                     'icon' => 'fas fa-hand-holding-usd' // رمز مالي

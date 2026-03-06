@@ -106,4 +106,17 @@ class AccountController extends Controller
 
         return back()->with('success', 'تم حذف القيد بنجاح');
     }
+
+    public function accDay(Request $request)
+    {
+        $date = $request->input('date', date('Y-m-d'));
+        $accounts = Account::with('customer')->whereDate('created_at', $date)->get();
+
+        // الحسابات المالية
+        $totalDebit = $accounts->sum('debit');
+        $totalCredit = $accounts->sum('credit');
+        $netBalance = $totalCredit - $totalDebit; // صافي الحركة
+
+        return view('accounts.acc-day', compact('accounts', 'date', 'totalDebit', 'totalCredit', 'netBalance'));
+    }
 }

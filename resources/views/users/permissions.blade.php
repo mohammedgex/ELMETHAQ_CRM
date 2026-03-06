@@ -45,7 +45,6 @@
                                     'bag-create' => 'تعريف الحقائب',
                                     'group-create' => 'تعريف المجموعات',
                                     'file-create' => 'تعريف المستندات',
-                                    'payment-create' => 'تعريف المعاملات المالية',
                                     'test-create' => 'الاختبارات',
                                     'job-create' => 'تعريف الوظائف',
                                     'bulk-sms-access' => 'ارسال رسائل',

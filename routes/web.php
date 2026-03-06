@@ -296,6 +296,8 @@ Route::group([
 
     Route::delete('/accounts/{account}', [AccountController::class, 'destroy'])
         ->name('accounts.destroy');
+
+    Route::get('/accounts/day', [AccountController::class, 'accDay'])->name('accounts.day');
 });
 
 // قيادة امنة للسائقين
