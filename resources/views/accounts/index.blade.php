@@ -46,18 +46,10 @@
                                 </span>
                             @empty
                                 <span class="text-muted small italic w-100 border p-2 rounded text-center">
-                                    <i class="fas fa-info-circle mr-1"></i> لا توجد بنود سداد مسجلة
+                                    لا توجد بنود سداد مسجلة
                                 </span>
                             @endforelse
                         </div>
-                        @if ($customer->paymentTitles->isNotEmpty())
-                            <div class="mt-2 text-right">
-                                <small class="text-muted">إجمالي البنود:</small>
-                                <span class="text-bold {{ $totalTitlesPrice < 0 ? 'text-danger' : 'text-dark' }}">
-                                    {{ number_format($totalTitlesPrice, 2) }} ج.م
-                                </span>
-                            </div>
-                        @endif
                     </div>
 
                     <hr class="my-3">
@@ -76,16 +68,35 @@
                     </div>
 
                     <div
-                        class="summary-item p-3 rounded shadow-sm {{ $balance >= 0 ? 'bg-success-light border border-success' : 'bg-danger-light border border-danger' }}">
+                        class="summary-item p-2 mb-3 rounded shadow-sm {{ $balance >= 0 ? 'bg-success-light' : 'bg-danger-light' }}">
                         <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="text-bold d-block">الرصيد الحالي</span>
-                                <small
-                                    class="opacity-75">{{ $balance >= 0 ? 'رصيد دائن (له)' : 'رصيد مدين (عليه)' }}</small>
-                            </div>
-                            <span class="h4 mb-0 text-bold">{{ number_format($balance, 2) }}</span>
+                            <span class="small font-weight-bold">رصيد الحسابات:</span>
+                            <span class="text-bold">{{ number_format($balance, 2) }}</span>
                         </div>
                     </div>
+
+                    <hr class="my-3 shadow-sm" style="border-top: 2px dashed #bbb;">
+
+                    @php
+                        // المتبقي = إجمالي البنود - الرصيد الحالي
+                        $finalRequired = $totalTitlesPrice - $balance;
+                    @endphp
+
+                    <div class="final-balance-card p-3 rounded bg-dark shadow">
+                        <div class="text-center">
+                            <span class="text-uppercase small d-block mb-1" style="letter-spacing: 1px;">المتبقي النهائي
+                                المطلوب:</span>
+                            <h3 class="mb-0 text-bold {{ $finalRequired <= 0 ? 'text-success' : 'text-warning' }}">
+                                {{ number_format($finalRequired, 2) }} <small>ج.م</small>
+                            </h3>
+                            @if ($finalRequired < 0)
+                                <small class="text-success font-italic">يوجد فائض للعميل</small>
+                            @elseif($finalRequired > 0)
+                                <small class="text-warning font-italic">يجب تحصيل هذا المبلغ</small>
+                            @endif
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
