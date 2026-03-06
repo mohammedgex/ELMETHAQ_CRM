@@ -57,13 +57,13 @@
                     <div class="summary-item mb-2 p-2 rounded bg-light-custom border-left border-danger">
                         <div class="d-flex justify-content-between">
                             <span class="small text-muted font-weight-bold">إجمالي مدين</span>
-                            <span class="text-danger text-bold">{{ number_format($totalDebit, 2) }}</span>
+                            <span class="text-success text-bold">{{ number_format($totalDebit, 2) }}</span>
                         </div>
                     </div>
                     <div class="summary-item mb-3 p-2 rounded bg-light-custom border-left border-success">
                         <div class="d-flex justify-content-between">
                             <span class="small text-muted font-weight-bold">إجمالي دائن</span>
-                            <span class="text-success text-bold">{{ number_format($totalCredit, 2) }}</span>
+                            <span class="text-danger text-bold">{{ number_format($totalCredit, 2) }}</span>
                         </div>
                     </div>
 
@@ -113,8 +113,8 @@
                                 <tr>
                                     <th class="pl-4">التاريخ</th>
                                     <th>البيان</th>
-                                    <th class="text-center">مدين (-)</th>
-                                    <th class="text-center">دائن (+)</th>
+                                    <th class="text-center">مدين (+)</th>
+                                    <th class="text-center">دائن (-)</th>
                                     <th class="text-center">الرصيد</th>
                                     <th class="text-center">إجراء</th>
                                 </tr>
@@ -122,7 +122,7 @@
                             <tbody>
                                 @php $runningBalance = 0; @endphp
                                 @forelse ($accounts as $account)
-                                    @php $runningBalance += ($account->credit - $account->debit); @endphp
+                                    @php $runningBalance += ( $account->debit - $account->credit); @endphp
                                     <tr>
                                         <td class="pl-4">
                                             <div class="text-bold mb-0 small">{{ $account->created_at->format('d-m-Y') }}
@@ -136,13 +136,13 @@
                                         </td>
                                         <td class="text-center">
                                             <span
-                                                class="{{ $account->debit > 0 ? 'text-danger-custom text-bold' : 'text-muted opacity-50' }}">
+                                                class="{{ $account->debit > 0 ? 'text-success-custom text-bold' : 'text-muted opacity-50' }}">
                                                 {{ $account->debit > 0 ? number_format($account->debit, 2) : '0.00' }}
                                             </span>
                                         </td>
                                         <td class="text-center">
                                             <span
-                                                class="{{ $account->credit > 0 ? 'text-success-custom text-bold' : 'text-muted opacity-50' }}">
+                                                class="{{ $account->credit > 0 ? 'text-danger-custom text-bold' : 'text-muted opacity-50' }}">
                                                 {{ $account->credit > 0 ? number_format($account->credit, 2) : '0.00' }}
                                             </span>
                                         </td>

@@ -9,19 +9,19 @@
 @section('content')
     <div class="row">
         <div class="col-md-4 col-sm-6 col-12">
-            <div class="info-box bg-danger shadow-sm">
+            <div class="info-box bg-success shadow-sm">
                 <span class="info-box-icon"><i class="fas fa-arrow-up"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">إجمالي المدين (خارج)</span>
+                    <span class="info-box-text">إجمالي المدين (داخل)</span>
                     <span class="info-box-number">{{ number_format($totalDebit, 2) }}</span>
                 </div>
             </div>
         </div>
         <div class="col-md-4 col-sm-6 col-12">
-            <div class="info-box bg-success shadow-sm">
+            <div class="info-box  bg-danger shadow-sm">
                 <span class="info-box-icon"><i class="fas fa-arrow-down"></i></span>
                 <div class="info-box-content">
-                    <span class="info-box-text">إجمالي الدائن (داخل)</span>
+                    <span class="info-box-text">إجمالي الدائن (خارج)</span>
                     <span class="info-box-number">{{ number_format($totalCredit, 2) }}</span>
                 </div>
             </div>
@@ -85,13 +85,13 @@
                                 </td>
                                 <td class="text-center">
                                     <span class="badge badge-pill badge-outline-danger px-3 py-2"
-                                        style="font-size: 0.9rem; border: 1px solid #dc3545; color: #dc3545;">
+                                        style="font-size: 0.9rem; border: 1px solid #28a745; color: #28a745;">
                                         {{ number_format($account->debit, 2) }}
                                     </span>
                                 </td>
                                 <td class="text-center">
                                     <span class="badge badge-pill badge-outline-success px-3 py-2"
-                                        style="font-size: 0.9rem; border: 1px solid #28a745; color: #28a745;">
+                                        style="font-size: 0.9rem; border: 1px solid #dc3545; color: #dc3545;">
                                         {{ number_format($account->credit, 2) }}
                                     </span>
                                 </td>

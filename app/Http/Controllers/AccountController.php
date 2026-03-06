@@ -115,7 +115,7 @@ class AccountController extends Controller
         // الحسابات المالية
         $totalDebit = $accounts->sum('debit');
         $totalCredit = $accounts->sum('credit');
-        $netBalance = $totalCredit - $totalDebit; // صافي الحركة
+        $netBalance = $totalDebit - $totalCredit; // صافي الحركة
 
         return view('accounts.acc-day', compact('accounts', 'date', 'totalDebit', 'totalCredit', 'netBalance'));
     }

@@ -37,34 +37,34 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="debit" class="text-danger"><i class="fas fa-minus-circle mr-1"></i> مبلغ
-                                        مدين (عليه)</label>
+                                        مدين (له)</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text bg-danger text-white border-0"><i
+                                            <span class="input-group-text bg-success text-white border-0"><i
                                                     class="fas fa-money-bill-wave"></i></span>
                                         </div>
                                         <input type="number" step="0.01" name="debit" id="debit"
                                             class="form-control form-control-lg border-danger" placeholder="0.00"
                                             value="0.00">
                                     </div>
-                                    <small class="text-muted">أدخل المبلغ الذي سحبه العميل أو ذمته المالية.</small>
+                                    <small class="text-muted">أدخل المبلغ الذي سدده العميل أو أودعه.</small>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="credit" class="text-success"><i class="fas fa-plus-circle mr-1"></i> مبلغ
-                                        دائن (له)</label>
+                                        دائن (عليه)</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text bg-success text-white border-0"><i
+                                            <span class="input-group-text bg-danger text-white border-0"><i
                                                     class="fas fa-cash-register"></i></span>
                                         </div>
                                         <input type="number" step="0.01" name="credit" id="credit"
                                             class="form-control form-control-lg border-success" placeholder="0.00"
                                             value="0.00">
                                     </div>
-                                    <small class="text-muted">أدخل المبلغ الذي سدده العميل أو أودعه.</small>
+                                    <small class="text-muted">أدخل المبلغ الذي سحبه العميل أو ذمته المالية.</small>
                                 </div>
                             </div>
                         </div>
