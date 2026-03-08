@@ -2,290 +2,269 @@
 
 @section('title', 'تحديد الصلاحيات')
 
-@section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">تحديد صلاحيات المستخدم</h1>
-@stop
-
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card card-dark shadow-lg" style="border-radius: 15px; background-color: #343a40;">
-                <div class="card-body">
-
-                    <!-- معلومات المستخدم -->
-                    <div class="mb-4 p-3 shadow-sm rounded"
-                        style="background-color: #495057; border-right: 5px solid #997a44;">
-                        <h5 class="mb-1 text-white font-weight-bold">
-                            👤 {{ $user->name }}
-                        </h5>
-                        <p class="mb-0 text-light">
-                            📧 {{ $user->email }}
-                        </p>
-                    </div>
-
-                    <!-- عنوان -->
-                    <h4 class="mb-4 text-white font-weight-bold">اختر الصلاحيات</h4>
-
-                    <form method="POST" action="{{ route('permissions.edit', $user->id) }}">
-                        @csrf
-
-                        <div class="row">
-                            @php
-                                $permissions = [
-                                    'dashboard-access' => 'لوحة التحكم',
-                                    'leads-customers-show' => 'العملاء المحتملون',
-                                    'customers-show' => 'عرض العملاء',
-                                    'create-customer' => 'إضافة عميل',
-                                    'show-customer' => 'عرض العميل',
-                                    'visa-type-create' => 'تعريف التأشيرة',
-                                    'embassy-create' => 'تعريف القنصلية',
-                                    'sponser-create' => 'تعريف الكفيل',
-                                    'delegate-create' => 'تعريف المناديب',
-                                    'message-create' => 'تعريف قوالب الرسائل',
-                                    'bag-create' => 'تعريف الحقائب',
-                                    'group-create' => 'تعريف المجموعات',
-                                    'file-create' => 'تعريف المستندات',
-                                    'test-create' => 'الاختبارات',
-                                    'job-create' => 'تعريف الوظائف',
-                                    'bulk-sms-access' => 'ارسال رسائل',
-                                    'tasks-access' => 'المهام',
-                                    'users-manage' => 'المستخدم',
-                                    'company-settings' => 'اعدادات الشركة',
-                                    'archived-customers' => 'ارشيف العملاء',
-                                    'taakeb-show' => 'طلبات التعقيب',
-                                    'requests-show' => 'طلبات الملفات',
-                                    'loginFail-access' => 'فشل تسجيل الدخول',
-                                    'show-group-customers' => ' عرض عملاء المجموعات',
-                                    'show-leads' => 'عرض العملاء المحتملين',
-                                    'job-question-create' => 'تعريف اسئلة الوظائف',
-                                    'deep-search-access' => 'البحث المتقدم',
-                                    'delegates-settings' => 'اعدادات المناديب',
-                                    'financial-matters' => 'الامور المالية',
-                                ];
-                            @endphp
-
-                            @foreach ($permissions as $value => $label)
-                                <div class="col-md-3 mb-3">
-                                    <div class="form-check d-flex align-items-center text-white">
-                                        <input class="form-check-input me-2" type="checkbox" id="perm_{{ $loop->index }}"
-                                            name="permissions[]" value="{{ $value }}"
-                                            @if (in_array($value, $userPermissions)) checked @endif>
-                                        <label class="form-check-label" for="perm_{{ $loop->index }}">
-                                            {{ $label }}
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <!-- زر الحفظ -->
-                        <button type="submit" class="btn mt-4 px-4 shadow-sm btn-success" style=" color: white;">
-                            حفظ الصلاحيات المختارة
-                        </button>
-                    </form>
+    <div class="container-fluid pt-4">
+        <div class="row mb-4 px-2">
+            <div class="col-12 d-flex justify-content-between align-items-center modern-header-card p-3 shadow-sm">
+                <div>
+                    <h4 class="mb-0 font-weight-bold header-title">إدارة صلاحيات الوصول</h4>
+                    <p class="mb-0 small user-subtitle">المستخدم: <strong>{{ $user->name }}</strong> ({{ $user->email }})
+                    </p>
                 </div>
+                <a href="{{ route('users') }}" class="btn btn-back-modern rounded-pill px-4">
+                    <i class="fas fa-undo-alt ml-1"></i> رجوع
+                </a>
             </div>
         </div>
+
+        <form method="POST" action="{{ route('permissions.edit', $user->id) }}">
+            @csrf
+            <div class="row">
+                @php
+                    $permissions = [
+                        'dashboard-access' => ['label' => 'لوحة التحكم', 'icon' => 'fa-chart-pie'],
+                        'leads-customers-show' => ['label' => 'العملاء المحتملون', 'icon' => 'fa-user-tag'],
+                        'customers-show' => ['label' => 'عرض العملاء', 'icon' => 'fa-users'],
+                        'create-customer' => ['label' => 'إضافة عميل', 'icon' => 'fa-user-plus'],
+                        'show-customer' => ['label' => 'عرض العميل', 'icon' => 'fa-id-card'],
+                        'visa-type-create' => ['label' => 'تعريف التأشيرة', 'icon' => 'fa-passport'],
+                        'embassy-create' => ['label' => 'تعريف القنصلية', 'icon' => 'fa-building'],
+                        'sponser-create' => ['label' => 'تعريف الكفيل', 'icon' => 'fa-handshake'],
+                        'delegate-create' => ['label' => 'تعريف المناديب', 'icon' => 'fa-walking'],
+                        'message-create' => ['label' => 'قوالب الرسائل', 'icon' => 'fa-comment-alt'],
+                        'bag-create' => ['label' => 'تعريف الحقائب', 'icon' => 'fa-suitcase'],
+                        'group-create' => ['label' => 'تعريف المجموعات', 'icon' => 'fa-layer-group'],
+                        'file-create' => ['label' => 'تعريف المستندات', 'icon' => 'fa-file-medical'],
+                        'test-create' => ['label' => 'الاختبارات', 'icon' => 'fa-vials'],
+                        'job-create' => ['label' => 'تعريف الوظائف', 'icon' => 'fa-briefcase'],
+                        'bulk-sms-access' => ['label' => 'إرسال رسائل', 'icon' => 'fa-paper-plane'],
+                        'tasks-access' => ['label' => 'المهام', 'icon' => 'fa-tasks'],
+                        'users-manage' => ['label' => 'المستخدمين', 'icon' => 'fa-user-shield'],
+                        'company-settings' => ['label' => 'إعدادات الشركة', 'icon' => 'fa-cog'],
+                        'archived-customers' => ['label' => 'أرشيف العملاء', 'icon' => 'fa-archive'],
+                        'taakeb-show' => ['label' => 'طلبات التعقيب', 'icon' => 'fa-stamp'],
+                        'requests-show' => ['label' => 'طلبات الملفات', 'icon' => 'fa-folder-open'],
+                        'loginFail-access' => ['label' => 'فشل الدخول', 'icon' => 'fa-exclamation-triangle'],
+                        'show-group-customers' => ['label' => 'عملاء المجموعات', 'icon' => 'fa-users-cog'],
+                        'show-leads' => ['label' => 'عرض المحتملين', 'icon' => 'fa-eye'],
+                        'job-question-create' => ['label' => 'أسئلة الوظائف', 'icon' => 'fa-question-circle'],
+                        'deep-search-access' => ['label' => 'البحث المتقدم', 'icon' => 'fa-search-plus'],
+                        'delegates-settings' => ['label' => 'إعدادات المناديب', 'icon' => 'fa-user-cog'],
+                        'financial-matters' => ['label' => 'الأمور المالية', 'icon' => 'fa-money-bill-wave'],
+                    ];
+                @endphp
+
+                @foreach ($permissions as $value => $data)
+                    <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                        <div class="permission-card shadow-sm border-0 h-100 transition-3d">
+                            <div class="card-body p-3 d-flex align-items-center">
+                                <div class="icon-box-modern mr-3 ml-3">
+                                    <i class="fas {{ $data['icon'] }}"></i>
+                                </div>
+                                <div class="flex-grow-1 text-right">
+                                    <h6 class="mb-0 font-weight-bold permission-title">{{ $data['label'] }}</h6>
+                                    <span class="text-xs text-muted">ID: {{ $value }}</span>
+                                </div>
+                                <div class="custom-checkbox-wrapper ml-2">
+                                    <input type="checkbox" id="perm_{{ $loop->index }}" name="permissions[]"
+                                        value="{{ $value }}" class="custom-checkbox-input"
+                                        @if (in_array($value, $userPermissions)) checked @endif>
+                                    <label for="perm_{{ $loop->index }}" class="custom-checkbox-label"></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <div class="sticky-footer text-center mt-5 pb-5">
+                <button type="submit" class="btn btn-save-modern shadow-lg px-5 py-3 rounded-pill">
+                    <i class="fas fa-shield-check ml-2"></i> اعتماد الصلاحيات الجديدة
+                </button>
+            </div>
+        </form>
     </div>
-
 @stop
-
-
 
 @section('css')
     <style>
-        .form-check-label {
-            font-weight: bold;
-            margin-right: 8px;
+        /* باليتة الألوان المودرن */
+        :root {
+            --primary-navy: #1a237e;
+            --accent-blue: #3f51b5;
+            --light-bg: #f5f7fb;
+            --card-bg-dark: #121826;
+            --item-bg-dark: #1c2437;
         }
 
-        .form-check-input {
-            border-color: #997a44;
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Cairo', sans-serif;
         }
 
-        .form-check-input:checked {
-            background-color: #997a44;
-            border-color: #997a44;
-        }
-
-        .btn {
-            transition: all 0.3s ease-in-out;
-            font-weight: bold;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .card {
+        /* الكارد الخاص بالصلاحية */
+        .permission-card {
+            background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
         }
 
-        .checkbox-wrapper-19 {
-            box-sizing: border-box;
-            --background-color: #997a44;
-            --checkbox-height: 25px;
+        .dark-mode .permission-card {
+            background: var(--item-bg-dark) !important;
+            color: #fff;
         }
 
-        @-moz-keyframes dothabottomcheck-19 {
-            0% {
-                height: 0;
-            }
-
-            100% {
-                height: calc(var(--checkbox-height) / 2);
-            }
+        .border-left-premium {
+            border-left: 5px solid var(--accent-blue);
         }
 
-        @-webkit-keyframes dothabottomcheck-19 {
-            0% {
-                height: 0;
-            }
-
-            100% {
-                height: calc(var(--checkbox-height) / 2);
-            }
+        .text-navy {
+            color: var(--primary-navy);
         }
 
-        @keyframes dothabottomcheck-19 {
-            0% {
-                height: 0;
-            }
-
-            100% {
-                height: calc(var(--checkbox-height) / 2);
-            }
+        .dark-mode .text-navy {
+            color: #8c9eff;
         }
 
-        @keyframes dothatopcheck-19 {
-            0% {
-                height: 0;
-            }
-
-            50% {
-                height: 0;
-            }
-
-            100% {
-                height: calc(var(--checkbox-height) * 1.2);
-            }
+        /* صندوق الأيقونة */
+        .icon-box-modern {
+            width: 45px;
+            height: 45px;
+            background: rgba(63, 81, 181, 0.1);
+            color: var(--accent-blue);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
         }
 
-        @-webkit-keyframes dothatopcheck-19 {
-            0% {
-                height: 0;
-            }
-
-            50% {
-                height: 0;
-            }
-
-            100% {
-                height: calc(var(--checkbox-height) * 1.2);
-            }
+        .dark-mode .icon-box-modern {
+            background: rgba(255, 255, 255, 0.05);
+            color: #8c9eff;
         }
 
-        @-moz-keyframes dothatopcheck-19 {
-            0% {
-                height: 0;
-            }
-
-            50% {
-                height: 0;
-            }
-
-            100% {
-                height: calc(var(--checkbox-height) * 1.2);
-            }
+        /* تأثير الـ 3D Hover */
+        .transition-3d {
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
 
-        .checkbox-wrapper-19 input[type=checkbox] {
+        .transition-3d:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1) !important;
+            background-color: #fff;
+        }
+
+        .dark-mode .transition-3d:hover {
+            background-color: #242f48 !important;
+        }
+
+        /* كاستم تشيك بوكس (دائري وأنيق) */
+        .custom-checkbox-input {
             display: none;
         }
 
-        .checkbox-wrapper-19 .check-box {
-            height: var(--checkbox-height);
-            width: var(--checkbox-height);
-            background-color: transparent;
-            border: calc(var(--checkbox-height) * .1) solid #000;
-            border-radius: 5px;
-            position: relative;
-            display: inline-block;
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            -moz-transition: border-color ease 0.2s;
-            -o-transition: border-color ease 0.2s;
-            -webkit-transition: border-color ease 0.2s;
-            transition: border-color ease 0.2s;
+        .custom-checkbox-label {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #ddd;
+            border-radius: 50%;
             cursor: pointer;
+            position: relative;
+            transition: 0.3s;
         }
 
-        .checkbox-wrapper-19 .check-box::before,
-        .checkbox-wrapper-19 .check-box::after {
-            -moz-box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
+        .custom-checkbox-input:checked+.custom-checkbox-label {
+            background-color: var(--accent-blue);
+            border-color: var(--accent-blue);
+        }
+
+        .custom-checkbox-input:checked+.custom-checkbox-label::after {
+            content: '✔';
+            color: #fff;
             position: absolute;
-            height: 0;
-            width: calc(var(--checkbox-height) * .2);
-            background-color: #997a44;
-            display: inline-block;
-            -moz-transform-origin: left top;
-            -ms-transform-origin: left top;
-            -o-transform-origin: left top;
-            -webkit-transform-origin: left top;
-            transform-origin: left top;
-            border-radius: 5px;
-            content: " ";
-            -webkit-transition: opacity ease 0.5;
-            -moz-transition: opacity ease 0.5;
-            transition: opacity ease 0.5;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
         }
 
-        .checkbox-wrapper-19 .check-box::before {
-            top: calc(var(--checkbox-height) * .72);
-            left: calc(var(--checkbox-height) * .41);
-            /* box-shadow: 0 0 0 calc(var(--checkbox-height) * .05) var(--background-color); */
-            -moz-transform: rotate(-135deg);
-            -ms-transform: rotate(-135deg);
-            -o-transform: rotate(-135deg);
-            -webkit-transform: rotate(-135deg);
-            transform: rotate(-135deg);
+        /* زر الحفظ */
+        .btn-save-modern {
+            background: linear-gradient(135deg, #1a237e 0%, #3f51b5 100%);
+            color: white !important;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            border: none;
+            min-width: 300px;
         }
 
-        .checkbox-wrapper-19 .check-box::after {
-            top: calc(var(--checkbox-height) * .37);
-            left: calc(var(--checkbox-height) * .05);
-            -moz-transform: rotate(-45deg);
-            -ms-transform: rotate(-45deg);
-            -o-transform: rotate(-45deg);
-            -webkit-transform: rotate(-45deg);
-            transform: rotate(-45deg);
+        .btn-save-modern:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
         }
 
-        .checkbox-wrapper-19 input[type=checkbox]:checked+.check-box,
-        .checkbox-wrapper-19 .check-box.checked {
-            border-color: #997a44;
+        .text-xs {
+            font-size: 0.75rem;
         }
 
-        .checkbox-wrapper-19 input[type=checkbox]:checked+.check-box::after,
-        .checkbox-wrapper-19 .check-box.checked::after {
-            height: calc(var(--checkbox-height) / 2);
-            -moz-animation: dothabottomcheck-19 0.2s ease 0s forwards;
-            -o-animation: dothabottomcheck-19 0.2s ease 0s forwards;
-            -webkit-animation: dothabottomcheck-19 0.2s ease 0s forwards;
-            animation: dothabottomcheck-19 0.2s ease 0s forwards;
+        .dark-mode .text-muted {
+            color: #94a3b8 !important;
         }
 
-        .checkbox-wrapper-19 input[type=checkbox]:checked+.check-box::before,
-        .checkbox-wrapper-19 .check-box.checked::before {
-            height: calc(var(--checkbox-height) * 1.2);
-            -moz-animation: dothatopcheck-19 0.4s ease 0s forwards;
-            -o-animation: dothatopcheck-19 0.4s ease 0s forwards;
-            -webkit-animation: dothatopcheck-19 0.4s ease 0s forwards;
-            animation: dothatopcheck-19 0.4s ease 0s forwards;
+        /* --- تنسيق الهيدر المودرن --- */
+        .modern-header-card {
+            background-color: #ffffff;
+            /* لون الفاتح */
+            border-right: 5px solid #3f51b5;
+            /* استبدال border-left بـ border-right للغة العربية */
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .header-title {
+            color: #1a237e;
+        }
+
+        .user-subtitle {
+            color: #6c757d;
+        }
+
+        /* --- تنسيق الزر --- */
+        .btn-back-modern {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            color: #333;
+            transition: 0.3s;
+        }
+
+        /* --- تعديلات الدارك مود (السحر هنا) --- */
+        .dark-mode .modern-header-card {
+            background-color: #1c2437 !important;
+            /* لون كحلي عميق متناسق مع الكروت */
+            border-right-color: #8c9eff !important;
+            /* لون حدود أفتح للبروز */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .dark-mode .header-title {
+            color: #ffffff !important;
+        }
+
+        .dark-mode .user-subtitle {
+            color: #94a3b8 !important;
+        }
+
+        .dark-mode .btn-back-modern {
+            background-color: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .dark-mode .btn-back-modern:hover {
+            background-color: #4a5568;
+            color: #fff;
         }
     </style>
 @stop

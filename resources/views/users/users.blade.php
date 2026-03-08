@@ -1,164 +1,298 @@
 @extends('adminlte::page')
 
-@section('title', 'مستخدمو لوحة التحكم')
+@section('title', 'إدارة المستخدمين')
 
 @section('content_header')
-    <h1 style="font-weight:bold; text-align:right;">مستخدمو لوحة التحكم</h1>
+    <div class="container-fluid">
+        <div class="row mb-4 pt-3">
+            <div class="col-sm-6">
+                <h1 class="font-weight-bold page-main-title">إدارة المستخدمين</h1>
+                <p class="text-muted small">يمكنك إضافة، تعديل ومراقبة صلاحيات المستخدمين من هنا.</p>
+            </div>
+            <div class="col-sm-6 text-left d-flex align-items-center justify-content-end">
+                <a href="{{ route('user.index') }}"
+                    class="btn btn-primary-gradient px-4 py-2 shadow-lg rounded-pill d-inline-flex align-items-center justify-content-center">
+                    <i class="fas fa-plus-circle ml-2"></i>
+                    <span>إضافة مستخدم جديد</span>
+                </a>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('content')
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card shadow-lg p-4 border-0" style="border-radius: 15px; background-color: #eae0d5;">
-                <div class="d-flex align-items-center my-3">
-                    <a class="btn btn-sm btn-success shadow-sm mx-1" href="{{ route('user.index') }}" style="height: 40px;"
-                        data-bs-toggle="modal" data-bs-target="#addUserModal">
-                        <i class="fas fa-user-plus"></i> إضافة مستخدم
-                    </a>
-                    <input type="text" class="form-control form-control-sm mx-1" placeholder="بحث عن مستخدم"
-                        style="width: 300px;height: 40px;">
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table table-hover text-center" id="usersTable">
-                        <thead style="background-color: #343a40; color: white;">
+    <div class="container-fluid">
+        <div class="card main-table-card border-0 shadow-sm overflow-hidden">
+            <div class="card-body p-0">
+                <table class="table table-borderless table-hover mb-0 custom-modern-table" id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>البريد الإلكتروني</th>
+                            <th>المستوى</th>
+                            <th class="text-center">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($users as $user)
                             <tr>
-                                <th>كود المستخدم</th>
-                                <th>الاسم</th>
-                                <th>البريد الإلكتروني</th>
-                                <th>الدور</th>
-                                <th>الإجراءات</th>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle mr-3 bg-soft-primary text-primary">
+                                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <a href="{{ route('users.history', $user->id) }}" class="user-name-link">
+                                                {{ $user->name ?? 'غير معروف' }}
+                                            </a>
+                                            <div class="small text-muted">ID: #{{ $user->id }}</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle text-muted">{{ $user->email }}</td>
+                                <td class="align-middle">
+                                    <span class="modern-badge badge-{{ $user->role }}">
+                                        {{ $user->role }}
+                                    </span>
+                                </td>
+                                <td class="align-middle text-center">
+                                    <div class="dropdown">
+                                        <button class="btn btn-light btn-sm rounded-circle shadow-sm"
+                                            data-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <div class="dropdown-menu dropdown-menu-right shadow border-0">
+                                            <a class="dropdown-item" href="{{ route('user.permissions', $user->id) }}">
+                                                <i class="fas fa-shield-alt text-success mr-2"></i> الصلاحيات
+                                            </a>
+                                            <a class="dropdown-item"
+                                                href="{{ route('user.changePasswordUser', $user->id) }}">
+                                                <i class="fas fa-edit text-info mr-2"></i> تعديل البيانات
+                                            </a>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($users as $user)
-                                <tr class="table-light">
-                                    <td>#{{ $user->id }}</td>
-                                    <td>
-                                        <a href="{{ route('users.history', $user->id) }}"
-                                            class="text-decoration-none text-dark">
-                                            {{ $user->name ?? '-' }}</a>
-                                    </td>
-                                    <td>{{ $user->email }}</td>
-                                    <td><span class="badge bg-info text-white">{{ $user->role }}</span></td>
-                                    <td class="d-flex justify-content-center">
-                                        <a href="{{ route('user.permissions', $user->id) }}">
-                                            <button class="btn btn-sm btn-outline-success shadow-sm"><i
-                                                    class="fas fa-edit"></i>
-                                                تعديل الصلاحيات</button>
-                                        </a>
-                                        <a href="{{ route('user.changePasswordUser', $user->id) }}">
-                                            <button class="btn btn-sm btn-outline-success shadow-sm"><i
-                                                    class="fas fa-edit"></i>
-                                                تعديل</button>
-                                        </a>
-                                        <button class="btn btn-sm btn-outline-danger shadow-sm"><i class="fas fa-trash"></i>
-                                            حذف</button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form action="" method="POST" class="modal-content p-3">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">إضافة مستخدم جديد</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content border-0 modern-modal">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title font-weight-bold">مستخدم جديد</h5>
+                    <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
-                <div class="modal-body">
+                <form action="" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <label class="font-weight-bold">الاسم</label>
-                        <input type="text" class="form-control" name="name" placeholder="أدخل اسم المستخدم" required>
+                    <div class="modal-body p-4">
+                        <div class="form-group">
+                            <label class="small font-weight-bold">الاسم الكامل</label>
+                            <input type="text" class="form-control modern-input" name="name"
+                                placeholder="مثال: أحمد محمد" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="small font-weight-bold">البريد الإلكتروني</label>
+                            <input type="email" class="form-control modern-input" name="email"
+                                placeholder="email@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="small font-weight-bold">كلمة المرور</label>
+                            <input type="password" class="form-control modern-input" name="password" required>
+                        </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="font-weight-bold">البريد الإلكتروني</label>
-                        <input type="email" class="form-control" name="email" placeholder="أدخل البريد الإلكتروني"
-                            required>
+                    <div class="modal-footer border-0 pt-0">
+                        <button type="submit" class="btn btn-primary-gradient w-100 py-2 rounded-lg shadow">تأكيد
+                            الإضافة</button>
                     </div>
-                    <div class="mb-3">
-                        <label class="font-weight-bold">كلمة المرور</label>
-                        <input type="password" class="form-control" name="password" placeholder="أدخل كلمة المرور" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="font-weight-bold">الدور</label>
-                        <select class="form-control" name="role">
-                            <option value="admin">مدير</option>
-                            <option value="editor">محرر</option>
-                            <option value="user">مستخدم عادي</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-success">إضافة المستخدم</button>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
     <style>
-        .dt-buttons {
-            margin-bottom: 10px;
+        /* المتغيرات والأساسيات */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --soft-primary: #eef2ff;
         }
 
-        .dt-button {
-            padding: 8px 15px;
-            margin: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 5px;
+        body {
+            background-color: #f8fafc;
+            color: #334155;
+        }
+
+        .dark-mode body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+
+        /* تحسين شكل الكارد */
+        .main-table-card {
+            border-radius: 20px !important;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .main-table-card {
+            background: #1e293b !important;
+        }
+
+        /* ستايل الجدول العصري */
+        .custom-modern-table thead th {
+            background-color: #f1f5f9;
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            font-weight: 700;
+            padding: 20px;
+            border: none;
+        }
+
+        .dark-mode .custom-modern-table thead th {
+            background-color: #334155;
+            color: #94a3b8;
+        }
+
+        .custom-modern-table tbody td {
+            padding: 20px;
+            border-bottom: 1px solid #f1f5f9;
+            transition: 0.2s;
+        }
+
+        .dark-mode .custom-modern-table tbody td {
+            border-bottom: 1px solid #334155;
+        }
+
+        .custom-modern-table tbody tr:hover td {
+            background-color: rgba(102, 126, 234, 0.03);
             cursor: pointer;
         }
 
-        .buttons-excel {
-            background-color: #28a745 !important;
-            color: white !important;
+        /* الأفاتار الصغير */
+        .avatar-circle {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
         }
 
-        .buttons-pdf {
-            background-color: #dc3545 !important;
-            color: white !important;
+        .bg-soft-primary {
+            background: var(--soft-primary);
+        }
+
+        /* اسم المستخدم */
+        .user-name-link {
+            font-weight: 600;
+            color: #1e293b;
+            transition: 0.2s;
+        }
+
+        .dark-mode .user-name-link {
+            color: #f1f5f9;
+        }
+
+        .user-name-link:hover {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        /* البادج العصري */
+        .modern-badge {
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-admin {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-editor {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-user {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        /* زر التدرج اللوني */
+        .btn-primary-gradient {
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-primary-gradient:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+            color: white;
+        }
+
+        /* المدخلات (Inputs) */
+        .modern-input {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px;
+            transition: 0.3s;
+        }
+
+        .modern-input:focus {
+            background: #fff;
+            border-color: #667eea;
+            box-shadow: none;
+        }
+
+        .dark-mode .modern-input {
+            background: #334155;
+            border-color: #475569;
+            color: #fff;
+        }
+
+        .modern-modal {
+            border-radius: 25px;
+        }
+
+        .dark-mode .modern-modal {
+            background: #1e293b;
+            color: #fff;
         }
     </style>
 @stop
 
 @section('js')
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.4.2/js/buttons.html5.min.js"></script>
     <script>
-        $('#usersTable').DataTable({
-            dom: 'Bfrtip',
-            buttons: [{
-                    extend: 'excel',
-                    text: '<i class="fa fa-file-excel"></i> تصدير إلى Excel',
-                    className: 'buttons-excel'
+        $(document).ready(function() {
+            $('#usersTable').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
                 },
-                {
-                    extend: 'print',
-                    text: '<i class="fa fa-print"></i> طباعة',
-                    className: 'buttons-pdf'
-                }
-            ],
-            language: {
-                url: "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
-            },
-            pageLength: 10,
+                dom: '<"p-3 d-flex justify-content-between align-items-center"fB>rt<"p-3"p>',
+                buttons: [{
+                        extend: 'excel',
+                        className: 'btn btn-sm btn-outline-success mx-1 rounded-pill'
+                    },
+                    {
+                        extend: 'print',
+                        className: 'btn btn-sm btn-outline-dark mx-1 rounded-pill'
+                    }
+                ]
+            });
         });
     </script>
 @stop
