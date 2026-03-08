@@ -108,25 +108,25 @@ class AppServiceProvider extends ServiceProvider
                 ];
             }
             // العملاء المحتملون
-            if ($user->role === 'admin' || $user->permissions->contains('permission', 'loginFail-access')) {
-                $existingMenu[] = [
-                    'text' => 'محاولات دخول فاشلة',
-                    'url' => 'admin/login-fail',
-                    'icon' => 'fas fa-user-secret',
-                ];
-            }
+            // if ($user->role === 'admin' || $user->permissions->contains('permission', 'loginFail-access')) {
+            //     $existingMenu[] = [
+            //         'text' => 'محاولات دخول فاشلة',
+            //         'url' => 'admin/login-fail',
+            //         'icon' => 'fas fa-user-secret',
+            //     ];
+            // }
             $pendingCount = ModelsDocumentType::where('order_status', 'panding')->count();
 
             // العملاء المحتملون
-            if ($user->role === 'admin' || $user->permissions->contains('permission', 'requests-show')) {
-                $existingMenu[] = [
-                    'text'  => 'طلبات الملفات',
-                    'url'   => 'admin/document-requests', // غيره حسب مسار صفحة الطلبات
-                    'icon'  => 'fas fa-file-alt',
-                    'label' => $pendingCount,
-                    'label_color' => 'warning', // success, danger, info, primary...
-                ];
-            }
+            // if ($user->role === 'admin' || $user->permissions->contains('permission', 'requests-show')) {
+            //     $existingMenu[] = [
+            //         'text'  => 'طلبات الملفات',
+            //         'url'   => 'admin/document-requests', // غيره حسب مسار صفحة الطلبات
+            //         'icon'  => 'fas fa-file-alt',
+            //         'label' => $pendingCount,
+            //         'label_color' => 'warning', // success, danger, info, primary...
+            //     ];
+            // }
 
             // العملاء
             if ($user->role === 'admin' || $user->permissions->contains('permission', 'customers-show')) {
