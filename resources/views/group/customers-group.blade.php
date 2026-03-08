@@ -130,6 +130,11 @@
                                                 تعيين حقيبة
                                             </button>
                                         </li>
+                                        <li>
+                                            <button id="exportExcel" class="dropdown-item text-info">استخراج Excel
+                                            </button>
+                                        </li>
+
                                         @if (auth()->user()?->permissions->contains('permission', 'financial-matters') || auth()->user()?->role == 'admin')
                                             <li>
                                                 <a href="{{ route('accounts.customers.summary', $group->id) }}">
@@ -2385,5 +2390,42 @@
             }), "customers.xlsx");
         });
     </script>
+    <script>
+        document.getElementById('exportExcel').addEventListener('click', function() {
+            // 1. تجميع الـ Checkboxes المختارة فقط
+            const selectedCheckboxes = document.querySelectorAll('.row-checkbox:checked');
+
+            if (selectedCheckboxes.length === 0) {
+                alert('يرجى تحديد عميل واحد على الأقل');
+                return;
+            }
+
+            const excelData = [];
+
+            // 2. استخراج البيانات وتحويلها من JSON
+            selectedCheckboxes.forEach(checkbox => {
+                const customerData = JSON.parse(checkbox.getAttribute('data-customer'));
+
+                excelData.push({
+                    'الاسم عربي': customerData.name_ar,
+                    'الرقم القومي': customerData.card_id,
+                    'رقم الجواز': customerData.passport_id
+                });
+            });
+
+            // 3. إنشاء شيت الإكسيل
+            const worksheet = XLSX.utils.json_to_sheet(excelData);
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "العملاء");
+
+            // 4. ضبط اتجاه النص ليكون من اليمين لليسار (اختياري)
+            if (!worksheet['!ref']) return;
+            worksheet['!views'] = [{
+                RTL: true
+            }];
+
+            // 5. تحميل الملف
+            XLSX.writeFile(workbook, 'قائمة_العملاء.xlsx');
+        });
     </script>
 @stop
