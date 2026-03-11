@@ -2407,9 +2407,10 @@
                 const customerData = JSON.parse(checkbox.getAttribute('data-customer'));
 
                 excelData.push({
-                    'الاسم عربي': customerData.name_ar,
-                    'الرقم القومي': customerData.card_id,
-                    'رقم الجواز': customerData.passport_id
+                    'Name_AR': customerData.name_ar,
+                    'Governorate': customerData.governorate_live,
+                    'National_ID': customerData.card_id,
+                    'Passport_ID': customerData.passport_id
                 });
             });
 
