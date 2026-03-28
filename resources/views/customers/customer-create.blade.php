@@ -615,6 +615,9 @@
                                         <option value="تم تجهيز الورق"
                                             {{ old('status', $edit->status ?? '') == 'تم تجهيز الورق' ? 'selected' : '' }}>
                                             تم تجهيز الورق</option>
+                                        <option value="الغاء السفر"
+                                            {{ old('status', $edit->status ?? '') == 'الغاء السفر' ? 'selected' : '' }}>
+                                            الغاء السفر</option>
                                     </select>
                                 </div>
 
