@@ -178,7 +178,8 @@ class CustomerGroupController extends Controller
         }
         $customers =  $group->customers;
 
-        $statusCounts = Customer::select('status', DB::raw('count(*) as total'))
+        $statusCounts = $group->customers() // لاحظ القوسين () هنا للتعامل معها كـ Query Builder
+            ->select('status', DB::raw('count(*) as total'))
             ->groupBy('status')
             ->get();
 
