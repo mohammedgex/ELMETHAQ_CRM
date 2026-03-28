@@ -9,6 +9,7 @@ use App\Models\History;
 use App\Models\VisaType;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class CustomerGroupController extends Controller
 {
@@ -175,13 +176,20 @@ class CustomerGroupController extends Controller
                 $borders[] = 'rgba(54, 162, 235, 1)';
             }
         }
+        $customers =  $group->customers;
+
+        $statusCounts = Customer::select('status', DB::raw('count(*) as total'))
+            ->groupBy('status')
+            ->get();
 
         return view('group.group-statistics', compact(
             'group',
             'delegateNames',
             'customersCount',
             'colors',
-            'borders'
+            'borders',
+            'statusCounts',
+            'customers'
         ));
     }
 }
