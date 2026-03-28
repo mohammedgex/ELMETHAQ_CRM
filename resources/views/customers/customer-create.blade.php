@@ -189,14 +189,12 @@
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #997a44;"
                                         name="status">
                                         <option value="">اختر الحالة</option>
-                                        <option value="جديد">جديد</option>
-                                        <option value="ناجح">ناجح</option>
                                         <option value="تجهيز الاوراق">تجهيز الاوراق</option>
+                                        <option value="جاري تجهيز الورق">جاري تجهيز الورق</option>
+                                        <option value="تم تجهيز الورق">تم تجهيز الورق</option>
                                     </select>
                                 </div>
                             </div>
-
-
 
                         </div>
 
@@ -604,9 +602,6 @@
                                     <select class="form-control fw-bold" style="height: 60px; border-color: #343a40;"
                                         name="status">
                                         <option value="">اختر الحالة</option>
-                                        <option value="جديد"
-                                            {{ old('status', $edit->status ?? '') == 'جديد' ? 'selected' : '' }}>جديد
-                                        </option>
                                         <option value="تم السفر"
                                             {{ old('status', $edit->status ?? '') == 'تم السفر' ? 'selected' : '' }}>تم
                                             السفر
@@ -614,6 +609,12 @@
                                         <option value="تجهيز الاوراق"
                                             {{ old('status', $edit->status ?? '') == 'تجهيز الاوراق' ? 'selected' : '' }}>
                                             تجهيز الأوراق</option>
+                                        <option value="جاري تجهيز الورق"
+                                            {{ old('status', $edit->status ?? '') == 'جاري تجهيز الورق' ? 'selected' : '' }}>
+                                            جاري تجهيز الورق</option>
+                                        <option value="تم تجهيز الورق"
+                                            {{ old('status', $edit->status ?? '') == 'تم تجهيز الورق' ? 'selected' : '' }}>
+                                            تم تجهيز الورق</option>
                                     </select>
                                 </div>
 
