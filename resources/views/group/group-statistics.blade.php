@@ -99,7 +99,9 @@
                         @foreach ($customers as $customer)
                             <tr>
                                 <td class="ps-4 fw-medium text-emphasis-secondary">
-                                    {{ $customer->name_ar }}
+                                    <a href="{{ route('customer.add', $customer->id) }}">
+                                        {{ $customer->name_ar }}
+                                    </a>
                                 </td>
                                 <td class="ps-4 fw-medium text-emphasis-secondary">
                                     {{ $customer->phone }}
