@@ -90,6 +90,7 @@
                     <thead class="table-light text-muted">
                         <tr class="text-uppercase small">
                             <th class="ps-4" style="width: 25%;">اسم العميل</th>
+                            <th class="text-center" style="width: 15%;">رقم الهاتف</th>
                             <th class="text-center" style="width: 15%;">الحالة</th>
                             <th class="ps-3" style="width: 60%;">الملاحظات</th>
                         </tr>
@@ -99,6 +100,9 @@
                             <tr>
                                 <td class="ps-4 fw-medium text-emphasis-secondary">
                                     {{ $customer->name_ar }}
+                                </td>
+                                <td class="ps-4 fw-medium text-emphasis-secondary">
+                                    {{ $customer->phone }}
                                 </td>
                                 <td class="text-center">
                                     <span
