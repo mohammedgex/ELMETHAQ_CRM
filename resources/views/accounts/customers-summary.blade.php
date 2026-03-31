@@ -157,19 +157,52 @@
                                     </td>
 
                                     <td>
-                                        @if (empty($customer->notes) || $customer->notes == 0)
-                                            <div class="notes-edit input-group input-group-sm mx-auto"
-                                                style="max-width: 100px;" data-id="{{ $customer->id }}">
-                                                <input type="number" class="form-control notes-input" placeholder="0">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary notes-save"><i
-                                                            class="fas fa-check"></i></button>
+                                        @if ($customer->LeadCustomer?->tests?->count())
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-info dropdown-toggle shadow-sm px-3"
+                                                    type="button" data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                    <i class="fas fa-vial fa-sm mr-1"></i>
+                                                    <span
+                                                        class="font-weight-bold">{{ $customer->LeadCustomer->tests->count() }}</span>
+                                                </button>
+
+                                                <div class="dropdown-menu shadow border-0 py-2"
+                                                    style="min-width: 200px; border-radius: 8px;">
+                                                    <h6 class="dropdown-header text-uppercase text-muted small pb-1">نتائج
+                                                        الاختبارات</h6>
+                                                    <div class="dropdown-divider"></div>
+
+                                                    @foreach ($customer->LeadCustomer->tests as $test)
+                                                        @php
+                                                            // جلب أحدث تقييم وتخزينه في متغير لتجنب تكرار الكود
+                                                            $latestEval = $customer->LeadCustomer->evaluations
+                                                                ->where('test_id', $test->id)
+                                                                ->sortByDesc('created_at')
+                                                                ->first();
+                                                        @endphp
+
+                                                        <a class="dropdown-item d-flex justify-content-between align-items-center py-2"
+                                                            href="{{ route('test.leads', $test->id) }}">
+
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="fas fa-file-alt mr-2 text-info"
+                                                                    style="font-size: 0.9rem;"></i>
+                                                                <span class="text-dark">{{ $test->title }}</span>
+                                                            </div>
+
+                                                            <span
+                                                                class="badge {{ $latestEval ? 'badge-primary-soft text-primary' : 'badge-light text-muted' }} ml-3">
+                                                                {{ $latestEval->evaluation ?? 'منتظر' }}
+                                                            </span>
+                                                        </a>
+                                                    @endforeach
                                                 </div>
                                             </div>
                                         @else
-                                            <span class="badge badge-pill badge-info px-3 py-2 notes-badge shadow-sm"
-                                                data-id="{{ $customer->id }}">
-                                                <i class="fas fa-vial mr-1"></i> {{ $customer->notes }}
+                                            <span class="badge badge-light py-2 px-3 text-muted"
+                                                style="border: 1px dashed #ccc;">
+                                                <i class="fas fa-minus fa-xs mr-1"></i> لا يوجد
                                             </span>
                                         @endif
                                     </td>
