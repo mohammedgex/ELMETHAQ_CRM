@@ -169,11 +169,12 @@
 
                                                 <div class="dropdown-menu shadow border-0 py-2"
                                                     style="
-                    width: max-content; /* تجبر المربع على أخذ حجم محتواه بالكامل */
-                    min-width: 250px;    /* الحد الأدنى للعرض */
-                    max-width: 450px;    /* حد أقصى عشان لو الاسم عملاق ميبوظش الشاشة */
+                    width: max-content;
+                    min-width: 250px;
+                    max-width: 450px;
                     border-radius: 8px;
-                    z-index: 9999;       /* التأكد من ظهورها فوق كل العناصر */
+                    z-index: 9999;
+                    background: #020304!important;
                  ">
 
                                                     <h6 class="dropdown-header text-uppercase text-muted small pb-1">نتائج
@@ -190,7 +191,7 @@
 
                                                         <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
                                                             href="{{ route('test.leads', $test->id) }}"
-                                                            style="white-space: normal;">
+                                                            style="white-space: normal; ">
                                                             <div class="d-flex align-items-center mr-3" style="flex: 1;">
                                                                 <i class="fas fa-file-alt mr-2 text-info"
                                                                     style="min-width: 15px;"></i>
