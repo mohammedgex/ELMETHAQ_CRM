@@ -168,31 +168,40 @@
                                                 </button>
 
                                                 <div class="dropdown-menu shadow border-0 py-2"
-                                                    style="min-width: 200px; border-radius: 8px;">
+                                                    style="
+                    width: max-content; /* تجبر المربع على أخذ حجم محتواه بالكامل */
+                    min-width: 250px;    /* الحد الأدنى للعرض */
+                    max-width: 450px;    /* حد أقصى عشان لو الاسم عملاق ميبوظش الشاشة */
+                    border-radius: 8px;
+                    z-index: 9999;       /* التأكد من ظهورها فوق كل العناصر */
+                 ">
+
                                                     <h6 class="dropdown-header text-uppercase text-muted small pb-1">نتائج
                                                         الاختبارات</h6>
                                                     <div class="dropdown-divider"></div>
 
                                                     @foreach ($customer->LeadCustomer->tests as $test)
                                                         @php
-                                                            // جلب أحدث تقييم وتخزينه في متغير لتجنب تكرار الكود
                                                             $latestEval = $customer->LeadCustomer->evaluations
                                                                 ->where('test_id', $test->id)
                                                                 ->sortByDesc('created_at')
                                                                 ->first();
                                                         @endphp
 
-                                                        <a class="dropdown-item d-flex justify-content-between align-items-center py-2"
-                                                            href="{{ route('test.leads', $test->id) }}">
-
-                                                            <div class="d-flex align-items-center">
+                                                        <a class="dropdown-item d-flex justify-content-between align-items-center py-2 px-3"
+                                                            href="{{ route('test.leads', $test->id) }}"
+                                                            style="white-space: normal;">
+                                                            <div class="d-flex align-items-center mr-3" style="flex: 1;">
                                                                 <i class="fas fa-file-alt mr-2 text-info"
-                                                                    style="font-size: 0.9rem;"></i>
-                                                                <span class="text-dark">{{ $test->title }}</span>
+                                                                    style="min-width: 15px;"></i>
+                                                                <span class="text-dark"
+                                                                    style="font-size: 0.9rem; line-height: 1.2;">
+                                                                    {{ $test->title }}
+                                                                </span>
                                                             </div>
 
                                                             <span
-                                                                class="badge {{ $latestEval ? 'badge-primary-soft text-primary' : 'badge-light text-muted' }} ml-3">
+                                                                class="badge {{ $latestEval ? 'badge-primary-soft text-primary' : 'badge-light text-muted' }} ml-2">
                                                                 {{ $latestEval->evaluation ?? 'منتظر' }}
                                                             </span>
                                                         </a>
@@ -206,6 +215,11 @@
                                             </span>
                                         @endif
                                     </td>
+                                    <style>
+                                        .table-responsive {
+                                            overflow: visible !important;
+                                        }
+                                    </style>
 
                                     <td class="financial-cell debit-cell">{{ number_format($debit, 2) }}</td>
                                     <td class="financial-cell credit-cell">{{ number_format($credit, 2) }}</td>
