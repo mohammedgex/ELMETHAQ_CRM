@@ -298,6 +298,15 @@ Route::group([
         ->name('accounts.destroy');
 
     Route::get('/accounts/day', [AccountController::class, 'accDay'])->name('accounts.day');
+
+
+    // صفحة رفع الملف
+    Route::get('/import-transactions', [AccountController::class, 'showImportPage'])->name('import.view');
+
+    // الأكشن اللي بيستلم الملف ويعالجه
+    Route::post('/import-transactions', [AccountController::class, 'processImport'])->name('import.store');
+    // مسار حفظ البيانات النهائية بعد عملية المطابقة
+    Route::post('/import-final-confirm', [AccountController::class, 'finalConfirm'])->name('import.final_confirm');
 });
 
 // قيادة امنة للسائقين

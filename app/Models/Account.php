@@ -12,6 +12,8 @@ class Account extends Model
         'debit',
         'credit',
         'description',
+        'updated_at',
+        'created_at',
     ];
 
     public function customer()

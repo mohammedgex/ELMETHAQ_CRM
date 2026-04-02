@@ -18,6 +18,7 @@
 
 @section('content')
     <div class="row">
+        {{-- العمود الجانبي: ملخص العميل --}}
         <div class="col-xl-3 col-lg-4">
             <div class="card card-outline card-primary shadow-sm custom-card">
                 <div class="card-body box-profile">
@@ -54,15 +55,16 @@
 
                     <hr class="my-3">
 
-                    <div class="summary-item mb-2 p-2 rounded bg-light-custom border-left border-danger">
+                    {{-- الإجماليات (لا تشمل الشراء بناءً على تعديل الـ Controller) --}}
+                    <div class="summary-item mb-2 p-2 rounded bg-light-custom border-left border-success">
                         <div class="d-flex justify-content-between">
-                            <span class="small text-muted font-weight-bold">إجمالي مدين</span>
+                            <span class="small text-muted font-weight-bold">إجمالي مدين (+)</span>
                             <span class="text-success text-bold">{{ number_format($totalDebit, 2) }}</span>
                         </div>
                     </div>
-                    <div class="summary-item mb-3 p-2 rounded bg-light-custom border-left border-success">
+                    <div class="summary-item mb-3 p-2 rounded bg-light-custom border-left border-danger">
                         <div class="d-flex justify-content-between">
-                            <span class="small text-muted font-weight-bold">إجمالي دائن</span>
+                            <span class="small text-muted font-weight-bold">إجمالي دائن (-)</span>
                             <span class="text-danger text-bold">{{ number_format($totalCredit, 2) }}</span>
                         </div>
                     </div>
@@ -70,7 +72,7 @@
                     <div
                         class="summary-item p-2 mb-3 rounded shadow-sm {{ $balance >= 0 ? 'bg-success-light' : 'bg-danger-light' }}">
                         <div class="d-flex justify-content-between align-items-center">
-                            <span class="small font-weight-bold">رصيد الحسابات:</span>
+                            <span class="small font-weight-bold">صافي المديونية:</span>
                             <span class="text-bold">{{ number_format($balance, 2) }}</span>
                         </div>
                     </div>
@@ -78,7 +80,6 @@
                     <hr class="my-3 shadow-sm" style="border-top: 2px dashed #bbb;">
 
                     @php
-                        // المتبقي = إجمالي البنود - الرصيد الحالي
                         $finalRequired = $totalTitlesPrice - $balance;
                     @endphp
 
@@ -96,11 +97,11 @@
                             @endif
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
 
+        {{-- عمود الجدول: سجل التحركات --}}
         <div class="col-xl-9 col-lg-8">
             <div class="card shadow-sm custom-card">
                 <div class="card-header border-0 d-flex align-items-center">
@@ -115,24 +116,33 @@
                                     <th>البيان</th>
                                     <th class="text-center">مدين (+)</th>
                                     <th class="text-center">دائن (-)</th>
-                                    <th class="text-center">الرصيد</th>
+                                    <th class="text-center">الرصيد التراكمي</th>
                                     <th class="text-center">إجراء</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php $runningBalance = 0; @endphp
                                 @forelse ($accounts as $account)
-                                    @php $runningBalance += ( $account->debit - $account->credit); @endphp
-                                    <tr>
+                                    @php
+                                        $runningBalance += $account->debit - $account->credit;
+                                        // تحديد إذا كان السطر هو عملية شراء لتمييزه لونياً
+                                        $isPurchase = str_contains($account->description, 'شراء');
+                                    @endphp
+                                    <tr class="{{ $isPurchase ? 'bg-purchase-yellow' : '' }}">
                                         <td class="pl-4">
                                             <div class="text-bold mb-0 small">{{ $account->created_at->format('d-m-Y') }}
                                             </div>
                                             <div class="text-muted extra-small">{{ $account->created_at->format('h:i A') }}
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="">
                                             <div class="description-text font-weight-500">
-                                                {{ $account->description ?: 'إجراء مالي عام' }}</div>
+                                                {{ $account->description ?: 'إجراء مالي عام' }}
+                                                @if ($isPurchase)
+                                                    <span class="badge badge-secondary ml-1 small"
+                                                        style="font-size: 0.6rem;">غير مدرج في الحساب</span>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="text-center">
                                             <span
@@ -180,8 +190,6 @@
 @section('css')
     <style>
         /* --- ألوان مخصصة تدعم الوضعين --- */
-
-        /* خلفيات خفيفة للعناصر في الوضع الفاتح */
         .bg-light-custom {
             background-color: #f8f9fa;
         }
@@ -200,6 +208,19 @@
             background-color: #f4f6f9;
             color: #495057;
             border-bottom: 2px solid #dee2e6;
+        }
+
+        /* تمييز صف الشراء */
+        .bg-purchase-row {
+            background-color: rgba(0, 0, 0, 0.04) !important;
+        }
+
+        .bg-purchase-row td {
+            color: #888;
+        }
+
+        .dark-mode .bg-purchase-row {
+            background-color: rgba(255, 255, 255, 0.05) !important;
         }
 
         /* الوضع المظلم (Dark Mode) */
@@ -236,10 +257,6 @@
             border-top: 1px solid #3d4348;
         }
 
-        .dark-mode .table-hover tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.02);
-        }
-
         /* ألوان النصوص المالية */
         .text-danger-custom {
             color: #e53e3e;
@@ -274,7 +291,6 @@
             background-color: rgba(236, 159, 5, 0.2);
         }
 
-        /* إضافات جمالية */
         .extra-small {
             font-size: 0.75rem;
         }
@@ -293,7 +309,6 @@
             vertical-align: middle !important;
         }
 
-        /* تنسيق الطباعة */
         @media print {
 
             .btn,
@@ -320,6 +335,23 @@
                 background: transparent !important;
                 border: 1px solid #eee;
             }
+        }
+
+        /* لون صف الشراء في الوضع الفاتح - أصفر هادئ */
+        .bg-purchase-yellow {
+            background-color: #fff9c4 !important;
+            /* أصفر فاتح (Lemon Chiffon) */
+        }
+
+        /* لون صف الشراء في الوضع المظلم - أصفر داكن ليتناسب مع الخلفية السوداء */
+        .dark-mode .bg-purchase-yellow {
+            background-color: #4d4600 !important;
+            /* أصفر غامق جداً */
+        }
+
+        /* اختيارياً: جعل النص في صف الشراء مائلاً لتمييزه أكثر */
+        .bg-purchase-yellow td {
+            font-style: italic;
         }
     </style>
 @stop
