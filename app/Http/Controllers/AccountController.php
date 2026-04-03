@@ -78,6 +78,7 @@ class AccountController extends Controller
                 $query->where('description', 'not like', '%شراء%');
             }], 'credit')
             ->get();
+        return $customers;
 
         foreach ($customers as $customer) {
             $customer->balance =
