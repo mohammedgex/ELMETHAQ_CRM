@@ -245,17 +245,17 @@ class AccountController extends Controller
 
                 if ($match && !empty($match['customer_id'])) {
                     // معالجة التاريخ (كودك السابق الذكي)
-                    $dateRaw = $row[1] ?? null;
+                    $dateRaw = $row[6] ?? null;
                     $finalDate = is_numeric($dateRaw)
                         ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateRaw))
                         : Carbon::parse($dateRaw);
 
                     \App\Models\Account::create([
                         'customer_id' => $match['customer_id'],
-                        'debit'       => (float)str_replace(',', '', $row[6] ?? 0),
-                        'credit'      => (float)str_replace(',', '', $row[4] ?? 0),
-                        'description' => trim($row[2] ?? '') . " (مستورد)",
-                        // 'created_at'  => $finalDate->setTime(10, 0),
+                        'debit'       => (float)str_replace(',', '', $row[10] ?? 0),
+                        'credit'      => (float)str_replace(',', '', $row[12] ?? 0),
+                        'description' => trim($row[7] ?? '') . " (مستورد)",
+                        'created_at'  => $finalDate->setTime(10, 0),
                     ]);
                 }
             }
