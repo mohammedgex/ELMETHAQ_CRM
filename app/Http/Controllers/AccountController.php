@@ -150,25 +150,25 @@ class AccountController extends Controller
         $cleanData = collect($data)->slice(2); // تجاهل الهيدر
         session(['excel_data' => $cleanData->toArray()]);
 
-        // 2. جلب الأسماء الفريدة من الإكسيل للربط اليدوي
+        // 2. جلب الأسماء الفريدة من الإكسيل (للعرض في القائمة المنسدلة اليدوية)
         $allExcelNames = $cleanData->pluck(0)->unique()->filter()->values()->all();
 
-        // 3. جلب عملاء السيستم للمجموعة المحددة
+        // 3. جلب عملاء السيستم
         $systemCustomers = \App\Models\Customer::where('customer_group_id', $group_id)->get();
 
         $customersList = [];
         foreach ($systemCustomers as $customer) {
-            // تنظيف اسم السيستم (بدون مسافات وبدون همزات)
+            // تنظيف اسم السيستم: (بدون مسافات، بدون همزات، وبدون رموز)
             $systemNameClean = $this->normalizeArabic($customer->name_ar, true);
 
             $foundInExcel = $cleanData->first(function ($row) use ($systemNameClean) {
                 $excelOriginalName = $row[0] ?? '';
                 if (empty($excelOriginalName)) return false;
 
-                // تنظيف اسم الإكسيل (بدون مسافات وبدون همزات)
+                // تنظيف اسم الإكسيل بنفس الطريقة (تجريد كامل)
                 $excelNameClean = $this->normalizeArabic($excelOriginalName, true);
 
-                // المقارنة الآن ستنجح لأن "عبدالرحمن" ستطابق "عبدالرحمن" حتى لو كان أحدهما بمسافة
+                // التحقق من وجود اسم السيستم داخل نص الإكسيل أو العكس
                 return str_contains($excelNameClean, $systemNameClean) || str_contains($systemNameClean, $excelNameClean);
             });
 
@@ -190,20 +190,28 @@ class AccountController extends Controller
         $tashkeel = ["/ُ/", "/ً/", "/ٌ/", "/َّ/", "/ِ/", "/ٍ/", "/ْ/", "/َ/"];
         $string = preg_replace($tashkeel, "", $string);
 
-        // 2. توحيد الحروف الضعيفة (أ، إ، آ -> ا) (ة -> ه) (ى، ئ -> ي)
+        // 2. توحيد الحروف الضعيفة والياء الفارسية والكاف
         $entities = [
             '/[أإآ]/u' => 'ا',
             '/[ة]/u'    => 'ه',
             '/[ى]/u'    => 'ي',
             '/[ئ]/u'    => 'ي',
             '/[ؤ]/u'    => 'و',
+            '/ی/u'      => 'ي', // الياء بدون نقاط
+            '/ک/u'      => 'ك', // الكاف الفارسية
         ];
         $string = preg_replace(array_keys($entities), array_values($entities), $string);
 
-        // 3. إزالة كافة المسافات إذا كان المطلوب هو المقارنة (لحل مشكلة عبدالرحمن وعبد الرحمن)
+        // 3. إزالة أي شيء ليس حرفاً عربياً (الأرقام، الشرطات، النجوم، المائل)
+        // هذا سيحول "01010936-السائق / سيد" إلى "السائق سيد"
+        $string = preg_replace('/[^\x{0621}-\x{064A}]/u', ' ', $string);
+
+        // 4. معالجة المسافات
         if ($stripSpaces) {
+            // إزالة المسافات تماماً للمقارنة (عبدالرحمن = عبد الرحمن)
             $string = preg_replace('/\s+/', '', $string);
         } else {
+            // توحيد المسافات لمسافة واحدة فقط
             $string = preg_replace('/\s+/', ' ', $string);
         }
 
