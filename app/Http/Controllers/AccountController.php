@@ -70,15 +70,17 @@ class AccountController extends Controller
     {
         $customers = Customer::where('customer_group_id', $group_id)
             ->withSum(['accounts as total_debit' => function ($query) {
-                // استبعاد أي صف يحتوي وصفه على كلمة "شراء"
-                $query->where('description', 'not like', '%شراء%');
+                // تنظيف الوصف من المسافات وتوحيد الألف (أ، إ، آ -> ا) قبل الاستبعاد
+                $query->whereRaw("
+            REPLACE(REPLACE(REPLACE(REPLACE(description, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), ' ', '') 
+            NOT LIKE ?", ['%شراء%']);
             }], 'debit')
             ->withSum(['accounts as total_credit' => function ($query) {
-                // يجب تكرار نفس الشرط هنا لضمان توازن الحسابات المستبعدة
-                $query->where('description', 'not like', '%شراء%');
+                $query->whereRaw("
+            REPLACE(REPLACE(REPLACE(REPLACE(description, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), ' ', '') 
+            NOT LIKE ?", ['%شراء%']);
             }], 'credit')
             ->get();
-        return $customers;
 
         foreach ($customers as $customer) {
             $customer->balance =
