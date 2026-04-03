@@ -3,7 +3,24 @@
 @section('title', 'كشف الحساب اليومي')
 
 @section('content_header')
-    <h1 class="m-0 text-dark">تقرير يومية: <span class="badge badge-info">{{ $date }}</span></h1>
+    <div class="d-flex justify-content-between align-items-center flex-wrap">
+        {{-- جهة العنوان --}}
+        <div>
+            <h1 class="m-0 text-dark text-bold">
+                <i class="fas fa-calendar-day mr-1 text-muted"></i>
+                تقرير يومية: <span class="badge badge-info shadow-sm">{{ $date }}</span>
+            </h1>
+        </div>
+
+        {{-- جهة الأزرار --}}
+        <div class="mt-2 mt-md-0">
+            <a href="{{ route('import.view') }}" class="btn btn-outline-dark shadow-sm">
+                <i class="fas fa-file-import mr-1"></i> استيراد حركات (Excel)
+            </a>
+
+            {{-- يمكنك إضافة أزرار أخرى هنا مستقبلاً --}}
+        </div>
+    </div>
 @stop
 
 @section('content')
