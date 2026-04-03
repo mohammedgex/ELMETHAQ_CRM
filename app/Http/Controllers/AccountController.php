@@ -158,11 +158,18 @@ class AccountController extends Controller
 
         $customersList = [];
         foreach ($systemCustomers as $customer) {
-            $searchName = $this->normalizeArabic($customer->name_ar);
+            // تنظيف اسم السيستم (بدون مسافات وبدون همزات)
+            $systemNameClean = $this->normalizeArabic($customer->name_ar, true);
 
-            // محاولة إيجاد تطابق آلي
-            $foundInExcel = $cleanData->first(function ($row) use ($searchName) {
-                return str_contains($this->normalizeArabic($row[0] ?? ''), $searchName);
+            $foundInExcel = $cleanData->first(function ($row) use ($systemNameClean) {
+                $excelOriginalName = $row[0] ?? '';
+                if (empty($excelOriginalName)) return false;
+
+                // تنظيف اسم الإكسيل (بدون مسافات وبدون همزات)
+                $excelNameClean = $this->normalizeArabic($excelOriginalName, true);
+
+                // المقارنة الآن ستنجح لأن "عبدالرحمن" ستطابق "عبدالرحمن" حتى لو كان أحدهما بمسافة
+                return str_contains($excelNameClean, $systemNameClean) || str_contains($systemNameClean, $excelNameClean);
             });
 
             $customersList[] = [
@@ -175,7 +182,7 @@ class AccountController extends Controller
 
         return view('accounts.mapping', compact('customersList', 'allExcelNames', 'group_id'));
     }
-    private function normalizeArabic($string, $removeSpaces = false)
+    private function normalizeArabic($string, $stripSpaces = false)
     {
         if (empty($string)) return "";
 
@@ -183,7 +190,7 @@ class AccountController extends Controller
         $tashkeel = ["/ُ/", "/ً/", "/ٌ/", "/َّ/", "/ِ/", "/ٍ/", "/ْ/", "/َ/"];
         $string = preg_replace($tashkeel, "", $string);
 
-        // 2. توحيد الحروف الضعيفة
+        // 2. توحيد الحروف الضعيفة (أ، إ، آ -> ا) (ة -> ه) (ى، ئ -> ي)
         $entities = [
             '/[أإآ]/u' => 'ا',
             '/[ة]/u'    => 'ه',
@@ -193,12 +200,10 @@ class AccountController extends Controller
         ];
         $string = preg_replace(array_keys($entities), array_values($entities), $string);
 
-        // 3. معالجة المسافات
-        if ($removeSpaces) {
-            // إزالة كل المسافات للمقارنة الصارمة للأسماء المركبة
+        // 3. إزالة كافة المسافات إذا كان المطلوب هو المقارنة (لحل مشكلة عبدالرحمن وعبد الرحمن)
+        if ($stripSpaces) {
             $string = preg_replace('/\s+/', '', $string);
         } else {
-            // توحيد المسافات فقط
             $string = preg_replace('/\s+/', ' ', $string);
         }
 
