@@ -175,6 +175,35 @@ class AccountController extends Controller
 
         return view('accounts.mapping', compact('customersList', 'allExcelNames', 'group_id'));
     }
+    private function normalizeArabic($string, $removeSpaces = false)
+    {
+        if (empty($string)) return "";
+
+        // 1. إزالة التشكيل
+        $tashkeel = ["/ُ/", "/ً/", "/ٌ/", "/َّ/", "/ِ/", "/ٍ/", "/ْ/", "/َ/"];
+        $string = preg_replace($tashkeel, "", $string);
+
+        // 2. توحيد الحروف الضعيفة
+        $entities = [
+            '/[أإآ]/u' => 'ا',
+            '/[ة]/u'    => 'ه',
+            '/[ى]/u'    => 'ي',
+            '/[ئ]/u'    => 'ي',
+            '/[ؤ]/u'    => 'و',
+        ];
+        $string = preg_replace(array_keys($entities), array_values($entities), $string);
+
+        // 3. معالجة المسافات
+        if ($removeSpaces) {
+            // إزالة كل المسافات للمقارنة الصارمة للأسماء المركبة
+            $string = preg_replace('/\s+/', '', $string);
+        } else {
+            // توحيد المسافات فقط
+            $string = preg_replace('/\s+/', ' ', $string);
+        }
+
+        return trim($string);
+    }
 
     public function finalConfirm(Request $request)
     {
@@ -226,28 +255,4 @@ class AccountController extends Controller
      * دالة موحدة لتطهير النصوص العربية
      * تقوم بتحويل كل الأشكال الممكنة لحرف واحد لضمان المطابقة
      */
-    private function normalizeArabic($string)
-    {
-        if (empty($string)) return "";
-
-        // 1. إزالة التشكيل (فتحة، ضمة، إلخ)
-        $tashkeel = ["/ُ/", "/ً/", "/ٌ/", "/َّ/", "/ِ/", "/ٍ/", "/ْ/", "/َ/"];
-        $string = preg_replace($tashkeel, "", $string);
-
-        // 2. توحيد الحروف الضعيفة والمشابهة
-        $entities = [
-            '/[أإآ]/u' => 'ا',
-            '/[ة]/u'    => 'ه',
-            '/[ى]/u'    => 'ي',
-            '/[ئ]/u'    => 'ي',
-            '/[ؤ]/u'    => 'و',
-        ];
-
-        $string = preg_replace(array_keys($entities), array_values($entities), $string);
-
-        // 3. إزالة أي مسافات زائدة في المنتصف وتحويلها لمسافة واحدة
-        $string = preg_replace('/\s+/', ' ', $string);
-
-        return trim($string);
-    }
 }
