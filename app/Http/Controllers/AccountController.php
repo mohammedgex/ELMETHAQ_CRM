@@ -137,64 +137,91 @@ class AccountController extends Controller
     }
 
 
-    public function showImportPage()
+    public function showImportPage($group_id)
     {
-        return view('accounts.import');
+        return view('accounts.import', compact('group_id'));
     }
-    public function processImport(Request $request)
+    public function processImport(Request $request, $group_id)
     {
         $request->validate(['excel_file' => 'required|mimes:xlsx,xls,csv']);
 
-        // قراءة الشيت كمصفوفة
+        // 1. قراءة الملف وتخزينه مؤقتاً
         $data = \Excel::toArray([], $request->file('excel_file'))[0];
-
-        // استخراج البيانات وتخزينها بالسيشن
-        $cleanData = collect($data)->slice(2);
+        $cleanData = collect($data)->slice(2); // تجاهل الهيدر
         session(['excel_data' => $cleanData->toArray()]);
 
-        // جلب الأسماء الفريدة من العمود الأول
-        $excelCustomers = $cleanData->pluck(0)->unique()->filter()->toArray();
+        // 2. جلب الأسماء الفريدة من الإكسيل للربط اليدوي
+        $allExcelNames = $cleanData->pluck(0)->unique()->filter()->values()->all();
+
+        // 3. جلب عملاء السيستم للمجموعة المحددة
+        $systemCustomers = \App\Models\Customer::where('customer_group_id', $group_id)->get();
 
         $customersList = [];
-        foreach ($excelCustomers as $excelName) {
-            // 1. استخراج الاسم فقط وتجاهل أي شيء قبل الـ "/" (مثل السائق / ...)
-            $rawName = preg_replace('/^.*?\/\s*/u', '', $excelName);
+        foreach ($systemCustomers as $customer) {
+            $searchName = $this->normalizeArabic($customer->name_ar);
 
-            // إذا كان هناك "-" نفصل ونأخذ الجزء الثاني (الاسم) فقط
-            if (str_contains($rawName, '-')) {
-                $parts = explode('-', $rawName);
-                $displayName = trim(end($parts)); // نأخذ آخر جزء بعد الشرطة كونه غالباً هو الاسم
-            } else {
-                $displayName = trim($rawName);
-            }
-
-            // 2. تطهير الاسم للبحث (Normalize)
-            $searchName = $this->normalizeArabic($displayName);
-
-            // 3. البحث في السيستم (بالاسم فقط مع تجاهل فروقات الهمزات والتاء المربوطة في الطرفين)
-            $systemCustomer = \App\Models\Customer::where(function ($query) use ($searchName) {
-                $query->whereRaw("
-                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(name_ar, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), 'ة', 'ه'), 'ى', 'ي') 
-                LIKE ?", ["%" . $searchName . "%"]);
-            })->first();
-
-            // 4. محاولة أخيرة: إذا لم يجد، نبحث بالاسم الأصلي كما هو
-            if (!$systemCustomer) {
-                $systemCustomer = \App\Models\Customer::where('name_ar', 'like', '%' . $displayName . '%')->first();
-            }
+            // محاولة إيجاد تطابق آلي
+            $foundInExcel = $cleanData->first(function ($row) use ($searchName) {
+                return str_contains($this->normalizeArabic($row[0] ?? ''), $searchName);
+            });
 
             $customersList[] = [
-                'excel_original' => $excelName,
-                'display_name'   => $displayName,
-                'system_id'      => $systemCustomer ? $systemCustomer->id : null,
-                'system_name'    => $systemCustomer ? $systemCustomer->name_ar : null,
-                'status'         => $systemCustomer ? 'found' : 'not_found'
+                'system_id'      => $customer->id,
+                'system_name'    => $customer->name_ar,
+                'excel_original' => $foundInExcel ? $foundInExcel[0] : null,
+                'status'         => $foundInExcel ? 'found' : 'not_found'
             ];
         }
 
-        return view('accounts.mapping', compact('customersList'));
+        return view('accounts.mapping', compact('customersList', 'allExcelNames', 'group_id'));
     }
 
+    public function finalConfirm(Request $request)
+    {
+        $excelData = session('excel_data');
+        $mapping = $request->input('mapping');
+
+        if (!$excelData || !$mapping) {
+            return redirect()->route('import.view')->with('error', 'انتهت صلاحية البيانات، يرجى الرفع مجدداً.');
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($excelData as $row) {
+                $excelNameInRow = $row[0];
+
+                // البحث: هل تم ربط هذا الاسم من الإكسيل بعميل في السيستم؟
+                $match = collect($mapping)->first(function ($item) use ($excelNameInRow) {
+                    return isset($item['excel_name']) && $item['excel_name'] == $excelNameInRow;
+                });
+
+                if ($match && !empty($match['customer_id'])) {
+                    // معالجة التاريخ (كودك السابق الذكي)
+                    $dateRaw = $row[1] ?? null;
+                    $finalDate = is_numeric($dateRaw)
+                        ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateRaw))
+                        : Carbon::parse($dateRaw);
+
+                    \App\Models\Account::create([
+                        'customer_id' => $match['customer_id'],
+                        'debit'       => (float)str_replace(',', '', $row[6] ?? 0),
+                        'credit'      => (float)str_replace(',', '', $row[4] ?? 0),
+                        'description' => trim($row[2] ?? '') . " (مستورد)",
+                        'created_at'  => $finalDate->setTime(10, 0),
+                    ]);
+                }
+            }
+
+            DB::commit();
+            session()->forget('excel_data');
+            return redirect()
+                ->route('import.view', ['group_id' => $request->group_id])
+                ->with('success', 'تم استيراد الحركات بنجاح.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'حدث خطأ: ' . $e->getMessage());
+        }
+    }
     /**
      * دالة موحدة لتطهير النصوص العربية
      * تقوم بتحويل كل الأشكال الممكنة لحرف واحد لضمان المطابقة
@@ -203,10 +230,11 @@ class AccountController extends Controller
     {
         if (empty($string)) return "";
 
-        // إزالة الحركات (فتحة، ضمة، إلخ)
+        // 1. إزالة التشكيل (فتحة، ضمة، إلخ)
         $tashkeel = ["/ُ/", "/ً/", "/ٌ/", "/َّ/", "/ِ/", "/ٍ/", "/ْ/", "/َ/"];
         $string = preg_replace($tashkeel, "", $string);
 
+        // 2. توحيد الحروف الضعيفة والمشابهة
         $entities = [
             '/[أإآ]/u' => 'ا',
             '/[ة]/u'    => 'ه',
@@ -217,96 +245,9 @@ class AccountController extends Controller
 
         $string = preg_replace(array_keys($entities), array_values($entities), $string);
 
-        // إزالة أي مسافات زائدة في المنتصف
+        // 3. إزالة أي مسافات زائدة في المنتصف وتحويلها لمسافة واحدة
         $string = preg_replace('/\s+/', ' ', $string);
 
         return trim($string);
-    }
-
-    public function finalConfirm(Request $request)
-    {
-        // 1. جلب البيانات من السيشن والفورم
-        $excelData = session('excel_data');
-        $mapping = $request->input('mapping');
-
-        // 2. التحقق من وجود البيانات ومن ربط كل الحقول (Validation)
-        if (!$excelData || !$mapping) {
-            return redirect()->back()->with('error', 'انتهت صلاحية الجلسة أو البيانات غير موجودة.');
-        }
-
-        foreach ($mapping as $entry) {
-            if (empty($entry['customer_id'])) {
-                return redirect()->back()
-                    ->with('error', 'خطأ: لا يمكن الحفظ! يجب ربط جميع الأسماء في الجدول بعملاء من النظام.')
-                    ->withInput();
-            }
-        }
-
-        // 3. بدء عملية الحفظ الفعلي
-        DB::beginTransaction();
-
-        try {
-            foreach ($excelData as $row) {
-                $excelName = $row[0]; // اسم العميل في الشيت
-
-                // البحث عن العميل المختار لهذا الاسم في مصفوفة الربط
-                $mappedCustomer = collect($mapping)->firstWhere('excel_name', $excelName);
-
-                if ($mappedCustomer && !empty($mappedCustomer['customer_id'])) {
-
-                    $invoiceRaw = $row[2] ?? ''; // نص الفاتورة
-                    $dateRaw = $row[1] ?? null;  // التاريخ من الإكسيل
-
-                    // --- معالجة التاريخ الذكية (لحل مشكلة 19-10-1970) ---
-                    $finalDate = Carbon::now();
-                    if ($dateRaw) {
-                        try {
-                            // إذا كان الإكسيل يرسل التاريخ كـ "رقم تسلسلي" (مثل 45949)
-                            if (is_numeric($dateRaw)) {
-                                $finalDate = Carbon::instance(Date::excelToDateTimeObject($dateRaw))->setTime(10, 0, 0);
-                            } else {
-                                // إذا كان التاريخ نصاً بصيغة شهر/يوم/سنة
-                                $finalDate = Carbon::createFromFormat('m/d/Y', trim($dateRaw))->setTime(10, 0, 0);
-                            }
-                        } catch (\Exception $e) {
-                            try {
-                                // محاولة أخيرة مرنة في حال اختلف التنسيق
-                                $finalDate = Carbon::parse($dateRaw)->setTime(10, 0, 0);
-                            } catch (\Exception $e2) {
-                                $finalDate = Carbon::now(); // في حال الفشل التام نأخذ تاريخ اليوم
-                            }
-                        }
-                    }
-
-                    // --- تنظيف الوصف ---
-                    $finalDescription = '';
-                    if (str_contains($invoiceRaw, 'شراء')) {
-                        $finalDescription = 'شراء';
-                    } else {
-                        // أي حالة أخرى نكتب النص كما هو مع التاريخ الأصلي
-                        $finalDescription = trim($invoiceRaw) . ' بتاريخ ' . $dateRaw;
-                    }
-
-                    // --- تنفيذ القيد في قاعدة البيانات ---
-                    \App\Models\Account::create([
-                        'customer_id' => $mappedCustomer['customer_id'],
-                        'debit'       => isset($row[6]) ? (float)str_replace(',', '', $row[6]) : 0,
-                        'credit'      => isset($row[4]) ? (float)str_replace(',', '', $row[4]) : 0,
-                        'description' => $finalDescription,
-                        'created_at'  => $finalDate,
-                        'updated_at'  => $finalDate,
-                    ]);
-                }
-            }
-
-            // 4. الاعتماد النهائي ومسح الذاكرة المؤقتة
-            DB::commit();
-            session()->forget('excel_data');
-
-            return redirect()->route('import.view')->with('success', 'تم استيراد كافة القيود بنجاح بالتواريخ الصحيحة.');
-        } catch (\Exception $e) {
-            DB::rollback();
-            return redirect()->back()->with('error', 'حدث خطأ تقني أثناء الحفظ: ' . $e->getMessage());
-        }
     }
 }

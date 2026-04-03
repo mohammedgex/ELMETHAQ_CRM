@@ -301,10 +301,10 @@ Route::group([
 
 
     // صفحة رفع الملف
-    Route::get('/import-transactions', [AccountController::class, 'showImportPage'])->name('import.view');
+    Route::get('/import-transactions/{group_id}', [AccountController::class, 'showImportPage'])->name('import.view');
 
     // الأكشن اللي بيستلم الملف ويعالجه
-    Route::post('/import-transactions', [AccountController::class, 'processImport'])->name('import.store');
+    Route::post('/import-transactions/{group_id}', [AccountController::class, 'processImport'])->name('import.store');
     // مسار حفظ البيانات النهائية بعد عملية المطابقة
     Route::post('/import-final-confirm', [AccountController::class, 'finalConfirm'])->name('import.final_confirm');
 });

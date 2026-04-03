@@ -13,13 +13,7 @@
         </div>
 
         {{-- جهة الأزرار --}}
-        <div class="mt-2 mt-md-0">
-            <a href="{{ route('import.view') }}" class="btn btn-outline-dark shadow-sm">
-                <i class="fas fa-file-import mr-1"></i> استيراد حركات (Excel)
-            </a>
 
-            {{-- يمكنك إضافة أزرار أخرى هنا مستقبلاً --}}
-        </div>
     </div>
 @stop
 

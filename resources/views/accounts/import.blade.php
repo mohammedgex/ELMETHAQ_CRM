@@ -21,7 +21,8 @@
                         </h3>
                     </div>
 
-                    <form id="importForm" action="{{ route('import.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="importForm" action="{{ route('import.store', $group_id) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="card-body py-4">
                             <div class="text-center mb-4">
