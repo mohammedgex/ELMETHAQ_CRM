@@ -70,15 +70,18 @@ class AccountController extends Controller
     {
         $customers = Customer::where('customer_group_id', $group_id)
             ->withSum(['accounts as total_debit' => function ($query) {
-                // تنظيف الوصف من المسافات وتوحيد الألف (أ، إ، آ -> ا) قبل الاستبعاد
-                $query->whereRaw("
-            REPLACE(REPLACE(REPLACE(REPLACE(description, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), ' ', '') 
-            NOT LIKE ?", ['%شراء%']);
+                $query->where(function ($q) {
+                    // 1. استبعاد الكلمة (مع تنظيف الألف والهمزات والمسافات)
+                    $q->whereRaw("REPLACE(REPLACE(REPLACE(REPLACE(description, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), ' ', '') NOT LIKE ?", ['%شراء%'])
+                        // 2. ضمان جلب الصفوف التي ليس لها وصف (NULL)
+                        ->orWhereNull('description');
+                });
             }], 'debit')
             ->withSum(['accounts as total_credit' => function ($query) {
-                $query->whereRaw("
-            REPLACE(REPLACE(REPLACE(REPLACE(description, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), ' ', '') 
-            NOT LIKE ?", ['%شراء%']);
+                $query->where(function ($q) {
+                    $q->whereRaw("REPLACE(REPLACE(REPLACE(REPLACE(description, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), ' ', '') NOT LIKE ?", ['%شراء%'])
+                        ->orWhereNull('description');
+                });
             }], 'credit')
             ->get();
 
