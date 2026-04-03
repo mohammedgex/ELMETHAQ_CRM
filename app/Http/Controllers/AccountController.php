@@ -230,7 +230,8 @@ class AccountController extends Controller
         $mapping = $request->input('mapping');
 
         if (!$excelData || !$mapping) {
-            return redirect()->route('import.view')->with('error', 'انتهت صلاحية البيانات، يرجى الرفع مجدداً.');
+            return redirect()->route('import.view', ['group_id' => $request->group_id])
+                ->with('error', 'انتهت صلاحية البيانات، يرجى الرفع مجدداً.');
         }
 
         DB::beginTransaction();
@@ -238,36 +239,55 @@ class AccountController extends Controller
             foreach ($excelData as $row) {
                 $excelNameInRow = $row[0];
 
-                // البحث: هل تم ربط هذا الاسم من الإكسيل بعميل في السيستم؟
+                // البحث عن العميل المرتبط في مصفوفة الـ Mapping
                 $match = collect($mapping)->first(function ($item) use ($excelNameInRow) {
                     return isset($item['excel_name']) && $item['excel_name'] == $excelNameInRow;
                 });
 
                 if ($match && !empty($match['customer_id'])) {
-                    // معالجة التاريخ (كودك السابق الذكي)
+
+                    // --- نظام معالجة التاريخ الذكي ---
                     $dateRaw = $row[1] ?? null;
-                    $finalDate = is_numeric($dateRaw)
-                        ? Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateRaw))
-                        : Carbon::parse($dateRaw);
+                    try {
+                        if (is_numeric($dateRaw)) {
+                            $finalDate = \Carbon\Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($dateRaw));
+                        } elseif (!empty($dateRaw)) {
+                            $finalDate = \Carbon\Carbon::parse($dateRaw);
+                        } else {
+                            $finalDate = now(); // إذا كانت الخلية فارغة تماماً
+                        }
+
+                        // حماية: إذا كان التاريخ الناتج قديماً جداً (مثل 1902 أو 1900)
+                        // نقوم باستبداله بتاريخ اليوم ليتوافق مع قاعدة البيانات
+                        if ($finalDate->year < 1970) {
+                            $finalDate = now();
+                        }
+                    } catch (\Exception $e) {
+                        $finalDate = now(); // في حالة فشل أي محاولة قراءة، استخدم تاريخ اليوم
+                    }
+                    // ---------------------------------
 
                     \App\Models\Account::create([
                         'customer_id' => $match['customer_id'],
                         'debit'       => (float)str_replace(',', '', $row[6] ?? 0),
                         'credit'      => (float)str_replace(',', '', $row[4] ?? 0),
                         'description' => trim($row[2] ?? '') . " (مستورد)",
-                        'created_at'  => $finalDate->setTime(10, 0),
+                        'created_at'  => $finalDate->setTime(10, 0, 0), // ضبط الوقت لتجنب مشاكل المناطق الزمنية
+                        'updated_at'  => now(),
                     ]);
                 }
             }
 
             DB::commit();
             session()->forget('excel_data');
+
             return redirect()
                 ->route('import.view', ['group_id' => $request->group_id])
                 ->with('success', 'تم استيراد الحركات بنجاح.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'حدث خطأ: ' . $e->getMessage());
+            // إظهار رسالة خطأ واضحة للمطور في حالة حدوث شيء غير متوقع
+            return redirect()->back()->with('error', 'حدث خطأ أثناء الحفظ: ' . $e->getMessage());
         }
     }
     /**
