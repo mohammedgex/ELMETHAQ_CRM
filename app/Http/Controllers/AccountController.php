@@ -70,12 +70,12 @@ class AccountController extends Controller
     {
         $customers = Customer::where('customer_group_id', $group_id)
             ->withSum(['accounts as total_debit' => function ($query) {
-                $query->where('description', '!=', 'شراء');
-                // أو إذا كنت تريد استبعاد أي وصف يحتوي على كلمة شراء:
-                // $query->where('description', 'not like', '%شراء%');
+                // استبعاد أي صف يحتوي وصفه على كلمة "شراء"
+                $query->where('description', 'not like', '%شراء%');
             }], 'debit')
             ->withSum(['accounts as total_credit' => function ($query) {
-                $query->where('description', '!=', 'شراء');
+                // يجب تكرار نفس الشرط هنا لضمان توازن الحسابات المستبعدة
+                $query->where('description', 'not like', '%شراء%');
             }], 'credit')
             ->get();
 
