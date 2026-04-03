@@ -1082,8 +1082,16 @@ class CustomerController extends Controller
         // 🔍 البحث بناءً على النوع المختار
         if ($type === 'name' && $request->filled('name')) {
             $keyword = $request->name;
-            $customers->where('name_ar', 'like', "%{$keyword}%");
-            $leads->where('name', 'like', "%{$keyword}%");
+
+            // دالة مساعدة لتنظيف النص وتبسيطه للبحث
+            $normalizeSearch = function ($query, $column, $value) {
+                return $query->whereRaw("
+            REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE($column, 'أ', 'ا'), 'إ', 'ا'), 'آ', 'ا'), 'ة', 'ه'), 'ى', 'ي'), 'ئ', 'ي') 
+            LIKE ?", ["%" . $this->normalizeArabic($value) . "%"]);
+            };
+
+            $normalizeSearch($customers, 'name_ar', $keyword);
+            $normalizeSearch($leads, 'name', $keyword);
         } elseif ($type === 'passport' && $request->filled('passport')) {
             $keyword = $request->passport;
             $customers->where('passport_id', 'like', "%{$keyword}%");
@@ -1126,6 +1134,12 @@ class CustomerController extends Controller
 
         // 🔹 عرض النتائج في الصفحة
         return view('deep-search', compact('customers', 'leads', 'type'));
+    }
+    private function normalizeArabic($string)
+    {
+        $search = ['أ', 'إ', 'آ', 'ة', 'ى', 'ئ'];
+        $replace = ['ا', 'ا', 'ا', 'ه', 'ي', 'ي'];
+        return str_replace($search, $replace, $string);
     }
 
     // CustomerController.php
