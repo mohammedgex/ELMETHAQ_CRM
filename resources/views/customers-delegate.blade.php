@@ -20,6 +20,8 @@
                                     <th>#</th>
                                     <th>اسم</th>
                                     <th>رقم الهاتف</th>
+                                    <th>المجموعة</th>
+                                    <th>الحقيبة</th>
                                     <th>الإجراءات</th>
                                 </tr>
                             </thead>
@@ -29,6 +31,8 @@
                                         <td>{{ $customer->id }}</td>
                                         <td>{{ $customer->name_ar }}</td>
                                         <td>{{ $customer->phone }}</td>
+                                        <td>{{ $customer->customerGroup->title ?? '-' }}</td>
+                                        <td>{{ $customer->bag->name ?? '-' }}</td>
                                         <td class="d-flex justify-content-center align-items-center gap-1">
                                             <a href="{{ route('customer.add', $customer->id) }}"
                                                 class="btn btn-sm btn-outline-success shadow-sm" title="تعديل">
