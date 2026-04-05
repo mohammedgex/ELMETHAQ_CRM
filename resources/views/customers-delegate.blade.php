@@ -136,12 +136,15 @@
     <script>
         $(document).ready(function() {
             $('#example').DataTable({
+                "paging": false, // تم إيقاف تقسيم الصفحات هنا
+                "scrollY": "600px", // اختيار اختياري: إضافة سكرول داخلي إذا كان الجدول طويلاً جداً
+                "scrollCollapse": true,
+                "info": true, // لإظهار عدد العملاء الكلي أسفل الجدول
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/ar.json"
-                    {{-- تعريب الجدول بالكامل --}}
                 },
                 "dom": 'Bfrtip',
-                {{-- لتحديد أماكن ظهور الأزرار والفلاتر --}} "buttons": [{
+                "buttons": [{
                         extend: 'excelHtml5',
                         text: '<i class="fas fa-file-excel"></i> تصدير Excel',
                         className: 'btn btn-success'
@@ -158,15 +161,11 @@
                     }
                 ],
                 "responsive": true,
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
                 "ordering": true,
-                "info": true,
                 "autoWidth": false,
                 "order": [
                     [0, "desc"]
-                ] {{-- ترتيب تنازلي حسب أول عمود (ID) --}}
+                ]
             });
         });
     </script>
