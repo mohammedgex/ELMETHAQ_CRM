@@ -254,7 +254,9 @@ class AccountController extends Controller
                         'customer_id' => $match['customer_id'],
                         'debit'       => (float)str_replace(',', '', $row[12] ?? 0),
                         'credit'      => (float)str_replace(',', '', $row[10] ?? 0),
-                        'description' => trim($row[7] ?? '') . " (مستورد)",
+                        'description' => trim(
+                            str_replace('.', '', preg_replace('/:\s*\d+.*/', '', $row[7] ?? ''))
+                        ),
                         'created_at'  => $finalDate->setTime(10, 0),
                     ]);
                 }
