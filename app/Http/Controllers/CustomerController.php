@@ -1102,7 +1102,17 @@ class CustomerController extends Controller
             // ... بقية الشروط (جواز السفر، الهوية، الهاتف) تبقى كما هي ...
             $keyword = $request->passport;
             $customers->where('passport_id', 'like', "%{$keyword}%");
-            $leads->where('passport_numder', 'like', "%{$keyword}%");
+            $leads->where('passport_id', 'like', "%{$keyword}%");
+        } elseif ($type === 'nid' && $request->filled('nid')) {
+            // ... بقية الشروط (جواز السفر، الهوية، الهاتف) تبقى كما هي ...
+            $keyword = $request->nid;
+            $customers->where('card_id', 'like', "%{$keyword}%");
+            $leads->where('card_id', 'like', "%{$keyword}%");
+        } elseif ($type === 'phone' && $request->filled('phone')) {
+            // ... بقية الشروط (جواز السفر، الهوية، الهاتف) تبقى كما هي ...
+            $keyword = $request->phone;
+            $customers->where('phone', 'like', "%{$keyword}%");
+            $leads->where('phone', 'like', "%{$keyword}%");
         }
         // ... [تكملة بقية الشروط nid و phone] ...
 
