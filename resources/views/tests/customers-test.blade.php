@@ -83,6 +83,7 @@
                                 <th>المحافظة</th>
                                 <th>الحالة</th>
                                 <th>المندوب</th>
+                                <th>المجموعة</th>
                                 <th>عدد التقييمات</th>
                                 <th>التقييم</th>
                                 <th>الإجراءات</th>
@@ -128,6 +129,7 @@
                                             {{ $lead->status }}
                                         </span>
                                     </td>
+                                    <td>{{ $lead->customer->customerGroup->title ?? '-' }}</td>
                                     <td>{{ $lead->delegate->name ?? '-' }}</td>
                                     @php
                                         $evaluationCount = $lead
