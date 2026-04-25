@@ -129,8 +129,8 @@
                                             {{ $lead->status }}
                                         </span>
                                     </td>
-                                    <td>{{ $lead->customer->customerGroup->title ?? '-' }}</td>
                                     <td>{{ $lead->delegate->name ?? '-' }}</td>
+                                    <td>{{ $lead->customer->customerGroup->title ?? '-' }}</td>
                                     @php
                                         $evaluationCount = $lead
                                             ->evaluations()
