@@ -11,6 +11,9 @@
             <a href="{{ route('import.view', $group_id) }}" class="btn btn-outline-dark shadow-sm">
                 <i class="fas fa-file-import mr-1"></i> استيراد حركات (Excel)
             </a>
+            <a href="{{ route('import.removeAccountsGroup', $group_id) }}" class="btn btn-outline-danger shadow-sm">
+                <i class="fas fa-file-import mr-1"></i>> إزالة بيانات المجموعة
+            </a>
 
             {{-- يمكنك إضافة أزرار أخرى هنا مستقبلاً --}}
         </div>

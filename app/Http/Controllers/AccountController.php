@@ -224,6 +224,19 @@ class AccountController extends Controller
         return trim($string);
     }
 
+    public function removeAccountsGroup($group_id)
+    {
+        DB::table('accounts')
+            ->whereIn('customer_id', function ($query) use ($group_id) {
+                $query->select('id')
+                    ->from('customers')
+                    ->where('customer_group_id', $group_id);
+            })
+            ->delete();
+
+        return redirect()->back()->with('success', 'تم حذف الحركات المالية للمجموعة بنجاح');
+    }
+
     public function finalConfirm(Request $request)
     {
         $excelData = session('excel_data');

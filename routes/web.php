@@ -307,6 +307,7 @@ Route::group([
     Route::post('/import-transactions/{group_id}', [AccountController::class, 'processImport'])->name('import.store');
     // مسار حفظ البيانات النهائية بعد عملية المطابقة
     Route::post('/import-final-confirm', [AccountController::class, 'finalConfirm'])->name('import.final_confirm');
+    Route::get('/remove-accounts-group/{id}', [AccountController::class, 'removeAccountsGroup'])->name('import.removeAccountsGroup');
 });
 
 // قيادة امنة للسائقين
